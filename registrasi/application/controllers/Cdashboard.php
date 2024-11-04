@@ -84,9 +84,10 @@ class CDashboard extends CI_Controller {
                 $data['detail_anak'][$key]->tahun = $jarak->y;
                 $data['detail_anak'][$key]->hari = $jarak->d;
 
-                $zona = $this->Observasizona->getByID($da->id);
-                $data['detail_anak'][$key]->zona = $zona->zona;
-                $data['detail_anak'][$key]->pengajar = $zona->pengajar;
+//                $zona = $this->Observasizona->getByID($da->id);
+//                var_dump($zona);exit();
+                $data['detail_anak'][$key]->zona = null;
+                $data['detail_anak'][$key]->pengajar = null;
                 
             }
         }  
@@ -94,7 +95,7 @@ class CDashboard extends CI_Controller {
         if(!empty($data['detail_pengasuh'])) {
             foreach ($data['detail_pengasuh'] as $key => $da) {
                 // print_r($da);die();
-                $data['detail_pengash'][$key]->bulan = 12 + $bulan - date('m', strtotime($da->tanggal_lahir));
+                //$data['detail_pengash'][$key]->bulan = 12 + $bulan - date('m', strtotime($da->tanggal_lahir));
                 $data['detail_pengasuh'][$key]->tahun = $tahun - date('Y', strtotime($da->tanggal_lahir));
 
                 $now = date('Y-m-d');
