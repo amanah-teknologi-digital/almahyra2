@@ -1,0 +1,36 @@
+TRUNCATE `data_user`;
+TRUNCATE `m_kendaraan`;
+TRUNCATE `m_perangkat`;
+TRUNCATE `m_perwakilan`;
+TRUNCATE `m_ruangan`;
+TRUNCATE `m_unit`;
+TRUNCATE `tr_peminjaman_kendaraan`;
+TRUNCATE `tr_peminjaman_perangkat`;
+TRUNCATE `tr_peminjaman_perangkat_item`;
+TRUNCATE `tr_peminjaman_ruangan`;
+
+INSERT INTO `data_user` (
+	`id`, `id_role`, `id_perwakilan`, 
+	`id_unit`, `name`, `nip`,
+	`email`, `password`, `phone`, `photo`, 
+	`activation`, `date_created`, `date_updated`, 
+	`created_by`, `is_active`
+) 
+VALUES  (
+	NULL, '919', '99', '99', 'root', '9199999', 'root@umum.go', '2597ba55e1de948956ae9aa389933116', 
+	'-', NULL, '1', '2021-06-28 00:00:00', 
+	'2021-06-28 00:00:00', '1', '1'
+);
+
+
+// change per 28/06/2021
+ALTER TABLE `tr_peminjaman_kendaraan` ADD `catatan` TEXT DEFAULT NULL AFTER `keperluan`;
+ALTER TABLE `tr_peminjaman_kendaraan` CHANGE `nota` `nota` VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
+ALTER TABLE `tr_peminjaman_ruangan` ADD `catatan` TEXT NULL AFTER `keperluan`;
+
+
+// change 2 / 7 / 2021
+ALTER TABLE `data_user` ADD `fullnip` VARCHAR(100) NULL DEFAULT NULL AFTER `nip`;
+
+// change password 7/7/2021
+update data_user set `password` = '827ccb0eea8a706c4c34a16891f84e7b' where id_role!=1
