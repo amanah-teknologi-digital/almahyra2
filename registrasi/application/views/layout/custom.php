@@ -28,7 +28,7 @@
             type : 'success',
             confirmButtonColor: '#4fa7f3'
         });
-	<?php } ?>      
+	<?php unset($_SESSION['success']); } ?>
 
 	<?php if (!empty($_SESSION['failed'])) { ?>
 		swal({
@@ -37,7 +37,7 @@
             type : 'error',
             confirmButtonColor: '#d57171'
         });
-	<?php } ?>
+	<?php unset($_SESSION['failed']); } ?>
 
     <?php if (!empty($_SESSION['info'])) { ?>
         swal({
@@ -46,7 +46,7 @@
             type : 'info',
             confirmButtonColor: '#d57171'
         });
-    <?php } ?>
+    <?php unset($_SESSION['info']); } ?>
 
     if ('#tbl') {
         $('#tbl').dataTable({
