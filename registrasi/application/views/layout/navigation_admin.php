@@ -152,12 +152,6 @@
                         <span class="item-name">Items</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= base_url().'tahun'; ?>">
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Tahun<span>
-                    </a>
-                </li>
             </ul>
         </div>		
 
@@ -301,24 +295,36 @@
                 <h6>Rencana Belajar</h6>
             </header>
             <ul class="childNav">
-                <li class="nav-item">
-                    <a href="<?= base_url().'rencana-belajar'; ?>">
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Tematik Tahunan</span>
-                    </a>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'rencana-belajar'; ?><!--">-->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Tematik Tahunan</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <!-- <li class="nav-item">
                     <a href="<?= base_url().'laporan-rencana-belajar'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Tematik Tahunan</span>
                     </a>
                 </li> -->
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'rencana-pelaksanaan'; ?><!--">-->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Pelaksanaan Belajar</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item">
-                    <a href="<?= base_url().'rencana-pelaksanaan'; ?>">
+                    <a href="<?= base_url().'tahun'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Pelaksanaan Belajar</span>
+                        <span class="item-name">Tematik Tahunan<span>
                     </a>
-                </li>               
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'tematik-bulanan'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Tematik Bulanan<span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

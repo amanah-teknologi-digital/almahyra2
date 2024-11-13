@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CTahun extends CI_Controller {
+class CTematikBulanan extends CI_Controller {
 
 	var $data = array();
 	function __construct() {
@@ -18,23 +18,23 @@ class CTahun extends CI_Controller {
         } 
 
 		$this->data = array(
-            'controller'=>'ctahun',
-            'redirect'=>'tahun',
-            'title'=>'Tematik Tahunan',
+            'controller'=>'ctematikbulanan',
+            'redirect'=>'tematik-bulanan',
+            'title'=>'Tematik Bulanan',
             'parent'=>'rencana'
         );
 		## load model here 
-		$this->load->model('Mtahun', 'Tahun');
+		$this->load->model('MTematikbulan', 'TematikBulan');
 	}
 
 	public function index()	{	
 
 		$data = $this->data;
 
-		$data['list'] = $this->Tahun->getAll();
-		$data['column'] = $this->Tahun->getColumn();
+		$data['list'] = $this->TematikBulan->getAll();
+		$data['column'] = $this->TematikBulan->getColumn();
 
-		$this->load->view('inc/tahun/list', $data);
+		$this->load->view('inc/tematikbulan/list', $data);
 	}
 
 	public function insert() {
