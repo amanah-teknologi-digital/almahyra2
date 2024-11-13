@@ -37,6 +37,10 @@ class CTematikBulanan extends CI_Controller {
 		$this->load->view('inc/tematikbulan/list', $data);
 	}
 
+    public function lihatdata($tahun){
+        echo $tahun;
+    }
+
 	public function insert() {
 		
 		$err = $this->Tahun->insert();

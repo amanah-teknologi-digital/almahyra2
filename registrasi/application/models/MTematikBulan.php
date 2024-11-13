@@ -6,15 +6,14 @@
 			parent::__construct();
 
 	        ## declate table name here
-	        $this->table_name = 'ref_tahun' ;
+	        $this->table_name = 'ref_bulan' ;
 	    }
 
 	    ## get all data in table
 	    function getAll() {
-            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role, d.tahun as is_pakai FROM ref_tahun a 
-                JOIN data_user b ON b.id = a.updater 
-                JOIN m_role c ON c.id = b.id_role 
-                LEFT JOIN (SELECT tahun FROM tema_bulanan GROUP BY tahun) d ON d.tahun = a.tahun                           
+            $sql = "SELECT a.*, b.jml_bulan, COALESCE(c.jml_tematikbulanan, 0) AS jml_tematikbulanan FROM ref_tahun a 
+                LEFT JOIN (SELECT COUNT(bulan) as jml_bulan FROM ref_bulan) b ON 1 = 1
+                LEFT JOIN (SELECT tahun, COUNT(bulan) as jml_tematikbulanan FROM tema_bulanan GROUP BY tahun) c ON c.tahun = a.tahun                           
                 ORDER BY a.tahun DESC";
 
             $query = $this->db->query($sql);
