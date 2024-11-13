@@ -38,7 +38,13 @@ class CTematikBulanan extends CI_Controller {
 	}
 
     public function lihatdata($tahun){
-        echo $tahun;
+        $data = $this->data;
+
+        $data['list'] = $this->TematikBulan->getAll();
+        $data['column'] = $this->TematikBulan->getColumn();
+        $data['tahun_tematik'] = $tahun;
+
+        $this->load->view('inc/tematikbulan/lihat_data', $data);
     }
 
 	public function insert() {

@@ -10,6 +10,7 @@
     <link href="<?= base_url().'dist-assets/'?>css/plugins/perfect-scrollbar.min.css" rel="stylesheet" />
     <link href="<?= base_url().'dist-assets/'?>css/plugins/datatables.min.css" rel="stylesheet" />
     <link href="<?= base_url().'dist-assets/'?>css/plugins/sweetalert2.min.css" rel="stylesheet" />
+    <link href="<?= base_url().'dist-assets/'?>css/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="<?= base_url().'dist-assets/'?>css/plugins/smart.wizard/smart_wizard.min.css" />

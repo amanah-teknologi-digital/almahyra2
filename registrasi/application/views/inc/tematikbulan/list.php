@@ -54,7 +54,7 @@
                                                             </div>
                                                         </td>
                                                         <td align="center">
-                                                            <a href="<?= base_url().$redirect.'/'.$row->tahun ?>" class="btn btn-sm btn-success"><span class="fa fa-eye"></span>Lihat Data</a>
+                                                            <a href="<?= base_url().$redirect.'/'.$row->tahun ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span> Lihat Data</a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
