@@ -58,6 +58,7 @@ $route['dashboard'] = 'cdashboard';
 
 // referensi
 $route['role'] = 'crole';
+$route['tahun'] = 'ctahun';
 $route['pengguna'] = 'cpengguna';
 $route['imunisasi'] = 'cimunisasi';
 $route['penyakit'] = 'cpenyakit';

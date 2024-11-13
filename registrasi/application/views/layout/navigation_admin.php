@@ -152,6 +152,12 @@
                         <span class="item-name">Items</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'tahun'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Tahun<span>
+                    </a>
+                </li>
             </ul>
         </div>		
 
