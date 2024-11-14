@@ -14,6 +14,7 @@
 
 <script src="<?= base_url().'dist-assets/'?>js/plugins/jquery.smartWizard.min.js"></script>
 <script src="<?= base_url().'dist-assets/'?>js/plugins/smart.wizard.script.min.js"></script>
+<script src="<?= base_url().'dist-assets/'?>js/plugins/jquery.validate.min.js"></script>
 
 <!-- select 2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

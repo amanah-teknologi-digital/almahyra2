@@ -66,5 +66,23 @@
             line-height: 50px;
             border: 1px solid #eee;
         }
+
+        label.error {
+            color: #dc3545; /* Abu-abu */
+            font-size: 0.875em;
+            margin-top: 5px;
+        }
+
+        /* Menandai input yang tidak valid */
+        input.error, select.error, textarea.error {
+            border-color: #dc3545; /* Warna merah */
+            background-color: #f8d7da; /* Latar belakang merah muda */
+        }
+
+        /* Menandai input yang valid */
+        input.valid, select.valid, textarea.valid {
+            border-color: #28a745; /* Warna hijau */
+            background-color: #d4edda; /* Latar belakang hijau muda */
+        }
     </style>
 </head>

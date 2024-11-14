@@ -50,9 +50,9 @@
 
 		## get data by id in table
 	    function getByID($id) {
-	        $this->db->where(array('tahun' => $id));
+	        $this->db->where(array('id_temabulanan' => $id));
 	        
-	        $query = $this->db->get($this->table_name);
+	        $query = $this->db->get("tema_bulanan");
 	        
 	        return $query->row();
 	    }
@@ -66,20 +66,20 @@
 	    ## insert data into table
 	    function insert() {
             $user = $this->session->userdata['auth'];
-            $tahun_sekarang = date('Y');
 
-	        $a_input['tahun'] = $_POST['tahun'];
-	        $a_input['uraian'] = $_POST['name'];
+            $tahun = $_POST['tahun_penentuan'];
+            $bulan = $_POST['bulan_penentuan'];
+            $nama_tema = $_POST['nama_tema'];
+            $keterangan = $_POST['keterangan'];
+
+	        $a_input['tahun'] = $tahun;
+	        $a_input['bulan'] = $bulan;
+	        $a_input['nama'] = $nama_tema;
+	        $a_input['deskripsi'] = $keterangan;
 	        $a_input['created_at'] = date('Y-m-d H:m:s');
-            if ($tahun_sekarang == $_POST['tahun']){
-                $a_input['is_aktif'] = 1;
-            }else{
-                $a_input['is_aktif'] = 0;
-            }
-
 	        $a_input['updater'] = $user->id;
 
-	        $this->db->insert($this->table_name, $a_input);
+	        $this->db->insert('tema_bulanan', $a_input);
 
 	        return $this->db->error();	        
 	    }
@@ -88,13 +88,14 @@
 	    function update($id) {
             $user = $this->session->userdata['auth'];
 
-	        $a_input['uraian'] = $_POST['name'];
+	        $a_input['nama'] = $_POST['nama_tema'];
+	        $a_input['deskripsi'] = $_POST['keterangan'];
 	        $a_input['updated_at'] = date('Y-m-d H:m:s');
 	        $a_input['updater'] = $user->id;
 
-	        $this->db->where('tahun', $id);
+	        $this->db->where('id_temabulanan', $id);
 	        
-	        $this->db->update($this->table_name, $a_input);
+	        $this->db->update('tema_bulanan', $a_input);
 
 	        return $this->db->error(1);	        
 	    }

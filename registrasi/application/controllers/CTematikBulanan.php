@@ -49,8 +49,7 @@ class CTematikBulanan extends CI_Controller {
     }
 
 	public function insert() {
-		
-		$err = $this->Tahun->insert();
+		$err = $this->TematikBulan->insert();
 
 		if ($err['code'] == '0') {
 			$this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
@@ -58,13 +57,13 @@ class CTematikBulanan extends CI_Controller {
 			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
 		}
 
-		redirect($this->data['redirect']);
+		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
 	public function edit($id) {
 		$data = $this->data;
 
-		$data['list_edit'] = $this->Tahun->getByID($id) ;
+		$data['list_edit'] = $this->TematikBulan->getByID($id) ;
 
 	    $this->output->set_content_type('application/json');
 	    
@@ -74,7 +73,7 @@ class CTematikBulanan extends CI_Controller {
 	}
 
 	public function update() {
-		$err = $this->Tahun->update($this->input->post('id'));
+		$err = $this->TematikBulan->update($this->input->post('id_temabulanan'));
 
 		if ($err['code'] == '0') {
 			$this->session->set_flashdata('success', 'Berhasil Merubah Data');
@@ -82,7 +81,7 @@ class CTematikBulanan extends CI_Controller {
 			$this->session->set_flashdata('failed', 'Gagal Merubah Data');
 		}	
 
-		redirect($this->data['redirect']);
+		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
 	public function delete($id) {
