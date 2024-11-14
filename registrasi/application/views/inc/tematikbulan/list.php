@@ -42,11 +42,11 @@
                                                         <!-- <td><?= $i++ ?></td> -->
                                                         <td align="center"><?= $row->tahun ?></td>
                                                         <td><?= $row->uraian ?></td>
-                                                        <td align="center"><?= $row->is_aktif? '<span class="badge badge-success">aktif</span>':'<span class="badge badge-danger">tidak aktif</span>'; ?></td>
+                                                        <td align="center"><?= $row->is_aktif? '<span class="badge badge-success">Aktif</span>':'<span class="badge badge-danger">Tidak Aktif</span>'; ?></td>
                                                         <td align="center">
                                                             <?= $row->jml_tematikbulanan.' / '.$row->jml_bulan ?><br>
                                                             <div class="progress">
-                                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: <?= ((int) ($row->jml_tematikbulanan/$row->jml_bulan))*100 ?>%;"><?= ((int) ($row->jml_tematikbulanan/$row->jml_bulan))*100 ?>%</div>
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: <?= $row->jml_tematikbulanan/$row->jml_bulan*100 ?>%;"><?= ($row->jml_tematikbulanan/$row->jml_bulan)*100 ?>%</div>
                                                             </div>
                                                         </td>
                                                         <td align="center">
