@@ -22,10 +22,6 @@
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <div class="alert alert-info" role="alert">
-                                        Memanajemen tema per bulan beserta sub tema dari bulan tersebut sesuai tematik tahunanya!. ini juga akan menentukan jadwal harianya nanti.
-                                    </div>
-
                                     <div class="table-responsive">
                                         <table class="display table table-striped table-bordered" id="tbl" style="width:100%">
                                             <thead>
@@ -71,6 +67,7 @@
                                             </tfoot>
                                         </table>
                                     </div>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Memanajemen tema per bulan beserta sub tema dari bulan tersebut sesuai tematik tahunanya, ini juga akan menentukan jadwal harian.</span></p>
                                 </div>
                             </div>
                         </div>

@@ -10,11 +10,25 @@
 	    }
 
 	    ## get all data in table
-	    function getAll() {
+	    function getAll()
+        {
             $sql = "SELECT a.*, b.jml_bulan, COALESCE(c.jml_tematikbulanan, 0) AS jml_tematikbulanan FROM ref_tahun a 
                 LEFT JOIN (SELECT COUNT(bulan) as jml_bulan FROM ref_bulan) b ON 1 = 1
                 LEFT JOIN (SELECT tahun, COUNT(bulan) as jml_tematikbulanan FROM tema_bulanan GROUP BY tahun) c ON c.tahun = a.tahun                           
                 ORDER BY a.tahun DESC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getAllBulanByTahun($tahun) {
+            $sql = "SELECT a.bulan, a.nama as nama_bulan, b.id_temabulanan, b.nama as nama_temabulanan,
+                b.created_at, b.updated_at, c.name as nama_updater 
+                FROM ref_bulan a 
+                LEFT JOIN tema_bulanan b ON b.bulan = a.bulan and b.tahun = $tahun                          
+                LEFT JOIN data_user c ON c.id = b.updater               
+                ORDER BY a.bulan ASC";
 
             $query = $this->db->query($sql);
 

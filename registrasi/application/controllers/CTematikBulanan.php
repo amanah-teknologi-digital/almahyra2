@@ -25,6 +25,7 @@ class CTematikBulanan extends CI_Controller {
         );
 		## load model here 
 		$this->load->model('MTematikbulan', 'TematikBulan');
+		$this->load->model('MTahun', 'Tahun');
 	}
 
 	public function index()	{	
@@ -40,8 +41,8 @@ class CTematikBulanan extends CI_Controller {
     public function lihatdata($tahun){
         $data = $this->data;
 
-        $data['list'] = $this->TematikBulan->getAll();
-        $data['column'] = $this->TematikBulan->getColumn();
+        $data['tema_tahun'] = $this->Tahun->getByID($tahun);
+        $data['list_bulan'] = $this->TematikBulan->getAllBulanByTahun($tahun);
         $data['tahun_tematik'] = $tahun;
 
         $this->load->view('inc/tematikbulan/lihat_data', $data);

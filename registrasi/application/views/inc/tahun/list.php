@@ -22,11 +22,7 @@
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <div class="alert alert-info" role="alert">
-                                        Tahun dengan status <b>aktif</b> akan dijadikan acuan dalam proses kegiatan namira. dimohon berhati - hati dalam mengubah status tahun!
-                                    </div>
                                     <button class="btn btn-info m-1 mb-4 add-button" type="button" data-toggle="modal" data-target="#adding-modal">Tambah</button>
-
                                     <div class="table-responsive">
                                         <table class="display table table-striped table-bordered" id="tbl" style="width:100%">
                                             <thead>
@@ -83,6 +79,7 @@
                                             </tfoot>
                                         </table>
                                     </div>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Tahun dengan status <b>aktif</b> akan dijadikan acuan dalam proses kegiatan namira. dimohon berhati - hati dalam mengubah status tahun!</span></p>
                                 </div>
                             </div>
                         </div>
