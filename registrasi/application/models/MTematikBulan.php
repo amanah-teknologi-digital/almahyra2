@@ -24,10 +24,11 @@
 
         function getAllBulanByTahun($tahun) {
             $sql = "SELECT a.bulan, a.nama as nama_bulan, b.id_temabulanan, b.nama as nama_temabulanan,
-                b.created_at, b.updated_at, c.name as nama_updater 
+                b.created_at, b.updated_at, c.name as nama_user, d.name as nama_role
                 FROM ref_bulan a 
                 LEFT JOIN tema_bulanan b ON b.bulan = a.bulan and b.tahun = $tahun                          
                 LEFT JOIN data_user c ON c.id = b.updater               
+                LEFT JOIN m_role d ON d.id = c.id_role               
                 ORDER BY a.bulan ASC";
 
             $query = $this->db->query($sql);

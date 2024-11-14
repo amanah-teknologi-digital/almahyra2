@@ -45,7 +45,6 @@
                                                         <td><?= $row->uraian ?></td>
                                                         <td align="center"><?= $row->is_aktif? '<span class="badge badge-success">aktif</span>':'<span class="badge badge-danger">tidak aktif</span>'; ?></td>
                                                         <td>
-
                                                             <p><span class="text-muted"><i>Terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?> oleh <?= $row->nama_role.' ('.$row->nama_user.')' ?></i></span></p>
                                                         </td>
                                                         <td align="center">

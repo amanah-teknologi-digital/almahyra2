@@ -27,23 +27,41 @@
                                     <h5 class="card-title d-flex align-items-center justify-content-center">Rencana Belajar Bulanan untuk Tematik Tahun <?= $tahun_tematik ?>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $tema_tahun->uraian ?></span></h5>
                                     <fieldset>
                                         <div class="accordion" id="accordionRightIcon">
-                                            <?php foreach ($list_bulan as $bulan){ ?>
+                                            <?php foreach ($list_bulan as $bulan){
+                                                if (empty($bulan->id_temabulanan)){
+                                                    $temp_uraian = $bulan->nama_bulan.'&nbsp;<span class="text-danger text-small">( tema belum ditentukan! )</span>';
+                                                }else{
+                                                    $temp_uraian = $bulan->nama_bulan.'&nbsp;<span class="text-success text-small">( Sub Tema: <b>'.$bulan->nama_temabulanan.'</b> )</span>';
+                                                    $temp_uraian .= '&nbsp;<span class="text-muted text-small"><i>terakhir update ';
+                                                    if (empty($row->updated_at)){
+                                                        $temp_uraian .= timeAgo($bulan->created_at);
+                                                    }else{
+                                                        $temp_uraian .= timeAgo($bulan->updated_at);
+                                                    }
+                                                    $temp_uraian .= ' oleh '.$bulan->nama_role.' ('.$bulan->nama_user.')</i></span>';
+                                                 
+                                                }
+                                                ?>
                                                 <div class="card">
                                                     <div class="card-header header-elements-inline">
                                                         <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0">
-                                                            <a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icon-right-<?= $bulan->bulan ?>" aria-expanded="false"><?=$bulan->nama_bulan ?></a>
+                                                            <a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icon-right-<?= $bulan->bulan ?>" aria-expanded="false"><?= $temp_uraian; ?></a>
                                                         </h6>
                                                     </div>
                                                     <div class="collapse" id="accordion-item-icon-right-<?= $bulan->bulan ?>" data-parent="#accordionRightIcon">
                                                         <div class="card-body">
+                                                            <?php if (empty($bulan->id_temabulanan)){ ?>
+                                                                <span class="text-danger text-small d-flex align-items-center justify-content-center font-weight-bold">Silahkan menentukan tema bulan <?= $bulan->nama_bulan ?> terlebih dahulu!</span>
+                                                            <?php }else{ ?>
 
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             <?php } ?>
                                         </div>
                                     </fieldset>
-                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Memanajemen tema per bulan beserta sub tema dari bulan tersebut sesuai tematik tahunanya, ini juga akan menentukan jadwal harian.</span></p>
+                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Setiap bulan memiliki <b>tema dan sub tema</b> untuk mingguan, per sub tema akan ditentukan <b>tanggal mingguanya</b>.</span></p>
                                 </div>
                             </div>
                         </div>
