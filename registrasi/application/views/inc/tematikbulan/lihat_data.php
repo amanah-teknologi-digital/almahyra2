@@ -29,10 +29,10 @@
                                         <div class="accordion" id="accordionRightIcon">
                                             <?php foreach ($list_bulan as $bulan){
                                                 if (empty($bulan->id_temabulanan)){
-                                                    $temp_uraian = '<span style="color: black">'.$bulan->nama_bulan.'</span>&nbsp;<span class="text-danger text-small">( tema belum ditentukan! )</span>';
+                                                    $temp_uraian = '<span style="color: black">'.$bulan->nama_bulan.'</span>&nbsp;&nbsp;&nbsp;<span class="text-danger text-small">( tema belum ditentukan! )</span>';
                                                     $btn_bulan = '&nbsp;<span class="btn btn-sm btn-success tentukan_tema" data-id="'.$bulan->bulan.'" data-nama="'.$bulan->nama_bulan.'"><span class="fas fa-plus"></span>&nbsp;Tentukan</span>';
                                                 }else{
-                                                    $temp_uraian = '<span style="color: black">'.$bulan->nama_bulan.'</span>&nbsp;<span class="text-success text-small">( Sub Tema: <b>'.$bulan->nama_temabulanan.'</b> )</span>';
+                                                    $temp_uraian = '<span style="color: black">'.$bulan->nama_bulan.'</span>&nbsp;&nbsp;&nbsp;<span class="text-success text-small">( Tema: <b>'.$bulan->nama_temabulanan.'</b> )</span>';
                                                     $temp_uraian .= '&nbsp;<span class="text-muted text-small"><i>terakhir update ';
                                                     if (empty($bulan->updated_at)){
                                                         $temp_uraian .= timeAgo($bulan->created_at);
@@ -43,18 +43,31 @@
                                                     $btn_bulan = '&nbsp;<span class="btn btn-sm btn-warning edit_tema" data-id="'.$bulan->id_temabulanan.'" data-nama="'.$bulan->nama_bulan.'"><span class="fas fa-edit"></span>&nbsp;Update</span>';
                                                 } ?>
                                                 <div class="card">
-                                                    <div class="card-header header-elements-inline">
+                                                    <div class="card-header header-elements-inline" style="background-color: rgb(231 240 255) !important;">
                                                         <h6 class="card-title ul-collapse__icon--size ul-collapse__right-icon mb-0">
                                                             <a class="text-default collapsed" data-toggle="collapse" href="#accordion-item-icon-right-<?= $bulan->bulan ?>" aria-expanded="false"><?= $temp_uraian; ?></a><?= $btn_bulan ?>
                                                         </h6>
                                                     </div>
                                                     <div class="collapse" id="accordion-item-icon-right-<?= $bulan->bulan ?>" data-parent="#accordionRightIcon">
-                                                        <div class="card-body">
-                                                            <?php if (empty($bulan->id_temabulanan)){ ?>
-                                                                <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Silahkan menentukan tema bulan <?= $bulan->nama_bulan ?> terlebih dahulu!</span>
-                                                            <?php }else{ ?>
-
-                                                            <?php } ?>
+                                                        <div class="card-body ">
+                                                            <h5 class="card-title d-flex align-items-center justify-content-center">Tematik Bulan&nbsp;<b><?= $bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $bulan->nama_temabulanan ?></span></h5>
+                                                            <br>
+                                                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                                                <?php if (!empty($bulan->deskripsi)){ ?>
+                                                                    <span class="text-muted font-italic text-small"><b>Keterangan:&nbsp;</b> <?= $bulan->deskripsi ?></span>
+                                                                <?php } ?>
+                                                                <button class="btn btn-sm btn-primary"><span class="fas fa-plus"></span>&nbsp;Tambah Sub Tema</button>
+                                                            </div>
+                                                            <div class="table-responsive">
+                                                                <table class="display table table-bordered" >
+                                                                    <tr>
+                                                                        <th>Nama Periode</th>
+                                                                        <th>Nama Sub Tema</th>
+                                                                        <th>Timestamp</th>
+                                                                        <th>Aksi</th>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -23,7 +23,7 @@
         }
 
         function getAllBulanByTahun($tahun) {
-            $sql = "SELECT a.bulan, a.nama as nama_bulan, b.id_temabulanan, b.nama as nama_temabulanan,
+            $sql = "SELECT a.bulan, a.nama as nama_bulan, b.id_temabulanan, b.nama as nama_temabulanan, b.deskripsi,
                 b.created_at, b.updated_at, c.name as nama_user, d.name as nama_role
                 FROM ref_bulan a 
                 LEFT JOIN tema_bulanan b ON b.bulan = a.bulan and b.tahun = $tahun                          
