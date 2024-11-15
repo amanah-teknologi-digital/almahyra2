@@ -118,6 +118,22 @@
 	        return $query->row();
 	    }
 
+        function getJadwalMingguanByTahun($tahun) {
+            $sql = "SELECT a.bulan, b.id_temabulanan, c.id_jadwalmingguan, c.nama as nama_subtema, d.tanggal,
+                e.name as nama_user, f.name as nama_role, d.created_at, d.updated_at
+                FROM ref_bulan a 
+                JOIN tema_bulanan b ON b.bulan = a.bulan and b.tahun = $tahun
+                JOIN jadwal_mingguan c ON c.id_temabulanan = b.id_temabulanan
+                JOIN rincian_jadwal_mingguan d ON d.id_jadwalmingguan = c.id_jadwalmingguan                          
+                JOIN data_user e ON e.id = d.updater               
+                JOIN m_role f ON f.id = e.id_role               
+                ORDER BY c.id_jadwalmingguan, d.tanggal ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
 	}
 
 ?>

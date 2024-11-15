@@ -172,9 +172,9 @@
                     $("#tahunedit").html(data['list_edit']['tahun']);
                     $("#name_edit").val(data['list_edit']['uraian']);
                     if (data['list_edit']['is_aktif'] === '1'){
-                        $("#statusedit").html('<span class="badge badge-success">aktif</span>');
+                        $("#statusedit").html('<span class="badge badge-success">Aktif</span>');
                     }else{
-                        $("#statusedit").html('<span class="badge badge-danger">tidak aktif</span>');
+                        $("#statusedit").html('<span class="badge badge-danger">Tidak Aktif</span>');
                     }
 
                     $("#updating-modal").modal('show');

@@ -43,7 +43,34 @@ class CTematikBulanan extends CI_Controller {
 
         $data['tema_tahun'] = $this->Tahun->getByID($tahun);
         $data['list_bulan'] = $this->TematikBulan->getAllBulanByTahun($tahun);
+        $data_mingguan = $this->TematikBulan->getJadwalMingguanByTahun($tahun);
+        $data_subtema = [];
+        $data_tanggal_pelaksana = [];
+        foreach ($data_mingguan as $subtema){
+            if (!empty($data_subtema)) {
+                $temp_subtema = array_column($data_subtema[$subtema->id_temabulanan], 'id_jadwalmingguan');
+            }else{
+                $temp_subtema = [];
+            }
+            if (empty($data_subtema) OR !in_array($subtema->id_jadwalmingguan, $temp_subtema)){
+                $data_subtema[$subtema->id_temabulanan][] = [
+                    'id_jadwalmingguan' => $subtema->id_jadwalmingguan,
+                    'nama_subtema' => $subtema->nama_subtema
+                ];
+            }
+
+            $data_tanggal_pelaksana[$subtema->id_jadwalmingguan][] = [
+                'tanggal' => $subtema->tanggal,
+                'created_at' => $subtema->created_at,
+                'updated_at' => $subtema->updated_at,
+                'nama_user' => $subtema->nama_user,
+                'nama_role' => $subtema->nama_role,
+            ];
+        }
+
         $data['tahun_tematik'] = $tahun;
+        $data['data_subtema'] = $data_subtema;
+        $data['data_mingguan'] = $data_tanggal_pelaksana;
 
         $this->load->view('inc/tematikbulan/lihat_data', $data);
     }

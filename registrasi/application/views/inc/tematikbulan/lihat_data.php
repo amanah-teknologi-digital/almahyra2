@@ -50,24 +50,47 @@
                                                     </div>
                                                     <div class="collapse" id="accordion-item-icon-right-<?= $bulan->bulan ?>" data-parent="#accordionRightIcon">
                                                         <div class="card-body ">
-                                                            <h5 class="card-title d-flex align-items-center justify-content-center">Tematik Bulan&nbsp;<b><?= $bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $bulan->nama_temabulanan ?></span></h5>
-                                                            <br>
-                                                            <div class="mb-3 d-flex justify-content-between align-items-center">
-                                                                <?php if (!empty($bulan->deskripsi)){ ?>
-                                                                    <span class="text-muted font-italic text-small"><b>Keterangan:&nbsp;</b> <?= $bulan->deskripsi ?></span>
-                                                                <?php } ?>
-                                                                <button class="btn btn-sm btn-primary"><span class="fas fa-plus"></span>&nbsp;Tambah Sub Tema</button>
-                                                            </div>
-                                                            <div class="table-responsive">
-                                                                <table class="display table table-bordered" >
-                                                                    <tr>
-                                                                        <th>Nama Periode</th>
-                                                                        <th>Nama Sub Tema</th>
-                                                                        <th>Timestamp</th>
-                                                                        <th>Aksi</th>
-                                                                    </tr>
-                                                                </table>
-                                                            </div>
+                                                            <?php if (!empty($bulan->id_temabulanan)){ ?>
+                                                                <h5 class="card-title d-flex align-items-center justify-content-center">Tematik Bulan&nbsp;<b><?= $bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $bulan->nama_temabulanan ?></span></h5>
+                                                                <br>
+                                                                <div class="mb-3 d-flex justify-content-between align-items-center">
+                                                                    <span class="text-muted font-italic text-small">
+                                                                    <?php if (!empty($bulan->deskripsi)){ ?>
+                                                                        <b>Keterangan:&nbsp;</b><?= $bulan->deskripsi ?>
+                                                                    <?php } ?>
+                                                                    </span>
+                                                                    <button class="btn btn-sm btn-primary"><span class="fas fa-plus"></span>&nbsp;Tambah Sub Tema</button>
+                                                                </div>
+                                                                <div class="table-responsive">
+                                                                    <table class="display table table-bordered table-sm" >
+                                                                        <tr class="bg-gray-300">
+                                                                            <th class="font-weight-bold">Periode</th>
+                                                                            <th class="font-weight-bold">Nama Sub Tema</th>
+                                                                            <th class="font-weight-bold">Tanggal Pelaksanaan</th>
+                                                                            <th class="font-weight-bold">Aksi</th>
+                                                                        </tr>
+                                                                        <?php if (isset($data_subtema[$bulan->id_temabulanan]) && count($data_subtema[$bulan->id_temabulanan]) > 0){
+                                                                            foreach ($data_subtema[$bulan->id_temabulanan] as $key => $subtema){
+                                                                                $iter = 0;
+                                                                                foreach ($data_mingguan[$subtema['id_jadwalmingguan']] as $mingguan){ ?>
+                                                                                    <tr>
+                                                                                        <?php if ($iter == 0){ ?>
+                                                                                            <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><span class="font-italic font-weight-bold">Minggu ke <?= ($key+1) ?></span></td>
+                                                                                            <td rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><?= $subtema['nama_subtema'] ?></td>
+                                                                                        <?php } ?>
+                                                                                        <td><?= $mingguan['tanggal'] ?></td>
+                                                                                        <td></td>
+                                                                                    </tr>
+                                                                            <?php $iter++; }
+                                                                            }
+                                                                        }else{ ?>
+                                                                            <tr>
+                                                                                <td colspan="4" align="center"><i class="text-small text-danger font-weight-bold">Data sub tema kosong!</i></td>
+                                                                            </tr>
+                                                                        <?php } ?>
+                                                                    </table>
+                                                                </div>
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
                                                 </div>
