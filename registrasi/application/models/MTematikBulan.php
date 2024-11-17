@@ -121,6 +121,74 @@
 	        return $this->db->trans_status();
 	    }
 
+        function updateSubTema() {
+            $user = $this->session->userdata['auth'];
+
+            $nama_subtema = $_POST['nama_subtema'];
+            $keterangan = $_POST['keterangan'];
+            $tanggal_pelaksanaan = $_POST['tanggal_pelaksanaan'];
+            $list_tanggal = explode(',', $tanggal_pelaksanaan);
+            $id_jadwalmingguan = $_POST['id_jadwalmingguan'];
+            $data_tanggal = $this->getTanggalJadwalMingguan($id_jadwalmingguan);
+
+            $list_jadwal_editable = [];
+            $list_jadwal_noneditable = [];
+            foreach ($data_tanggal as $tanggal){
+                if (empty($tanggal->is_inputjadwalharian)){
+                    $list_jadwal_editable[] = $tanggal->tanggal;
+                }else{
+                    $list_jadwal_noneditable[] = $tanggal->tanggal;
+                }
+            }
+
+            if (count($list_tanggal) > 0){
+                $this->db->trans_start();
+
+                $a_input['nama'] = $nama_subtema;
+                $a_input['keterangan'] = $keterangan;
+                $a_input['updated_at'] = date('Y-m-d H:m:s');
+                $a_input['updater'] = $user->id;
+
+                $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
+                $this->db->update('jadwal_mingguan', $a_input);
+
+                //hapus sub tema yang belum diisi jadwal harian
+                if (count($list_jadwal_editable) > 0) {
+                    $this->db->where_in('tanggal', $list_jadwal_editable);
+                    $this->db->delete('rincian_jadwal_mingguan');
+                }
+
+                foreach ($list_tanggal as $tanggal){
+                    if (!in_array($tanggal, $list_jadwal_noneditable)) {
+                        $temp_date = date('Y-m-d', strtotime($tanggal));
+                        $a_input_rincian['id_jadwalmingguan'] = $id_jadwalmingguan;
+                        $a_input_rincian['tanggal'] = $temp_date;
+                        $a_input_rincian['created_at'] = date('Y-m-d H:m:s');
+                        $a_input_rincian['updater'] = $user->id;
+
+                        $this->db->insert('rincian_jadwal_mingguan', $a_input_rincian);
+                    }
+                }
+
+                $this->db->trans_complete();
+            }
+
+	        return $this->db->trans_status();
+	    }
+        function hapusSubTema($id_jadwalmingguan) {
+            $this->db->trans_start();
+
+            $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
+            $this->db->delete('rincian_jadwal_mingguan');
+
+            $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
+            $this->db->delete('jadwal_mingguan');
+
+            $this->db->trans_complete();
+
+	        return $this->db->trans_status();
+	    }
+
 	    ## update data in table
 	    function update($id) {
             $user = $this->session->userdata['auth'];
@@ -233,6 +301,16 @@
             $query = $this->db->query($sql);
 
             return $query->row()->tahun;
+        }
+
+        function getBulanByIdJadwalMingguan($id_jadwalmingguan) {
+            $sql = "SELECT b.bulan FROM jadwal_mingguan a 
+             JOIN tema_bulanan b ON b.id_temabulanan = a.id_temabulanan
+             WHERE a.id_jadwalmingguan = $id_jadwalmingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->row()->bulan;
         }
 
 	}

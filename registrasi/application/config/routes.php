@@ -120,6 +120,7 @@ $route['laporan-pelaksanaan-belajar/(:any)'] = 'crencanapelaksanaan/pelaksanaanr
 
 $route['tematik-bulanan'] = 'ctematikbulanan';
 $route['tematik-bulanan/(:num)'] = 'ctematikbulanan/lihatdata/$1';
+$route['tematik-bulanan/(:num)/subtema/(:num)'] = 'ctematikbulanan/lihatsubtema/$1/$2';
 
 
 

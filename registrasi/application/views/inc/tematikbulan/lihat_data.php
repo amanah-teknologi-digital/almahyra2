@@ -89,11 +89,14 @@
                                                                                             <?php }else{ ?>
                                                                                                 <span class="badge badge-success">Sudah diinput</span>
                                                                                             <?php } ?>
-                                                                                            &nbsp;<a href="#" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Lihat Jadwal</a>
+                                                                                            &nbsp;<a href="<?= base_url().$redirect.'/'.$tahun_tematik.'/subtema/'.$subtema['id_jadwalmingguan'] ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Lihat Jadwal</a>
                                                                                         </td>
                                                                                         <?php if ($iter == 0){ ?>
                                                                                             <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>">
                                                                                                 <span class="btn btn-sm btn-warning edit_subtema" data-id="<?= $subtema['id_jadwalmingguan'] ?>" data-nama="<?= $bulan->nama_bulan ?>" data-namatema="<?= $bulan->nama_temabulanan ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
+                                                                                                <?php if (!isset($data_is_hapus[$subtema['id_jadwalmingguan']])){ ?>
+                                                                                                    <span class="btn btn-sm btn-danger hapus_subtema" data-id="<?= $subtema['id_jadwalmingguan'] ?>" data-nama="<?= $bulan->nama_bulan ?>" data-namatema="<?= $bulan->nama_temabulanan ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
+                                                                                                <?php } ?>
                                                                                             </td>
                                                                                         <?php } ?>
                                                                                     </tr>
@@ -263,6 +266,27 @@
                         </form>
                     </div>
                 </div>
+                <div class="modal fade" id="hapus-subtema" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/hapussubtema', 'id="frm_hapussubtema"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Hapus Sub Tema Bulan <span class="text-success" id="label_nama_bulansubtema_hapus"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Apakah yakin menghapus sub tema <span class="font-weight-bold" id="label_nama_tema_hapus"></span> beserta detail data tanggal? </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-danger ml-2" type="submit">Hapus</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_jadwalmingguan" id="id_jadwalmingguan_hapus">
+                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                        </form>
+                    </div>
+                </div>
 
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
@@ -273,9 +297,10 @@
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
-        var url = "<?= base_url().$controller ?>";
-        var tanggal_selected = <?= json_encode($data_tanggal_disabled); ?>;
-        var bulan_active_accordion = <?= $active_accordion_bulan; ?>;
+        let url = "<?= base_url().$controller ?>";
+        let tanggal_selected = <?= json_encode($data_tanggal_disabled); ?>;
+        let bulan_active_accordion = <?= $active_accordion_bulan; ?>;
+        let arr_tanggal_noneditable = [];
 
         $(document).ready(function() {
             $('#accordion-item-icon-right-'+bulan_active_accordion).addClass('show'); // Make the first item expand
@@ -294,6 +319,19 @@
                     multidate: true, // This enables multiple date selection,
                 }
             );
+
+            $('#tanggal_pelaksanaan_update').datepicker().on('changeDate', function(e) {
+                selectedDates = $('#tanggal_pelaksanaan_update').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                let selected = selectedDates.split(',');
+                let result = arr_tanggal_noneditable.filter(item => !selected.includes(item));
+
+                if (result.length > 0) {
+                    e.preventDefault(); // Prevent unselecting the date if it's already selected
+                    alert('Tanggal sudah diinput jadwal harian.');
+                    selected = $.merge(selected, arr_tanggal_noneditable);
+                    $('#tanggal_pelaksanaan_update').datepicker('setDates', selected);
+                }
+            });
 
             $("#frm_tambah").validate({
                 rules: {
@@ -406,6 +444,20 @@
             $("#tambah-subtema").modal('show');
         });
 
+        $('.hapus_subtema').click(function(){
+            clearFormStatus("#frm_hapussubtema");
+
+            let id_jadwalmingguan = $(this).data('id')
+            let nama_bulan = $(this).data('nama')
+            let nama_tema = $(this).data('namatema')
+
+            $("#label_nama_bulansubtema_hapus").html(nama_bulan);
+            $("#id_jadwalmingguan_hapus").val(id_jadwalmingguan);
+            $("#label_nama_tema_hapus").html(nama_tema);
+
+            $("#hapus-subtema").modal('show');
+        });
+
         $('.edit_tema').click(function(){
             clearFormStatus('#frm_update')
 
@@ -429,6 +481,7 @@
         $('.edit_subtema').click(function(){
             clearFormStatus('#frm_updatesubtema')
             $('#tanggal_pelaksanaan_update').datepicker('update', '');
+            arr_tanggal_noneditable = [];
 
             let id_jadwalmingguan = $(this).data('id')
             let nama_bulan = $(this).data('nama')
@@ -446,13 +499,15 @@
                     let data_jadwal_disabled = data['data_tanggal_disabled'];
                     let list_jadwal_editable = data['list_jadwal_editable'];
                     let list_jadwal_noneditable = data['list_jadwal_noneditable'];
-                    data_jadwal_disabled = $.merge(data_jadwal_disabled, list_jadwal_noneditable);
+                    list_jadwal_editable = $.merge(list_jadwal_editable, list_jadwal_noneditable);
+
+                    arr_tanggal_noneditable = list_jadwal_noneditable;
 
                     $("#nama_subtema_update").val(data['list_edit']['nama']);
                     $("#keterangan_subtema_update").val(data['list_edit']['keterangan']);
 
-                    $('#tanggal_pelaksanaan_update').datepicker('setDates', list_jadwal_editable);
                     $('#tanggal_pelaksanaan_update').datepicker('setDatesDisabled', data_jadwal_disabled);
+                    $('#tanggal_pelaksanaan_update').datepicker('setDates', list_jadwal_editable);
 
                     $("#edit-subtema").modal('show');
                 }

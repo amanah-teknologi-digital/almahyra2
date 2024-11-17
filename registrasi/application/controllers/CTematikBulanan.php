@@ -54,6 +54,7 @@ class CTematikBulanan extends CI_Controller {
 
         $data_subtema = [];
         $data_tanggal_pelaksana = [];
+        $data_is_hapus = [];
         foreach ($data_mingguan as $subtema){
             if (!empty($data_subtema)) {
                 $temp_subtema = array_column($data_subtema[$subtema->id_temabulanan], 'id_jadwalmingguan');
@@ -66,6 +67,10 @@ class CTematikBulanan extends CI_Controller {
                     'nama_subtema' => $subtema->nama_subtema,
                     'keterangan' => $subtema->keterangan,
                 ];
+            }
+
+            if (!empty($subtema->is_inputjadwalharian)){
+                $data_is_hapus[$subtema->id_jadwalmingguan] = 1;
             }
 
             $data_tanggal_pelaksana[$subtema->id_jadwalmingguan][] = [
@@ -82,9 +87,17 @@ class CTematikBulanan extends CI_Controller {
         $data['data_subtema'] = $data_subtema;
         $data['data_mingguan'] = $data_tanggal_pelaksana;
         $data['data_tanggal_disabled'] = $data_tanggal_disabled;
+        $data['data_is_hapus'] = $data_is_hapus;
         $data['active_accordion_bulan'] = empty($this->active_accordion_bulan)? 0 : $this->active_accordion_bulan;
 
         $this->load->view('inc/tematikbulan/lihat_data', $data);
+    }
+
+    public function lihatsubtema($tahun, $id_jadwalmingguan){
+        $data = $this->data;
+        $data['tahun_tematik'] = $tahun;
+        $data['id_jadwalmingguan'] = $id_jadwalmingguan;
+        $this->load->view('inc/tematikbulan/lihat_datasubtema', $data);
     }
 
 	public function insert() {
@@ -108,6 +121,20 @@ class CTematikBulanan extends CI_Controller {
             $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
         }else{
             $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        }
+
+		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
+	}
+
+    public function updatesubtema() {
+		$err = $this->TematikBulan->updateSubTema();
+        $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
+        $this->session->set_userdata('active_accordion_bulan', $bulan);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Mengupdate Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Mengupdate Data');
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
@@ -164,15 +191,17 @@ class CTematikBulanan extends CI_Controller {
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
-	public function delete($id) {
-		$err = $this->Tahun->delete($id);
+	public function hapussubtema() {
+        $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
+        $err = $this->TematikBulan->hapusSubTema($_POST['id_jadwalmingguan']);
+        $this->session->set_userdata('active_accordion_bulan', $bulan);
 
-		if ($err > 0) {
-			$this->session->set_flashdata('success', 'Berhasil Menghapus Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
-		}	
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
 
-		redirect($this->data['redirect']);
+        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 }
