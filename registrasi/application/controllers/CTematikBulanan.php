@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CTematikBulanan extends CI_Controller {
 
 	var $data = array();
+    var $active_accordion_bulan = 0;
 	function __construct() {
 		parent::__construct();
 		
@@ -23,6 +24,9 @@ class CTematikBulanan extends CI_Controller {
             'title'=>'Tematik Bulanan',
             'parent'=>'rencana'
         );
+
+        $this->active_accordion_bulan = $this->session->userdata('active_accordion_bulan');
+
 		## load model here 
 		$this->load->model('MTematikbulan', 'TematikBulan');
 		$this->load->model('MTahun', 'Tahun');
@@ -34,6 +38,7 @@ class CTematikBulanan extends CI_Controller {
 
 		$data['list'] = $this->TematikBulan->getAll();
 		$data['column'] = $this->TematikBulan->getColumn();
+        $this->session->unset_userdata('active_accordion_bulan');
 
 		$this->load->view('inc/tematikbulan/list', $data);
 	}
@@ -44,6 +49,9 @@ class CTematikBulanan extends CI_Controller {
         $data['tema_tahun'] = $this->Tahun->getByID($tahun);
         $data['list_bulan'] = $this->TematikBulan->getAllBulanByTahun($tahun);
         $data_mingguan = $this->TematikBulan->getJadwalMingguanByTahun($tahun);
+        $data_tanggal_disabled = $this->TematikBulan->getTanggalSelected($tahun);
+        $data_tanggal_disabled = array_column($data_tanggal_disabled, 'tanggal');
+
         $data_subtema = [];
         $data_tanggal_pelaksana = [];
         foreach ($data_mingguan as $subtema){
@@ -71,6 +79,8 @@ class CTematikBulanan extends CI_Controller {
         $data['tahun_tematik'] = $tahun;
         $data['data_subtema'] = $data_subtema;
         $data['data_mingguan'] = $data_tanggal_pelaksana;
+        $data['data_tanggal_disabled'] = $data_tanggal_disabled;
+        $data['active_accordion_bulan'] = empty($this->active_accordion_bulan)? 0 : $this->active_accordion_bulan;
 
         $this->load->view('inc/tematikbulan/lihat_data', $data);
     }
@@ -83,6 +93,20 @@ class CTematikBulanan extends CI_Controller {
 		} else {
 			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
 		}
+
+		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
+	}
+
+    public function insertsubtema() {
+		$err = $this->TematikBulan->insertSubTema();
+        $bulan = $this->TematikBulan->getBulanBySubTema($_POST['id_temabulanan']);
+        $this->session->set_userdata('active_accordion_bulan', $bulan);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}

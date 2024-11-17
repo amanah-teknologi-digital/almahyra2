@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="<?= base_url().'dist-assets/'?>css/plugins/smart.wizard/smart_wizard_theme_arrows.min.css" />
     <link rel="stylesheet" href="<?= base_url().'dist-assets/'?>css/plugins/smart.wizard/smart_wizard_theme_circles.min.css" />
     <link rel="stylesheet" href="<?= base_url().'dist-assets/'?>css/plugins/smart.wizard/smart_wizard_theme_dots.min.css" />
+    <link rel="stylesheet" href="<?= base_url().'dist-assets/'?>css/bootstrap-datepicker.min.css" />
 
     <style type="text/css">
         thead, th {

@@ -46,7 +46,7 @@
                                                         <td align="center">
                                                             <?= $row->jml_tematikbulanan.' / '.$row->jml_bulan ?><br>
                                                             <div class="progress">
-                                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: <?= $row->jml_tematikbulanan/$row->jml_bulan*100 ?>%;"><?= ($row->jml_tematikbulanan/$row->jml_bulan)*100 ?>%</div>
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: <?= round(($row->jml_tematikbulanan/$row->jml_bulan)*100) ?>%;"><?= round(($row->jml_tematikbulanan/$row->jml_bulan)*100) ?>%</div>
                                                             </div>
                                                         </td>
                                                         <td align="center">

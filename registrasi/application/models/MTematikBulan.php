@@ -84,6 +84,43 @@
 	        return $this->db->error();	        
 	    }
 
+        function insertSubTema() {
+            $user = $this->session->userdata['auth'];
+
+            $nama_subtema = $_POST['nama_subtema'];
+            $keterangan = $_POST['keterangan'];
+            $tanggal_pelaksanaan = $_POST['tanggal_pelaksanaan'];
+            $list_tanggal = explode(',', $tanggal_pelaksanaan);
+            $id_temabulanan = $_POST['id_temabulanan'];
+
+            if (count($list_tanggal) > 0){
+                $this->db->trans_start();
+
+                $a_input['id_temabulanan'] = $id_temabulanan;
+                $a_input['nama'] = $nama_subtema;
+                $a_input['keterangan'] = $keterangan;
+                $a_input['created_at'] = date('Y-m-d H:m:s');
+                $a_input['updater'] = $user->id;
+
+                $this->db->insert('jadwal_mingguan', $a_input);
+                $id_jadwalmingguan = $this->db->insert_id();
+
+                foreach ($list_tanggal as $tanggal){
+                    $temp_date = date('Y-m-d', strtotime($tanggal));
+                    $a_input_rincian['id_jadwalmingguan'] = $id_jadwalmingguan;
+                    $a_input_rincian['tanggal'] = $temp_date;
+                    $a_input_rincian['created_at'] = date('Y-m-d H:m:s');
+                    $a_input_rincian['updater'] = $user->id;
+
+                    $this->db->insert('rincian_jadwal_mingguan', $a_input_rincian);
+                }
+
+                $this->db->trans_complete();
+            }
+
+	        return $this->db->trans_status();
+	    }
+
 	    ## update data in table
 	    function update($id) {
             $user = $this->session->userdata['auth'];
@@ -132,6 +169,28 @@
             $query = $this->db->query($sql);
 
             return $query->result();
+        }
+
+        function getTanggalSelected($tahun) {
+            $sql = "SELECT a.tanggal
+                FROM rincian_jadwal_mingguan a 
+                JOIN jadwal_mingguan b ON b.id_jadwalmingguan = a.id_jadwalmingguan
+                JOIN tema_bulanan c ON c.id_temabulanan = b.id_temabulanan
+                WHERE c.tahun = $tahun              
+                ORDER BY a.tanggal ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getBulanBySubTema($id_temabulanan) {
+            $sql = "SELECT bulan FROM tema_bulanan WHERE id_temabulanan = $id_temabulanan";
+
+            $query = $this->db->query($sql);
+            $bulan = $query->row()->bulan;
+
+            return $bulan;
         }
 
 	}

@@ -24,3 +24,22 @@ function timeAgo($timestamp) {
         }
     }
 }
+
+if (!function_exists('format_date_indonesia')) {
+    function format_date_indonesia($date) {
+        $days_in_indonesian = array(
+            '0' => 'Minggu',
+            '1' => 'Senin',
+            '2' => 'Selasa',
+            '3' => 'Rabu',
+            '4' => 'Kamis',
+            '5' => 'Jumat',
+            '6' => 'Sabtu'
+        );
+
+        $timestamp = strtotime($date);
+        $day_number = date('w', $timestamp);
+
+        return $days_in_indonesian[$day_number];
+    }
+}

@@ -59,14 +59,15 @@
                                                                         <b>Keterangan:&nbsp;</b><?= $bulan->deskripsi ?>
                                                                     <?php } ?>
                                                                     </span>
-                                                                    <button class="btn btn-sm btn-primary"><span class="fas fa-plus"></span>&nbsp;Tambah Sub Tema</button>
+                                                                    <button class="btn btn-sm btn-primary btn-tambahsubtema" data-id="<?= $bulan->id_temabulanan?>" data-nama="<?= $bulan->nama_bulan  ?>" data-namatema="<?= $bulan->nama_temabulanan ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Sub Tema</button>
                                                                 </div>
                                                                 <div class="table-responsive">
                                                                     <table class="display table table-bordered table-sm" >
                                                                         <tr class="bg-gray-300">
                                                                             <th class="font-weight-bold">Periode</th>
                                                                             <th class="font-weight-bold">Nama Sub Tema</th>
-                                                                            <th class="font-weight-bold">Tanggal Pelaksanaan</th>
+                                                                            <th class="font-weight-bold">Tanggal</th>
+                                                                            <th class="font-weight-bold">Status Jadwal</th>
                                                                             <th class="font-weight-bold">Aksi</th>
                                                                         </tr>
                                                                         <?php if (isset($data_subtema[$bulan->id_temabulanan]) && count($data_subtema[$bulan->id_temabulanan]) > 0){
@@ -78,8 +79,11 @@
                                                                                             <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><span class="font-italic font-weight-bold">Minggu ke <?= ($key+1) ?></span></td>
                                                                                             <td rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><?= $subtema['nama_subtema'] ?></td>
                                                                                         <?php } ?>
-                                                                                        <td><?= $mingguan['tanggal'] ?></td>
+                                                                                        <td align="center" class="text-muted"><i><?= format_date_indonesia($mingguan['tanggal']).', '. date('d-m-Y', strtotime($mingguan['tanggal'])) ?></i></td>
                                                                                         <td></td>
+                                                                                        <?php if ($iter == 0){ ?>
+                                                                                            <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"></td>
+                                                                                        <?php } ?>
                                                                                     </tr>
                                                                             <?php $iter++; }
                                                                             }
@@ -168,6 +172,47 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="modal fade" id="tambah-subtema" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/insertsubtema', 'id="frm_tambahsubtema"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tambah Sub Tema Bulan <span class="text-success" id="label_nama_bulansubtema"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label>Tema</label>
+                                        <p><b id="label_nama_tema"></b></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sub Tema</label>
+                                        <input class="form-control" type="text" required name="nama_subtema" id="nama_subtema" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Keterangan <i>(Optional)</i></label>
+                                        <textarea class="form-control" name="keterangan" id="keterangan_subtema" cols="30" rows="5" autocomplete="off"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tanggal Pelaksanaan</label>
+                                        <input type="text" name="tanggal_pelaksanaan" id="tanggal_pelaksanaan" class="form-control" required autocomplete="off">
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_temabulanan" id="id_temabulanan_subtema">
+                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                        </form>
+                    </div>
+                </div>
+
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
             </div>
@@ -178,8 +223,22 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
+        var tanggal_selected = <?= json_encode($data_tanggal_disabled); ?>;
+        var bulan_active_accordion = <?= $active_accordion_bulan; ?>;
 
+        console.log(tanggal_selected);
+        console.log(bulan_active_accordion);
         $(document).ready(function() {
+            $('#accordion-item-icon-right-'+bulan_active_accordion).addClass('show'); // Make the first item expand
+
+            $('#tanggal_pelaksanaan').datepicker(
+                {
+                    format: 'yyyy-mm-dd',
+                    multidate: true, // This enables multiple date selection,
+                    datesDisabled: tanggal_selected
+                }
+            );
+
             $("#frm_tambah").validate({
                 rules: {
                     nama_tema: {
@@ -211,6 +270,34 @@
                     form.submit(); // Mengirimkan form jika validasi lolos
                 }
             });
+
+            $.validator.addMethod('dateCount', function(value, element) {
+                return value.split(',').length > 0; // Ensures at least one date is selected
+            }, 'Please select at least one date.');
+
+            $("#frm_tambahsubtema").validate({
+                rules: {
+                    nama_subtema: {
+                        required: true
+                    },
+                    tanggal_pelaksanaan: {
+                        required: true,
+                        dateCount: true     // Ensure that at least one date is selected
+                    }
+                },
+                messages: {
+                    nama_subtema: {
+                        required: "Sub tema harus diisi!"
+                    },
+                    tanggal_pelaksanaan: {
+                        required: "Tanggal pelaksanaan harus diisi!",
+                        dateCount: "Pilih minimal satu tanggal!"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
+            });
         });
 
         $('.tentukan_tema').click(function(){
@@ -222,6 +309,21 @@
             $("#label_nama_bulan").html(nama_bulan);
             $("#bulan_penentuan").val(bulan);
             $("#adding-modal").modal('show');
+        });
+
+        $('.btn-tambahsubtema').click(function(){
+            clearFormStatus("#frm_tambahsubtema");
+            $('#tanggal_pelaksanaan').datepicker('update', '');
+
+            let id_temabulanan = $(this).data('id')
+            let nama_bulan = $(this).data('nama')
+            let nama_tema = $(this).data('namatema')
+
+            $("#label_nama_bulansubtema").html(nama_bulan);
+            $("#id_temabulanan_subtema").val(id_temabulanan);
+            $("#label_nama_tema").html(nama_tema);
+
+            $("#tambah-subtema").modal('show');
         });
 
         $('.edit_tema').click(function(){
