@@ -77,12 +77,24 @@
                                                                                     <tr>
                                                                                         <?php if ($iter == 0){ ?>
                                                                                             <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><span class="font-italic font-weight-bold">Minggu ke <?= ($key+1) ?></span></td>
-                                                                                            <td rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><?= $subtema['nama_subtema'] ?></td>
+                                                                                            <td rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"><?= $subtema['nama_subtema'] ?>
+                                                                                                <br>
+                                                                                                <i style="font-size: smaller">keterangan: <span class="text-muted"><?= $subtema['keterangan'] ?></span></i>
+                                                                                            </td>
                                                                                         <?php } ?>
-                                                                                        <td align="center" class="text-muted"><i><?= format_date_indonesia($mingguan['tanggal']).', '. date('d-m-Y', strtotime($mingguan['tanggal'])) ?></i></td>
-                                                                                        <td></td>
+                                                                                        <td align="center" class="text-muted "><i><?= format_date_indonesia($mingguan['tanggal']).', '. date('d-m-Y', strtotime($mingguan['tanggal'])) ?></i></td>
+                                                                                        <td align="center">
+                                                                                            <?php if (is_null($mingguan['is_inputjadwalharian'])){ ?>
+                                                                                                <span class="badge badge-danger">Belum diinput</span>
+                                                                                            <?php }else{ ?>
+                                                                                                <span class="badge badge-success">Sudah diinput</span>
+                                                                                            <?php } ?>
+                                                                                            &nbsp;<a href="#" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Lihat Jadwal</a>
+                                                                                        </td>
                                                                                         <?php if ($iter == 0){ ?>
-                                                                                            <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>"></td>
+                                                                                            <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>">
+                                                                                                <span class="btn btn-sm btn-warning edit_subtema" data-id="<?= $subtema['id_jadwalmingguan'] ?>" data-nama="<?= $bulan->nama_bulan ?>" data-namatema="<?= $bulan->nama_temabulanan ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
+                                                                                            </td>
                                                                                         <?php } ?>
                                                                                     </tr>
                                                                             <?php $iter++; }
@@ -212,6 +224,45 @@
                         </form>
                     </div>
                 </div>
+                <div class="modal fade" id="edit-subtema" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/updatesubtema', 'id="frm_updatesubtema"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Pembaharuan Sub Tema Bulan <span class="text-success" id="label_nama_bulansubtema_update"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label>Tema</label>
+                                        <p><b id="label_nama_tema_update"></b></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sub Tema</label>
+                                        <input class="form-control" type="text" required name="nama_subtema" id="nama_subtema_update" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Keterangan <i>(Optional)</i></label>
+                                        <textarea class="form-control" name="keterangan" id="keterangan_subtema_update" cols="30" rows="5" autocomplete="off"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tanggal Pelaksanaan</label>
+                                        <input type="text" name="tanggal_pelaksanaan" id="tanggal_pelaksanaan_update" class="form-control" required autocomplete="off">
+                                    </div>
+
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_jadwalmingguan" id="id_jadwalmingguan">
+                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                        </form>
+                    </div>
+                </div>
 
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
@@ -226,8 +277,6 @@
         var tanggal_selected = <?= json_encode($data_tanggal_disabled); ?>;
         var bulan_active_accordion = <?= $active_accordion_bulan; ?>;
 
-        console.log(tanggal_selected);
-        console.log(bulan_active_accordion);
         $(document).ready(function() {
             $('#accordion-item-icon-right-'+bulan_active_accordion).addClass('show'); // Make the first item expand
 
@@ -236,6 +285,13 @@
                     format: 'yyyy-mm-dd',
                     multidate: true, // This enables multiple date selection,
                     datesDisabled: tanggal_selected
+                }
+            );
+
+            $('#tanggal_pelaksanaan_update').datepicker(
+                {
+                    format: 'yyyy-mm-dd',
+                    multidate: true, // This enables multiple date selection,
                 }
             );
 
@@ -298,6 +354,30 @@
                     form.submit(); // Mengirimkan form jika validasi lolos
                 }
             });
+
+            $("#frm_updatesubtema").validate({
+                rules: {
+                    nama_subtema_update: {
+                        required: true
+                    },
+                    tanggal_pelaksanaan_update: {
+                        required: true,
+                        dateCount: true     // Ensure that at least one date is selected
+                    }
+                },
+                messages: {
+                    nama_subtema_update: {
+                        required: "Sub tema harus diisi!"
+                    },
+                    tanggal_pelaksanaan_update: {
+                        required: "Tanggal pelaksanaan harus diisi!",
+                        dateCount: "Pilih minimal satu tanggal!"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
+            });
         });
 
         $('.tentukan_tema').click(function(){
@@ -342,6 +422,39 @@
                     $("#keterangan_update").val(data['list_edit']['deskripsi']);
 
                     $("#updating-modal").modal('show');
+                }
+            });
+        })
+
+        $('.edit_subtema').click(function(){
+            clearFormStatus('#frm_updatesubtema')
+            $('#tanggal_pelaksanaan_update').datepicker('update', '');
+
+            let id_jadwalmingguan = $(this).data('id')
+            let nama_bulan = $(this).data('nama')
+            let nama_tema = $(this).data('namatema')
+
+            $("#label_nama_bulansubtema_update").html(nama_bulan);
+            $("#label_nama_tema_update").html(nama_tema);
+            $("#id_jadwalmingguan").val(id_jadwalmingguan);
+
+            $.ajax({
+                url: url + '/editsubtema/' + $(this).data('id'),
+                type:'GET',
+                dataType: 'json',
+                success: function(data){
+                    let data_jadwal_disabled = data['data_tanggal_disabled'];
+                    let list_jadwal_editable = data['list_jadwal_editable'];
+                    let list_jadwal_noneditable = data['list_jadwal_noneditable'];
+                    data_jadwal_disabled = $.merge(data_jadwal_disabled, list_jadwal_noneditable);
+
+                    $("#nama_subtema_update").val(data['list_edit']['nama']);
+                    $("#keterangan_subtema_update").val(data['list_edit']['keterangan']);
+
+                    $('#tanggal_pelaksanaan_update').datepicker('setDates', list_jadwal_editable);
+                    $('#tanggal_pelaksanaan_update').datepicker('setDatesDisabled', data_jadwal_disabled);
+
+                    $("#edit-subtema").modal('show');
                 }
             });
         })

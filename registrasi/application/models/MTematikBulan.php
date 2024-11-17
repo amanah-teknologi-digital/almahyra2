@@ -156,14 +156,15 @@
 	    }
 
         function getJadwalMingguanByTahun($tahun) {
-            $sql = "SELECT a.bulan, b.id_temabulanan, c.id_jadwalmingguan, c.nama as nama_subtema, d.tanggal,
-                e.name as nama_user, f.name as nama_role, d.created_at, d.updated_at
+            $sql = "SELECT a.bulan, b.id_temabulanan, c.id_jadwalmingguan, c.nama as nama_subtema, d.tanggal, c.keterangan,
+                e.name as nama_user, f.name as nama_role, d.created_at, d.updated_at, g.id_rincianjadwal_mingguan as is_inputjadwalharian
                 FROM ref_bulan a 
                 JOIN tema_bulanan b ON b.bulan = a.bulan and b.tahun = $tahun
                 JOIN jadwal_mingguan c ON c.id_temabulanan = b.id_temabulanan
                 JOIN rincian_jadwal_mingguan d ON d.id_jadwalmingguan = c.id_jadwalmingguan                          
                 JOIN data_user e ON e.id = d.updater               
-                JOIN m_role f ON f.id = e.id_role               
+                JOIN m_role f ON f.id = e.id_role       
+                LEFT JOIN (SELECT id_rincianjadwal_mingguan FROM jadwal_harian GROUP BY id_rincianjadwal_mingguan) g ON g.id_rincianjadwal_mingguan = d.id_rincianjadwal_mingguan
                 ORDER BY c.id_jadwalmingguan, d.tanggal ASC";
 
             $query = $this->db->query($sql);
@@ -184,6 +185,37 @@
             return $query->result();
         }
 
+        function getTanggalSelectedExcludeIdMingguan($tahun, $id_jadwalmingguan) {
+            $sql = "SELECT a.tanggal
+                FROM rincian_jadwal_mingguan a 
+                JOIN jadwal_mingguan b ON b.id_jadwalmingguan = a.id_jadwalmingguan
+                JOIN tema_bulanan c ON c.id_temabulanan = b.id_temabulanan
+                WHERE c.tahun = $tahun AND b.id_jadwalmingguan != $id_jadwalmingguan            
+                ORDER BY a.tanggal ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getJadwalMingguanById($id_jadwalmingguan) {
+            $sql = "SELECT * FROM jadwal_mingguan WHERE id_jadwalmingguan = $id_jadwalmingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getTanggalJadwalMingguan($id_jadwalmingguan) {
+            $sql = "SELECT a.tanggal, b.id_rincianjadwal_mingguan as is_inputjadwalharian FROM rincian_jadwal_mingguan a 
+                 LEFT JOIN (SELECT id_rincianjadwal_mingguan FROM jadwal_harian GROUP BY id_rincianjadwal_mingguan) b ON b.id_rincianjadwal_mingguan = a.id_rincianjadwal_mingguan
+                 WHERE a.id_jadwalmingguan = $id_jadwalmingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getBulanBySubTema($id_temabulanan) {
             $sql = "SELECT bulan FROM tema_bulanan WHERE id_temabulanan = $id_temabulanan";
 
@@ -191,6 +223,16 @@
             $bulan = $query->row()->bulan;
 
             return $bulan;
+        }
+
+        function getTahunByIdJadwalMingguan($id_jadwalmingguan) {
+            $sql = "SELECT b.tahun FROM jadwal_mingguan a 
+             JOIN tema_bulanan b ON b.id_temabulanan = a.id_temabulanan
+             WHERE a.id_jadwalmingguan = $id_jadwalmingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->row()->tahun;
         }
 
 	}

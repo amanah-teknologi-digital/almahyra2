@@ -63,12 +63,14 @@ class CTematikBulanan extends CI_Controller {
             if (empty($data_subtema) OR !in_array($subtema->id_jadwalmingguan, $temp_subtema)){
                 $data_subtema[$subtema->id_temabulanan][] = [
                     'id_jadwalmingguan' => $subtema->id_jadwalmingguan,
-                    'nama_subtema' => $subtema->nama_subtema
+                    'nama_subtema' => $subtema->nama_subtema,
+                    'keterangan' => $subtema->keterangan,
                 ];
             }
 
             $data_tanggal_pelaksana[$subtema->id_jadwalmingguan][] = [
                 'tanggal' => $subtema->tanggal,
+                'is_inputjadwalharian' => $subtema->is_inputjadwalharian,
                 'created_at' => $subtema->created_at,
                 'updated_at' => $subtema->updated_at,
                 'nama_user' => $subtema->nama_user,
@@ -118,6 +120,33 @@ class CTematikBulanan extends CI_Controller {
 
 	    $this->output->set_content_type('application/json');
 	    
+	    $this->output->set_output(json_encode($data));
+
+	    return $data;
+	}
+
+    public function editsubtema($id) {
+		$data = $this->data;
+
+		$data['list_edit'] = $this->TematikBulan->getJadwalMingguanById($id) ;
+        $tahun = $this->TematikBulan->getTahunByIdJadwalMingguan($id);
+		$data_tanggal = $this->TematikBulan->getTanggalJadwalMingguan($id) ;
+        $data_tanggal_disabled = $this->TematikBulan->getTanggalSelectedExcludeIdMingguan($tahun, $id);
+        $data_tanggal_disabled = array_column($data_tanggal_disabled, 'tanggal');
+        $data['data_tanggal_disabled'] = $data_tanggal_disabled;
+        $data['list_jadwal_noneditable'] = [];
+        $data['list_jadwal_editable'] = [];
+
+        foreach ($data_tanggal as $tgl){
+            if (empty($tgl->is_inputjadwalharian)){
+                $data['list_jadwal_editable'][] = $tgl->tanggal;
+            }else{
+                $data['list_jadwal_noneditable'][] = $tgl->tanggal;
+            }
+        }
+
+	    $this->output->set_content_type('application/json');
+
 	    $this->output->set_output(json_encode($data));
 
 	    return $data;
