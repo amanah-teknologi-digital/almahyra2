@@ -142,16 +142,6 @@
                 $input_jadwal['id_kelas'] = $id_kelas;
                 $this->db->insert('jadwal_harian', $input_jadwal);
                 $id_jadwalharian = $this->db->insert_id();
-                $urutan = 1;
-            }else{
-                $sql = "SELECT urutan FROM rincian_jadwal_harian WHERE id_jadwalharian = $id_jadwalharian ORDER BY urutan DESC LIMIT 1";
-                $query = $this->db->query($sql);
-                $urutan = $query->row()->urutan;
-                if (empty($urutan)){
-                    $urutan = 1;
-                }else{
-                    $urutan++;
-                }
             }
 
             $a_input['id_jadwalharian'] = $id_jadwalharian;
@@ -161,7 +151,6 @@
             $a_input['keterangan'] = $keterangan;
             $a_input['created_at'] = date('Y-m-d H:m:s');
             $a_input['updater'] = $user->id;
-            $a_input['urutan'] = $urutan;
 
             $this->db->insert('rincian_jadwal_harian', $a_input);
             $this->db->trans_complete();
@@ -257,6 +246,17 @@
 
             $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
             $this->db->delete('jadwal_mingguan');
+
+            $this->db->trans_complete();
+
+	        return $this->db->trans_status();
+	    }
+
+        function hapusKegiatan($id_rincianjadwal_harian) {
+            $this->db->trans_start();
+
+            $this->db->where('id_rincianjadwal_harian', $id_rincianjadwal_harian);
+            $this->db->delete('rincian_jadwal_harian');
 
             $this->db->trans_complete();
 
@@ -421,7 +421,7 @@
             JOIN data_user c ON c.id = b.updater               
             JOIN m_role d ON d.id = c.id_role
            WHERE a.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan
-           ORDER BY a.id_kelas, b.urutan ASC ";
+           ORDER BY a.id_kelas, b.jam_mulai ASC ";
 
             $query = $this->db->query($sql);
 

@@ -56,7 +56,6 @@
                                                                     <th align="center">Jam</th>
                                                                     <th align="center">Kegiatan</th>
                                                                     <th align="center">Keterangan</th>
-                                                                    <th align="center">Urutan</th>
                                                                     <th align="center">Aksi</th>
                                                                 </tr>
                                                             </thead>
@@ -68,16 +67,15 @@
                                                                             <td align="center"><?= Date('H:i',strtotime($kegiatan->jam_mulai)).' - '.Date('H:i',strtotime($kegiatan->jam_selesai)) ?></td>
                                                                             <td><?= $kegiatan->uraian; ?></td>
                                                                             <td><span class="text-muted font-italic text-small"><?= $kegiatan->keterangan; ?></span></td>
-                                                                            <td align="center"><?= $kegiatan->urutan; ?></td>
                                                                             <td align="center">
                                                                                 <span class="btn btn-sm btn-warning edit_kegiatan" data-idkelas="<?= $kelas->id_kelas ?>" data-id="<?= $kegiatan->id_rincianjadwal_harian ?>" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
-                                                                                <span class="btn btn-sm btn-danger hapus_kegiatan" data-idkelas="<?= $kelas->id_kelas ?>" data-id="<?= $kegiatan->id_rincianjadwal_harian ?>" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
+                                                                                <span class="btn btn-sm btn-danger hapus_kegiatan" data-idkelas="<?= $kelas->id_kelas ?>" data-id="<?= $kegiatan->id_rincianjadwal_harian ?>" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-namakegiatan="<?= $kegiatan->uraian ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
                                                                             </td>
                                                                         </tr>
                                                                 <?php }
                                                                 }else{ ?>
                                                                     <tr>
-                                                                        <td colspan="7" align="center"><span class="font-weight-bold text-danger text-small"><i>Data Jadwal Kosong!</i></span></td>
+                                                                        <td colspan="6" align="center"><span class="font-weight-bold text-danger text-small"><i>Data Jadwal Kosong!</i></span></td>
                                                                     </tr>
                                                                 <?php } ?>
                                                             </tbody>
@@ -193,6 +191,29 @@
                         </form>
                     </div>
                 </div>
+                <div class="modal fade" id="hapus-kegiatan" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/hapuskegiatan', 'id="frm_hapuskegiatan"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Hapus Jadwal Kegiatan Sub Tema <span class="text-success" id="label_nama_subtema_hapus"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Apakah yakin menghapus kegiatan <span class="font-weight-bold" id="label_nama_kegiatan_hapus"></span> pada kelas <span class="font-weight-bold" id="label_nama_kelas_hapus"></span>? </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-danger ml-2" type="submit">Hapus</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_kelas" id="id_kelas_hapus">
+                        <input type="hidden" name="id_rincianjadwal_harian" id="id_rincianjadwal_harian_hapus">
+                        <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
+                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                        </form>
+                    </div>
+                </div>
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
             </div>
@@ -237,7 +258,6 @@
                     type:'GET',
                     dataType: 'json',
                     success: function(data){
-                        console.log(data);
                         let data_kegiatan = data['list_edit'];
 
                         $("#jam_mulai_update").val(data_kegiatan['jam_mulai']);
@@ -248,6 +268,24 @@
                         $("#update-kegitan").modal('show');
                     }
                 });
+            });
+
+            $('.hapus_kegiatan').click(function(){
+                clearFormStatus("#frm_hapuskegiatan");
+
+                let nama_kelas = $(this).data('nama')
+                let nama_kegiatan = $(this).data('namakegiatan')
+                let nama_tema = $(this).data('namatema')
+                let id_rincianjadwal_harian = $(this).data('id')
+                let id_kelas = $(this).data('idkelas')
+
+                $("#label_nama_subtema_hapus").html(nama_tema);
+                $("#label_nama_kegiatan_hapus").html(nama_kegiatan);
+                $("#label_nama_kelas_hapus").html(nama_kelas);
+                $("#id_rincianjadwal_harian_hapus").val(id_rincianjadwal_harian);
+                $("#id_kelas_hapus").val(id_kelas);
+
+                $("#hapus-kegiatan").modal('show');
             });
 
             $("#frm_tambahkegiatan").validate({

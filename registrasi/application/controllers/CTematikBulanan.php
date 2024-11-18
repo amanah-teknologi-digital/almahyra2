@@ -267,4 +267,17 @@ class CTematikBulanan extends CI_Controller {
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
+
+    public function hapuskegiatan() {
+        $err = $this->TematikBulan->hapusKegiatan($_POST['id_rincianjadwal_harian']);
+        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
+
+        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
+	}
 }
