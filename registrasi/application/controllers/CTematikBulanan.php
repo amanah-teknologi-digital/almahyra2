@@ -165,6 +165,19 @@ class CTematikBulanan extends CI_Controller {
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
 
+    public function updatekegiatan() {
+		$err = $this->TematikBulan->updateKegiatan();
+        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        }
+
+		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
+	}
+
     public function updatesubtema() {
 		$err = $this->TematikBulan->updateSubTema();
         $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
@@ -210,6 +223,17 @@ class CTematikBulanan extends CI_Controller {
                 $data['list_jadwal_noneditable'][] = $tgl->tanggal;
             }
         }
+
+	    $this->output->set_content_type('application/json');
+
+	    $this->output->set_output(json_encode($data));
+
+	    return $data;
+	}
+
+    public function editkegiatan($id) {
+		$data = $this->data;
+        $data['list_edit'] = $this->TematikBulan->getJadwalKegiatanHarianById($id) ;
 
 	    $this->output->set_content_type('application/json');
 

@@ -69,7 +69,10 @@
                                                                             <td><?= $kegiatan->uraian; ?></td>
                                                                             <td><span class="text-muted font-italic text-small"><?= $kegiatan->keterangan; ?></span></td>
                                                                             <td align="center"><?= $kegiatan->urutan; ?></td>
-                                                                            <td align="center"></td>
+                                                                            <td align="center">
+                                                                                <span class="btn btn-sm btn-warning edit_kegiatan" data-idkelas="<?= $kelas->id_kelas ?>" data-id="<?= $kegiatan->id_rincianjadwal_harian ?>" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
+                                                                                <span class="btn btn-sm btn-danger hapus_kegiatan" data-idkelas="<?= $kelas->id_kelas ?>" data-id="<?= $kegiatan->id_rincianjadwal_harian ?>" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
+                                                                            </td>
                                                                         </tr>
                                                                 <?php }
                                                                 }else{ ?>
@@ -146,6 +149,50 @@
                         </form>
                     </div>
                 </div>
+                <div class="modal fade" id="update-kegitan" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/updatekegiatan', 'id="frm_updatekegiatan"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Pembaharuan Jadwal Kegiatan Sub Tema <span class="text-success" id="label_nama_subtema_update"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label>Nama Kelas</label>
+                                        <p class="font-weight-bold" id="label_namakelas_update"></p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Jam Mulai</label>
+                                        <input type="time" name="jam_mulai" id="jam_mulai_update" class="form-control" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Jam Selesai</label>
+                                        <input type="time" name="jam_selesai" id="jam_selesai_update" class="form-control" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Nama Kegiatan</label>
+                                        <input type="text" name="nama_kegiatan" id="nama_kegiatan_update" class="form-control" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Keterangan <i>(Optional)</i></label>
+                                        <textarea class="form-control" name="keterangan" id="keterangan_update" cols="30" rows="5" autocomplete="off"></textarea>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_kelas" id="id_kelas_update">
+                        <input type="hidden" name="id_rincianjadwal_harian" id="id_rincianjadwal_harian">
+                        <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
+                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                        </form>
+                    </div>
+                </div>
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
             </div>
@@ -172,6 +219,37 @@
                 $("#tambah-kegitan").modal('show');
             });
 
+            $('.edit_kegiatan').click(function(){
+                clearFormStatus('#frm_updatekegiatan')
+
+                let nama_kelas = $(this).data('nama')
+                let nama_tema = $(this).data('namatema')
+                let id_rincianjadwal_harian = $(this).data('id')
+                let id_kelas = $(this).data('idkelas')
+
+                $("#label_nama_subtema_update").html(nama_tema);
+                $("#label_namakelas_update").html(nama_kelas);
+                $("#id_rincianjadwal_harian").val(id_rincianjadwal_harian);
+                $("#id_kelas_update").val(id_kelas);
+
+                $.ajax({
+                    url: url + '/editkegiatan/' + $(this).data('id'),
+                    type:'GET',
+                    dataType: 'json',
+                    success: function(data){
+                        console.log(data);
+                        let data_kegiatan = data['list_edit'];
+
+                        $("#jam_mulai_update").val(data_kegiatan['jam_mulai']);
+                        $("#jam_selesai_update").val(data_kegiatan['jam_selesai']);
+                        $("#nama_kegiatan_update").val(data_kegiatan['uraian']);
+                        $("#keterangan_update").val(data_kegiatan['keterangan']);
+
+                        $("#update-kegitan").modal('show');
+                    }
+                });
+            });
+
             $("#frm_tambahkegiatan").validate({
                 rules: {
                     jam_mulai: {
@@ -192,6 +270,34 @@
                         required: "Jam selesai harus diisi!"
                     },
                     nama_kegiatan: {
+                        required: "Nama Kegiatan harus diisi!"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
+            });
+
+            $("#frm_updatekegiatan").validate({
+                rules: {
+                    jam_mulai_update: {
+                        required: true
+                    },
+                    jam_selesai_update: {
+                        required: true
+                    },
+                    nama_kegiatan_update: {
+                        required: true
+                    }
+                },
+                messages: {
+                    jam_mulai_update: {
+                        required: "Jam mulai harus diisi!"
+                    },
+                    jam_selesai_update: {
+                        required: "Jam selesai harus diisi!"
+                    },
+                    nama_kegiatan_update: {
                         required: "Nama Kegiatan harus diisi!"
                     }
                 },

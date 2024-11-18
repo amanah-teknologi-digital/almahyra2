@@ -223,6 +223,32 @@
 
 	        return $this->db->trans_status();
 	    }
+        function updateKegiatan() {
+            $user = $this->session->userdata['auth'];
+
+            $id_rincianjadwal_harian = $_POST['id_rincianjadwal_harian'];
+            $jam_mulai = $_POST['jam_mulai'];
+            $jam_selesai = $_POST['jam_selesai'];
+            $nama_kegiatan = $_POST['nama_kegiatan'];
+            $keterangan = $_POST['keterangan'];
+
+            $a_input['jam_mulai'] = $jam_mulai;
+            $a_input['jam_selesai'] = $jam_selesai;
+            $a_input['uraian'] = $nama_kegiatan;
+            $a_input['keterangan'] = $keterangan;
+            $a_input['updated_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
+
+            $this->db->trans_start();
+
+            $this->db->where('id_rincianjadwal_harian', $id_rincianjadwal_harian);
+            $this->db->update('rincian_jadwal_harian', $a_input);
+
+            $this->db->trans_complete();
+
+	        return $this->db->trans_status();
+	    }
+
         function hapusSubTema($id_jadwalmingguan) {
             $this->db->trans_start();
 
@@ -400,6 +426,14 @@
             $query = $this->db->query($sql);
 
             return $query->result();
+        }
+
+        function getJadwalKegiatanHarianById($id_rincianjadwal_harian){
+            $sql = "SELECT * FROM rincian_jadwal_harian a WHERE a.id_rincianjadwal_harian = $id_rincianjadwal_harian";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
         }
 
         function getJadwalStimulus($id_rincianjadwal_mingguan){
