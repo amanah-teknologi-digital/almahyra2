@@ -74,6 +74,7 @@ class CTematikBulanan extends CI_Controller {
             }
 
             $data_tanggal_pelaksana[$subtema->id_jadwalmingguan][] = [
+                'id_rincianjadwal_mingguan' => $subtema->id_rincianjadwal_mingguan,
                 'tanggal' => $subtema->tanggal,
                 'is_inputjadwalharian' => $subtema->is_inputjadwalharian,
                 'created_at' => $subtema->created_at,
@@ -93,14 +94,16 @@ class CTematikBulanan extends CI_Controller {
         $this->load->view('inc/tematikbulan/lihat_data', $data);
     }
 
-    public function lihatsubtema($tahun, $id_jadwalmingguan){
-        $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($id_jadwalmingguan);
+    public function lihatjadwalharian($tahun, $id_rincianjadwal_mingguan){
+        $bulan = $this->TematikBulan->getBulanByIdRincianJadwal($id_rincianjadwal_mingguan);
         $this->session->set_userdata('active_accordion_bulan', $bulan);
-
         $data = $this->data;
         $data['tahun_tematik'] = $tahun;
-        $data['id_jadwalmingguan'] = $id_jadwalmingguan;
-        $this->load->view('inc/tematikbulan/lihat_datasubtema', $data);
+        $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+        $data['data_rincianjadwal_mingguan'] = $this->TematikBulan->getRincianJadwalMingguanById($id_rincianjadwal_mingguan);
+        $data['data_subtema'] = $this->TematikBulan->getJadwalMingguanById($data['data_rincianjadwal_mingguan']->id_jadwalmingguan);
+
+        $this->load->view('inc/tematikbulan/lihat_dataharian', $data);
     }
 
 	public function insert() {

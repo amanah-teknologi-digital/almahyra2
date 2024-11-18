@@ -25,9 +25,9 @@
                             <a href="<?= base_url().$redirect.'/'.$tahun_tematik ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title d-flex align-items-center justify-content-center">Rencana Belajar Bulanan untuk Tematik Tahun <?= $tahun_tematik ?>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $tema_tahun->uraian ?></span></h5>
+                                    <h5 class="card-title d-flex align-items-center justify-content-center">Data Jadwal Harian untuk Sub Tema&nbsp;<span class="text-success"><?= $data_subtema->nama ?></span>&nbsp;pada Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia($data_rincianjadwal_mingguan->tanggal).', '.date('d-m-Y', strtotime($data_rincianjadwal_mingguan->tanggal)); ?></span></h5>
 
-                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Setiap bulan memiliki <b>tema dan sub tema</b> untuk mingguan, per sub tema akan ditentukan <b>tanggal mingguanya</b>.</span></p>
+                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Menentukan jadwal harian sesuai tanggal dan subtema yang ditetapkan ke <b>masing-masing kelas</b>.</span></p>
                                 </div>
                             </div>
                         </div>

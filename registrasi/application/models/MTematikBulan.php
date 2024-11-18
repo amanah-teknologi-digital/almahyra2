@@ -225,7 +225,7 @@
 
         function getJadwalMingguanByTahun($tahun) {
             $sql = "SELECT a.bulan, b.id_temabulanan, c.id_jadwalmingguan, c.nama as nama_subtema, d.tanggal, c.keterangan,
-                e.name as nama_user, f.name as nama_role, d.created_at, d.updated_at, g.id_rincianjadwal_mingguan as is_inputjadwalharian
+                e.name as nama_user, f.name as nama_role,d.id_rincianjadwal_mingguan, d.created_at, d.updated_at, g.id_rincianjadwal_mingguan as is_inputjadwalharian
                 FROM ref_bulan a 
                 JOIN tema_bulanan b ON b.bulan = a.bulan and b.tahun = $tahun
                 JOIN jadwal_mingguan c ON c.id_temabulanan = b.id_temabulanan
@@ -274,6 +274,14 @@
             return $query->row();
         }
 
+        function getRincianJadwalMingguanById($id_rincianjadwal_mingguan) {
+            $sql = "SELECT * FROM rincian_jadwal_mingguan WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
         function getTanggalJadwalMingguan($id_jadwalmingguan) {
             $sql = "SELECT a.tanggal, b.id_rincianjadwal_mingguan as is_inputjadwalharian FROM rincian_jadwal_mingguan a 
                  LEFT JOIN (SELECT id_rincianjadwal_mingguan FROM jadwal_harian GROUP BY id_rincianjadwal_mingguan) b ON b.id_rincianjadwal_mingguan = a.id_rincianjadwal_mingguan
@@ -307,6 +315,17 @@
             $sql = "SELECT b.bulan FROM jadwal_mingguan a 
              JOIN tema_bulanan b ON b.id_temabulanan = a.id_temabulanan
              WHERE a.id_jadwalmingguan = $id_jadwalmingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->row()->bulan;
+        }
+
+        function getBulanByIdRincianJadwal($id_rincianjadwal_mingguan) {
+            $sql = "SELECT c.bulan FROM rincian_jadwal_mingguan a 
+             JOIN jadwal_mingguan b ON b.id_jadwalmingguan = a.id_jadwalmingguan
+             JOIN tema_bulanan c ON c.id_temabulanan = b.id_temabulanan
+             WHERE a.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan";
 
             $query = $this->db->query($sql);
 

@@ -89,7 +89,7 @@
                                                                                             <?php }else{ ?>
                                                                                                 <span class="badge badge-success">Sudah diinput</span>
                                                                                             <?php } ?>
-                                                                                            &nbsp;<a href="<?= base_url().$redirect.'/'.$tahun_tematik.'/subtema/'.$subtema['id_jadwalmingguan'] ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Jadwal Harian</a>
+                                                                                            &nbsp;<a href="<?= base_url().$redirect.'/'.$tahun_tematik.'/jadwalharian/'.$mingguan['id_rincianjadwal_mingguan'] ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Jadwal Harian</a>
                                                                                         </td>
                                                                                         <?php if ($iter == 0){ ?>
                                                                                             <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>">
