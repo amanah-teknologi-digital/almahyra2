@@ -116,7 +116,7 @@ class CTematikBulanan extends CI_Controller {
             $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
         }
         foreach ($list_jadwalstimulus as $stimulus) {
-            $temp_jadwal_stimulus[$stimulus->id_kelas][] = $stimulus;
+            $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
         }
 
         $data['data_jadwal_harian'] = $temp_jadwal_harian;
@@ -270,6 +270,19 @@ class CTematikBulanan extends CI_Controller {
 
     public function hapuskegiatan() {
         $err = $this->TematikBulan->hapusKegiatan($_POST['id_rincianjadwal_harian']);
+        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
+
+        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
+	}
+
+    public function simpanstimulus() {
+        $err = $this->TematikBulan->simpanStimulus($_POST['id_kelas']);
         $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
         if ($err === FALSE) {

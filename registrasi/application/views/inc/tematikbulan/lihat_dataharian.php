@@ -41,14 +41,23 @@
                                     <div class="tab-content" id="myTabContent">
                                         <?php foreach ($data_kelas as $key => $kelas){ ?>
                                             <div class="tab-pane fade show <?= $active_tab_kelas==$kelas->id_kelas ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
-                                                <div class="card-body">
+                                                <div class="card-body shadow">
                                                     <h5 class="card-title"><b>Jadwal Harian</b></h5>
-                                                    <div class="table-responsive" id="zero_configuration_table<?= $kelas->id_kelas ?>">
-                                                        <div class="mb-3 d-flex justify-content-between align-items-center">
-                                                            <button class="btn btn-sm btn-warning btn-tambahbytemplate" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah dari Template</button>
-                                                            <button class="btn btn-sm btn-primary btn-tambahkegiatan" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</button>
+                                                    <div class="row mb-3 d-flex align-items-center justify-content-center">
+                                                        <div class="col-sm-4">
+                                                            <select name="" id="" class="form-control">
+                                                                <option value="">-- Pilih Template Jadwal --</option>
+                                                            </select>
                                                         </div>
-                                                        <i class="text-muted" style="font-size: 11px"><b>note:</b> <span class="text-danger font-weight-bold">* Jika tambah dari template, jadwal yang sudah ada akan dihapus!</span></i>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-sm btn-warning btn-tambahbytemplate" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Ambil dari Template Jadwal</button>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <button class="btn btn-sm btn-primary btn-tambahkegiatan float-right" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="table-responsive" id="zero_configuration_table<?= $kelas->id_kelas ?>">
+                                                        <i class="text-muted" style="font-size: 11px"><b>note:</b> <span>* Jika tambah dari template, jadwal yang sudah ada akan dihapus!</span></i>
                                                         <table class="display table table-sm table-striped table-bordered">
                                                             <thead style="background-color: #bfdfff">
                                                                 <tr>
@@ -85,12 +94,44 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="card-body">
+                                                <br>
+                                                <div class="card-body shadow">
                                                     <h5 class="card-title"><b>Data Stimulus</b></h5>
-                                                    <?php if (isset($data_jadwal_harian[$kelas->id_kelas])){ ?>
-                                                    <?php }else{ ?>
-                                                        <span class="font-weight-bold text-danger text-small"><i>Data Stimulus Kosong!</i></span>
-                                                    <?php }?>
+                                                    <div class="row mb-3 d-flex align-items-center justify-content-center">
+                                                        <div class="col-sm-4">
+                                                            <select name="" id="" class="form-control">
+                                                                <option value="">-- Pilih Template Stimulus --</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <button class="btn btn-sm btn-warning btn-tambahbytemplate"><span class="fas fa-plus"></span>&nbsp;Ambil Template Stimulus</button>
+                                                        </div>
+                                                        <div class="col-sm-5"></div>
+                                                    </div>
+                                                    <i class="text-muted" style="font-size: 11px"><b>note:</b> <span>* Jika tambah dari template, data stimulus yang sudah ada akan direplace!</span></i>
+                                                    <?php echo form_open_multipart($controller.'/simpanstimulus', 'id="frm_simpanstimulus'.$kelas->id_kelas.'"'); ?>
+                                                        <fieldset>
+                                                            <div class="form-group">
+                                                                <label>Nama Tema Stimulus</label>
+                                                                <input type="text" name="nama_tema_stimulus" id="nama_tema_stimulus<?= $kelas->id_kelas ?>" class="form-control" autocomplete="off" value="<?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->nama:'';  ?>">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Uraian Kegiatan Stimulus</label>
+                                                                <div id="editor<?= $kelas->id_kelas ?>" style="height: 200px;">
+                                                                    <?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->rincian_kegiatan:'';  ?>
+                                                                </div>
+                                                                <input type="hidden" name="editorContent" id="editorContent<?= $kelas->id_kelas ?>" data-editor-index="<?= $kelas->id_kelas ?>" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label>Keterangan <i>(Optional)</i></label>
+                                                                <textarea class="form-control" name="keterangan" id="keterangan<?= $kelas->id_kelas ?>" cols="30" rows="5" autocomplete="off"><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'';  ?></textarea>
+                                                            </div>
+                                                        </fieldset>
+                                                        <button class="btn btn-sm btn-success"><span class="fas fa-save"></span>&nbsp;Simpan Data Stimulus</button>
+                                                        <input type="hidden" name="id_kelas" value="<?= $kelas->id_kelas; ?>">
+                                                        <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
+                                                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                                                    </form>
                                                 </div>
                                             </div>
                                         <?php } ?>
@@ -224,8 +265,27 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         let url = "<?= base_url().$controller ?>";
-
+        let lis_kelas = <?= json_encode($data_kelas) ?>;
+        let quill = [];
         $(document).ready(function() {
+            $.each(lis_kelas, function(index, value){
+                quill[value.id_kelas] =
+                    new Quill('#editor'+value.id_kelas, {
+                        theme: 'snow',  // You can also choose 'bubble'
+                        modules: {
+                            toolbar: [
+                                [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                ['bold', 'italic', 'underline'],
+                                [{ 'align': [] }],
+                                ['link'],
+                                ['image'],
+                                ['blockquote']
+                            ]
+                        }
+                    });
+            });
+
             $('.btn-tambahkegiatan').click(function(){
                 clearFormStatus("#frm_tambahkegiatan");
 
@@ -314,6 +374,34 @@
                 submitHandler: function(form) {
                     form.submit(); // Mengirimkan form jika validasi lolos
                 }
+            });
+
+            $.each(lis_kelas, function(index, value){
+                $("#frm_simpanstimulus"+value.id_kelas).validate({
+                    rules: {
+                        nama_tema_stimulus:{
+                            required: true
+                        }
+                    },
+                    messages: {
+                        nama_tema_stimulus: {
+                            required: "Nama Tema Stimulus harus diisi!"
+                        }
+                    },
+                    submitHandler: function(form, event) {
+                        let content = quill[value.id_kelas].getText().trim();
+                        let htmlcontent = quill[value.id_kelas].root.innerHTML;
+                        console.log(content, htmlcontent);
+                        if (htmlcontent === "<p><br></p>" || content === ""){
+                            alert('Uraian Kegiatan Stimulus harus diisi!');
+                            event.preventDefault();  // Prevent form submission
+                            return false;  // Prevent default action
+                        }
+
+                        $('#editorContent'+value.id_kelas).val(htmlcontent);
+                        form.submit(); // Mengirimkan form jika validasi lolos
+                    }
+                });
             });
 
             $("#frm_updatekegiatan").validate({

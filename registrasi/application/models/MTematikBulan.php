@@ -158,6 +158,56 @@
 	        return $this->db->trans_status();
 	    }
 
+        function simpanStimulus($id_kelas) {
+            $user = $this->session->userdata['auth'];
+
+            $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
+            $nama = $_POST['nama_tema_stimulus'];
+            $editorContent = $_POST['editorContent'];
+            $keterangan = $_POST['keterangan'];
+
+            $sql = "SELECT id_jadwalstimulus FROM jadwal_stimulus WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
+            $query = $this->db->query($sql);
+            $id_jadwalstimulus = $query->row()->id_jadwalstimulus;
+
+            $this->db->trans_start();
+
+            if (empty($id_jadwalstimulus)) {
+                $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+                $input_jadwal['id_kelas'] = $id_kelas;
+                $this->db->insert('jadwal_stimulus', $input_jadwal);
+                $id_jadwalstimulus = $this->db->insert_id();
+            }
+
+            $sql = "SELECT id_rincianjadwal_stimulus FROM rincian_jadwal_stimulus WHERE id_jadwalstimulus = $id_jadwalstimulus";
+            $query = $this->db->query($sql);
+            $id_rincianjadwal_stimulus = $query->row()->id_rincianjadwal_stimulus;
+
+            if (empty($id_rincianjadwal_stimulus)) {
+                $input_data_stimulus['id_jadwalstimulus'] = $id_jadwalstimulus;
+                $input_data_stimulus['nama'] = $nama;
+                $input_data_stimulus['rincian_kegiatan'] = $editorContent;
+                $input_data_stimulus['keterangan'] = $keterangan;
+                $input_data_stimulus['created_at'] = date('Y-m-d H:m:s');
+                $input_data_stimulus['updater'] = $user->id;
+
+                $this->db->insert('rincian_jadwal_stimulus', $input_data_stimulus);
+            }else{
+                $input_data_stimulus['nama'] = $nama;
+                $input_data_stimulus['rincian_kegiatan'] = $editorContent;
+                $input_data_stimulus['keterangan'] = $keterangan;
+                $input_data_stimulus['updated_at'] = date('Y-m-d H:m:s');
+                $input_data_stimulus['updater'] = $user->id;
+
+                $this->db->where('id_rincianjadwal_stimulus', $id_rincianjadwal_stimulus);
+                $this->db->update('rincian_jadwal_stimulus', $input_data_stimulus);
+            }
+
+            $this->db->trans_complete();
+
+	        return $this->db->trans_status();
+	    }
+
         function updateSubTema() {
             $user = $this->session->userdata['auth'];
 
