@@ -78,7 +78,7 @@
                                             </tfoot>
                                         </table>
                                     </div>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Tahun dengan status <b>aktif</b> akan dijadikan acuan dalam proses kegiatan namira. dimohon berhati - hati dalam mengubah status tahun!</span></p>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Tahun dengan status <b>aktif</b> akan dijadikan acuan dalam proses kegiatan namira. dimohon berhati - hati dalam mengubah status tahun!</span></p>
                                 </div>
                             </div>
                         </div>

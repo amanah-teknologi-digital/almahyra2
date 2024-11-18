@@ -67,7 +67,7 @@
                                             </tfoot>
                                         </table>
                                     </div>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Memanajemen tema <b>per bulan beserta sub tema</b> dari bulan tersebut sesuai tematik tahunanya, ini juga akan menentukan <b>jadwal harian</b>.</span></p>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Memanajemen tema <b>per bulan beserta sub tema</b> dari bulan tersebut sesuai tematik tahunanya, ini juga akan menentukan <b>jadwal harian</b>.</span></p>
                                 </div>
                             </div>
                         </div>

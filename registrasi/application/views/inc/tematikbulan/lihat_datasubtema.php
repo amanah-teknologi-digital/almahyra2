@@ -17,7 +17,7 @@
                             <li><a href="#">Rencana Belajar</a></li>
                             <li><a href="#"><?= $title ?></a></li>
                             <li><a href="#">Data Tematik</a></li>
-                            <li>Sub Tema</li>
+                            <li>Jadwal Harian</li>
                         </ul>
                     </div>
                     <div class="row">

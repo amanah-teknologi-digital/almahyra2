@@ -94,6 +94,9 @@ class CTematikBulanan extends CI_Controller {
     }
 
     public function lihatsubtema($tahun, $id_jadwalmingguan){
+        $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($id_jadwalmingguan);
+        $this->session->set_userdata('active_accordion_bulan', $bulan);
+
         $data = $this->data;
         $data['tahun_tematik'] = $tahun;
         $data['id_jadwalmingguan'] = $id_jadwalmingguan;

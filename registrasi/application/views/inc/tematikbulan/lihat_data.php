@@ -63,7 +63,7 @@
                                                                 </div>
                                                                 <div class="table-responsive">
                                                                     <table class="display table table-bordered table-sm" >
-                                                                        <tr class="bg-gray-300">
+                                                                        <tr style="background-color: #bfdfff">
                                                                             <th class="font-weight-bold">Periode</th>
                                                                             <th class="font-weight-bold">Nama Sub Tema</th>
                                                                             <th class="font-weight-bold">Tanggal</th>
@@ -89,7 +89,7 @@
                                                                                             <?php }else{ ?>
                                                                                                 <span class="badge badge-success">Sudah diinput</span>
                                                                                             <?php } ?>
-                                                                                            &nbsp;<a href="<?= base_url().$redirect.'/'.$tahun_tematik.'/subtema/'.$subtema['id_jadwalmingguan'] ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Lihat Jadwal</a>
+                                                                                            &nbsp;<a href="<?= base_url().$redirect.'/'.$tahun_tematik.'/subtema/'.$subtema['id_jadwalmingguan'] ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp; Jadwal Harian</a>
                                                                                         </td>
                                                                                         <?php if ($iter == 0){ ?>
                                                                                             <td align="center" rowspan="<?= count($data_mingguan[$subtema['id_jadwalmingguan']]) ?>">
@@ -109,6 +109,8 @@
                                                                         <?php } ?>
                                                                     </table>
                                                                 </div>
+                                                                <p class="font-italic float-right mt-5" style="font-size: 11px"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Setiap Sub Tema memiliki <b>banyak tanggal</b>, jika semua tanggal di sub tema <b>belum ada jadwal harian</b>, maka bisa <b>dihapus</b>.
+                                                                        Jika ingin <b>update tanggal</b>, diklik update untuk menentukan tanggal dan data subtemanya, Jika tanggal yang <b>sudah ditentukan jadwal harianya</b>, maka tidak bisa <b>diubah/diunselect</b>.</span></p>
                                                             <?php } ?>
                                                         </div>
                                                     </div>
@@ -116,7 +118,7 @@
                                             <?php } ?>
                                         </div>
                                     </fieldset>
-                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted">Setiap bulan memiliki <b>tema dan sub tema</b> untuk mingguan, per sub tema akan ditentukan <b>tanggal mingguanya</b>.</span></p>
+                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Setiap bulan memiliki <b>tema dan sub tema</b> untuk mingguan, per sub tema akan ditentukan <b>tanggal mingguanya</b>.</span></p>
                                 </div>
                             </div>
                         </div>
