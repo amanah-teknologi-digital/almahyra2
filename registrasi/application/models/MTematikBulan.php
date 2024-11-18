@@ -121,6 +121,54 @@
 	        return $this->db->trans_status();
 	    }
 
+        function insertKegiatan() {
+            $user = $this->session->userdata['auth'];
+
+            $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
+            $id_kelas = $_POST['id_kelas'];
+            $jam_mulai = $_POST['jam_mulai'];
+            $jam_selesai = $_POST['jam_selesai'];
+            $nama_kegiatan = $_POST['nama_kegiatan'];
+            $keterangan = $_POST['keterangan'];
+
+            $sql = "SELECT id_jadwalharian FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
+            $query = $this->db->query($sql);
+            $id_jadwalharian = $query->row()->id_jadwalharian;
+
+            $this->db->trans_start();
+
+            if (empty($id_jadwalharian)) {
+                $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+                $input_jadwal['id_kelas'] = $id_kelas;
+                $this->db->insert('jadwal_harian', $input_jadwal);
+                $id_jadwalharian = $this->db->insert_id();
+                $urutan = 1;
+            }else{
+                $sql = "SELECT urutan FROM rincian_jadwal_harian WHERE id_jadwalharian = $id_jadwalharian ORDER BY urutan DESC LIMIT 1";
+                $query = $this->db->query($sql);
+                $urutan = $query->row()->urutan;
+                if (empty($urutan)){
+                    $urutan = 1;
+                }else{
+                    $urutan++;
+                }
+            }
+
+            $a_input['id_jadwalharian'] = $id_jadwalharian;
+            $a_input['jam_mulai'] = $jam_mulai;
+            $a_input['jam_selesai'] = $jam_selesai;
+            $a_input['uraian'] = $nama_kegiatan;
+            $a_input['keterangan'] = $keterangan;
+            $a_input['created_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
+            $a_input['urutan'] = $urutan;
+
+            $this->db->insert('rincian_jadwal_harian', $a_input);
+            $this->db->trans_complete();
+
+	        return $this->db->trans_status();
+	    }
+
         function updateSubTema() {
             $user = $this->session->userdata['auth'];
 
@@ -330,6 +378,41 @@
             $query = $this->db->query($sql);
 
             return $query->row()->bulan;
+        }
+
+        function getKelas(){
+            $sql = "SELECT * FROM ref_kelas";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getJadwalHarianById($id_rincianjadwal_mingguan){
+            $sql = "SELECT a.id_jadwalharian, a.id_kelas, b.*, c.name as nama_user, d.name as nama_role
+            FROM jadwal_harian a 
+            JOIN rincian_jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+            JOIN data_user c ON c.id = b.updater               
+            JOIN m_role d ON d.id = c.id_role
+           WHERE a.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan
+           ORDER BY a.id_kelas, b.urutan ASC ";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getJadwalStimulus($id_rincianjadwal_mingguan){
+            $sql = "SELECT a.id_jadwalstimulus, a.id_kelas, b.*, c.name as nama_user, d.name as nama_role
+            FROM jadwal_stimulus a 
+            JOIN rincian_jadwal_stimulus b ON b.id_jadwalstimulus = a.id_jadwalstimulus
+            JOIN data_user c ON c.id = b.updater               
+            JOIN m_role d ON d.id = c.id_role
+           WHERE a.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
         }
 
 	}

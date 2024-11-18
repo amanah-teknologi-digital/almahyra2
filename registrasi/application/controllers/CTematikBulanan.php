@@ -5,6 +5,7 @@ class CTematikBulanan extends CI_Controller {
 
 	var $data = array();
     var $active_accordion_bulan = 0;
+    var $active_tab_kelas = 0;
 	function __construct() {
 		parent::__construct();
 		
@@ -26,6 +27,7 @@ class CTematikBulanan extends CI_Controller {
         );
 
         $this->active_accordion_bulan = $this->session->userdata('active_accordion_bulan');
+        $this->active_tab_kelas = $this->session->userdata('active_tab_kelas');
 
 		## load model here 
 		$this->load->model('MTematikbulan', 'TematikBulan');
@@ -39,6 +41,7 @@ class CTematikBulanan extends CI_Controller {
 		$data['list'] = $this->TematikBulan->getAll();
 		$data['column'] = $this->TematikBulan->getColumn();
         $this->session->unset_userdata('active_accordion_bulan');
+        $this->session->unset_userdata('active_tab_kelas');
 
 		$this->load->view('inc/tematikbulan/list', $data);
 	}
@@ -51,6 +54,7 @@ class CTematikBulanan extends CI_Controller {
         $data_mingguan = $this->TematikBulan->getJadwalMingguanByTahun($tahun);
         $data_tanggal_disabled = $this->TematikBulan->getTanggalSelected($tahun);
         $data_tanggal_disabled = array_column($data_tanggal_disabled, 'tanggal');
+        $this->session->unset_userdata('active_tab_kelas');
 
         $data_subtema = [];
         $data_tanggal_pelaksana = [];
@@ -102,6 +106,22 @@ class CTematikBulanan extends CI_Controller {
         $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
         $data['data_rincianjadwal_mingguan'] = $this->TematikBulan->getRincianJadwalMingguanById($id_rincianjadwal_mingguan);
         $data['data_subtema'] = $this->TematikBulan->getJadwalMingguanById($data['data_rincianjadwal_mingguan']->id_jadwalmingguan);
+        $data['data_kelas'] = $this->TematikBulan->getKelas();
+        $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($id_rincianjadwal_mingguan);
+        $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($id_rincianjadwal_mingguan);
+
+        $temp_jadwal_harian = [];
+        $temp_jadwal_stimulus = [];
+        foreach ($list_jadwalharian as $jadwal){
+            $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
+        }
+        foreach ($list_jadwalstimulus as $stimulus) {
+            $temp_jadwal_stimulus[$stimulus->id_kelas][] = $stimulus;
+        }
+
+        $data['data_jadwal_harian'] = $temp_jadwal_harian;
+        $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
+        $data['active_tab_kelas'] = empty($this->active_tab_kelas)? 0 : $this->active_tab_kelas;
 
         $this->load->view('inc/tematikbulan/lihat_dataharian', $data);
     }
@@ -130,6 +150,19 @@ class CTematikBulanan extends CI_Controller {
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
+	}
+
+    public function insertkegiatan() {
+		$err = $this->TematikBulan->insertKegiatan();
+        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        }
+
+		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
 
     public function updatesubtema() {
