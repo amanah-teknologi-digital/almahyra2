@@ -119,6 +119,75 @@
 	        return $query->row();
 	    }
 
-	}
+        function insertKegiatan() {
+            $user = $this->session->userdata['auth'];
+
+            $id_templatejadwal = $_POST['id_templatejadwal'];
+            $jam_mulai = $_POST['jam_mulai'];
+            $jam_selesai = $_POST['jam_selesai'];
+            $nama_kegiatan = $_POST['nama_kegiatan'];
+            $keterangan = $_POST['keterangan'];
+
+            $this->db->trans_start();
+
+            $a_input['id_templatejadwal'] = $id_templatejadwal;
+            $a_input['jam_mulai'] = $jam_mulai;
+            $a_input['jam_selesai'] = $jam_selesai;
+            $a_input['uraian'] = $nama_kegiatan;
+            $a_input['keterangan'] = $keterangan;
+            $a_input['created_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
+
+            $this->db->insert('jadwal_kegiatan', $a_input);
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
+        function getJadwalKegiatanHarianById($id_kegiatan){
+            $sql = "SELECT * FROM jadwal_kegiatan a WHERE a.id_kegiatan = $id_kegiatan";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function updateKegiatan() {
+            $user = $this->session->userdata['auth'];
+
+            $id_kegiatan = $_POST['id_kegiatan'];
+            $jam_mulai = $_POST['jam_mulai'];
+            $jam_selesai = $_POST['jam_selesai'];
+            $nama_kegiatan = $_POST['nama_kegiatan'];
+            $keterangan = $_POST['keterangan'];
+
+            $a_input['jam_mulai'] = $jam_mulai;
+            $a_input['jam_selesai'] = $jam_selesai;
+            $a_input['uraian'] = $nama_kegiatan;
+            $a_input['keterangan'] = $keterangan;
+            $a_input['updated_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
+
+            $this->db->trans_start();
+
+            $this->db->where('id_kegiatan', $id_kegiatan);
+            $this->db->update('jadwal_kegiatan', $a_input);
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
+        function hapusKegiatan($id_kegiatan) {
+            $this->db->trans_start();
+
+            $this->db->where('id_kegiatan', $id_kegiatan);
+            $this->db->delete('jadwal_kegiatan');
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+    }
 
 ?>

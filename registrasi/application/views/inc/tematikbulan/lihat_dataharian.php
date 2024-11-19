@@ -406,24 +406,24 @@
 
             $("#frm_updatekegiatan").validate({
                 rules: {
-                    jam_mulai_update: {
+                    jam_mulai: {
                         required: true
                     },
-                    jam_selesai_update: {
+                    jam_selesai: {
                         required: true
                     },
-                    nama_kegiatan_update: {
+                    nama_kegiatan: {
                         required: true
                     }
                 },
                 messages: {
-                    jam_mulai_update: {
+                    jam_mulai: {
                         required: "Jam mulai harus diisi!"
                     },
-                    jam_selesai_update: {
+                    jam_selesai: {
                         required: "Jam selesai harus diisi!"
                     },
-                    nama_kegiatan_update: {
+                    nama_kegiatan: {
                         required: "Nama Kegiatan harus diisi!"
                     }
                 },

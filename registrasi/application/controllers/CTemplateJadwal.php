@@ -96,4 +96,51 @@ class CTemplateJadwal extends CI_Controller {
 
         redirect($this->data['redirect']);
 	}
+
+    public function editkegiatan($id) {
+        $data = $this->data;
+        $data['list_edit'] = $this->TemplateJadwal->getJadwalKegiatanHarianById($id) ;
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+    }
+
+    public function insertkegiatan() {
+        $err = $this->TemplateJadwal->insertKegiatan();
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        }
+
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_templatejadwal']);
+    }
+
+    public function updatekegiatan() {
+        $err = $this->TemplateJadwal->updateKegiatan();
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        }
+
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_templatejadwal']);
+    }
+
+    public function hapuskegiatan() {
+        $err = $this->TemplateJadwal->hapusKegiatan($_POST['id_kegiatan']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
+
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_templatejadwal']);
+    }
 }
