@@ -84,7 +84,7 @@
 
                 <!--  Modal -->
                 <div class="modal fade" id="adding-modal" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-lg" role="document">
                         <?php echo form_open_multipart($controller.'/insert'); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -94,12 +94,21 @@
                                 <div class="modal-body">                                   
                                     <fieldset>
                                         <div class="form-group">
-                                            <label>Tahun</label>
-                                            <input type="number" class="form-control" required name="tahun" id="tahun_tambah" autocomplete="off">
+                                            <label>Nama Template</label>
+                                            <input type="text" class="form-control" required name="nama_template" id="nama_template" autocomplete="off">
                                         </div>
                                         <div class="form-group">
-                                            <label>Uraian Tema</label>
-                                            <input class="form-control" type="text" required name="name" id="name_tambah" autocomplete="off">
+                                            <label>Tema Stimulus</label>
+                                            <input class="form-control" type="text" required name="nama_tema" id="nama_tema" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Uraian Kegiatan Stimulus</label>
+                                            <div id="editor" style="height: 200px;"></div>
+                                            <input type="hidden" name="editorContent" id="editorContent" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Keterangan <i>(Optional)</i></label>
+                                            <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="10" autocomplete="off"></textarea>
                                         </div>
                                     </fieldset>                                    
                                 </div>
@@ -156,6 +165,22 @@
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
 
+        $(document).ready(function() {
+            let quill = new Quill('#editor', {
+                    theme: 'snow',  // You can also choose 'bubble'
+                    modules: {
+                        toolbar: [
+                            [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'align': [] }],
+                            ['link'],
+                            ['image'],
+                            ['blockquote']
+                        ]
+                    }
+                });
+        });
         $('.edit').click(function(){
             $.ajax({
                 url: url + '/edit/' + $(this).data('id'),
