@@ -49,12 +49,12 @@
                                                         </td>
                                                         <td align="center">
                                                             <?php if (empty($row->is_pakai)){ ?>
-                                                                <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->tahun; ?>">
+                                                                <button class="btn btn-outline-warning btn-sm btn-icon edit" type="button" data-id="<?= $row->tahun; ?>">
                                                                     <span class="ul-btn__icon">
                                                                         <i class="i-Pen-3"></i>
                                                                     </span>
                                                                 </button>
-                                                                <button class="btn btn-outline-danger btn-icon delete" type="button" data-id="<?= $row->tahun; ?>">
+                                                                <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->tahun; ?>">
                                                                     <span class="ul-btn__icon">
                                                                         <i class="i-Close-Window"></i>
                                                                     </span>

@@ -47,12 +47,12 @@
                                                             <p><span class="text-muted"><i>terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?> oleh <?= $row->nama_role.' ('.$row->nama_user.')' ?></i></span></p>
                                                         </td>
                                                         <td align="center">
-                                                            <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->id_templatestimulus; ?>">
+                                                            <button class="btn btn-outline-warning btn-sm btn-icon edit" type="button" data-id="<?= $row->id_templatestimulus; ?>">
                                                                     <span class="ul-btn__icon">
                                                                         <i class="i-Pen-3"></i>
                                                                     </span>
                                                             </button>
-                                                            <button class="btn btn-outline-danger btn-icon delete" type="button" data-id="<?= $row->id_templatestimulus; ?>">
+                                                            <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->id_templatestimulus; ?>">
                                                                     <span class="ul-btn__icon">
                                                                         <i class="i-Close-Window"></i>
                                                                     </span>

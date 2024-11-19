@@ -45,12 +45,15 @@
                                                             <p><span class="text-muted"><i>terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?> oleh <?= $row->nama_role.' ('.$row->nama_user.')' ?></i></span></p>
                                                         </td>
                                                         <td align="center">
-                                                            <a href="<?= base_url().$redirect.'/edit/'.$row->id_templatejadwal ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span> Lihat Data</a>
-                                                            <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->id_templatejadwal; ?>">
-                                                                    <span class="ul-btn__icon">
-                                                                        <i class="i-Close-Window"></i>
-                                                                    </span>
-                                                            </button>
+                                                            <div class="d-flex align-items-center justify-content-center">
+                                                                <a href="<?= base_url().$redirect.'/edit/'.$row->id_templatejadwal ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span> Lihat Data</a>
+                                                                &nbsp;
+                                                                <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->id_templatejadwal; ?>">
+                                                                        <span class="ul-btn__icon">
+                                                                            <i class="i-Close-Window"></i>
+                                                                        </span>
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>
