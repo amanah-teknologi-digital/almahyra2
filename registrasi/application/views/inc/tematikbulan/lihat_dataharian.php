@@ -46,7 +46,7 @@
                                                     <?php echo form_open_multipart('', 'id="frm_gettemplate_jadwal'.$kelas->id_kelas.'"'); ?>
                                                         <div class="row mb-3 d-flex align-items-center justify-content-center">
                                                             <div class="col-sm-4">
-                                                                <select name="template_jadwal" class="form-control">
+                                                                <select name="template_jadwal" id="template_jadwal<?= $kelas->id_kelas ?>" class="form-control">
                                                                     <option value="">-- Pilih Template Jadwal --</option>
                                                                     <?php foreach ($data_template_jadwal as $template){ ?>
                                                                         <option value="<?= $template->id_templatejadwal ?>"><?= $template->nama ?></option>
@@ -54,10 +54,10 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-sm-3">
-                                                                <button class="btn btn-sm btn-warning btn-tambahbytemplate" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Ambil dari Template Jadwal</button>
+                                                                <button class="btn btn-sm btn-warning" id="btn-tambahbytemplate<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Ambil dari Template Jadwal</button>
                                                             </div>
                                                             <div class="col-sm-5">
-                                                                <span class="btn btn-sm btn-primary btn-tambahkegiatan float-right" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</span>
+                                                                <span class="btn btn-sm btn-primary btn-tambahkegiatan float-right" id="btn-tambahkegiatan<?= $kelas->id_kelas ?>" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</span>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -95,9 +95,13 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                    <div class="table-responsive d-none"  id="preview_fromtemplate<?= $kelas->id_kelas ?>">
+                                                    <?php echo form_open_multipart($controller.'/terapkantemplatejadwal'); ?>
+                                                        <div class="table-responsive" style="display: none;"  id="preview_fromtemplate<?= $kelas->id_kelas ?>">
 
-                                                    </div>
+                                                        </div>
+                                                        <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
+                                                        <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                                                    </form>
                                                 </div>
                                                 <br>
                                                 <div class="card-body shadow">
@@ -105,7 +109,7 @@
                                                     <?php echo form_open_multipart('', 'id="frm_gettemplate_stimulus'.$kelas->id_kelas.'"'); ?>
                                                         <div class="row mb-3 d-flex align-items-center justify-content-center">
                                                             <div class="col-sm-4">
-                                                                <select name="template_stimulus" class="form-control">
+                                                                <select name="template_stimulus" id="template_stimulus<?= $kelas->id_kelas ?>" class="form-control">
                                                                     <option value="">-- Pilih Template Stimulus --</option>
                                                                     <?php foreach ($data_template_stimulus as $template){ ?>
                                                                         <option value="<?= $template->id_templatestimulus ?>"><?= $template->nama_template ?></option>
@@ -115,7 +119,9 @@
                                                             <div class="col-sm-3">
                                                                 <button class="btn btn-sm btn-warning btn-tambahbytemplate_stimulus"><span class="fas fa-plus"></span>&nbsp;Ambil Template Stimulus</button>
                                                             </div>
-                                                            <div class="col-sm-5"></div>
+                                                            <div class="col-sm-5">
+                                                                <span class="text-success font-italic" style="font-size: 11px;" id="label_load_stimulus<?= $kelas->id_kelas ?>"></span>
+                                                            </div>
                                                         </div>
                                                     </form>
                                                     <i class="text-muted" style="font-size: 11px"><b>note:</b> <span>* Jika tambah dari template, data stimulus yang sudah ada akan direplace!</span></i>
@@ -455,7 +461,8 @@
                         }
                     },
                     submitHandler: function(form) {
-                        console.log(value.id_kelas);
+                        let id_template = $("#template_jadwal"+value.id_kelas).val();
+                        getDataJadwal(value.id_kelas, id_template);
                         //form.submit(); // Mengirimkan form jika validasi lolos
                     }
                 });
@@ -474,12 +481,104 @@
                         }
                     },
                     submitHandler: function(form) {
-                        console.log(value.id_kelas);
+                        let id_template = $("#template_stimulus"+value.id_kelas).val();
+                        getDataStimulus(value.id_kelas, id_template);
                         //form.submit(); // Mengirimkan form jika validasi lolos
                     }
                 });
             });
         });
+
+        function hideTombolManual(id_kelas){
+            $("#template_jadwal"+id_kelas).prop('disabled', true);
+            $("#btn-tambahbytemplate"+id_kelas).hide();
+            $("#btn-tambahkegiatan"+id_kelas).hide();
+        }
+
+        function showTombolManual(id_kelas){
+            $("#template_jadwal"+id_kelas).prop('disabled', false);
+            $("#btn-tambahbytemplate"+id_kelas).show();
+            $("#btn-tambahkegiatan"+id_kelas).show();
+            $("#preview_fromtemplate" + id_kelas).html('');
+            $("#preview_fromtemplate" + id_kelas).hide();
+            $("#zero_configuration_table" + id_kelas).show()
+        }
+
+        function getDataJadwal(id_kelas, id_templatejadwal){
+            $.ajax({
+                url: url + '/gettemplatejadwal/' + id_templatejadwal,
+                type:'GET',
+                dataType: 'json',
+                success: function(data){
+                    let data_jadwal = data;
+
+                    if (data_jadwal.length > 0) {
+                        let html = '<p class="font-italic mt-3"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Preview jadwal dari template, klik <b>tombol terapkan template</b> dibawah untuk <b>menerapkan jadwal template</b>.</span></p>';
+                        html += '<table class="display table table-sm table-striped table-bordered font-italic">';
+                        html += '<thead style="background-color: #bfdfff">';
+                        html += '<tr>';
+                        html += '<th align="center">No</th>';
+                        html += '<th align="center">Jam</th>';
+                        html += '<th align="center">Kegiatan</th>';
+                        html += '<th align="center">Keterangan</th>';
+                        html += '</tr>';
+                        html += '</thead>';
+                        html += '<tbody>';
+
+                        $.each(data_jadwal, function (index, value) {
+                            html += '<tr>';
+                            html += '<td align="center">' + (index + 1) + '</td>';
+                            html += '<td align="center">' + formatTime(value.jam_mulai) + ' - ' + formatTime(value.jam_selesai) + '</td>';
+                            html += '<td>' + value.uraian + '</td>';
+                            html += '<td><span class="text-muted font-italic text-small">' + value.keterangan + '</span></td>';
+                            html += '</tr>';
+                        });
+
+                        html += '</tbody>';
+                        html += '</table>';
+                        html += '<input type="hidden" name="id_kelas" value="'+id_kelas+'">';
+                        html += '<input type="hidden" name="id_templatejadwal" value="'+id_templatejadwal+'">';
+                        html += '<button class="btn btn-sm btn-success" onclick="applyTemplateJadwal('+id_kelas+', '+id_templatejadwal+')"><span class="fas fa-check"></span>&nbsp;Terapkan Template</button>';
+                        html += '&nbsp;<button class="btn btn-sm btn-danger" onclick="showTombolManual('+id_kelas+')"><span class="fas fa-times"></span>&nbsp;Batal</button>';
+
+                        $("#preview_fromtemplate" + id_kelas).html(html);
+                        $("#preview_fromtemplate" + id_kelas).show();
+                        $("#zero_configuration_table" + id_kelas).hide()
+                        hideTombolManual(id_kelas);
+                    }else{
+                        alert('Data jadwal template jadwal kosong!');
+                    }
+                }
+            });
+        }
+
+        function getDataStimulus(id_kelas, id_templatestimulus){
+            $.ajax({
+                url: url + '/gettemplatestimulus/' + id_templatestimulus,
+                type:'GET',
+                dataType: 'json',
+                success: function(data){
+                    let data_jadwal = data;
+
+                    if(data_jadwal){
+                        $("#nama_tema_stimulus"+id_kelas).val(data_jadwal.nama);
+                        quill[id_kelas].root.innerHTML = data_jadwal.uraian;
+                        $("#keterangan"+id_kelas).val(data_jadwal.keterangan);
+                        $("#label_load_stimulus"+id_kelas).html('Data berhasil diload!, silahkan klik tombol <b>Simpan</b> dibawah untuk menyimpan data!');
+                    }else{
+                        alert('Data template stimulus kosong!');
+                    }
+                }
+            });
+        }
+
+        function formatTime(inputTime) {
+            // Extract the hours and minutes from the input string (HH:MM:SS format)
+            const [hours, minutes] = inputTime.split(':');
+
+            // Return the formatted time as HH:MM
+            return `${hours}:${minutes}`;
+        }
 
         function clearFormStatus(formId) {
             // Reset the form values

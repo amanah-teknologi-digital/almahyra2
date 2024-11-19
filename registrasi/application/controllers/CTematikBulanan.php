@@ -290,11 +290,38 @@ class CTematikBulanan extends CI_Controller {
         $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
         if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+            $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
         }else{
-            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+            $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
         }
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
+
+    public function gettemplatejadwal($id_templatejadwal){
+        $data = $this->TematikBulan->getTemplateJadwalById($id_templatejadwal);
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($data));
+
+    }
+
+    public function gettemplatestimulus($id_templatestimulus){
+        $data = $this->TematikBulan->getTemplateStimulusById($id_templatestimulus);
+        $this->output->set_content_type('application/json');
+        $this->output->set_output(json_encode($data));
+
+    }
+
+    public function terapkantemplatejadwal(){
+        $err = $this->TematikBulan->terapkanTemplateJadwal();
+        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menerapkan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menerapkan Data');
+        }
+
+        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
+    }
 }
