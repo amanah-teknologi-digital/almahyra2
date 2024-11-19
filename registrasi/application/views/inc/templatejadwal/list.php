@@ -45,12 +45,8 @@
                                                             <p><span class="text-muted"><i>terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?> oleh <?= $row->nama_role.' ('.$row->nama_user.')' ?></i></span></p>
                                                         </td>
                                                         <td align="center">
-                                                            <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->id_templatejadwal; ?>">
-                                                                    <span class="ul-btn__icon">
-                                                                        <i class="i-Pen-3"></i>
-                                                                    </span>
-                                                            </button>
-                                                            <button class="btn btn-outline-danger btn-icon delete" type="button" data-id="<?= $row->id_templatejadwal; ?>">
+                                                            <a href="<?= base_url().$redirect.'/edit/'.$row->id_templatejadwal ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span> Lihat Data</a>
+                                                            <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->id_templatejadwal; ?>">
                                                                     <span class="ul-btn__icon">
                                                                         <i class="i-Close-Window"></i>
                                                                     </span>

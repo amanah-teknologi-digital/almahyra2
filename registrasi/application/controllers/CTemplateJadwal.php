@@ -80,14 +80,14 @@ class CTemplateJadwal extends CI_Controller {
 	}
 
 	public function delete($id) {
-		$err = $this->Tahun->delete($id);
+        $err = $this->TemplateJadwal->delete($id);
 
-		if ($err > 0) {
-			$this->session->set_flashdata('success', 'Berhasil Menghapus Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
-		}	
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
 
-		redirect($this->data['redirect']);
+        redirect($this->data['redirect']);
 	}
 }

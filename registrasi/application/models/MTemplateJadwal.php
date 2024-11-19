@@ -84,11 +84,18 @@
 
 	    ## delete data in table
 		function delete($id) {
-			$this->db->where('tahun', $id)->where('is_aktif', 0);
+            $this->db->trans_start();
 
-			$this->db->delete($this->table_name);
+            $this->db->where('id_templatejadwal', $id);
+            $this->db->delete('jadwal_kegiatan');
 
-			return $this->db->affected_rows();
+            $this->db->where('id_templatejadwal', $id);
+            $this->db->delete('template_jadwal');
+
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
 		}
 
 		## get data by id in table
