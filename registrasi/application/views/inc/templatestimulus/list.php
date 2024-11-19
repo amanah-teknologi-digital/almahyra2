@@ -85,7 +85,7 @@
                 <!--  Modal -->
                 <div class="modal fade" id="adding-modal" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
-                        <?php echo form_open_multipart($controller.'/insert'); ?>
+                        <?php echo form_open_multipart($controller.'/insert','id="frm_tambahtemplate"'); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Penambahan Template Stimulus</h5>
@@ -122,35 +122,40 @@
                 </div>
 
                 <div class="modal fade" id="updating-modal" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <?php echo form_open_multipart($controller.'/update'); ?>
+                    <div class="modal-dialog modal-lg" role="document">
+                        <?php echo form_open_multipart($controller.'/update','id="frm_updatetemplate"'); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Perbaharuan Data</h5>
+                                    <h5 class="modal-title">Perbaharuan Template Stimulus</h5>
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <fieldset>
                                         <div class="form-group">
-                                            <label>Tahun</label>
-                                            <p id="tahunedit" style="font-weight: bold"></p>
+                                            <label>Nama Template</label>
+                                            <input type="text" class="form-control" required name="nama_template" id="nama_template_update" autocomplete="off">
                                         </div>
                                         <div class="form-group">
-                                            <label>Uraian Tema</label>
-                                            <input class="form-control" type="text" required name="name" id="name_edit" autocomplete="off">
+                                            <label>Tema Stimulus</label>
+                                            <input class="form-control" type="text" required name="nama_tema" id="nama_tema_update" autocomplete="off">
                                         </div>
                                         <div class="form-group">
-                                            <label>Status</label>
-                                            <p id="statusedit" style="font-weight: bold"></p>
+                                            <label>Uraian Kegiatan Stimulus</label>
+                                            <div id="editor_update" style="height: 200px;"></div>
+                                            <input type="hidden" name="editorContent" id="editorContent_update" />
                                         </div>
-                                        <input type="hidden" name="id" id="id">
-                                    </fieldset>                                    
+                                        <div class="form-group">
+                                            <label>Keterangan <i>(Optional)</i></label>
+                                            <textarea class="form-control" name="keterangan" id="keterangan_update" cols="30" rows="10" autocomplete="off"></textarea>
+                                        </div>
+                                    </fieldset>
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                                     <button class="btn btn-primary ml-2" type="submit">Simpan</button>
                                 </div>
                             </div>
+                            <input type="hidden" name="id_templatestimulus" id="id_templatestimulus" />
                         </form>
                     </div>
                 </div>
@@ -180,40 +185,117 @@
                         ]
                     }
                 });
-        });
-        $('.edit').click(function(){
-            $.ajax({
-                url: url + '/edit/' + $(this).data('id'),
-                type:'GET',
-                dataType: 'json',
-                success: function(data){
-                    
-                    $("#id").val(data['list_edit']['tahun']);
-                    $("#tahunedit").html(data['list_edit']['tahun']);
-                    $("#name_edit").val(data['list_edit']['uraian']);
-                    if (data['list_edit']['is_aktif'] === '1'){
-                        $("#statusedit").html('<span class="badge badge-success">Aktif</span>');
-                    }else{
-                        $("#statusedit").html('<span class="badge badge-danger">Tidak Aktif</span>');
+
+            let quill_update = new Quill('#editor_update', {
+                theme: 'snow',  // You can also choose 'bubble'
+                modules: {
+                    toolbar: [
+                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['bold', 'italic', 'underline'],
+                        [{ 'align': [] }],
+                        ['link'],
+                        ['image'],
+                        ['blockquote']
+                    ]
+                }
+            });
+
+            $("#frm_tambahtemplate").validate({
+                rules: {
+                    nama_template:{
+                        required: true
+                    },
+                    nama_tema:{
+                        required: true
+                    }
+                },
+                messages: {
+                    nama_template: {
+                        required: "Nama Template Stimulus harus diisi!"
+                    },
+                    nama_tema: {
+                        required: "Tema Stimulus harus diisi!"
+                    }
+                },
+                submitHandler: function(form, event) {
+                    let content = quill.getText().trim();
+                    let htmlcontent = quill.root.innerHTML;
+
+                    if (htmlcontent === "<p><br></p>" || content === ""){
+                        alert('Uraian Kegiatan Stimulus harus diisi!');
+                        event.preventDefault();  // Prevent form submission
+                        return false;  // Prevent default action
                     }
 
-                    $("#updating-modal").modal('show');
-                }                
-            }); 
-        })
+                    $('#editorContent').val(htmlcontent);
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
+            });
 
-        $('.delete').click(function () {
-            var id = $(this).data('id') ;
-            swal({
-                title: 'Apakah yakin data ini ingin di hapus? ',
-                showCancelButton: true,
-                confirmButtonColor: '#4caf50',
-                cancelButtonColor: '#f44336',
-                confirmButtonText: 'Ya, Lanjutkan hapus!',
-                cancelButtonText: 'Batal',
-            }).then(function () {
-                window.location = url + '/delete/' + id ;
+            $("#frm_updatetemplate").validate({
+                rules: {
+                    nama_template_update:{
+                        required: true
+                    },
+                    nama_tema_update:{
+                        required: true
+                    }
+                },
+                messages: {
+                    nama_template_update: {
+                        required: "Nama Template Stimulus harus diisi!"
+                    },
+                    nama_tema_update: {
+                        required: "Tema Stimulus harus diisi!"
+                    }
+                },
+                submitHandler: function(form, event) {
+                    let content = quill_update.getText().trim();
+                    let htmlcontent = quill_update.root.innerHTML;
+
+                    if (htmlcontent === "<p><br></p>" || content === ""){
+                        alert('Uraian Kegiatan Stimulus harus diisi!');
+                        event.preventDefault();  // Prevent form submission
+                        return false;  // Prevent default action
+                    }
+
+                    $('#editorContent_update').val(htmlcontent);
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
+            });
+
+            $('.edit').click(function(){
+                $.ajax({
+                    url: url + '/edit/' + $(this).data('id'),
+                    type:'GET',
+                    dataType: 'json',
+                    success: function(data){
+
+                        $("#id_templatestimulus").val(data['list_edit']['id_templatestimulus']);
+                        $("#nama_template_update").val(data['list_edit']['nama_template']);
+                        $("#nama_tema_update").val(data['list_edit']['nama']);
+                        $("#keterangan_update").val(data['list_edit']['keterangan']);
+                        quill_update.root.innerHTML = data['list_edit']['uraian'];
+
+                        $("#updating-modal").modal('show');
+                    }
+                });
             })
+
+            $('.delete').click(function () {
+                var id = $(this).data('id') ;
+                swal({
+                    title: 'Apakah yakin data ini ingin di hapus? ',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4caf50',
+                    cancelButtonColor: '#f44336',
+                    confirmButtonText: 'Ya, Lanjutkan hapus!',
+                    cancelButtonText: 'Batal',
+                }).then(function () {
+                    window.location = url + '/delete/' + id ;
+                })
+            });
         });
     </script>
 </html>

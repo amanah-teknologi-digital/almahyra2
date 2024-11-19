@@ -35,7 +35,7 @@
 
 		## get data by id in table
 	    function getByID($id) {
-	        $this->db->where(array('tahun' => $id));
+	        $this->db->where(array('id_templatestimulus' => $id));
 	        
 	        $query = $this->db->get($this->table_name);
 	        
@@ -49,24 +49,53 @@
 	    }
 
 	    ## insert data into table
-	    function insert() {
+        function insertStimulasi(){
             $user = $this->session->userdata['auth'];
-            $tahun_sekarang = date('Y');
 
-	        $a_input['tahun'] = $_POST['tahun'];
-	        $a_input['uraian'] = $_POST['name'];
-	        $a_input['created_at'] = date('Y-m-d H:m:s');
-            if ($tahun_sekarang == $_POST['tahun']){
-                $a_input['is_aktif'] = 1;
-            }else{
-                $a_input['is_aktif'] = 0;
-            }
+            $nama_template = $_POST['nama_template'];
+            $nama = $_POST['nama_tema'];
+            $uraian = $_POST['editorContent'];
+            $keterangan = $_POST['keterangan'];
 
-	        $a_input['updater'] = $user->id;
+            $this->db->trans_start();
 
-	        $this->db->insert($this->table_name, $a_input);
+            $a_input['nama_template'] = $nama_template;
+            $a_input['nama'] = $nama;
+            $a_input['uraian'] = $uraian;
+            $a_input['keterangan'] = $keterangan;
+            $a_input['created_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
 
-	        return $this->db->error();	        
+            $this->db->insert('template_stimulus', $a_input);
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+	    }
+
+        function updateStimulasi($id_templatestimulus){
+            $user = $this->session->userdata['auth'];
+
+            $nama_template = $_POST['nama_template'];
+            $nama = $_POST['nama_tema'];
+            $uraian = $_POST['editorContent'];
+            $keterangan = $_POST['keterangan'];
+
+            $this->db->trans_start();
+
+            $a_input['nama_template'] = $nama_template;
+            $a_input['nama'] = $nama;
+            $a_input['uraian'] = $uraian;
+            $a_input['keterangan'] = $keterangan;
+            $a_input['updated_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
+
+            $this->db->where('id_templatestimulus', $id_templatestimulus);
+            $this->db->update('template_stimulus', $a_input);
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
 	    }
 
 	    ## update data in table
@@ -86,11 +115,14 @@
 
 	    ## delete data in table
 		function delete($id) {
-			$this->db->where('tahun', $id)->where('is_aktif', 0);
+            $this->db->trans_start();
 
-			$this->db->delete($this->table_name);
+            $this->db->where('id_templatestimulus', $id);
+            $this->db->delete('template_stimulus');
 
-			return $this->db->affected_rows();
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
 		}
 
 		## get data by id in table

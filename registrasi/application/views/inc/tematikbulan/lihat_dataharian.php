@@ -391,7 +391,7 @@
                     submitHandler: function(form, event) {
                         let content = quill[value.id_kelas].getText().trim();
                         let htmlcontent = quill[value.id_kelas].root.innerHTML;
-                        console.log(content, htmlcontent);
+
                         if (htmlcontent === "<p><br></p>" || content === ""){
                             alert('Uraian Kegiatan Stimulus harus diisi!');
                             event.preventDefault();  // Prevent form submission

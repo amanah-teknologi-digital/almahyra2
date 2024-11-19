@@ -38,22 +38,21 @@ class CTemplateStimulus extends CI_Controller {
 	}
 
 	public function insert() {
-		
-		$err = $this->Tahun->insert();
+        $err = $this->TemplateStimulus->insertStimulasi();
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-		}
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambah Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambah Data');
+        }
 
-		redirect($this->data['redirect']);
+        redirect($this->data['redirect']);
 	}
 
 	public function edit($id) {
 		$data = $this->data;
 
-		$data['list_edit'] = $this->Tahun->getByID($id) ;
+		$data['list_edit'] = $this->TemplateStimulus->getByID($id) ;
 
 	    $this->output->set_content_type('application/json');
 	    
@@ -63,26 +62,26 @@ class CTemplateStimulus extends CI_Controller {
 	}
 
 	public function update() {
-		$err = $this->Tahun->update($this->input->post('id'));
+        $err = $this->TemplateStimulus->updateStimulasi($_POST['id_templatestimulus']);
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Merubah Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Merubah Data');
-		}	
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Merubah Data');
+        }
 
-		redirect($this->data['redirect']);
+        redirect($this->data['redirect']);
 	}
 
 	public function delete($id) {
-		$err = $this->Tahun->delete($id);
+		$err = $this->TemplateStimulus->delete($id);
 
-		if ($err > 0) {
-			$this->session->set_flashdata('success', 'Berhasil Menghapus Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
-		}	
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
 
-		redirect($this->data['redirect']);
+        redirect($this->data['redirect']);
 	}
 }
