@@ -11,10 +11,10 @@
 
 	    ## get all data in table
 	    function getAll() {
-            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role FROM template_stimulus a 
+            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role FROM template_jadwal a 
                 JOIN data_user b ON b.id = a.updater 
                 JOIN m_role c ON c.id = b.id_role            
-                ORDER BY a.id_templatestimulus DESC";
+                ORDER BY a.id_templatejadwal DESC";
 
             $query = $this->db->query($sql);
 
@@ -49,24 +49,22 @@
 	    }
 
 	    ## insert data into table
-	    function insert() {
+	    function insertTemplate() {
             $user = $this->session->userdata['auth'];
-            $tahun_sekarang = date('Y');
+            $nama_template = $_POST['nama_template'];
 
-	        $a_input['tahun'] = $_POST['tahun'];
-	        $a_input['uraian'] = $_POST['name'];
-	        $a_input['created_at'] = date('Y-m-d H:m:s');
-            if ($tahun_sekarang == $_POST['tahun']){
-                $a_input['is_aktif'] = 1;
-            }else{
-                $a_input['is_aktif'] = 0;
-            }
+            $this->db->trans_start();
 
-	        $a_input['updater'] = $user->id;
+            $a_input['nama'] = $nama_template;
+            $a_input['created_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
 
-	        $this->db->insert($this->table_name, $a_input);
+            $this->db->insert('template_jadwal', $a_input);
+            $id_templatejadwal = $this->db->insert_id();
 
-	        return $this->db->error();	        
+            $this->db->trans_complete();
+
+            return ['err' => $this->db->trans_status(), 'id_templatejadwal' => $id_templatejadwal];
 	    }
 
 	    ## update data in table

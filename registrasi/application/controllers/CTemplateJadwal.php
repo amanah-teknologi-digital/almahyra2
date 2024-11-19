@@ -37,17 +37,23 @@ class CTemplateJadwal extends CI_Controller {
 	}
 
 	public function insert() {
-		
-		$err = $this->Tahun->insert();
+        $data = $this->TemplateJadwal->insertTemplate();
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-		}
+        $err = $data['err'];
+        $id_template_jadwal = $data['id_templatejadwal'];
 
-		redirect($this->data['redirect']);
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Data');
+            redirect($this->data['redirect']);
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Merubah Data');
+            redirect($this->data['redirect'].'/edit/'.$id_template_jadwal);
+        }
 	}
+
+    public function lihatdata($id_templatejadwal){
+        var_dump($id_templatejadwal);
+    }
 
 	public function edit($id) {
 		$data = $this->data;
