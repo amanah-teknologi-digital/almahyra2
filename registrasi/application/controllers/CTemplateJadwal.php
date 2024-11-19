@@ -52,7 +52,13 @@ class CTemplateJadwal extends CI_Controller {
 	}
 
     public function lihatdata($id_templatejadwal){
-        var_dump($id_templatejadwal);
+        $data = $this->data;
+
+        $data['data_template'] = $this->TemplateJadwal->getByID($id_templatejadwal);
+        $data['data_jadwal_template'] = $this->TemplateJadwal->getDataJadwalTempateById($id_templatejadwal);
+        $data['id_templatejadwal'] = $id_templatejadwal;
+
+        $this->load->view('inc/templatejadwal/lihat_data', $data);
     }
 
 	public function edit($id) {

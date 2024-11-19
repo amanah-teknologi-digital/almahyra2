@@ -6,7 +6,7 @@
 			parent::__construct();
 
 	        ## declate table name here
-	        $this->table_name = 'template_stimulus' ;
+	        $this->table_name = 'template_jadwal' ;
 	    }
 
 	    ## get all data in table
@@ -33,9 +33,21 @@
 	        return $query->result();
 		}
 
+        function getDataJadwalTempateById($id_templatejadwal) {
+            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role FROM jadwal_kegiatan a 
+                JOIN data_user b ON b.id = a.updater 
+                JOIN m_role c ON c.id = b.id_role       
+                WHERE a.id_templatejadwal = $id_templatejadwal
+                ORDER BY a.jam_mulai ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+		}
+
 		## get data by id in table
 	    function getByID($id) {
-	        $this->db->where(array('tahun' => $id));
+	        $this->db->where(array('id_templatejadwal' => $id));
 	        
 	        $query = $this->db->get($this->table_name);
 	        
