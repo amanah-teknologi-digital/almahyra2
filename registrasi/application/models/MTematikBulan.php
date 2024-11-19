@@ -36,6 +36,22 @@
 	        return $query->result();
 		}
 
+        function getTemplateJadwal(){
+            $sql = "SELECT * FROM template_jadwal a ORDER BY a.id_templatejadwal ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getTemplateStimulus(){
+            $sql = "SELECT * FROM template_stimulus a ORDER BY a.id_templatestimulus ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
 		## get all data in table for list (select)
 	    function getList() {
 	    	

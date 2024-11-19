@@ -109,6 +109,10 @@ class CTematikBulanan extends CI_Controller {
         $data['data_kelas'] = $this->TematikBulan->getKelas();
         $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($id_rincianjadwal_mingguan);
         $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($id_rincianjadwal_mingguan);
+        $data_template_jadwal = $this->TematikBulan->getTemplateJadwal();
+        $data_template_stimulus = $this->TematikBulan->getTemplateStimulus();
+        $data['data_template_jadwal'] = $data_template_jadwal;
+        $data['data_template_stimulus'] = $data_template_stimulus;
 
         $temp_jadwal_harian = [];
         $temp_jadwal_stimulus = [];

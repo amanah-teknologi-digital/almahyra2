@@ -43,19 +43,24 @@
                                             <div class="tab-pane fade show <?= $active_tab_kelas==$kelas->id_kelas ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
                                                 <div class="card-body shadow">
                                                     <h5 class="card-title"><b>Jadwal Harian</b></h5>
-                                                    <div class="row mb-3 d-flex align-items-center justify-content-center">
-                                                        <div class="col-sm-4">
-                                                            <select name="" id="" class="form-control">
-                                                                <option value="">-- Pilih Template Jadwal --</option>
-                                                            </select>
+                                                    <?php echo form_open_multipart('', 'id="frm_gettemplate_jadwal'.$kelas->id_kelas.'"'); ?>
+                                                        <div class="row mb-3 d-flex align-items-center justify-content-center">
+                                                            <div class="col-sm-4">
+                                                                <select name="template_jadwal" class="form-control">
+                                                                    <option value="">-- Pilih Template Jadwal --</option>
+                                                                    <?php foreach ($data_template_jadwal as $template){ ?>
+                                                                        <option value="<?= $template->id_templatejadwal ?>"><?= $template->nama ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <button class="btn btn-sm btn-warning btn-tambahbytemplate" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Ambil dari Template Jadwal</button>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <span class="btn btn-sm btn-primary btn-tambahkegiatan float-right" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-sm-3">
-                                                            <button class="btn btn-sm btn-warning btn-tambahbytemplate" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Ambil dari Template Jadwal</button>
-                                                        </div>
-                                                        <div class="col-sm-5">
-                                                            <button class="btn btn-sm btn-primary btn-tambahkegiatan float-right" data-namatema="<?= $data_subtema->nama ?>" data-nama="<?= $kelas->nama  ?>" data-idkelas="<?= $kelas->id_kelas ?>"><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</button>
-                                                        </div>
-                                                    </div>
+                                                    </form>
                                                     <div class="table-responsive" id="zero_configuration_table<?= $kelas->id_kelas ?>">
                                                         <i class="text-muted" style="font-size: 11px"><b>note:</b> <span>* Jika tambah dari template, jadwal yang sudah ada akan dihapus!</span></i>
                                                         <table class="display table table-sm table-striped table-bordered">
@@ -97,17 +102,22 @@
                                                 <br>
                                                 <div class="card-body shadow">
                                                     <h5 class="card-title"><b>Data Stimulus</b></h5>
-                                                    <div class="row mb-3 d-flex align-items-center justify-content-center">
-                                                        <div class="col-sm-4">
-                                                            <select name="" id="" class="form-control">
-                                                                <option value="">-- Pilih Template Stimulus --</option>
-                                                            </select>
+                                                    <?php echo form_open_multipart('', 'id="frm_gettemplate_stimulus'.$kelas->id_kelas.'"'); ?>
+                                                        <div class="row mb-3 d-flex align-items-center justify-content-center">
+                                                            <div class="col-sm-4">
+                                                                <select name="template_stimulus" class="form-control">
+                                                                    <option value="">-- Pilih Template Stimulus --</option>
+                                                                    <?php foreach ($data_template_stimulus as $template){ ?>
+                                                                        <option value="<?= $template->id_templatestimulus ?>"><?= $template->nama_template ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <button class="btn btn-sm btn-warning btn-tambahbytemplate_stimulus"><span class="fas fa-plus"></span>&nbsp;Ambil Template Stimulus</button>
+                                                            </div>
+                                                            <div class="col-sm-5"></div>
                                                         </div>
-                                                        <div class="col-sm-3">
-                                                            <button class="btn btn-sm btn-warning btn-tambahbytemplate"><span class="fas fa-plus"></span>&nbsp;Ambil Template Stimulus</button>
-                                                        </div>
-                                                        <div class="col-sm-5"></div>
-                                                    </div>
+                                                    </form>
                                                     <i class="text-muted" style="font-size: 11px"><b>note:</b> <span>* Jika tambah dari template, data stimulus yang sudah ada akan direplace!</span></i>
                                                     <?php echo form_open_multipart($controller.'/simpanstimulus', 'id="frm_simpanstimulus'.$kelas->id_kelas.'"'); ?>
                                                         <fieldset>
@@ -430,6 +440,44 @@
                 submitHandler: function(form) {
                     form.submit(); // Mengirimkan form jika validasi lolos
                 }
+            });
+
+            $.each(lis_kelas, function(index, value){
+                $("#frm_gettemplate_jadwal"+value.id_kelas).validate({
+                    rules: {
+                        template_jadwal: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        template_jadwal: {
+                            required: "Template jadwal harian harus dipilih!"
+                        }
+                    },
+                    submitHandler: function(form) {
+                        console.log(value.id_kelas);
+                        //form.submit(); // Mengirimkan form jika validasi lolos
+                    }
+                });
+            });
+
+            $.each(lis_kelas, function(index, value){
+                $("#frm_gettemplate_stimulus"+value.id_kelas).validate({
+                    rules: {
+                        template_stimulus: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        template_stimulus: {
+                            required: "Template stimulus harus dipilih!"
+                        }
+                    },
+                    submitHandler: function(form) {
+                        console.log(value.id_kelas);
+                        //form.submit(); // Mengirimkan form jika validasi lolos
+                    }
+                });
             });
         });
 
