@@ -1,6 +1,6 @@
 <?php  
 
-	class MTemplateJadwal extends CI_Model
+	class MTemplateStimulus extends CI_Model
 	{
 		public function __construct() {
 			parent::__construct();

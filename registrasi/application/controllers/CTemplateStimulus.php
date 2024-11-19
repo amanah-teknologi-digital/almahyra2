@@ -18,23 +18,23 @@ class CTemplateStimulus extends CI_Controller {
         } 
 
 		$this->data = array(
-            'controller'=>'ctahun',
-            'redirect'=>'tahun',
-            'title'=>'Tematik Tahunan',
+            'controller'=>'ctemplatestimulus',
+            'redirect'=>'template-stimulus',
+            'title'=>'Template Stimulus',
             'parent'=>'rencana'
         );
 		## load model here 
-		$this->load->model('Mtahun', 'Tahun');
+		$this->load->model('MTemplateStimulus', 'TemplateStimulus');
 	}
 
 	public function index()	{	
 
 		$data = $this->data;
 
-		$data['list'] = $this->Tahun->getAll();
-		$data['column'] = $this->Tahun->getColumn();
+		$data['list'] = $this->TemplateStimulus->getAll();
+		$data['column'] = $this->TemplateStimulus->getColumn();
 
-		$this->load->view('inc/tahun/list', $data);
+		$this->load->view('inc/templatestimulus/list', $data);
 	}
 
 	public function insert() {
