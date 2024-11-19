@@ -122,7 +122,8 @@ $route['tematik-bulanan'] = 'ctematikbulanan';
 $route['tematik-bulanan/(:num)'] = 'ctematikbulanan/lihatdata/$1';
 $route['tematik-bulanan/(:num)/jadwalharian/(:num)'] = 'ctematikbulanan/lihatjadwalharian/$1/$2';
 
-
+$route['template-jadwal'] = 'ctemplateharian';
+$route['template-stimulus'] = 'ctemplatestimulus';
 
 
 // $route['peminjaman-kendaraan'] = 'ctkendaraan';

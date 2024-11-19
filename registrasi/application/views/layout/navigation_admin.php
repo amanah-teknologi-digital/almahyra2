@@ -325,6 +325,18 @@
                         <span class="item-name">Tematik Bulanan<span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'template-jadwal'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Template Jadwal<span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'template-stimulus'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Template Stimulus<span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
