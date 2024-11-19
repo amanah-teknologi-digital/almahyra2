@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CTemplateHarian extends CI_Controller {
+class CTemplateJadwal extends CI_Controller {
 
 	var $data = array();
 	function __construct() {
@@ -18,23 +18,22 @@ class CTemplateHarian extends CI_Controller {
         } 
 
 		$this->data = array(
-            'controller'=>'ctahun',
-            'redirect'=>'tahun',
-            'title'=>'Tematik Tahunan',
+            'controller'=>'ctemplatejadwal',
+            'redirect'=>'template-jadwal',
+            'title'=>'Template Jadwal',
             'parent'=>'rencana'
         );
 		## load model here 
-		$this->load->model('Mtahun', 'Tahun');
+		$this->load->model('MTemplateJadwal', 'TemplateJadwal');
 	}
 
-	public function index()	{	
-
+	public function index()	{
 		$data = $this->data;
 
-		$data['list'] = $this->Tahun->getAll();
-		$data['column'] = $this->Tahun->getColumn();
+		$data['list'] = $this->TemplateJadwal->getAll();
+		$data['column'] = $this->TemplateJadwal->getColumn();
 
-		$this->load->view('inc/tahun/list', $data);
+		$this->load->view('inc/templatejadwal/list', $data);
 	}
 
 	public function insert() {
