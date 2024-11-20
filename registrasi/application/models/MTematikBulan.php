@@ -58,6 +58,14 @@
             return $query->row();
         }
 
+        function getKelasById($id_kelas){
+            $sql = "SELECT * FROM ref_kelas WHERE id_kelas = $id_kelas";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
         function getTemplateJadwal(){
             $sql = "SELECT * FROM template_jadwal a ORDER BY a.id_templatejadwal ASC";
 

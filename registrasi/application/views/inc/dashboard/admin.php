@@ -37,7 +37,7 @@
                                             <div class="tab-content" id="myTabContent">
                                                 <?php foreach ($data_kelas as $key => $kelas){ ?>
                                                     <div class="tab-pane fade show <?= $key==0 ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
-                                                        <div class="card-body shadow">
+                                                        <div class="card-body">
                                                             <?php echo form_open_multipart($controller.'/cetakjadwalharian', 'target="blank"'); ?>
                                                                 <h5 class="card-title d-flex align-items-center justify-content-between"><b class="float-left">Jadwal Harian</b>
                                                                     <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Jadwal</button>
@@ -74,22 +74,22 @@
                                                             <br>
                                                             <h5 class="card-title"><b>Data Stimulus</b></h5>
                                                             <?php if (isset($data_jadwal_stimulus[$kelas->id_kelas])){ ?>
-                                                                <table>
+                                                                <table style="width: 100%">
                                                                     <tr>
-                                                                        <td style="vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Nama Tema Stimulus</td>
-                                                                        <td class="p-1">
+                                                                        <td nowrap style="width:20%;vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Nama Tema Stimulus</td>
+                                                                        <td class="p-1" style="background-color: rgba(0, 0, 0, 0.05)">
                                                                             <span class="font-weight-bold"><?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?></span>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td style="background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Uraian Kegiatan Stimulus</td>
-                                                                        <td class="p-1">
+                                                                        <td nowrap style="width:20%;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Uraian Kegiatan Stimulus</td>
+                                                                        <td class="p-1" style="background-color: rgba(0, 0, 0, 0.05)">
                                                                             <?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->rincian_kegiatan:'';  ?>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td style="vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Keterangan</td>
-                                                                        <td class="p-1">
+                                                                        <td nowrap style="width:20%;vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Keterangan</td>
+                                                                        <td class="p-1" style="background-color: rgba(0, 0, 0, 0.05)">
                                                                             <span class="font-italic text-muted"><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'';  ?></span>
                                                                         </td>
                                                                     </tr>

@@ -244,7 +244,26 @@ class CDashboard extends CI_Controller {
     }
 
     public function cetakjadwalharian(){
-        var_dump($_POST);exit();
+        $data = $this->data;
+
+        $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($_POST['id_rincianjadwal_mingguan']);
+        $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($_POST['id_rincianjadwal_mingguan']);
+        $temp_jadwal_harian = [];
+        $temp_jadwal_stimulus = [];
+        foreach ($list_jadwalharian as $jadwal){
+            $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
+        }
+        foreach ($list_jadwalstimulus as $stimulus) {
+            $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
+        }
+
+        $data['data_jadwal_harian'] = $temp_jadwal_harian;
+        $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
+        $data['id_rincianjadwal_mingguan'] = $_POST['id_rincianjadwal_mingguan'];
+        $data['id_kelas'] = $_POST['id_kelas'];
+        $data['data_kelas'] = $this->TematikBulan->getKelasById($_POST['id_kelas']);
+
+        $this->load->view('inc/dashboard/cetak_jadwalharian', $data);
     }
 
 }
