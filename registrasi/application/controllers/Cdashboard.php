@@ -229,9 +229,11 @@ class CDashboard extends CI_Controller {
 
                 $data['data_jadwal_harian'] = $temp_jadwal_harian;
                 $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
+                $data['id_rincianjadwal_mingguan'] = $data['data_subtema']->id_rincianjadwal_mingguan;
             }else{
                 $data['data_jadwal_harian'] = [];
                 $data['data_jadwal_stimulus'] = [];
+                $data['id_rincianjadwal_mingguan'] = '';
             }
 
             $data['view_jadwal'] = 'inc/laporan/harian_full';
@@ -239,6 +241,10 @@ class CDashboard extends CI_Controller {
             $this->load->view('inc/dashboard/admin', $data);
         }
         
-    }   
+    }
+
+    public function cetakjadwalharian(){
+        var_dump($_POST);exit();
+    }
 
 }

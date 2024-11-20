@@ -38,7 +38,13 @@
                                                 <?php foreach ($data_kelas as $key => $kelas){ ?>
                                                     <div class="tab-pane fade show <?= $key==0 ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
                                                         <div class="card-body shadow">
-                                                            <h5 class="card-title"><b>Jadwal Harian</b></h5>
+                                                            <?php echo form_open_multipart($controller.'/cetakjadwalharian', 'target="blank"'); ?>
+                                                                <h5 class="card-title d-flex align-items-center justify-content-between"><b class="float-left">Jadwal Harian</b>
+                                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Jadwal</button>
+                                                                </h5>
+                                                                <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
+                                                                <input type="hidden" name="id_kelas" value="<?= $kelas->id_kelas ?>">
+                                                            </form>
                                                             <table class="display table table-sm table-striped table-bordered">
                                                                 <thead style="background-color: #bfdfff">
                                                                 <tr>
@@ -68,22 +74,26 @@
                                                             <br>
                                                             <h5 class="card-title"><b>Data Stimulus</b></h5>
                                                             <?php if (isset($data_jadwal_stimulus[$kelas->id_kelas])){ ?>
-                                                                <fieldset>
-                                                                    <div class="form-group">
-                                                                        <label>Nama Tema Stimulus</label>
-                                                                        <input type="text" name="nama_tema_stimulus" id="nama_tema_stimulus<?= $kelas->id_kelas ?>" class="form-control" autocomplete="off" value="<?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->nama:'';  ?>">
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Uraian Kegiatan Stimulus</label>
-                                                                        <div>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td style="vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Nama Tema Stimulus</td>
+                                                                        <td class="p-1">
+                                                                            <span class="font-weight-bold"><?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Uraian Kegiatan Stimulus</td>
+                                                                        <td class="p-1">
                                                                             <?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->rincian_kegiatan:'';  ?>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Keterangan <i>(Optional)</i></label>
-                                                                        <textarea class="form-control" name="keterangan" id="keterangan<?= $kelas->id_kelas ?>" cols="30" rows="5" autocomplete="off"><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'';  ?></textarea>
-                                                                    </div>
-                                                                </fieldset>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Keterangan</td>
+                                                                        <td class="p-1">
+                                                                            <span class="font-italic text-muted"><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'';  ?></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
                                                             <?php }else{ ?>
                                                                 <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
                                                             <?php } ?>
