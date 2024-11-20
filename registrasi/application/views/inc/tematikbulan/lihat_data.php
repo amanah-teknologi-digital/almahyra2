@@ -104,7 +104,7 @@
                                                                             }
                                                                         }else{ ?>
                                                                             <tr>
-                                                                                <td colspan="4" align="center"><i class="text-small text-danger font-weight-bold">Data sub tema kosong!</i></td>
+                                                                                <td colspan="5" align="center"><i class="text-small text-danger font-weight-bold">Data sub tema kosong!</i></td>
                                                                             </tr>
                                                                         <?php } ?>
                                                                     </table>

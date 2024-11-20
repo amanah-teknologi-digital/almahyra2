@@ -3,7 +3,7 @@
     <div class="sidebar-left open rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
         <ul class="navigation-left">
             <li class="nav-item <?= $parent=='dashboard'?'active':'' ?>" data-item="dashboard">
-                <a class="nav-item-hold" href="#">
+                <a class="nav-item-hold" href="<?= base_url().'dashboard'; ?>">
                     <i class="nav-icon i-Bar-Chart"></i>
                     <span class="nav-text">Dashboard</span>
                 </a>

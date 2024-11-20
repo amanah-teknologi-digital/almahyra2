@@ -36,6 +36,28 @@
 	        return $query->result();
 		}
 
+        function getDataTema($tahun, $bulan){
+            $sql = "SELECT a.bulan, b.id_temabulanan, b.nama as nama_tema, b.deskripsi
+                FROM ref_bulan a 
+                JOIN tema_bulanan b ON b.bulan = a.bulan
+                WHERE a.bulan = $bulan AND b.tahun = $tahun";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getDataSubtema($id_temabulanan, $tanggal){
+            $sql = "SELECT a.id_jadwalmingguan, b.id_rincianjadwal_mingguan, a.nama as nama_subtema
+                FROM jadwal_mingguan a 
+                JOIN rincian_jadwal_mingguan b ON b.id_jadwalmingguan = a.id_jadwalmingguan
+                WHERE a.id_temabulanan = $id_temabulanan AND b.tanggal = '$tanggal'";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
         function getTemplateJadwal(){
             $sql = "SELECT * FROM template_jadwal a ORDER BY a.id_templatejadwal ASC";
 

@@ -60,7 +60,7 @@ class CTematikBulanan extends CI_Controller {
         $data_tanggal_pelaksana = [];
         $data_is_hapus = [];
         foreach ($data_mingguan as $subtema){
-            if (!empty($data_subtema)) {
+            if (!empty($data_subtema[$subtema->id_temabulanan])) {
                 $temp_subtema = array_column($data_subtema[$subtema->id_temabulanan], 'id_jadwalmingguan');
             }else{
                 $temp_subtema = [];
