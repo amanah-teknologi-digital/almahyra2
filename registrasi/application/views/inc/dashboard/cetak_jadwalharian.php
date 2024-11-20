@@ -15,19 +15,21 @@
                 print-color-adjust: exact !important;           /* Firefox 97+, Safari 15.4+ */
             }
         }
+
+        body {
+            font-family: Comic Sans MS, Comic Sans, cursive;
+        }
       
         h1 {
             font-weight: bold;
             font-size: 16pt;
             text-align: center;
-            font-family: sans-serif;
         }
       
         table {
             border-collapse: collapse;
             width: 100%;                        
             font-size: 12pt;
-            font-family: sans-serif;
         }
 
         .table th {
@@ -46,7 +48,7 @@
         }
 
         .sheet {
-            background-image: url("<?= base_url().'dist-assets/'?>images/kop.png");
+            background-image: url("<?= base_url().'dist-assets/'?>images/kop2.png");
             /* Full height */
             height: 100%;
             /* Center and scale the image nicely */
@@ -113,7 +115,7 @@
                             <td align="center"><?= $key+1; ?></td>
                             <td align="center"><?= Date('H:i',strtotime($kegiatan->jam_mulai)).' - '.Date('H:i',strtotime($kegiatan->jam_selesai)) ?></td>
                             <td><?= $kegiatan->uraian; ?></td>
-                            <td><span class="text-muted font-italic text-small"><?= $kegiatan->keterangan; ?></span></td>
+                            <td><span style="color: gray"><i><?= $kegiatan->keterangan; ?></i></span></td>
                         </tr>
                     <?php }
                 }else{ ?>
