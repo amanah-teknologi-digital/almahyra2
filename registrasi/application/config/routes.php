@@ -97,9 +97,10 @@ $route['absensi-anak'] = 'cabsensianak';
 $route['absensi-items'] = 'cabsensiitems';
 $route['absensi-pengasuh'] = 'cabsensipengasuh';
 
-
 // aktivitas
 $route['aktivitas-anak'] = 'caktivitas';
+$route['aktivitas-harian'] = 'caktivitasharian';
+$route['aktivitas-harian/lihat-data/(:any)'] = 'caktivitasharian/lihataktivitas/$1';
 
 // laporan 
 $route['laporan-tumbuh-kembang'] = 'claporan/tumbuhkembangf';
@@ -114,7 +115,6 @@ $route['hasil-laporan-harian/(:any)'] = 'claporan/harianrpp/$1';
 $route['rencana-belajar'] = 'crencanabelajar';
 $route['rencana-pelaksanaan'] = 'crencanapelaksanaan';
 
-
 $route['laporan-rencana-belajar'] = 'crencanabelajar/rencanaf';
 $route['laporan-pelaksanaan-belajar/(:any)'] = 'crencanapelaksanaan/pelaksanaanrpp/$1';
 
@@ -125,7 +125,6 @@ $route['tematik-bulanan/(:num)/jadwalharian/(:num)'] = 'ctematikbulanan/lihatjad
 $route['template-jadwal'] = 'ctemplatejadwal';
 $route['template-jadwal/edit/(:num)'] = 'ctemplatejadwal/lihatdata/$1';
 $route['template-stimulus'] = 'ctemplatestimulus';
-
 
 // $route['peminjaman-kendaraan'] = 'ctkendaraan';
 // $route['peminjaman-kendaraan/pengembalian'] = 'ctkendaraan/pengembalian';

@@ -43,3 +43,31 @@ if (!function_exists('format_date_indonesia')) {
         return $days_in_indonesian[$day_number];
     }
 }
+
+if (!function_exists('hitung_usia')) {
+    function hitung_usia($tanggal_lahir) {
+        $tanggal_lahir = new DateTime($tanggal_lahir); // Mengonversi tanggal lahir menjadi objek DateTime
+        $sekarang = new DateTime(); // Tanggal saat ini
+        $diff = $sekarang->diff($tanggal_lahir); // Menghitung selisih waktu
+
+        // Menyusun usia berdasarkan tahun, bulan, dan hari
+        $usia = '';
+
+        // Jika tahun > 0, tampilkan tahun
+        if ($diff->y > 0) {
+            $usia .= $diff->y . ' Tahun ';
+        }
+
+        // Jika bulan > 0 atau tahun > 0 (agar bulan tetap ditampilkan meskipun tahun 0)
+        if ($diff->m > 0 || $diff->y > 0) {
+            $usia .= $diff->m . ' Bulan ';
+        }
+
+        // Selalu tampilkan hari jika lebih dari 0
+        if ($diff->d > 0) {
+            $usia .= $diff->d . ' Hari';
+        }
+
+        return $usia ?: 'Usia Tidak Diketahui'; // Jika tidak ada usia, tampilkan default 'Usia Tidak Diketahui'
+    }
+}
