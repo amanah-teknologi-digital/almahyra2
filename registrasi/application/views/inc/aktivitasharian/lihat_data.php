@@ -109,22 +109,22 @@
                                     <br>
                                     <?php echo form_open_multipart($controller.'/simpan', 'id="frm_simpan"'); ?>
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" id="example">
+                                            <table class="display table table-sm table-bordered" id="example">
                                                 <thead style="background-color: #bfdfff">
                                                     <tr>
                                                         <th style="width: 5%">No</th>
                                                         <th style="width: 15%">Waktu</th>
-                                                        <th style="width: 30%">Nama Kegiatan</th>
+                                                        <th style="width: 35%">Nama Kegiatan</th>
                                                         <th style="width: 20%">Status</th>
-                                                        <th style="width: 30%">Keterangan</th>
+                                                        <th style="width: 25%">Keterangan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <?php $no = 1; foreach ($list_kegiatan as $key => $value) { ?>
                                                         <tr>
                                                             <td align="center"><?= $no++ ?></td>
-                                                            <td><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
-                                                            <td><?= $value->uraian ?></td>
+                                                            <td align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
+                                                            <td><b class="text-muted"><?= $value->uraian ?></b></td>
                                                             <td align="center">
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1">
@@ -143,22 +143,34 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <br>
-                                        <h5 class="card-title"><b>Data Stimulus</b></h5>
-                                        <?php if (isset($data_stimulus)){ ?>
-                                            <div class="callout callout-primary alert-dismissible fade show">
-                                                <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
-                                                <span><?= isset($data_stimulus)? $data_stimulus->rincian_kegiatan:'';  ?></span>
-                                                <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
-                                                <h4 class="mt-2 text-warning font-weight-bold border-primary" style="text-shadow: 1px 1px 1px #676767;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
-                                            </div>
-                                        <?php }else{ ?>
-                                            <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
-                                        <?php } ?>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <button type="submit" class="btn btn-sm btn-success "><span class="fas fa-save"></span>&nbsp;Simpan Data</button>
-                                        </div>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <button type="submit" class="btn btn-sm btn-success "><span class="fas fa-save"></span>&nbsp;Simpan Data</button>
+                                    </div>
                                     </form>
+                                    <br>
+                                    <h5 class="card-title"><b>Data Stimulus</b></h5>
+                                    <?php if (isset($data_stimulus)){ ?>
+                                        <div class="callout callout-primary alert-dismissible fade show">
+                                            <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
+                                            <span><?= isset($data_stimulus)? $data_stimulus->rincian_kegiatan:'';  ?></span>
+                                            <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <h4 class="mt-3 text-warning font-weight-bold" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
+                                                <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-plus"></i> Tambah Capaian</a>
+                                            </div>
+                                            <?php if (count($capaian_indikator) > 0){ ?>
+                                                <ul>
+                                                    <?php foreach ($capaian_indikator as $key => $value) { ?>
+                                                        <li><?= $value->uraian ?></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            <?php }else{ ?>
+                                                <span class="text-muted font-italic">Data Kosong!</span>
+                                            <?php } ?>
+                                        </div>
+                                    <?php }else{ ?>
+                                        <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
+                                    <?php } ?>
                                     <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data-data aktivitas sesuai jadwal kegiatan yang diberikan.</span></p>
                                 </div>
                             </div>
@@ -178,19 +190,22 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         let url = "<?= base_url().$controller ?>";
-
+        const list_kegiatan = <?= json_encode($list_kegiatan) ?>;
         $(document).ready(function() {
-            $("#frm_tambah").validate({
-                rules: {
-                    nama_tema: {
-                        required: true
-                    }
-                },
-                messages: {
-                    nama_tema: {
-                        required: "Uraian tema harus diisi!"
-                    }
-                },
+            let rules = {};
+            let message = {};
+            $.each(list_kegiatan, function(index, value){
+                rules['status'+value.id_rincianjadwal_harian] = {
+                    required: true
+                };
+                message['status'+value.id_rincianjadwal_harian] = {
+                    required: "Status kegiatan harus diisi!"
+                };
+            });
+
+            $("#frm_simpan").validate({
+                rules: rules,
+                messages: message,
                 submitHandler: function(form) {
                     form.submit(); // Mengirimkan form jika validasi lolos
                 }
