@@ -2,7 +2,87 @@
 <html lang="en" dir="/">
 
     <?php $this->load->view('layout/head') ?>
+    <style>
+        .callout {
+            background-color: #fff;
+            border: 1px solid #e4e7ea;
+            border-left: 4px solid #c8ced3;
+            border-radius: .25rem;
+            margin: 1rem 0;
+            padding: .75rem 1.25rem;
+            position: relative;
+        }
 
+        .callout h4 {
+            font-size: 1.3125rem;
+            margin-top: 0;
+            margin-bottom: .8rem
+        }
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        .callout-default {
+            border-left-color: #777;
+            background-color: #f4f4f4;
+        }
+        .callout-default h4 {
+            color: #777;
+        }
+
+        .callout-primary {
+            background-color: #d2eef7;
+            border-color: #b8daff;
+            border-left-color: #17a2b8;
+        }
+        .callout-primary h4 {
+            color: #20a8d8;
+        }
+
+        .callout-success {
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+            border-left-color: #28a745;
+        }
+        .callout-success h4 {
+            color: #3c763d;
+        }
+
+        .callout-danger {
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            border-left-color: #d32535;
+        }
+        .callout-danger h4 {
+            color: #a94442;
+        }
+
+        .callout-warning {
+            background-color: #fcf8e3;
+            border-color: #faebcc;
+            border-left-color: #edb100;
+        }
+        .callout-warning h4 {
+            color: #f0ad4e;
+        }
+
+        .callout-info {
+            background-color: #d2eef7;
+            border-color: #b8daff;
+            border-left-color: #148ea1;
+        }
+        .callout-info h4 {
+            color: #31708f;
+        }
+
+        .callout-dismissible .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .75rem 1.25rem;
+            color: inherit;
+        }
+    </style>
     <body class="text-left">
         <div class="app-admin-wrap layout-sidebar-compact sidebar-dark-purple sidenav-open clearfix">
             <?php $this->load->view('layout/navigation') ?>     
@@ -23,8 +103,10 @@
                         <div class="col-md-12">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <?php if (!empty($data_tema)){ ?>
-                                        <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Jadwal Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(Date('Y-m-d:H:i:s')).', '.date('d-m-Y'); ?></span>&nbsp;dengan Tema&nbsp;<span class="text-success"><?= $data_tema->nama_tema ?></span></h5>
+                                    <?php if (!empty($data_tema)){
+                                        $now = date('Y-m-d');
+                                        ?>
+                                        <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Jadwal Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia($now).', '.date('d-m-Y'); ?></span>&nbsp;dengan Tema&nbsp;<span class="text-success"><?= $data_tema->nama_tema ?></span></h5>
                                         <?php if (!empty($data_subtema)){ ?>
                                             <span class="text-muted font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Sub Tema <?= $data_subtema->nama_subtema ?></span>
                                             <br>
@@ -74,26 +156,11 @@
                                                             <br>
                                                             <h5 class="card-title"><b>Data Stimulus</b></h5>
                                                             <?php if (isset($data_jadwal_stimulus[$kelas->id_kelas])){ ?>
-                                                                <table style="width: 100%">
-                                                                    <tr>
-                                                                        <td nowrap style="width:20%;vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Nama Tema Stimulus</td>
-                                                                        <td class="p-1" style="background-color: rgba(0, 0, 0, 0.05)">
-                                                                            <span class="font-weight-bold"><?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?></span>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td nowrap style="width:20%;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Uraian Kegiatan Stimulus</td>
-                                                                        <td class="p-1" style="background-color: rgba(0, 0, 0, 0.05)">
-                                                                            <?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->rincian_kegiatan:'';  ?>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td nowrap style="width:20%;vertical-align: top !important;background-color: #bfdfff;border: 1px solid #dee2e6" class="font-weight-bold p-2">Keterangan</td>
-                                                                        <td class="p-1" style="background-color: rgba(0, 0, 0, 0.05)">
-                                                                            <span class="font-italic text-muted"><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'';  ?></span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
+                                                                <div class="callout callout-primary alert-dismissible fade show">
+                                                                    <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?>&nbsp;<span class="text-muted">(<?= $kelas->nama ?>)</span></h4>
+                                                                    <span><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->rincian_kegiatan:'';  ?></span>
+                                                                    <span class="font-italic text-muted">Keterangan: <?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'-';  ?></span>
+                                                                </div>
                                                             <?php }else{ ?>
                                                                 <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
                                                             <?php } ?>

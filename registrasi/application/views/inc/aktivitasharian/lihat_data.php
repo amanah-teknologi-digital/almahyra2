@@ -2,7 +2,87 @@
 <html lang="en" dir="/">
 
     <?php $this->load->view('layout/head') ?>
+    <style>
+        .callout {
+            background-color: #fff;
+            border: 1px solid #e4e7ea;
+            border-left: 4px solid #c8ced3;
+            border-radius: .25rem;
+            margin: 1rem 0;
+            padding: .75rem 1.25rem;
+            position: relative;
+        }
 
+        .callout h4 {
+            font-size: 1.3125rem;
+            margin-top: 0;
+            margin-bottom: .8rem
+        }
+        .callout p:last-child {
+            margin-bottom: 0;
+        }
+
+        .callout-default {
+            border-left-color: #777;
+            background-color: #f4f4f4;
+        }
+        .callout-default h4 {
+            color: #777;
+        }
+
+        .callout-primary {
+            background-color: #d2eef7;
+            border-color: #b8daff;
+            border-left-color: #17a2b8;
+        }
+        .callout-primary h4 {
+            color: #20a8d8;
+        }
+
+        .callout-success {
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+            border-left-color: #28a745;
+        }
+        .callout-success h4 {
+            color: #3c763d;
+        }
+
+        .callout-danger {
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            border-left-color: #d32535;
+        }
+        .callout-danger h4 {
+            color: #a94442;
+        }
+
+        .callout-warning {
+            background-color: #fcf8e3;
+            border-color: #faebcc;
+            border-left-color: #edb100;
+        }
+        .callout-warning h4 {
+            color: #f0ad4e;
+        }
+
+        .callout-info {
+            background-color: #d2eef7;
+            border-color: #b8daff;
+            border-left-color: #148ea1;
+        }
+        .callout-info h4 {
+            color: #31708f;
+        }
+
+        .callout-dismissible .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: .75rem 1.25rem;
+            color: inherit;
+        }
+    </style>
     <body class="text-left">
         <div class="app-admin-wrap layout-sidebar-compact sidebar-dark-purple sidenav-open clearfix">
             <?php $this->load->view('layout/navigation') ?>     
@@ -27,30 +107,58 @@
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Belajar Aktivitas Harian&nbsp;<b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
                                     <br>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered" id="example">
-                                            <thead style="background-color: #bfdfff">
-                                                <tr>
-                                                    <th style="width: 5%">No</th>
-                                                    <th style="width: 15%">Waktu</th>
-                                                    <th style="width: 30%">Nama Kegiatan</th>
-                                                    <th style="width: 20%">Status</th>
-                                                    <th style="width: 30%">Keterangan</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $no = 1; foreach ($list_kegiatan as $key => $value) { ?>
+                                    <?php echo form_open_multipart($controller.'/simpan', 'id="frm_simpan"'); ?>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="example">
+                                                <thead style="background-color: #bfdfff">
                                                     <tr>
-                                                        <td align="center"><?= $no++ ?></td>
-                                                        <td><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
-                                                        <td><?= $value->uraian ?></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <th style="width: 5%">No</th>
+                                                        <th style="width: 15%">Waktu</th>
+                                                        <th style="width: 30%">Nama Kegiatan</th>
+                                                        <th style="width: 20%">Status</th>
+                                                        <th style="width: 30%">Keterangan</th>
                                                     </tr>
-                                            <?php } ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                </thead>
+                                                <tbody>
+                                                    <?php $no = 1; foreach ($list_kegiatan as $key => $value) { ?>
+                                                        <tr>
+                                                            <td align="center"><?= $no++ ?></td>
+                                                            <td><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
+                                                            <td><?= $value->uraian ?></td>
+                                                            <td align="center">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1">
+                                                                    <label class="form-check-label" for="inlineRadio1">Ada</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio2<?= $value->id_rincianjadwal_harian ?>" value="0">
+                                                                    <label class="form-check-label" for="inlineRadio2">Tidak</label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <textarea class="form-control" name="keterangan<?= $value->id_rincianjadwal_harian ?>" id="keterangan<?= $value->id_rincianjadwal_harian ?>" cols="10" rows="2"></textarea>
+                                                            </td>
+                                                        </tr>
+                                                <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <br>
+                                        <h5 class="card-title"><b>Data Stimulus</b></h5>
+                                        <?php if (isset($data_stimulus)){ ?>
+                                            <div class="callout callout-primary alert-dismissible fade show">
+                                                <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
+                                                <span><?= isset($data_stimulus)? $data_stimulus->rincian_kegiatan:'';  ?></span>
+                                                <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
+                                                <h4 class="mt-2 text-warning font-weight-bold border-primary" style="text-shadow: 1px 1px 1px #000000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
+                                            </div>
+                                        <?php }else{ ?>
+                                            <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
+                                        <?php } ?>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <button type="submit" class="btn btn-sm btn-success "><span class="fas fa-save"></span>&nbsp;Simpan Data</button>
+                                        </div>
+                                    </form>
                                     <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data-data aktivitas sesuai jadwal kegiatan yang diberikan.</span></p>
                                 </div>
                             </div>
