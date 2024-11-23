@@ -150,7 +150,7 @@
                                                 <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
                                                 <span><?= isset($data_stimulus)? $data_stimulus->rincian_kegiatan:'';  ?></span>
                                                 <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
-                                                <h4 class="mt-2 text-warning font-weight-bold border-primary" style="text-shadow: 1px 1px 1px #000000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
+                                                <h4 class="mt-2 text-warning font-weight-bold border-primary" style="text-shadow: 1px 1px 1px #676767;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
                                             </div>
                                         <?php }else{ ?>
                                             <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
