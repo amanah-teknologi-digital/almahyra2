@@ -538,7 +538,7 @@
                         html += '</table>';
                         html += '<input type="hidden" name="id_kelas" value="'+id_kelas+'">';
                         html += '<input type="hidden" name="id_templatejadwal" value="'+id_templatejadwal+'">';
-                        html += '<button class="btn btn-sm btn-success" onclick="applyTemplateJadwal('+id_kelas+', '+id_templatejadwal+')"><span class="fas fa-check"></span>&nbsp;Terapkan Template</button>';
+                        html += '<button class="btn btn-sm btn-success"><span class="fas fa-check"></span>&nbsp;Terapkan Template</button>';
                         html += '&nbsp;<button class="btn btn-sm btn-danger" onclick="showTombolManual('+id_kelas+')"><span class="fas fa-times"></span>&nbsp;Batal</button>';
 
                         $("#preview_fromtemplate" + id_kelas).html(html);
