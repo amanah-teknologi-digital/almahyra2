@@ -24,8 +24,33 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Belajar Aktivitas Harian ananda&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span></h5>
-                                    <span class="d-flex align-items-center justify-content-center text-muted font-italic font-weight-bold">Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
+                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Belajar Aktivitas Harian&nbsp;<b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
+                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered" id="example">
+                                            <thead style="background-color: #bfdfff">
+                                                <tr>
+                                                    <th style="width: 5%">No</th>
+                                                    <th style="width: 15%">Waktu</th>
+                                                    <th style="width: 30%">Nama Kegiatan</th>
+                                                    <th style="width: 20%">Status</th>
+                                                    <th style="width: 30%">Keterangan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php $no = 1; foreach ($list_kegiatan as $key => $value) { ?>
+                                                    <tr>
+                                                        <td align="center"><?= $no++ ?></td>
+                                                        <td><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
+                                                        <td><?= $value->uraian ?></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data-data aktivitas sesuai jadwal kegiatan yang diberikan.</span></p>
                                 </div>
                             </div>

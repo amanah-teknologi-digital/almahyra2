@@ -130,7 +130,7 @@
                     </div>
                     <!-- end of main-content -->
                 </div><!-- Footer Start -->
-                <form action="<?= $controller.'/checkAktivitas' ?>" id="frm_lihatdetail" method="POST" target="_blank">
+                <form action="<?= $controller.'/checkAktivitas' ?>" id="frm_lihatdetail" method="POST">
                     <input type="hidden" name="id_anak" id="id_anak">
                     <input type="hidden" name="id_jadwalharian" value="<?= $id_jadwalharian; ?>" >
                 </form>
