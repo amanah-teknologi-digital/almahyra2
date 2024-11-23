@@ -124,11 +124,76 @@
             }else{
                 $a_input['id_jadwalharian'] = $id_jadwalharian;
                 $a_input['id_anak'] = $id_anak;
+                $a_input['created_at'] = date('Y-m-d H:m:s');
 
                 $this->db->insert('aktivitas', $a_input);
 
                 return $this->db->insert_id();
             }
+        }
+
+        public function getKegiatanByAktivitas($id_aktivitas){
+            $sql = "SELECT c.id_rincianaktivitas, b.jam_mulai, b.jam_selesai, b.uraian, c.status, c.keterangan, c.created_at, c.updated_at
+                FROM aktivitas a 
+                JOIN rincian_jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+                LEFT JOIN rincian_aktivitas c ON c.id_rincianjadwal_harian = b.id_rincianjadwal_harian AND c.id_aktivitas = a.id_aktivitas
+                LEFT JOIN data_user d ON d.id = c.updater
+                WHERE a.id_aktivitas = $id_aktivitas 
+                ORDER BY b.jam_mulai ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        public function getDataStimulusByAktivitas($id_aktivitas){
+            $sql = "SELECT d.*
+                FROM aktivitas a 
+                JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+                JOIN jadwal_stimulus c ON c.id_rincianjadwal_mingguan = b.id_rincianjadwal_mingguan AND c.id_kelas = b.id_kelas
+                JOIN rincian_jadwal_stimulus d ON d.id_jadwalstimulus = c.id_jadwalstimulus
+                WHERE a.id_aktivitas = $id_aktivitas";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        public function getDataAnakByAktivitas($id_aktivitas){
+            $sql = "SELECT b.*, d.nama as nama_kelas, a.created_at as tanggal_aktivitas
+                FROM aktivitas a 
+                JOIN registrasi_data_anak b ON b.id = a.id_anak
+                JOIN jadwal_harian c ON c.id_jadwalharian = a.id_jadwalharian
+                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
+                WHERE a.id_aktivitas = $id_aktivitas";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        public function getDataSubtemaByAktivitas($id_aktivitas){
+            $sql = "SELECT c.id_rincianjadwal_mingguan, c.tanggal, d.nama as nama_subtema
+                FROM aktivitas a 
+                JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+                JOIN rincian_jadwal_mingguan c ON c.id_rincianjadwal_mingguan = b.id_rincianjadwal_mingguan
+                JOIN jadwal_mingguan d ON d.id_jadwalmingguan = c.id_jadwalmingguan
+                WHERE a.id_aktivitas = $id_aktivitas";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        public function getDataCapaianIndikator($id_aktivitas){
+            $sql = "SELECT b.*
+                FROM aktivitas a 
+                JOIN capaian_indikator b ON b.id_aktivitas = a.id_aktivitas
+                WHERE a.id_aktivitas = $id_aktivitas";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
         }
 
         function getJumlahKegiatan($id_jadwalharian){

@@ -65,7 +65,17 @@ class CaktivitasHarian extends CI_Controller {
     }
 
     public function lihatAktivitas($id_aktivitas){
-        var_dump($id_aktivitas);
+        $data = $this->data;
+        $data['data_subtema'] = $this->AktivitasHarian->getDataSubtemaByAktivitas($id_aktivitas);
+        $id_rincianjadwal_mingguan = $data['data_subtema']->id_rincianjadwal_mingguan;
+        $data['id_aktivitas'] = $id_aktivitas;
+        $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+        $data['list_kegiatan'] = $this->AktivitasHarian->getKegiatanByAktivitas($id_aktivitas);
+        $data['data_stimulus'] = $this->AktivitasHarian->getDataStimulusByAktivitas($id_aktivitas);
+        $data['capaian_indikator'] = $this->AktivitasHarian->getDataCapaianIndikator($id_aktivitas);
+        $data['data_anak'] = $this->AktivitasHarian->getDataAnakByAktivitas($id_aktivitas);
+
+        $this->load->view('inc/aktivitasharian/lihat_data', $data);
     }
 
 	public function insert() {

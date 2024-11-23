@@ -21,9 +21,9 @@
                     <div class="row mb-4">
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
-                                <div class="card-header">
-                                    <p class="card-title mb-0">Filter</p>
-                                </div>
+<!--                                <div class="card-header">-->
+<!--                                    <p class="card-title mb-0">Filter</p>-->
+<!--                                </div>-->
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table style="width: 100%;padding: 10px 10px;">
@@ -130,7 +130,7 @@
                     </div>
                     <!-- end of main-content -->
                 </div><!-- Footer Start -->
-                <form action="<?= $controller.'/checkAktivitas' ?>" id="frm_lihatdetail" method="POST">
+                <form action="<?= $controller.'/checkAktivitas' ?>" id="frm_lihatdetail" method="POST" target="_blank">
                     <input type="hidden" name="id_anak" id="id_anak">
                     <input type="hidden" name="id_jadwalharian" value="<?= $id_jadwalharian; ?>" >
                 </form>
