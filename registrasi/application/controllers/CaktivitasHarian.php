@@ -78,6 +78,18 @@ class CaktivitasHarian extends CI_Controller {
         $this->load->view('inc/aktivitasharian/lihat_data', $data);
     }
 
+    public function simpan(){
+        $err = $this->AktivitasHarian->simpanAktivitas($_POST['id_aktivitas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
+        }
+
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_aktivitas']);
+    }
+
 	public function insert() {
 		
 		$err = $this->Tahun->insert();

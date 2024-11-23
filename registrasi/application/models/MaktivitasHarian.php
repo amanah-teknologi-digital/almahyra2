@@ -204,6 +204,48 @@
             return $query->row()->jumlah_kegiatan;
         }
 
+        function simpanAktivitas($id_aktivitas){
+            $user = $this->session->userdata['auth'];
+
+            $list_kegiatan = $this->getKegiatanByAktivitas($id_aktivitas);
+
+            $this->db->trans_start();
+
+            foreach ($list_kegiatan as $kegiatan){
+                $id_rincianjadwal_harian = $kegiatan->id_rincianjadwal_harian;
+                $status = $_POST['status'.$id_rincianjadwal_harian];
+                $keterangan = $_POST['keterangan'.$id_rincianjadwal_harian];
+
+                $sql = "SELECT id_rincianaktivitas FROM rincian_aktivitas WHERE id_rincianjadwal_harian = $id_rincianjadwal_harian AND id_aktivitas = $id_aktivitas";
+                $query = $this->db->query($sql);
+
+                if (empty($query->row()->id_rincianaktivitas)) {
+                    $input_data['id_aktivitas'] = $id_aktivitas;
+                    $input_data['id_rincianjadwal_harian'] = $id_rincianjadwal_harian;
+                    $input_data['status'] = $status;
+                    $input_data['keterangan'] = $keterangan;
+                    $input_data['created_at'] = date('Y-m-d H:m:s');
+                    $input_data['updater'] = $user->id;
+
+                    $this->db->insert('rincian_aktivitas', $input_data);
+                }else{
+                    $id_rincianaktivitas = $query->row()->id_rincianaktivitas;
+
+                    $input_data['status'] = $status;
+                    $input_data['keterangan'] = $keterangan;
+                    $input_data['updated_at'] = date('Y-m-d H:m:s');
+                    $input_data['updater'] = $user->id;
+
+                    $this->db->where('id_rincianaktivitas', $id_rincianaktivitas);
+                    $this->db->update('rincian_aktivitas', $input_data);
+                }
+            }
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
 	    ## insert data into table
 	    function insert() {
             $user = $this->session->userdata['auth'];

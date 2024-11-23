@@ -127,16 +127,16 @@
                                                             <td><b class="text-muted"><?= $value->uraian ?></b></td>
                                                             <td align="center">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1">
+                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1" <?= $value->status == 1? 'checked':''; ?> >
                                                                     <label class="form-check-label" for="inlineRadio1">Ada</label>
                                                                 </div>
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio2<?= $value->id_rincianjadwal_harian ?>" value="0">
+                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio2<?= $value->id_rincianjadwal_harian ?>" value="0" <?= $value->status != 1? 'checked':''; ?>>
                                                                     <label class="form-check-label" for="inlineRadio2">Tidak</label>
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <textarea class="form-control" name="keterangan<?= $value->id_rincianjadwal_harian ?>" id="keterangan<?= $value->id_rincianjadwal_harian ?>" cols="10" rows="2"></textarea>
+                                                                <textarea class="form-control" name="keterangan<?= $value->id_rincianjadwal_harian ?>" id="keterangan<?= $value->id_rincianjadwal_harian ?>" cols="10" rows="2"><?= $value->keterangan? $value->keterangan:''; ?></textarea>
                                                             </td>
                                                         </tr>
                                                 <?php } ?>
@@ -146,6 +146,7 @@
                                     <div class="d-flex align-items-center justify-content-center">
                                         <button type="submit" class="btn btn-sm btn-success "><span class="fas fa-save"></span>&nbsp;Simpan Data</button>
                                     </div>
+                                    <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
                                     </form>
                                     <br>
                                     <h5 class="card-title"><b>Data Stimulus</b></h5>
