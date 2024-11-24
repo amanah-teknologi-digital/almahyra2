@@ -127,11 +127,11 @@
                                                             <td><b class="text-muted"><?= $value->uraian ?></b></td>
                                                             <td align="center">
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1" <?= $value->status == 1? 'checked':''; ?> >
+                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1" <?= $value->status == 1 && !is_null($value->status)? 'checked':''; ?> >
                                                                     <label class="form-check-label" for="inlineRadio1">Ada</label>
                                                                 </div>
                                                                 <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio2<?= $value->id_rincianjadwal_harian ?>" value="0" <?= $value->status != 1? 'checked':''; ?>>
+                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio2<?= $value->id_rincianjadwal_harian ?>" value="0" <?= $value->status != 1 && !is_null($value->status)? 'checked':''; ?>>
                                                                     <label class="form-check-label" for="inlineRadio2">Tidak</label>
                                                                 </div>
                                                             </td>
