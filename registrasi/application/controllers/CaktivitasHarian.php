@@ -27,23 +27,44 @@ class CaktivitasHarian extends CI_Controller {
 		$this->load->model('MaktivitasHarian', 'AktivitasHarian');
 	}
 
-	public function index()	{	
+	public function index()	{
+        var_dump($_POST);
+        if (!empty($_POST)) {
+            $this->session->set_userdata('tahun_session_aktivitas', $_POST['tahun']);
+            $this->session->set_userdata('id_rincianjadwal_mingguan_session_aktivitas', $_POST['id_rincianjadwal_mingguan']);
+            $this->session->set_userdata('id_jadwalharian_session_aktivitas', $_POST['id_jadwalharian']);
+        }
+
+        $tahun = $this->session->userdata('tahun_session_aktivitas');
+        $id_rincianjadwal_mingguan = $this->session->userdata('id_rincianjadwal_mingguan_session_aktivitas');
+        $id_jadwalharian = $this->session->userdata('id_jadwalharian_session_aktivitas');
 
 		$data = $this->data;
+
         $data['tahun'] = $this->AktivitasHarian->getListTahun();
-        foreach ($data['tahun'] as $key => $value) {
-            if ($value->is_aktif == 1) {
-                $tahun = $value->tahun;
+        if (empty($tahun)) {
+            foreach ($data['tahun'] as $key => $value) {
+                if ($value->is_aktif == 1) {
+                    $tahun = $value->tahun;
+                }
             }
         }
 
+        $data['tahun_selected'] = $tahun;
+
         $data['tanggal'] = $this->AktivitasHarian->getListTanggalByTahun($tahun);
-        $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+        if (empty($id_rincianjadwal_mingguan)) {
+            $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+        }
+        $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
         $data['kelas'] = $this->AktivitasHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
         if (!empty($data['kelas'])) {
-            $data['aktivitas'] = $this->AktivitasHarian->getAktivitasHarianByIdJadwal($data['kelas'][0]->id_jadwalharian);
-            $data['jumlah_kegiatan'] = $this->AktivitasHarian->getJumlahKegiatan($data['kelas'][0]->id_jadwalharian);
-            $data['id_jadwalharian'] = $data['kelas'][0]->id_jadwalharian;
+            if (empty($id_jadwalharian)) {
+                $id_jadwalharian = $data['kelas'][0]->id_jadwalharian;
+            }
+            $data['aktivitas'] = $this->AktivitasHarian->getAktivitasHarianByIdJadwal($id_jadwalharian);
+            $data['jumlah_kegiatan'] = $this->AktivitasHarian->getJumlahKegiatan($id_jadwalharian);
+            $data['id_jadwalharian'] = $id_jadwalharian;
         }else{
             $data['aktivitas'] = [];
             $data['jumlah_kegiatan'] = 0;

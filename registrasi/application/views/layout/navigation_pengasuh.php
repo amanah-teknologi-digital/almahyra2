@@ -114,10 +114,16 @@
                 <h6>Absensi</h6>
             </header>
             <ul class="childNav">
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'absensi-pengasuh'; ?><!--">-->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Kehadiran</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item">
-                    <a href="<?= base_url().'absensi-pengasuh'; ?>">
+                    <a href="<?= base_url().'aktivitas-harian'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Kehadiran</span>
+                        <span class="item-name">Aktivitas Harian</span>
                     </a>
                 </li>
             </ul>

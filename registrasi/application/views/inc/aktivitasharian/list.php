@@ -26,53 +26,55 @@
 <!--                                </div>-->
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table style="width: 100%;padding: 10px 10px;">
-                                            <colgroup>
-                                                <col style="width: 20%">
-                                                <col style="width: 80%">
-                                            </colgroup>
-                                            <tr>
-                                                <td>
-                                                    <label>Tahun</label>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control" id="tahun" name="tahun" required>
-                                                        <?php foreach ($tahun as $key => $value) { ?>
-                                                            <option value="<?= $value->tahun ?>" <?= $value->is_aktif == 1 ? 'selected' : '' ?>><?= $value->tahun ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label>Tanggal</label>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control" id="id_rincianjadwal_mingguan" name="id_rincianjadwal_mingguan" required>
-                                                        <?php foreach ($tanggal as $key => $value) { ?>
-                                                            <option value="<?= $value->id_rincianjadwal_mingguan ?>"><?= 'Tema: '.$value->nama_tema.', '.format_date_indonesia($value->tanggal).' '.date('d-m-Y', strtotime($value->tanggal)).' ('.$value->nama_subtema.')' ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label>Kelas</label>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control" id="id_kelas" name="id_kelas" required>
-                                                        <?php foreach ($kelas as $key => $value) { ?>
-                                                            <option value="<?= $value->id_jadwalharian ?>"><?= $value->nama_kelas ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" >
-                                                    <button class="btn btn-sm btn-primary mt-4">Tampilkan</button>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        <?php echo form_open_multipart($controller); ?>
+                                            <table style="width: 100%;padding: 10px 10px;">
+                                                <colgroup>
+                                                    <col style="width: 20%">
+                                                    <col style="width: 80%">
+                                                </colgroup>
+                                                <tr>
+                                                    <td>
+                                                        <label>Tahun</label>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control" id="tahun" name="tahun" required>
+                                                            <?php foreach ($tahun as $key => $value) { ?>
+                                                                <option value="<?= $value->tahun ?>" <?= $tahun_selected == $value->tahun ? 'selected' : '' ?>><?= $value->tahun ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>Tanggal</label>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control" id="id_rincianjadwal_mingguan" name="id_rincianjadwal_mingguan" required>
+                                                            <?php foreach ($tanggal as $key => $value) { ?>
+                                                                <option value="<?= $value->id_rincianjadwal_mingguan ?>" <?= $id_rincianjadwal_mingguan == $value->id_rincianjadwal_mingguan ? 'selected' : '' ?>><?= 'Tema: '.$value->nama_tema.', '.format_date_indonesia($value->tanggal).' '.date('d-m-Y', strtotime($value->tanggal)).' ('.$value->nama_subtema.')' ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label>Kelas</label>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control" id="id_jadwalharian" name="id_jadwalharian" required>
+                                                            <?php foreach ($kelas as $key => $value) { ?>
+                                                                <option value="<?= $value->id_jadwalharian ?>" <?= $id_jadwalharian == $value->id_jadwalharian ? 'selected' : '' ?>><?= $value->nama_kelas ?></option>
+                                                            <?php } ?>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" >
+                                                        <button class="btn btn-sm btn-primary mt-4">Tampilkan</button>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </form>
                                         <hr>
                                         <div class="table-responsive">
                                             <table class="display table table-striped table-bordered" id="tbl" style="width:100%">
