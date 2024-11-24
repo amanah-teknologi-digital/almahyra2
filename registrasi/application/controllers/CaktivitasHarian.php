@@ -158,4 +158,46 @@ class CaktivitasHarian extends CI_Controller {
 
 		redirect($this->data['redirect']);
 	}
+
+    public function getDataTanggal(){
+        $tahun = $_POST['tahun'];
+
+        $data = $this->AktivitasHarian->getListTanggalByTahun($tahun);
+        if (!empty($data)) {
+            $id_rincianjadwal_mingguan = $data[0]->id_rincianjadwal_mingguan;
+            $kelas = $this->AktivitasHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
+
+            $data_list = [];
+            foreach ($data as $key => $value) {
+                $value->nama_hari = format_date_indonesia($value->tanggal);
+                $value->tanggal = date('d-m-Y', strtotime($value->tanggal));
+                $data_list[] = $value;
+            }
+            $data['tanggal'] = $data_list;
+            $data['kelas'] = $kelas;
+        }else{
+            $data['tanggal'] = [];
+            $data['kelas'] = [];
+        }
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+
+    }
+
+    public function getDataKelas(){
+        $id_rincianjadwal_mingguan =  $_POST['id_rincianjadwal_mingguan'];
+
+        $data['kelas'] = $this->AktivitasHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+
+    }
 }

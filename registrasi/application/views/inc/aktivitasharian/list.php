@@ -37,7 +37,7 @@
                                                         <label>Tahun</label>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" id="tahun" name="tahun" required>
+                                                        <select class="form-control" id="tahun" name="tahun" required onchange="getDataTanggal(this)">
                                                             <?php foreach ($tahun as $key => $value) { ?>
                                                                 <option value="<?= $value->tahun ?>" <?= $tahun_selected == $value->tahun ? 'selected' : '' ?>><?= $value->tahun ?></option>
                                                             <?php } ?>
@@ -49,7 +49,7 @@
                                                         <label>Tanggal</label>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" id="id_rincianjadwal_mingguan" name="id_rincianjadwal_mingguan" required>
+                                                        <select class="form-control" id="id_rincianjadwal_mingguan" name="id_rincianjadwal_mingguan" required onchange="getDataKelas(this)">
                                                             <?php foreach ($tanggal as $key => $value) { ?>
                                                                 <option value="<?= $value->id_rincianjadwal_mingguan ?>" <?= $id_rincianjadwal_mingguan == $value->id_rincianjadwal_mingguan ? 'selected' : '' ?>><?= 'Tema: '.$value->nama_tema.', '.format_date_indonesia($value->tanggal).' '.date('d-m-Y', strtotime($value->tanggal)).' ('.$value->nama_subtema.')' ?></option>
                                                             <?php } ?>
@@ -153,5 +153,51 @@
             $('#id_anak').val(id);
             $('#frm_lihatdetail').submit();
         });
+
+        function resetInput(){
+            $('#id_rincianjadwal_mingguan').html('');
+            $('#id_jadwalharian').html('');
+        }
+
+        function getDataTanggal(dom){
+            let tahun = $(dom).val();
+            resetInput();
+
+            $.ajax({
+                url: url+'/getDataTanggal',
+                type: 'POST',
+                data: {tahun: tahun},
+                success: function(data){
+                    let data_tanggal = data['tanggal'];
+                    let data_kelas = data['kelas'];
+
+                    $.each(data_tanggal, function(key, value){
+                        $('#id_rincianjadwal_mingguan').append('<option value="'+value.id_rincianjadwal_mingguan+'">Tema: '+value.nama_tema+', '+ value.nama_hari + ' ' +value.tanggal+' ('+value.nama_subtema+')</option>');
+                    });
+
+                    $.each(data_kelas, function(key, value){
+                        $('#id_jadwalharian').append('<option value="'+value.id_jadwalharian+'">'+value.nama_kelas+'</option>');
+                    });
+                }
+            });
+        }
+
+        function getDataKelas(dom){
+            let id_rincianjadwal_mingguan = $(dom).val();
+            $('#id_jadwalharian').html('');
+
+            $.ajax({
+                url: url+'/getDataKelas',
+                type: 'POST',
+                data: {id_rincianjadwal_mingguan: id_rincianjadwal_mingguan},
+                success: function(data){
+                    let data_kelas = data['kelas'];
+
+                    $.each(data_kelas, function(key, value){
+                        $('#id_jadwalharian').append('<option value="'+value.id_jadwalharian+'">'+value.nama_kelas+'</option>');
+                    });
+                }
+            });
+        }
     </script>
 </html>
