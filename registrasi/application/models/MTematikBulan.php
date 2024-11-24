@@ -112,6 +112,8 @@
 	    ## insert data into table
 	    function insert() {
             try {
+                $this->db->trans_start();
+
                 $user = $this->session->userdata['auth'];
 
                 $tahun = $_POST['tahun_penentuan'];
@@ -127,6 +129,8 @@
                 $a_input['updater'] = $user->id;
 
                 $this->db->insert('tema_bulanan', $a_input);
+
+                $this->db->trans_complete();
 
                 if (!$this->db->trans_status()) {
                     throw new Exception('Database error!');
@@ -418,6 +422,8 @@
 	    ## update data in table
 	    function update($id) {
             try {
+                $this->db->trans_start();
+
                 $user = $this->session->userdata['auth'];
 
                 $a_input['nama'] = $_POST['nama_tema'];
@@ -426,8 +432,9 @@
                 $a_input['updater'] = $user->id;
 
                 $this->db->where('id_temabulanan', $id);
-
                 $this->db->update('tema_bulanan', $a_input);
+
+                $this->db->trans_complete();
 
                 if (!$this->db->trans_status()) {
                     throw new Exception('Database error!');
