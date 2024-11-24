@@ -111,188 +111,55 @@
 
 	    ## insert data into table
 	    function insert() {
-            $user = $this->session->userdata['auth'];
+            try {
+                $user = $this->session->userdata['auth'];
 
-            $tahun = $_POST['tahun_penentuan'];
-            $bulan = $_POST['bulan_penentuan'];
-            $nama_tema = $_POST['nama_tema'];
-            $keterangan = $_POST['keterangan'];
+                $tahun = $_POST['tahun_penentuan'];
+                $bulan = $_POST['bulan_penentuan'];
+                $nama_tema = $_POST['nama_tema'];
+                $keterangan = $_POST['keterangan'];
 
-	        $a_input['tahun'] = $tahun;
-	        $a_input['bulan'] = $bulan;
-	        $a_input['nama'] = $nama_tema;
-	        $a_input['deskripsi'] = $keterangan;
-	        $a_input['created_at'] = date('Y-m-d H:m:s');
-	        $a_input['updater'] = $user->id;
-
-	        $this->db->insert('tema_bulanan', $a_input);
-
-	        return $this->db->error();	        
-	    }
-
-        function insertSubTema() {
-            $user = $this->session->userdata['auth'];
-
-            $nama_subtema = $_POST['nama_subtema'];
-            $keterangan = $_POST['keterangan'];
-            $tanggal_pelaksanaan = $_POST['tanggal_pelaksanaan'];
-            $list_tanggal = explode(',', $tanggal_pelaksanaan);
-            $id_temabulanan = $_POST['id_temabulanan'];
-
-            if (count($list_tanggal) > 0){
-                $this->db->trans_start();
-
-                $a_input['id_temabulanan'] = $id_temabulanan;
-                $a_input['nama'] = $nama_subtema;
-                $a_input['keterangan'] = $keterangan;
+                $a_input['tahun'] = $tahun;
+                $a_input['bulan'] = $bulan;
+                $a_input['nama'] = $nama_tema;
+                $a_input['deskripsi'] = $keterangan;
                 $a_input['created_at'] = date('Y-m-d H:m:s');
                 $a_input['updater'] = $user->id;
 
-                $this->db->insert('jadwal_mingguan', $a_input);
-                $id_jadwalmingguan = $this->db->insert_id();
+                $this->db->insert('tema_bulanan', $a_input);
 
-                foreach ($list_tanggal as $tanggal){
-                    $temp_date = date('Y-m-d', strtotime($tanggal));
-                    $a_input_rincian['id_jadwalmingguan'] = $id_jadwalmingguan;
-                    $a_input_rincian['tanggal'] = $temp_date;
-                    $a_input_rincian['created_at'] = date('Y-m-d H:m:s');
-                    $a_input_rincian['updater'] = $user->id;
-
-                    $this->db->insert('rincian_jadwal_mingguan', $a_input_rincian);
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
                 }
-
-                $this->db->trans_complete();
+                return true;
+            }catch (Exception $e) {
+                throw $e;
             }
-
-	        return $this->db->trans_status();
 	    }
 
-        function insertKegiatan() {
-            $user = $this->session->userdata['auth'];
+        function insertSubTema() {
+            try {
+                $user = $this->session->userdata['auth'];
 
-            $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
-            $id_kelas = $_POST['id_kelas'];
-            $jam_mulai = $_POST['jam_mulai'];
-            $jam_selesai = $_POST['jam_selesai'];
-            $nama_kegiatan = $_POST['nama_kegiatan'];
-            $keterangan = $_POST['keterangan'];
+                $nama_subtema = $_POST['nama_subtema'];
+                $keterangan = $_POST['keterangan'];
+                $tanggal_pelaksanaan = $_POST['tanggal_pelaksanaan'];
+                $list_tanggal = explode(',', $tanggal_pelaksanaan);
+                $id_temabulanan = $_POST['id_temabulanan'];
 
-            $sql = "SELECT id_jadwalharian FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
-            $query = $this->db->query($sql);
-            $id_jadwalharian = $query->row()->id_jadwalharian;
+                if (count($list_tanggal) > 0){
+                    $this->db->trans_start();
 
-            $this->db->trans_start();
+                    $a_input['id_temabulanan'] = $id_temabulanan;
+                    $a_input['nama'] = $nama_subtema;
+                    $a_input['keterangan'] = $keterangan;
+                    $a_input['created_at'] = date('Y-m-d H:m:s');
+                    $a_input['updater'] = $user->id;
 
-            if (empty($id_jadwalharian)) {
-                $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
-                $input_jadwal['id_kelas'] = $id_kelas;
-                $this->db->insert('jadwal_harian', $input_jadwal);
-                $id_jadwalharian = $this->db->insert_id();
-            }
+                    $this->db->insert('jadwal_mingguan', $a_input);
+                    $id_jadwalmingguan = $this->db->insert_id();
 
-            $a_input['id_jadwalharian'] = $id_jadwalharian;
-            $a_input['jam_mulai'] = $jam_mulai;
-            $a_input['jam_selesai'] = $jam_selesai;
-            $a_input['uraian'] = $nama_kegiatan;
-            $a_input['keterangan'] = $keterangan;
-            $a_input['created_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
-
-            $this->db->insert('rincian_jadwal_harian', $a_input);
-            $this->db->trans_complete();
-
-	        return $this->db->trans_status();
-	    }
-
-        function simpanStimulus($id_kelas) {
-            $user = $this->session->userdata['auth'];
-
-            $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
-            $nama = $_POST['nama_tema_stimulus'];
-            $editorContent = $_POST['editorContent'];
-            $keterangan = $_POST['keterangan'];
-
-            $sql = "SELECT id_jadwalstimulus FROM jadwal_stimulus WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
-            $query = $this->db->query($sql);
-            $id_jadwalstimulus = $query->row()->id_jadwalstimulus;
-
-            $this->db->trans_start();
-
-            if (empty($id_jadwalstimulus)) {
-                $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
-                $input_jadwal['id_kelas'] = $id_kelas;
-                $this->db->insert('jadwal_stimulus', $input_jadwal);
-                $id_jadwalstimulus = $this->db->insert_id();
-            }
-
-            $sql = "SELECT id_rincianjadwal_stimulus FROM rincian_jadwal_stimulus WHERE id_jadwalstimulus = $id_jadwalstimulus";
-            $query = $this->db->query($sql);
-            $id_rincianjadwal_stimulus = $query->row()->id_rincianjadwal_stimulus;
-
-            if (empty($id_rincianjadwal_stimulus)) {
-                $input_data_stimulus['id_jadwalstimulus'] = $id_jadwalstimulus;
-                $input_data_stimulus['nama'] = $nama;
-                $input_data_stimulus['rincian_kegiatan'] = $editorContent;
-                $input_data_stimulus['keterangan'] = $keterangan;
-                $input_data_stimulus['created_at'] = date('Y-m-d H:m:s');
-                $input_data_stimulus['updater'] = $user->id;
-
-                $this->db->insert('rincian_jadwal_stimulus', $input_data_stimulus);
-            }else{
-                $input_data_stimulus['nama'] = $nama;
-                $input_data_stimulus['rincian_kegiatan'] = $editorContent;
-                $input_data_stimulus['keterangan'] = $keterangan;
-                $input_data_stimulus['updated_at'] = date('Y-m-d H:m:s');
-                $input_data_stimulus['updater'] = $user->id;
-
-                $this->db->where('id_rincianjadwal_stimulus', $id_rincianjadwal_stimulus);
-                $this->db->update('rincian_jadwal_stimulus', $input_data_stimulus);
-            }
-
-            $this->db->trans_complete();
-
-	        return $this->db->trans_status();
-	    }
-
-        function updateSubTema() {
-            $user = $this->session->userdata['auth'];
-
-            $nama_subtema = $_POST['nama_subtema'];
-            $keterangan = $_POST['keterangan'];
-            $tanggal_pelaksanaan = $_POST['tanggal_pelaksanaan'];
-            $list_tanggal = explode(',', $tanggal_pelaksanaan);
-            $id_jadwalmingguan = $_POST['id_jadwalmingguan'];
-            $data_tanggal = $this->getTanggalJadwalMingguan($id_jadwalmingguan);
-
-            $list_jadwal_editable = [];
-            $list_jadwal_noneditable = [];
-            foreach ($data_tanggal as $tanggal){
-                if (empty($tanggal->is_inputjadwalharian)){
-                    $list_jadwal_editable[] = $tanggal->tanggal;
-                }else{
-                    $list_jadwal_noneditable[] = $tanggal->tanggal;
-                }
-            }
-
-            if (count($list_tanggal) > 0){
-                $this->db->trans_start();
-
-                $a_input['nama'] = $nama_subtema;
-                $a_input['keterangan'] = $keterangan;
-                $a_input['updated_at'] = date('Y-m-d H:m:s');
-                $a_input['updater'] = $user->id;
-
-                $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
-                $this->db->update('jadwal_mingguan', $a_input);
-
-                //hapus sub tema yang belum diisi jadwal harian
-                if (count($list_jadwal_editable) > 0) {
-                    $this->db->where_in('tanggal', $list_jadwal_editable);
-                    $this->db->delete('rincian_jadwal_mingguan');
-                }
-
-                foreach ($list_tanggal as $tanggal){
-                    if (!in_array($tanggal, $list_jadwal_noneditable)) {
+                    foreach ($list_tanggal as $tanggal){
                         $temp_date = date('Y-m-d', strtotime($tanggal));
                         $a_input_rincian['id_jadwalmingguan'] = $id_jadwalmingguan;
                         $a_input_rincian['tanggal'] = $temp_date;
@@ -301,78 +168,274 @@
 
                         $this->db->insert('rincian_jadwal_mingguan', $a_input_rincian);
                     }
+
+                    $this->db->trans_complete();
+                }
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
+	    }
+
+        function insertKegiatan() {
+            try {
+                $user = $this->session->userdata['auth'];
+
+                $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
+                $id_kelas = $_POST['id_kelas'];
+                $jam_mulai = $_POST['jam_mulai'];
+                $jam_selesai = $_POST['jam_selesai'];
+                $nama_kegiatan = $_POST['nama_kegiatan'];
+                $keterangan = $_POST['keterangan'];
+
+                $sql = "SELECT id_jadwalharian FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
+                $query = $this->db->query($sql);
+                $id_jadwalharian = $query->row()->id_jadwalharian;
+
+                $this->db->trans_start();
+
+                if (empty($id_jadwalharian)) {
+                    $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+                    $input_jadwal['id_kelas'] = $id_kelas;
+                    $this->db->insert('jadwal_harian', $input_jadwal);
+                    $id_jadwalharian = $this->db->insert_id();
+                }
+
+                $a_input['id_jadwalharian'] = $id_jadwalharian;
+                $a_input['jam_mulai'] = $jam_mulai;
+                $a_input['jam_selesai'] = $jam_selesai;
+                $a_input['uraian'] = $nama_kegiatan;
+                $a_input['keterangan'] = $keterangan;
+                $a_input['created_at'] = date('Y-m-d H:m:s');
+                $a_input['updater'] = $user->id;
+
+                $this->db->insert('rincian_jadwal_harian', $a_input);
+                $this->db->trans_complete();
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
+	    }
+
+        function simpanStimulus($id_kelas) {
+            try {
+                $user = $this->session->userdata['auth'];
+
+                $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
+                $nama = $_POST['nama_tema_stimulus'];
+                $editorContent = $_POST['editorContent'];
+                $keterangan = $_POST['keterangan'];
+
+                $sql = "SELECT id_jadwalstimulus FROM jadwal_stimulus WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
+                $query = $this->db->query($sql);
+                $id_jadwalstimulus = $query->row()->id_jadwalstimulus;
+
+                $this->db->trans_start();
+
+                if (empty($id_jadwalstimulus)) {
+                    $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+                    $input_jadwal['id_kelas'] = $id_kelas;
+                    $this->db->insert('jadwal_stimulus', $input_jadwal);
+                    $id_jadwalstimulus = $this->db->insert_id();
+                }
+
+                $sql = "SELECT id_rincianjadwal_stimulus FROM rincian_jadwal_stimulus WHERE id_jadwalstimulus = $id_jadwalstimulus";
+                $query = $this->db->query($sql);
+                $id_rincianjadwal_stimulus = $query->row()->id_rincianjadwal_stimulus;
+
+                if (empty($id_rincianjadwal_stimulus)) {
+                    $input_data_stimulus['id_jadwalstimulus'] = $id_jadwalstimulus;
+                    $input_data_stimulus['nama'] = $nama;
+                    $input_data_stimulus['rincian_kegiatan'] = $editorContent;
+                    $input_data_stimulus['keterangan'] = $keterangan;
+                    $input_data_stimulus['created_at'] = date('Y-m-d H:m:s');
+                    $input_data_stimulus['updater'] = $user->id;
+
+                    $this->db->insert('rincian_jadwal_stimulus', $input_data_stimulus);
+                }else{
+                    $input_data_stimulus['nama'] = $nama;
+                    $input_data_stimulus['rincian_kegiatan'] = $editorContent;
+                    $input_data_stimulus['keterangan'] = $keterangan;
+                    $input_data_stimulus['updated_at'] = date('Y-m-d H:m:s');
+                    $input_data_stimulus['updater'] = $user->id;
+
+                    $this->db->where('id_rincianjadwal_stimulus', $id_rincianjadwal_stimulus);
+                    $this->db->update('rincian_jadwal_stimulus', $input_data_stimulus);
                 }
 
                 $this->db->trans_complete();
-            }
 
-	        return $this->db->trans_status();
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
+	    }
+
+        function updateSubTema() {
+            try {
+                $user = $this->session->userdata['auth'];
+
+                $nama_subtema = $_POST['nama_subtema'];
+                $keterangan = $_POST['keterangan'];
+                $tanggal_pelaksanaan = $_POST['tanggal_pelaksanaan'];
+                $list_tanggal = explode(',', $tanggal_pelaksanaan);
+                $id_jadwalmingguan = $_POST['id_jadwalmingguan'];
+                $data_tanggal = $this->getTanggalJadwalMingguan($id_jadwalmingguan);
+
+                $list_jadwal_editable = [];
+                $list_jadwal_noneditable = [];
+                foreach ($data_tanggal as $tanggal){
+                    if (empty($tanggal->is_inputjadwalharian)){
+                        $list_jadwal_editable[] = $tanggal->tanggal;
+                    }else{
+                        $list_jadwal_noneditable[] = $tanggal->tanggal;
+                    }
+                }
+
+                if (count($list_tanggal) > 0){
+                    $this->db->trans_start();
+
+                    $a_input['nama'] = $nama_subtema;
+                    $a_input['keterangan'] = $keterangan;
+                    $a_input['updated_at'] = date('Y-m-d H:m:s');
+                    $a_input['updater'] = $user->id;
+
+                    $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
+                    $this->db->update('jadwal_mingguan', $a_input);
+
+                    //hapus sub tema yang belum diisi jadwal harian
+                    if (count($list_jadwal_editable) > 0) {
+                        $this->db->where_in('tanggal', $list_jadwal_editable);
+                        $this->db->delete('rincian_jadwal_mingguan');
+                    }
+
+                    foreach ($list_tanggal as $tanggal){
+                        if (!in_array($tanggal, $list_jadwal_noneditable)) {
+                            $temp_date = date('Y-m-d', strtotime($tanggal));
+                            $a_input_rincian['id_jadwalmingguan'] = $id_jadwalmingguan;
+                            $a_input_rincian['tanggal'] = $temp_date;
+                            $a_input_rincian['created_at'] = date('Y-m-d H:m:s');
+                            $a_input_rincian['updater'] = $user->id;
+
+                            $this->db->insert('rincian_jadwal_mingguan', $a_input_rincian);
+                        }
+                    }
+
+                    $this->db->trans_complete();
+                }
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 	    }
         function updateKegiatan() {
-            $user = $this->session->userdata['auth'];
+            try {
+                $user = $this->session->userdata['auth'];
 
-            $id_rincianjadwal_harian = $_POST['id_rincianjadwal_harian'];
-            $jam_mulai = $_POST['jam_mulai'];
-            $jam_selesai = $_POST['jam_selesai'];
-            $nama_kegiatan = $_POST['nama_kegiatan'];
-            $keterangan = $_POST['keterangan'];
+                $id_rincianjadwal_harian = $_POST['id_rincianjadwal_harian'];
+                $jam_mulai = $_POST['jam_mulai'];
+                $jam_selesai = $_POST['jam_selesai'];
+                $nama_kegiatan = $_POST['nama_kegiatan'];
+                $keterangan = $_POST['keterangan'];
 
-            $a_input['jam_mulai'] = $jam_mulai;
-            $a_input['jam_selesai'] = $jam_selesai;
-            $a_input['uraian'] = $nama_kegiatan;
-            $a_input['keterangan'] = $keterangan;
-            $a_input['updated_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
+                $a_input['jam_mulai'] = $jam_mulai;
+                $a_input['jam_selesai'] = $jam_selesai;
+                $a_input['uraian'] = $nama_kegiatan;
+                $a_input['keterangan'] = $keterangan;
+                $a_input['updated_at'] = date('Y-m-d H:m:s');
+                $a_input['updater'] = $user->id;
 
-            $this->db->trans_start();
+                $this->db->trans_start();
 
-            $this->db->where('id_rincianjadwal_harian', $id_rincianjadwal_harian);
-            $this->db->update('rincian_jadwal_harian', $a_input);
+                $this->db->where('id_rincianjadwal_harian', $id_rincianjadwal_harian);
+                $this->db->update('rincian_jadwal_harian', $a_input);
 
-            $this->db->trans_complete();
+                $this->db->trans_complete();
 
-	        return $this->db->trans_status();
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 	    }
 
         function hapusSubTema($id_jadwalmingguan) {
-            $this->db->trans_start();
+            try {
+                $this->db->trans_start();
 
-            $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
-            $this->db->delete('rincian_jadwal_mingguan');
+                $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
+                $this->db->delete('rincian_jadwal_mingguan');
 
-            $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
-            $this->db->delete('jadwal_mingguan');
+                $this->db->where('id_jadwalmingguan', $id_jadwalmingguan);
+                $this->db->delete('jadwal_mingguan');
 
-            $this->db->trans_complete();
+                $this->db->trans_complete();
 
-	        return $this->db->trans_status();
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 	    }
 
         function hapusKegiatan($id_rincianjadwal_harian) {
-            $this->db->trans_start();
+            try {
+                $this->db->trans_start();
 
-            $this->db->where('id_rincianjadwal_harian', $id_rincianjadwal_harian);
-            $this->db->delete('rincian_jadwal_harian');
+                $this->db->where('id_rincianjadwal_harian', $id_rincianjadwal_harian);
+                $this->db->delete('rincian_jadwal_harian');
 
-            $this->db->trans_complete();
+                $this->db->trans_complete();
 
-	        return $this->db->trans_status();
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 	    }
 
 	    ## update data in table
 	    function update($id) {
-            $user = $this->session->userdata['auth'];
+            try {
+                $user = $this->session->userdata['auth'];
 
-	        $a_input['nama'] = $_POST['nama_tema'];
-	        $a_input['deskripsi'] = $_POST['keterangan'];
-	        $a_input['updated_at'] = date('Y-m-d H:m:s');
-	        $a_input['updater'] = $user->id;
+                $a_input['nama'] = $_POST['nama_tema'];
+                $a_input['deskripsi'] = $_POST['keterangan'];
+                $a_input['updated_at'] = date('Y-m-d H:m:s');
+                $a_input['updater'] = $user->id;
 
-	        $this->db->where('id_temabulanan', $id);
-	        
-	        $this->db->update('tema_bulanan', $a_input);
+                $this->db->where('id_temabulanan', $id);
 
-	        return $this->db->error(1);	        
+                $this->db->update('tema_bulanan', $a_input);
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 	    }
 
 	    ## delete data in table
@@ -584,8 +647,7 @@
 
                 $this->db->trans_complete();
 
-                $db_error = $this->db->error();
-                if (!empty($db_error)) {
+                if (!$this->db->trans_status()) {
                     throw new Exception('Database error!');
                 }
                 return true;

@@ -131,66 +131,66 @@ class CTematikBulanan extends CI_Controller {
     }
 
 	public function insert() {
-		$err = $this->TematikBulan->insert();
+        try {
+            $this->TematikBulan->insert();
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-		}
+            $this->session->set_flashdata('success', 'Berhasil Tambah Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Tambah Data: ' . $e->getMessage());
+        }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
     public function insertsubtema() {
-		$err = $this->TematikBulan->insertSubTema();
-        $bulan = $this->TematikBulan->getBulanBySubTema($_POST['id_temabulanan']);
-        $this->session->set_userdata('active_accordion_bulan', $bulan);
+        try {
+            $this->TematikBulan->insertSubTema();
+            $bulan = $this->TematikBulan->getBulanBySubTema($_POST['id_temabulanan']);
+            $this->session->set_userdata('active_accordion_bulan', $bulan);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+            $this->session->set_flashdata('success', 'Berhasil Tambah Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Tambah Data: ' . $e->getMessage());
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
     public function insertkegiatan() {
-		$err = $this->TematikBulan->insertKegiatan();
-        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+        try {
+            $this->TematikBulan->insertKegiatan();
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+            $this->session->set_flashdata('success', 'Berhasil Tambah Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Tambah Data: ' . $e->getMessage());
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
 
     public function updatekegiatan() {
-		$err = $this->TematikBulan->updateKegiatan();
-        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+        try {
+            $this->TematikBulan->updateKegiatan();
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+            $this->session->set_flashdata('success', 'Berhasil Update Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Update Data: ' . $e->getMessage());
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
 
     public function updatesubtema() {
-		$err = $this->TematikBulan->updateSubTema();
-        $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
-        $this->session->set_userdata('active_accordion_bulan', $bulan);
+        try {
+            $this->TematikBulan->updateSubTema();
+            $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
+            $this->session->set_userdata('active_accordion_bulan', $bulan);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Mengupdate Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Mengupdate Data');
+            $this->session->set_flashdata('success', 'Berhasil Update Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Update Data: ' . $e->getMessage());
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
@@ -247,52 +247,52 @@ class CTematikBulanan extends CI_Controller {
 	}
 
 	public function update() {
-		$err = $this->TematikBulan->update($this->input->post('id_temabulanan'));
+        try {
+            $this->TematikBulan->update($this->input->post('id_temabulanan'));
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Merubah Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Merubah Data');
-		}	
+            $this->session->set_flashdata('success', 'Berhasil Merubah Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Data: ' . $e->getMessage());
+        }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
 	public function hapussubtema() {
-        $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
-        $err = $this->TematikBulan->hapusSubTema($_POST['id_jadwalmingguan']);
-        $this->session->set_userdata('active_accordion_bulan', $bulan);
+        try {
+            $bulan = $this->TematikBulan->getBulanByIdJadwalMingguan($_POST['id_jadwalmingguan']);
+            $this->TematikBulan->hapusSubTema($_POST['id_jadwalmingguan']);
+            $this->session->set_userdata('active_accordion_bulan', $bulan);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+            $this->session->set_flashdata('success', 'Berhasil Hapus Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Hapus Data: ' . $e->getMessage());
         }
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
 
     public function hapuskegiatan() {
-        $err = $this->TematikBulan->hapusKegiatan($_POST['id_rincianjadwal_harian']);
-        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+        try {
+            $this->TematikBulan->hapusKegiatan($_POST['id_rincianjadwal_harian']);
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+            $this->session->set_flashdata('success', 'Berhasil Hapus Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Hapus Data: ' . $e->getMessage());
         }
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
 
     public function simpanstimulus() {
-        $err = $this->TematikBulan->simpanStimulus($_POST['id_kelas']);
-        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+        try {
+            $this->TematikBulan->simpanStimulus($_POST['id_kelas']);
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
+            $this->session->set_flashdata('success', 'Berhasil Simpan Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Simpan Data: ' . $e->getMessage());
         }
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
