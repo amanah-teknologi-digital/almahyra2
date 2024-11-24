@@ -313,13 +313,13 @@ class CTematikBulanan extends CI_Controller {
     }
 
     public function terapkantemplatejadwal(){
-        $err = $this->TematikBulan->terapkanTemplateJadwal();
-        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+        try {
+            $this->TematikBulan->terapkanTemplateJadwal();
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menerapkan Data');
-        }else{
             $this->session->set_flashdata('success', 'Berhasil Menerapkan Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Menerapkan Data: ' . $e->getMessage());
         }
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);

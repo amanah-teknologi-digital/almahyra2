@@ -558,31 +558,40 @@
             $id_rincianjadwal_mingguan = $_POST['id_rincianjadwal_mingguan'];
             $id_kelas = $_POST['id_kelas'];
 
-            $sql = "SELECT id_jadwalharian FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
-            $query = $this->db->query($sql);
-            $id_jadwalharian = $query->row()->id_jadwalharian;
+            try {
+                $sql = "SELECT id_jadwalharian FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
+                $query = $this->db->query($sql);
+                $id_jadwalharian = $query->row()->id_jadwalharian;
 
-            $this->db->trans_start();
+                $this->db->trans_start();
 
-            if (empty($id_jadwalharian)) {
-                $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
-                $input_jadwal['id_kelas'] = $id_kelas;
-                $this->db->insert('jadwal_harian', $input_jadwal);
-                $id_jadwalharian = $this->db->insert_id();
-            }else{
-                $this->db->where('id_jadwalharian', $id_jadwalharian);
-                $this->db->delete('rincian_jadwal_harian');
-            }
+                if (empty($id_jadwalharian)) {
+                    $input_jadwal['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
+                    $input_jadwal['id_kelas'] = $id_kelas;
+                    $this->db->insert('jadwal_harian', $input_jadwal);
+                    $id_jadwalharian = $this->db->insert_id();
+                }else{
+                    $this->db->where('id_jadwalharian', $id_jadwalharian);
+                    $this->db->delete('rincian_jadwal_harian');
+                }
 
-            $created = date('Y-m-d H:m:s');
-            $user = $this->session->userdata['auth']->id;
+                $created = date('Y-m-d H:m:s');
+                $user = $this->session->userdata['auth']->id;
 
-            $sql = "INSERT INTO rincian_jadwal_harian (id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, created_at, updater) 
+                $sql = "INSERT INTO rincian_jadwal_harian (id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, created_at, updater) 
                     SELECT $id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, '$created', '$user' FROM jadwal_kegiatan WHERE id_templatejadwal = $id_templatejadwal";
-            $this->db->query($sql);
+                $this->db->query($sql);
 
-            $this->db->trans_complete();
-            return $this->db->trans_status();
+                $this->db->trans_complete();
+
+                $db_error = $this->db->error();
+                if (!empty($db_error)) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
         }
 
         public function getTemplateStimulusById($id_templatestimulus){
