@@ -28,7 +28,6 @@ class CaktivitasHarian extends CI_Controller {
 	}
 
 	public function index()	{
-        var_dump($_POST);
         if (!empty($_POST)) {
             $this->session->set_userdata('tahun_session_aktivitas', $_POST['tahun']);
             $this->session->set_userdata('id_rincianjadwal_mingguan_session_aktivitas', $_POST['id_rincianjadwal_mingguan']);
