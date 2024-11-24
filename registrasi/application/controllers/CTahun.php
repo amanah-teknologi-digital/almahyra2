@@ -38,14 +38,13 @@ class CTahun extends CI_Controller {
 	}
 
 	public function insert() {
-		
-		$err = $this->Tahun->insert();
+        try {
+            $this->Tahun->insert();
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-		}
+            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data: ' . $e->getMessage());
+        }
 
 		redirect($this->data['redirect']);
 	}
@@ -63,25 +62,25 @@ class CTahun extends CI_Controller {
 	}
 
 	public function update() {
-		$err = $this->Tahun->update($this->input->post('id'));
+        try {
+            $this->Tahun->update($this->input->post('id'));
 
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Merubah Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Merubah Data');
-		}	
+            $this->session->set_flashdata('success', 'Berhasil Merubah Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Data: ' . $e->getMessage());
+        }
 
 		redirect($this->data['redirect']);
 	}
 
 	public function delete($id) {
-		$err = $this->Tahun->delete($id);
+        try {
+            $this->Tahun->delete($id);
 
-		if ($err > 0) {
-			$this->session->set_flashdata('success', 'Berhasil Menghapus Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
-		}	
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        } catch (Exception $e) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data: ' . $e->getMessage());
+        }
 
 		redirect($this->data['redirect']);
 	}

@@ -51,47 +51,78 @@
 
 	    ## insert data into table
 	    function insert() {
-            $user = $this->session->userdata['auth'];
-            $tahun_sekarang = date('Y');
+            try {
+                $this->db->trans_start();
 
-	        $a_input['tahun'] = $_POST['tahun'];
-	        $a_input['uraian'] = $_POST['name'];
-	        $a_input['created_at'] = date('Y-m-d H:m:s');
-            if ($tahun_sekarang == $_POST['tahun']){
-                $a_input['is_aktif'] = 1;
-            }else{
-                $a_input['is_aktif'] = 0;
+                $user = $this->session->userdata['auth'];
+                $tahun_sekarang = date('Y');
+
+                $a_input['tahun'] = $_POST['tahun'];
+                $a_input['uraian'] = $_POST['name'];
+                $a_input['created_at'] = date('Y-m-d H:m:s');
+                if ($tahun_sekarang == $_POST['tahun']){
+                    $a_input['is_aktif'] = 1;
+                }else{
+                    $a_input['is_aktif'] = 0;
+                }
+
+                $a_input['updater'] = $user->id;
+
+                $this->db->insert($this->table_name, $a_input);
+
+                $this->db->trans_complete();
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
             }
-
-	        $a_input['updater'] = $user->id;
-
-	        $this->db->insert($this->table_name, $a_input);
-
-	        return $this->db->error();	        
 	    }
 
 	    ## update data in table
 	    function update($id) {
-            $user = $this->session->userdata['auth'];
+            try {
+                $this->db->trans_start();
 
-	        $a_input['uraian'] = $_POST['name'];
-	        $a_input['updated_at'] = date('Y-m-d H:m:s');
-	        $a_input['updater'] = $user->id;
+                $user = $this->session->userdata['auth'];
 
-	        $this->db->where('tahun', $id);
-	        
-	        $this->db->update($this->table_name, $a_input);
+                $a_input['uraian'] = $_POST['name'];
+                $a_input['updated_at'] = date('Y-m-d H:m:s');
+                $a_input['updater'] = $user->id;
 
-	        return $this->db->error(1);	        
+                $this->db->where('tahun', $id);
+                $this->db->update($this->table_name, $a_input);
+
+                $this->db->trans_complete();
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 	    }
 
 	    ## delete data in table
 		function delete($id) {
-			$this->db->where('tahun', $id)->where('is_aktif', 0);
+            try {
+                $this->db->trans_start();
 
-			$this->db->delete($this->table_name);
+                $this->db->where('tahun', $id)->where('is_aktif', 0);
+                $this->db->delete($this->table_name);
 
-			return $this->db->affected_rows();
+                $this->db->trans_complete();
+
+                if (!$this->db->trans_status()) {
+                    throw new Exception('Database error!');
+                }
+                return true;
+            }catch (Exception $e) {
+                throw $e;
+            }
 		}
 
 		## get data by id in table
