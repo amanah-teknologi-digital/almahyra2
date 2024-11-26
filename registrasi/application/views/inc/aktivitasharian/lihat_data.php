@@ -156,6 +156,8 @@
                                                             <option value="<?= $nilai ?>" <?= $nilai == $cls->uraian? 'selected':'' ?>><?= $nilai ?></option>
                                                         <?php } ?>
                                                     </select>
+                                                    <br>
+                                                    <textarea class="form-control" name="keterangan_konklusi<?= $cls->id_konklusi_input ?>" id="keterangan_konklusi<?= $cls->id_konklusi_input ?>" placeholder="Keterangan Pilihan (Optional)" cols="30" rows="5" autocomplete="off"><?= !empty($cls->keterangan)? $cls->keterangan:''; ?></textarea>
                                                 <?php }elseif ($cls->jenis == 'textarea'){ ?>
                                                     <textarea class="form-control" name="<?= $cls->kolom ?>" id="<?= $cls->kolom ?>" cols="30" rows="5" <?= !empty($cls->flag)? $cls->flag:''; ?> autocomplete="off"><?= !empty($cls->uraian)? $cls->uraian:''; ?></textarea>
                                                 <?php } ?>

@@ -74,7 +74,7 @@
         }
 
         function getDataKonklusi($id_aktivitas){
-            $sql = "SELECT a.nama as nama_konklusi, a.jenis, a.nilai, a.kolom, a.flag, b.uraian, b.keterangan
+            $sql = "SELECT a.id_konklusi as id_konklusi_input, a.nama as nama_konklusi, a.jenis, a.nilai, a.kolom, a.flag, b.id_aktivitas, b.id_konklusi, b.uraian, b.keterangan
                 FROM konklusi a 
                 LEFT JOIN konklusi_aktivitas b ON b.id_konklusi = a.id_konklusi AND b.id_aktivitas = $id_aktivitas";
 
@@ -220,6 +220,7 @@
             $user = $this->session->userdata['auth'];
 
             $list_kegiatan = $this->getKegiatanByAktivitas($id_aktivitas);
+            $list_kolom_konklusi = $this->getDataKonklusi($id_aktivitas);
 
             $this->db->trans_start();
 
@@ -250,6 +251,50 @@
 
                     $this->db->where('id_rincianaktivitas', $id_rincianaktivitas);
                     $this->db->update('rincian_aktivitas', $input_data);
+                }
+            }
+
+            //input konklusi
+            foreach ($list_kolom_konklusi as $kolom_konklusi){
+                $id_konklusi = $kolom_konklusi->id_konklusi;
+                $kolom = $kolom_konklusi->kolom;
+                $input_data_konklusi = [];
+
+                if (empty($id_konklusi)) {
+                    $input_data_konklusi['id_aktivitas'] = $id_aktivitas;
+                    $input_data_konklusi['id_konklusi'] = $kolom_konklusi->id_konklusi_input;
+                    if (!empty($kolom_konklusi->flag)){
+                        $input_data_konklusi['uraian'] = $_POST[$kolom];
+                    }else{
+                        if (isset($_POST[$kolom])) {
+                            $input_data_konklusi['uraian'] = $_POST[$kolom];
+                        }
+                    }
+
+                    if ($kolom_konklusi->jenis == 'select' && isset($_POST['keterangan_konklusi'.$kolom_konklusi->id_konklusi_input])){
+                        $input_data_konklusi['keterangan'] = $_POST['keterangan_konklusi'.$kolom_konklusi->id_konklusi_input];
+                    }
+
+                    $input_data_konklusi['created_at'] = date('Y-m-d H:m:s');
+                    $input_data_konklusi['updater'] = $user->id;
+                    $this->db->insert('konklusi_aktivitas', $input_data_konklusi);
+                }else{
+                    if (!empty($kolom_konklusi->flag)){
+                        $input_data_konklusi['uraian'] = $_POST[$kolom];
+                    }else{
+                        if (isset($_POST[$kolom])) {
+                            $input_data_konklusi['uraian'] = $_POST[$kolom];
+                        }
+                    }
+
+                    if ($kolom_konklusi->jenis == 'select' && isset($_POST['keterangan_konklusi'.$kolom_konklusi->id_konklusi_input])){
+                        $input_data_konklusi['keterangan'] = $_POST['keterangan_konklusi'.$kolom_konklusi->id_konklusi_input];
+                    }
+
+                    $input_data_konklusi['updated_at'] = date('Y-m-d H:m:s');
+                    $input_data_konklusi['updater'] = $user->id;
+                    $this->db->where('id_konklusi', $id_konklusi)->where('id_aktivitas', $id_aktivitas);
+                    $this->db->update('konklusi_aktivitas', $input_data_konklusi);
                 }
             }
 
