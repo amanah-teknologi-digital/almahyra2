@@ -198,10 +198,14 @@
         }
 
         public function getDataCapaianIndikator($id_aktivitas){
-            $sql = "SELECT b.*
+            $sql = "SELECT b.*, c.name as nama_indikator, d.nama as nama_usia, e.name as nama_aspek
                 FROM aktivitas a 
                 JOIN capaian_indikator b ON b.id_aktivitas = a.id_aktivitas
-                WHERE a.id_aktivitas = $id_aktivitas";
+                JOIN m_kembang_anak c ON c.id = b.id_indikator
+                JOIN ref_usia d ON d.id_usia = c.id_usia
+                JOIN m_aspek e ON e.id = c.id_aspek
+                WHERE a.id_aktivitas = $id_aktivitas
+                ORDER BY d.days_min ASC, e.id ASC, c.id ASC";
 
             $query = $this->db->query($sql);
 
@@ -303,6 +307,28 @@
             return $this->db->trans_status();
         }
 
+        function tambahCapaian($id_aktivitas){
+            $user = $this->session->userdata['auth'];
+
+            $list_indikator = $_POST['indikators'];
+
+            $this->db->trans_start();
+
+            foreach ($list_indikator as $indikator){
+                $input_data['id_aktivitas'] = $id_aktivitas;
+                $input_data['id_indikator'] = $indikator;
+                $input_data['created_at'] = date('Y-m-d H:m:s');
+                $input_data['updater'] = $user->id;
+
+                $this->db->insert('capaian_indikator', $input_data);
+
+            }
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
 	    ## insert data into table
 	    function insert() {
             $user = $this->session->userdata['auth'];
@@ -356,6 +382,33 @@
 	        
 	        return $query->row();
 	    }
+
+        function getDataIndikator($id_aktivitas){
+            $sql = "SELECT a.id_anak FROM aktivitas a WHERE a.id_aktivitas = $id_aktivitas";
+            $query = $this->db->query($sql);
+            $id_anak = $query->row()->id_anak;
+
+            $sql = "SELECT d.id_usia FROM aktivitas a 
+                           JOIN registrasi_data_anak b ON b.id = a.id_anak
+                           JOIN v_kategori_usia c ON c.id = b.id
+                           JOIN ref_usia d ON d.days_min <= c.usia_hari
+                           WHERE a.id_aktivitas = $id_aktivitas";
+            $query = $this->db->query($sql);
+            $list_id_usia = array_column($query->result_array(), 'id_usia');
+
+            $sql = "SELECT a.*, b.name as nama_aspek, c.nama as nama_usia FROM m_kembang_anak a 
+                           JOIN m_aspek b ON b.id = a.id_aspek AND b.is_active = 1
+                           JOIN ref_usia c ON c.id_usia = a.id_usia
+                           WHERE a.is_active = 1 AND a.id_usia IN (".implode(',', $list_id_usia).") 
+                           AND a.id NOT IN (SELECT id_indikator FROM capaian_indikator a 
+                           JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas 
+                           WHERE b.id_anak = $id_anak) 
+                           ORDER BY c.days_min ASC, b.id ASC, a.id ASC";
+            $query = $this->db->query($sql);
+            $list_idindikator = $query->result();
+
+            return $list_idindikator;
+        }
 
 	}
 

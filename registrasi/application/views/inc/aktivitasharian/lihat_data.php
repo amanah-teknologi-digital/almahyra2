@@ -178,12 +178,12 @@
                                             <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <h4 class="mt-3 text-warning font-weight-bold" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
-                                                <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-fw fa-plus"></i> Tambah Capaian</a>
+                                                <a href="#" class="btn btn-sm btn-primary tambahindikator"><i class="fas fa-fw fa-plus"></i> Tambah Capaian Indikator</a>
                                             </div>
                                             <?php if (count($capaian_indikator) > 0){ ?>
                                                 <ul>
                                                     <?php foreach ($capaian_indikator as $key => $value) { ?>
-                                                        <li><?= $value->uraian ?></li>
+                                                        <li><?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))) ?></li>
                                                     <?php } ?>
                                                 </ul>
                                             <?php }else{ ?>
@@ -204,6 +204,56 @@
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
                 <!--  Modal -->
+                <div class="modal fade" id="updating-modal" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <?php echo form_open_multipart($controller.'/tambahcapaian'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Capaian Indikator a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="row q">
+                                        <div class="col-md-12">
+                                            <table class="display table table-bordered" id="tblq" style="width:100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Aspek</th>
+                                                    <th>Pertanyaan</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php $id_usian=0; foreach ($indikator as $indktr){ $temp_id_usia = $indktr->id_usia; ?>
+                                                    <?php if ($id_usian != $temp_id_usia){ ?>
+                                                        <tr style="background-color: antiquewhite">
+                                                            <td align="center" colspan="3"><b><?= $indktr->nama_usia; ?></b></td>
+                                                        </tr>
+                                                    <?php $id_usian = $temp_id_usia; } ?>
+                                                    <tr>
+                                                        <td align="center"><b><?= $indktr->nama_aspek ?></b></td>
+                                                        <td><?= $indktr->name ?></td>
+                                                        <td align="center">
+                                                            <input class="form-check" type="checkbox" name="indikators[]" value="<?= $indktr->id ?>">
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Tambah</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
@@ -231,6 +281,10 @@
                 submitHandler: function(form) {
                     form.submit(); // Mengirimkan form jika validasi lolos
                 }
+            });
+
+            $('.tambahindikator').click(function() {
+                $("#updating-modal").modal('show');
             });
         });
     </script>

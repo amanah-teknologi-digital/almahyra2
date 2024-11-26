@@ -95,6 +95,7 @@ class CaktivitasHarian extends CI_Controller {
         $data['capaian_indikator'] = $this->AktivitasHarian->getDataCapaianIndikator($id_aktivitas);
         $data['data_anak'] = $this->AktivitasHarian->getDataAnakByAktivitas($id_aktivitas);
         $data['konklusi'] = $this->AktivitasHarian->getDataKonklusi($id_aktivitas);
+        $data['indikator'] = $this->AktivitasHarian->getDataIndikator($id_aktivitas);
 
         $this->load->view('inc/aktivitasharian/lihat_data', $data);
     }
@@ -200,5 +201,17 @@ class CaktivitasHarian extends CI_Controller {
 
         return $data;
 
+    }
+
+    function tambahcapaian(){
+        $err = $this->AktivitasHarian->tambahCapaian($_POST['id_aktivitas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Tambah Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Tambah Data');
+        }
+
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_aktivitas']);
     }
 }
