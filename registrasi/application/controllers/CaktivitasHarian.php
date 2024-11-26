@@ -94,6 +94,7 @@ class CaktivitasHarian extends CI_Controller {
         $data['data_stimulus'] = $this->AktivitasHarian->getDataStimulusByAktivitas($id_aktivitas);
         $data['capaian_indikator'] = $this->AktivitasHarian->getDataCapaianIndikator($id_aktivitas);
         $data['data_anak'] = $this->AktivitasHarian->getDataAnakByAktivitas($id_aktivitas);
+        $data['konklusi'] = $this->AktivitasHarian->getDataKonklusi($id_aktivitas);
 
         $this->load->view('inc/aktivitasharian/lihat_data', $data);
     }

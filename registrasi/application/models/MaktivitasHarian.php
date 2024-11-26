@@ -73,6 +73,16 @@
                 return $query->result();
         }
 
+        function getDataKonklusi($id_aktivitas){
+            $sql = "SELECT a.nama as nama_konklusi, a.jenis, a.nilai, a.kolom, a.flag, b.uraian, b.keterangan
+                FROM konklusi a 
+                LEFT JOIN konklusi_aktivitas b ON b.id_konklusi = a.id_konklusi AND b.id_aktivitas = $id_aktivitas";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getAktivitasHarian($id_rincianjadwal_mingguan){
             $sql = "SELECT * FROM jadwal_harian a 
             JOIN 

@@ -143,6 +143,25 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                    <br>
+                                    <h5 class="card-title"><b>Data Konklusi</b></h5>
+                                    <fieldset>
+                                        <?php foreach ($konklusi as $cls) { ?>
+                                            <div class="form-group">
+                                                <label><?= $cls->nama_konklusi ?>&nbsp;<?= empty($cls->flag)? '<b><i>(Optional)</i></b>':''; ?></label>
+                                                <?php if ($cls->jenis == 'select'){ $temp_nilai = json_decode($cls->nilai,true); ?>
+                                                    <select class="form-control" name="<?= $cls->kolom ?>" id="<?= $cls->kolom ?>" <?= !empty($cls->flag)? $cls->flag:''; ?>>
+                                                        <option value="">-- Pilih Salah Satu --</option>
+                                                        <?php foreach ($temp_nilai as $nilai){ ?>
+                                                            <option value="<?= $nilai ?>" <?= $nilai == $cls->uraian? 'selected':'' ?>><?= $nilai ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                <?php }elseif ($cls->jenis == 'textarea'){ ?>
+                                                    <textarea class="form-control" name="<?= $cls->kolom ?>" id="<?= $cls->kolom ?>" cols="30" rows="5" <?= !empty($cls->flag)? $cls->flag:''; ?> autocomplete="off"><?= !empty($cls->uraian)? $cls->uraian:''; ?></textarea>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } ?>
+                                    </fieldset>
                                     <div class="d-flex align-items-center justify-content-center">
                                         <button type="submit" class="btn btn-sm btn-success "><span class="fas fa-save"></span>&nbsp;Simpan Data</button>
                                     </div>
