@@ -30,7 +30,7 @@
                                                     <!-- <th>#</th> -->
                                                     <th style="width: 5%">No</th>
                                                     <th style="width: 20%">Nama Template Stimulus</th>
-                                                    <th style="width: 25%">Nama Stimulus</th>
+                                                    <th style="width: 25%">Fokus Stimulus</th>
                                                     <th style="width: 35%">Timestamp</th>
                                                     <th style="width: 15%">Action</th>
                                                 </tr>
@@ -66,7 +66,7 @@
                                                     <!-- <th>#</th> -->
                                                     <th>No</th>
                                                     <th>Nama Template Stimulus</th>
-                                                    <th>Nama Stimulus</th>
+                                                    <th>Fokus Stimulus</th>
                                                     <th>Timestamp</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -98,7 +98,7 @@
                                             <input type="text" class="form-control" required name="nama_template" id="nama_template" autocomplete="off">
                                         </div>
                                         <div class="form-group">
-                                            <label>Tema Stimulus</label>
+                                            <label>Fokus Stimulus</label>
                                             <input class="form-control" type="text" required name="nama_tema" id="nama_tema" autocomplete="off">
                                         </div>
                                         <div class="form-group">
@@ -136,7 +136,7 @@
                                             <input type="text" class="form-control" required name="nama_template" id="nama_template_update" autocomplete="off">
                                         </div>
                                         <div class="form-group">
-                                            <label>Tema Stimulus</label>
+                                            <label>Fokus Stimulus</label>
                                             <input class="form-control" type="text" required name="nama_tema" id="nama_tema_update" autocomplete="off">
                                         </div>
                                         <div class="form-group">

@@ -157,7 +157,7 @@
                                                             <h5 class="card-title"><b>Data Stimulus</b></h5>
                                                             <?php if (isset($data_jadwal_stimulus[$kelas->id_kelas])){ ?>
                                                                 <div class="callout callout-primary alert-dismissible fade show">
-                                                                    <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?>&nbsp;<span class="text-muted">(<?= $kelas->nama ?>)</span></h4>
+                                                                    <h4><i class="fas fa-fw fa-info-circle"></i> Fokus <?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?>&nbsp;<span class="text-muted">(<?= $kelas->nama ?>)</span></h4>
                                                                     <span><?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->rincian_kegiatan:'';  ?></span>
                                                                     <span class="font-italic text-muted">Keterangan: <?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->keterangan:'-';  ?></span>
                                                                 </div>

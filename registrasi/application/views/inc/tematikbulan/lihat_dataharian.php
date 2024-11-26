@@ -128,7 +128,7 @@
                                                     <?php echo form_open_multipart($controller.'/simpanstimulus', 'id="frm_simpanstimulus'.$kelas->id_kelas.'"'); ?>
                                                         <fieldset>
                                                             <div class="form-group">
-                                                                <label>Nama Tema Stimulus</label>
+                                                                <label>Fokus Stimulus</label>
                                                                 <input type="text" name="nama_tema_stimulus" id="nama_tema_stimulus<?= $kelas->id_kelas ?>" class="form-control" autocomplete="off" value="<?= isset($data_jadwal_stimulus[$kelas->id_kelas])? $data_jadwal_stimulus[$kelas->id_kelas]->nama:'';  ?>">
                                                             </div>
                                                             <div class="form-group">

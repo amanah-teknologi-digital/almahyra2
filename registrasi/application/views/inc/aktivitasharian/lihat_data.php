@@ -152,7 +152,7 @@
                                     <h5 class="card-title"><b>Data Stimulus</b></h5>
                                     <?php if (isset($data_stimulus)){ ?>
                                         <div class="callout callout-primary alert-dismissible fade show">
-                                            <h4><i class="fas fa-fw fa-info-circle"></i> Tema <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
+                                            <h4><i class="fas fa-fw fa-info-circle"></i> Fokus <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
                                             <span><?= isset($data_stimulus)? $data_stimulus->rincian_kegiatan:'';  ?></span>
                                             <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
                                             <div class="d-flex align-items-center justify-content-between">
