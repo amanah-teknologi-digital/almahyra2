@@ -64,7 +64,9 @@
                 JOIN rincian_jadwal_mingguan c ON c.id_jadwalmingguan = b.id_jadwalmingguan
                 JOIN jadwal_harian d ON d.id_rincianjadwal_mingguan = c.id_rincianjadwal_mingguan
                 JOIN ref_bulan e ON e.bulan = a.bulan  
-                WHERE a.tahun = $tahun ORDER BY c.tanggal DESC";
+                WHERE a.tahun = $tahun
+                GROUP BY b.nama, e.nama, a.nama, c.id_rincianjadwal_mingguan, c.tanggal
+                ORDER BY c.tanggal DESC ";
 
                 $query = $this->db->query($sql);
 
