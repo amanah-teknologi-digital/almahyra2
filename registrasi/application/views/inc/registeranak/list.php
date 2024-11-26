@@ -25,16 +25,16 @@
                                     <button class="btn btn-info m-1 mb-4 add-button" type="button" data-toggle="modal" data-target="#adding-modal">Input Data Anak</button>
 
                                     <div class="table-responsive">
-                                        <table class="display table table-striped table-bordered" id="zero_configuration_table" style="width:100%">
+                                        <table class="display table table-sm table-striped table-bordered" id="zero_configuration_table" style="width:100%">
                                             <thead>
                                                 <tr>
                                                     <!-- <th>#</th> -->
                                                     <th>Nama</th>
-                                                    <th>Panggilan</th>
                                                     <th>Tempat/Tanggal Lahir</th>
                                                     <th>Tgl.Pendaftaran</th>
                                                     <th>Gol.Darah</th>
                                                     <th>Keterangan</th>
+                                                    <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -44,14 +44,25 @@
                                                 foreach ($list as $key =>$row) { ?>
                                                     <tr>
                                                         <!-- <td><?= $i++ ?></td> -->
-                                                        <td><?= ucwords($row->nama) ?></td>
-                                                        <td><?= ucwords($row->nick) ?></td>
+                                                        <td><?= ucwords($row->nama) ?><br>
+                                                            <span class="text-muted text-small font-italic">Panggilan: <?= ucwords($row->nick) ?></span>
+                                                        </td>
                                                         <td><?= ucwords($row->tempat_lahir) ?>, <?= date("d M Y", strtotime($row->tanggal_lahir)) ?> </td>
                                                         
                                                         <td><?= date("d M Y h:m", strtotime($row->date_created)) ?> </td>
                                                         <td><?= strtoupper($row->golongan_darah) ?></td>
                                                         <td>Anak ke <?= $row->anak_ke ?> dari <?= $row->jumlah_saudara ?> Bersaudara</td>
-                                                        <td align="center">
+                                                        <td align="center" nowrap>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status<?= $row->id ?>" onchange="ubahStatus('<?= $row->id ?>', 1)" id="inlineRadio1<?= $row->id ?>" value="1" <?= $row->is_active == 1 && !is_null($row->is_active)? 'checked':''; ?> >
+                                                                <label class="form-check-label" for="inlineRadio1">Aktif</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status<?= $row->id ?>" onchange="ubahStatus('<?= $row->id ?>', 0)" id="inlineRadio2<?= $row->id ?>" value="0" <?= $row->is_active != 1 && !is_null($row->is_active)? 'checked':''; ?>>
+                                                                <label class="form-check-label" for="inlineRadio2">Non Aktif</label>
+                                                            </div>
+                                                        </td>
+                                                        <td align="center" nowrap>
                                                             <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->id; ?>">
                                                                 <span class="ul-btn__icon">
                                                                     <i class="i-Pen-3"></i>
@@ -256,6 +267,10 @@
                         </form>
                     </div>
                 </div>
+                <?php echo form_open_multipart($controller.'/updatestatus', 'id="frm_ubahstatus"'); ?>
+                    <input type="hidden" name="id_user" id="id_user" required>
+                    <input type="hidden" name="status" id="status" required>
+                </form>
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
             </div>
@@ -301,5 +316,11 @@
                 window.location = url + '/delete/' + id ;
             })
         });
+
+        function ubahStatus(id, status){
+            $('#id_user').val(id);
+            $('#status').val(status);
+            $('#frm_ubahstatus').submit();
+        }
     </script>
 </html>

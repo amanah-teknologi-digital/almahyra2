@@ -13,13 +13,13 @@
 	    ## get all data in table
 	    function getAll() {
             
-	    	$this->db->where('is_active','1');
+	    	//$this->db->where('is_active','1');
 
             if($this->login->id_role == 4) {
 
                 $this->db->where('id_orangtua', $this->login->id);                
             }
-
+            $this->db->order_by('is_active', 'desc')->order_by('id', 'desc');
 	        $query = $this->db->get($this->table_name);
 
 	        return $query->result();
@@ -91,6 +91,17 @@
 	        $this->db->update($this->table_name, $a_input);
 
 	        return $this->db->error(1);	        
+	    }
+
+        function updatestatus($id) {
+            $a_input['is_active'] = $_POST['status'];
+	        $a_input['date_updated'] = date('Y-m-d H:m:s');
+
+	        $this->db->where('id', $id);
+
+	        $this->db->update($this->table_name, $a_input);
+
+	        return $this->db->error(1);
 	    }
 
 	    ## delete data in table

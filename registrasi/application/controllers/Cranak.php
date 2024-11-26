@@ -74,6 +74,18 @@ class CRanak extends CI_Controller {
 		redirect($this->data['redirect']);
 	}
 
+    public function updatestatus() {
+        $err = $this->RegisterAnak->updatestatus($_POST['id_user']);
+
+        if ($err['code'] == '0') {
+            $this->session->set_flashdata('success', 'Berhasil Merubah Status');
+        } else {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Status');
+        }
+
+        redirect($this->data['redirect']);
+    }
+
 	public function delete($id) {
 		$err = $this->RegisterAnak->delete($id);
 
