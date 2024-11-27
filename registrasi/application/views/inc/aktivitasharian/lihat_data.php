@@ -320,7 +320,6 @@
                     required: true,
                     showRemove: false,
                     showUpload: false,
-                    browseOnZoneClick: true,
                     allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
                     previewFileType: 'image',
                     overwriteInitial: false,
