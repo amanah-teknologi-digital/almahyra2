@@ -330,6 +330,10 @@
         }
 
         function hapusCapaianIndikator($id_capaianindikator){
+            $sql = "SELECT download_url FROM file_capaianindikator WHERE id_capaianindikator = $id_capaianindikator";
+            $query = $this->db->query($sql);
+            $list_file = $query->result();
+
             $this->db->trans_start();
 
             $this->db->where('id_capaianindikator', $id_capaianindikator);
@@ -339,6 +343,13 @@
             $this->db->delete('capaian_indikator');
 
             $this->db->trans_complete();
+
+            if($this->db->trans_status()){
+                foreach ($list_file as $file){
+                    $path = './'.$file->download_url;
+                    @unlink($path);
+                }
+            }
 
             return $this->db->trans_status();
         }
