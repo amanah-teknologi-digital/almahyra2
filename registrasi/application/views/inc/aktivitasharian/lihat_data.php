@@ -307,6 +307,72 @@
         $(document).ready(function() {
             let rules = {};
             let message = {};
+            let file_input = $('#file_dukung'), initPlugin = function() {
+                file_input.fileinput({
+                    uploadUrl: url+'/uploadfile',
+                    minFileCount: 1,
+                    maxFileCount: 5,
+                    browseOnZoneClick: true,
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                    previewFileType: 'image',
+                    overwriteInitial: false,
+                    initialPreview: [
+                        "http://lorempixel.com/800/460/people/1",
+                        "http://lorempixel.com/800/460/people/2"
+                    ],
+                    initialPreviewConfig: [
+                        {caption: "People-1.jpg", description: 'This is a representative placeholder description for this image.', size: 576237, width: "120px", url: "/site/file-delete", key: 1},
+                        {caption: "People-2.jpg", description: 'This is a representative placeholder description for this image.', size: 932882, width: "120px", url: "/site/file-delete", key: 2},
+                    ],
+                    initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                    initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                    uploadExtraData: function() {
+                        let id_capaianindikator = $('#id_capaianindikator_updt').val();
+                        return { 'id_capaianindikator': id_capaianindikator };
+                    }
+                }).on('filebatchpreupload', function(event, data) {
+                    var n = data.files.length, files = n > 1 ? n + ' files' : 'one file';
+                    if (!window.confirm("Are you sure you want to upload " + files + "?")) {
+                        return {
+                            message: "Upload aborted!", // upload error message
+                            data:{} // any other data to send that can be referred in `filecustomerror`
+                        };
+                    }
+                }).on('filesorted', function(e, params) {
+                    console.log('file sorted', e, params);
+                }).on('fileuploaded', function(e, params) {
+                    console.log('file uploaded', e, params);
+                }).on('filesuccessremove', function(e, id) {
+                    console.log('file success remove', e, id);
+                }).on('filebeforedelete', function() {
+                    return new Promise(function(resolve, reject) {
+                        $.confirm({
+                            title: 'Confirmation!',
+                            content: 'Are you sure you want to delete this file?',
+                            type: 'red',
+                            buttons: {
+                                ok: {
+                                    btnClass: 'btn-primary text-white',
+                                    keys: ['enter'],
+                                    action: function(){
+                                        resolve();
+                                    }
+                                },
+                                cancel: function(){
+                                    $.alert('File deletion was aborted! ' + krajeeGetCount('file-6'));
+                                }
+                            }
+                        });
+                    });
+                }).on('filedeleted', function() {
+                    setTimeout(function() {
+                        $.alert('File deletion was successful! ' + krajeeGetCount('file-6'));
+                    }, 900);
+                });
+            };
+
+            initPlugin();
+
             $.each(list_kegiatan, function(index, value){
                 rules['status'+value.id_rincianjadwal_harian] = {
                     required: true
@@ -335,54 +401,15 @@
                 $("#label_nama_indikator").html(nama_indikator);
                 $("#id_capaianindikator_updt").html(id_capaianindikator);
 
+                if (file_input.data('fileinput')) {
+                    file_input.fileinput('destroy');
+                }
+
+                initPlugin();
                 $("#updating-indikator").modal('show');
             });
 
-            $("#file_dukung").fileinput({
-                uploadUrl: url+'/uploadfile',
-                minFileCount: 1,
-                maxFileCount: 5,
-                browseOnZoneClick: true,
-                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-                previewFileType: 'image',
-                overwriteInitial: false,
-                // initialPreview: [
-                //     "http://lorempixel.com/800/460/people/1",
-                //     "http://lorempixel.com/800/460/people/2"
-                // ],
-                initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
-                initialPreviewFileType: 'image', // image is the default and can be overridden in config below
-                // initialPreviewConfig: [
-                //     {caption: "People-1.jpg", description: 'This is a representative placeholder description for this image.', size: 576237, width: "120px", url: "/site/file-delete", key: 1},
-                //     {caption: "People-2.jpg", description: 'This is a representative placeholder description for this image.', size: 932882, width: "120px", url: "/site/file-delete", key: 2},
-                // ],
-                uploadExtraData: function() {
-                    let id_capaianindikator = $('#id_capaianindikator_updt').val();
-                    return { 'id_capaianindikator': id_capaianindikator };
-                }
-            }).on('filebatchpreupload', function(event, data) {
-                var n = data.files.length, files = n > 1 ? n + ' files' : 'one file';
-                if (!window.confirm("Are you sure you want to upload " + files + "?")) {
-                    return {
-                        message: "Upload aborted!", // upload error message
-                        data:{} // any other data to send that can be referred in `filecustomerror`
-                    };
-                }
-            }).on('filesorted', function(e, params) {
-                console.log('file sorted', e, params);
-            }).on('fileuploaded', function(e, params) {
-                console.log('file uploaded', e, params);
-            }).on('filesuccessremove', function(e, id) {
-                console.log('file success remove', e, id);
-            });
 
-            $("#file_dukung").on("filepredelete", function(jqXHR) {
-                var abort = true;
-                if (confirm("Are you sure you want to delete this image?")) {
-                    abort = false;
-                }
-                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
-            });
         });
 
         function deleteList(id) {
