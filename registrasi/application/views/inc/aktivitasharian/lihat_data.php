@@ -270,7 +270,6 @@
                 </div>
                 <div class="modal fade" id="updating-indikator" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
-                        <?php echo form_open_multipart($controller.'/updateindikator'); ?>
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Capaian Indikator a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
@@ -281,15 +280,14 @@
                                 <p class="text-muted font-italic" id="label_nama_indikator"></p>
                                 <br>
                                 <h5><b>Data Dokumentasi</b></h5>
+                                <div class="file-loading">
+                                    <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <input type="hidden" name="id_capaianindikator" id="id_capaianindikator_updt">
-                                <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-                                <button class="btn btn-primary ml-2" type="submit">Tambah</button>
                             </div>
                         </div>
-                        </form>
                     </div>
                 </div>
                 <?php echo form_open_multipart($controller.'/hapusindikator', 'id="frm_hapusindikator"'); ?>
@@ -300,6 +298,7 @@
         </div>
     </body>
     <?php $this->load->view('layout/custom') ?>
+    <?php $this->load->view('layout/file_upload') ?>
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
@@ -337,6 +336,52 @@
                 $("#id_capaianindikator_updt").html(id_capaianindikator);
 
                 $("#updating-indikator").modal('show');
+            });
+
+            $("#file_dukung").fileinput({
+                uploadUrl: url+'/uploadfile',
+                minFileCount: 1,
+                maxFileCount: 5,
+                browseOnZoneClick: true,
+                allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                previewFileType: 'image',
+                overwriteInitial: false,
+                // initialPreview: [
+                //     "http://lorempixel.com/800/460/people/1",
+                //     "http://lorempixel.com/800/460/people/2"
+                // ],
+                initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                // initialPreviewConfig: [
+                //     {caption: "People-1.jpg", description: 'This is a representative placeholder description for this image.', size: 576237, width: "120px", url: "/site/file-delete", key: 1},
+                //     {caption: "People-2.jpg", description: 'This is a representative placeholder description for this image.', size: 932882, width: "120px", url: "/site/file-delete", key: 2},
+                // ],
+                uploadExtraData: function() {
+                    let id_capaianindikator = $('#id_capaianindikator_updt').val();
+                    return { 'id_capaianindikator': id_capaianindikator };
+                }
+            }).on('filebatchpreupload', function(event, data) {
+                var n = data.files.length, files = n > 1 ? n + ' files' : 'one file';
+                if (!window.confirm("Are you sure you want to upload " + files + "?")) {
+                    return {
+                        message: "Upload aborted!", // upload error message
+                        data:{} // any other data to send that can be referred in `filecustomerror`
+                    };
+                }
+            }).on('filesorted', function(e, params) {
+                console.log('file sorted', e, params);
+            }).on('fileuploaded', function(e, params) {
+                console.log('file uploaded', e, params);
+            }).on('filesuccessremove', function(e, id) {
+                console.log('file success remove', e, id);
+            });
+
+            $("#file_dukung").on("filepredelete", function(jqXHR) {
+                var abort = true;
+                if (confirm("Are you sure you want to delete this image?")) {
+                    abort = false;
+                }
+                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
             });
         });
 
