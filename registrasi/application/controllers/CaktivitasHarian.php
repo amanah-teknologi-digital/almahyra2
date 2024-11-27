@@ -241,29 +241,38 @@ class CaktivitasHarian extends CI_Controller {
             return [];
         }
         $total = count($_FILES[$input]['name']); // multiple files
-        $path = '/uploads/aktivitas_harian'; // your upload path
+        $path = './uploads/aktivitas_harian/'; // your upload path
+        $temp_filename = date('dmyhis').rand(1, 1000000);
+
         for ($i = 0; $i < $total; $i++) {
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
             $fileSize = $_FILES[$input]['size'][$i]; // the file size
+            $ext = pathinfo($_FILES[$input]['name'][$i], PATHINFO_EXTENSION);
 
             //Make sure we have a file path
             if ($tmpFilePath != ""){
                 //Setup our new file path
-                $newFilePath = $path . $fileName;
-                $newFileUrl = 'http://localhost/uploads/' . $fileName;
+                $newFilePath = $path . $temp_filename.'.'.$ext;
+                $newFileUrl = base_url() . 'uploads/aktivitas_harian/' . $temp_filename.'.'.$ext;
 
                 //Upload the file into the new path
                 if(move_uploaded_file($tmpFilePath, $newFilePath)) {
-                    $fileId = $fileName . $i; // some unique key to identify the file
-                    $preview[] = $newFileUrl;
-                    $config[] = [
-                        'key' => $fileId,
-                        'caption' => $fileName,
-                        'size' => $fileSize,
-                        'downloadUrl' => $newFileUrl, // the url to download the file
-                        'url' => 'http://localhost/delete.php', // server api to delete the file based on key
-                    ];
+                    $id_file = $this->AktivitasHarian->insertCapaianIndikatorFile($temp_filename, $ext, $fileName, $fileSize, $_POST['id_capaianindikator']);
+                    if (!empty($id_file)) {
+                        $fileId = $id_file; // some unique key to identify the file
+                        $preview[] = $newFileUrl;
+                        $config[] = [
+                            'key' => $fileId,
+                            'caption' => $fileName,
+                            'size' => $fileSize,
+                            'downloadUrl' => $newFileUrl, // the url to download the file
+                            'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                        ];
+                    }else{
+                        @unlink($newFilePath);
+                        $errors[] = $fileName;
+                    }
                 } else {
                     $errors[] = $fileName;
                 }
@@ -277,5 +286,42 @@ class CaktivitasHarian extends CI_Controller {
             $out['error'] = 'Oh snap! We could not upload the ' . $img . 'now. Please try again later.';
         }
         return $out;
+    }
+
+    function hapusfile(){
+        header('Content-Type: application/json'); // set json response headers
+
+        $err = $this->AktivitasHarian->hapusCapaianIndikatorFile($_POST['key']);
+
+        $out = ['initialPreview' => [], 'initialPreviewConfig' => [], 'initialPreviewAsData' => true];
+        if ($err === FALSE) {
+            $out['error'] = 'Oh snap! We could not delete the file now. Please try again later.';
+        }
+
+        echo json_encode($out); // return json data
+        exit(); // terminate
+    }
+
+    function getfile($id_capaianindikator){
+        $data_file = $this->AktivitasHarian->getCapaianIndikatorFile($id_capaianindikator);
+
+        $data['preview'] = $data['config'] = [];
+        foreach ($data_file as $row){
+            $fileId = $row->id_file; // some unique key to identify the file
+            $data['preview'][] = base_url().$row->download_url;
+            $data['config'][] = [
+                'key' => $fileId,
+                'caption' => $row->file_name,
+                'size' => $row->size,
+                'downloadUrl' => base_url().$row->download_url, // the url to download the file
+                'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+            ];
+        }
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
     }
 }
