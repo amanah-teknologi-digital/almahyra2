@@ -329,6 +329,17 @@
             return $this->db->trans_status();
         }
 
+        function hapusCapaianIndikator($id_capaianindikator){
+            $this->db->trans_start();
+
+            $this->db->where('id_capaianindikator', $id_capaianindikator);
+            $this->db->delete('capaian_indikator');
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
 	    ## insert data into table
 	    function insert() {
             $user = $this->session->userdata['auth'];

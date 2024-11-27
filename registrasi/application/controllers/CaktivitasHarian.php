@@ -112,6 +112,18 @@ class CaktivitasHarian extends CI_Controller {
         redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_aktivitas']);
     }
 
+    public function hapusindikator(){
+        $err = $this->AktivitasHarian->hapusCapaianIndikator($_POST['id_capaianindikator']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
+
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_aktivitas']);
+    }
+
 	public function insert() {
 		
 		$err = $this->Tahun->insert();

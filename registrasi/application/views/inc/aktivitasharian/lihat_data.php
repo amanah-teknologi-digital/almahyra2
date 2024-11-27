@@ -181,11 +181,25 @@
                                                 <a href="#" class="btn btn-sm btn-primary tambahindikator"><i class="fas fa-fw fa-plus"></i> Tambah Capaian Indikator</a>
                                             </div>
                                             <?php if (count($capaian_indikator) > 0){ ?>
-                                                <ul>
+                                                <table class="table table-sm table-bordered" style="font-size: 11px;">
+                                                    <tr style="background-color: burlywood;">
+                                                        <td class="font-weight-bold border-gray-600" style="width: 5%" align="center">No</td>
+                                                        <td class="font-weight-bold border-gray-600" style="width: 80%" align="center">Nama Indikator</td>
+                                                        <td class="font-weight-bold border-gray-600" style="width: 15%" align="center">Aksi</td>
+                                                    </tr>
                                                     <?php foreach ($capaian_indikator as $key => $value) { ?>
-                                                        <li><?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))) ?></li>
+                                                        <tr>
+                                                            <td class="border-gray-600" align="center"><?= $key+1 ?></td>
+                                                            <td class="border-gray-600 font-italic nowrap text-muted font-weight-bold"><?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))) ?></td>
+                                                            <td class="border-gray-600" align="center">
+                                                                <div class="d-flex align-items-center justify-content-center">
+                                                                    <span class="btn btn-sm btn-success btn-update" data-id="<?= $value->id_capaianindikator ?>" data-nama="<?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))) ?>"><span class="fas fa-eye"></span> Data</span>
+                                                                    &nbsp;<span class="btn btn-sm btn-danger" onclick="deleteList('<?= $value->id_capaianindikator ?>')"><span class="fas fa-close"></span> Hapus</span>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
                                                     <?php } ?>
-                                                </ul>
+                                                </table>
                                             <?php }else{ ?>
                                                 <span class="text-muted font-italic">Data Kosong!</span>
                                             <?php } ?>
@@ -254,6 +268,34 @@
                         </form>
                     </div>
                 </div>
+                <div class="modal fade" id="updating-indikator" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <?php echo form_open_multipart($controller.'/updateindikator'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Capaian Indikator a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5><b>Nama Indikator</b></h5>
+                                <p class="text-muted font-italic" id="label_nama_indikator"></p>
+                                <br>
+                                <h5><b>Data Dokumentasi</b></h5>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" name="id_capaianindikator" id="id_capaianindikator_updt">
+                                <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Tambah</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+                <?php echo form_open_multipart($controller.'/hapusindikator', 'id="frm_hapusindikator"'); ?>
+                    <input type="hidden" name="id_capaianindikator" id="id_capaianindikator_hps">
+                    <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
+                </form>
             </div>
         </div>
     </body>
@@ -286,6 +328,32 @@
             $('.tambahindikator').click(function() {
                 $("#updating-modal").modal('show');
             });
+
+            $('.btn-update').click(function(){
+                let nama_indikator = $(this).data('nama')
+                let id_capaianindikator = $(this).data('id')
+
+                $("#label_nama_indikator").html(nama_indikator);
+                $("#id_capaianindikator_updt").html(id_capaianindikator);
+
+                $("#updating-indikator").modal('show');
+            });
         });
+
+        function deleteList(id) {
+            swal({
+                title: 'Apakah yakin menghapus indikator? ',
+                text: "Progress dan dokumentasi indikator akan dihapus!",
+                showCancelButton: true,
+                confirmButtonColor: '#4caf50',
+                cancelButtonColor: '#f44336',
+                confirmButtonText: 'Ya, Lanjutkan hapus!',
+                cancelButtonText: 'Batal',
+                width: '600px'
+            }).then(function () {
+                $('#id_capaianindikator_hps').val(id);
+                $('#frm_hapusindikator').submit();
+            })
+        }
     </script>
 </html>
