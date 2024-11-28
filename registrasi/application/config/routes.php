@@ -101,6 +101,7 @@ $route['absensi-pengasuh'] = 'cabsensipengasuh';
 $route['aktivitas-anak'] = 'caktivitas';
 $route['aktivitas-harian'] = 'caktivitasharian';
 $route['aktivitas-harian/lihat-data/(:any)'] = 'caktivitasharian/lihataktivitas/$1';
+$route['dokumentasi-harian'] = 'cdokumentasiharian';
 
 // laporan 
 $route['laporan-tumbuh-kembang'] = 'claporan/tumbuhkembangf';

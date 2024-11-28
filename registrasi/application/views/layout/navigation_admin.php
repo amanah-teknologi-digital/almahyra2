@@ -268,6 +268,12 @@
                         <span class="item-name">Aktivitas Harian</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'dokumentasi-harian'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Dokumentasi Harian</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
