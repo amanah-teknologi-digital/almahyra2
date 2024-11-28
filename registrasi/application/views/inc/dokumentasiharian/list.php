@@ -77,7 +77,7 @@
                                         </form>
                                         <hr>
                                         <div class="table-responsive">
-                                            <h5><b>Data Dokumentasi</b></h5>
+                                            <h5><b>Data Dokumentasi <span class="text-success"><?= $nama_kelas ?></span> <?= 'Tema: '.$nama_tema.', '.format_date_indonesia($tanggal_selected).' '.date('d-m-Y', strtotime($tanggal_selected)).' <span class="font-italic text-muted">('.$nama_subtema.')</span>' ?></b></h5>
                                             <div class="file-loading">
                                                 <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*,video/*" multiple>
                                             </div>

@@ -83,6 +83,13 @@ class CdokumentasiHarian extends CI_Controller {
                 $id_jadwalharian = $data['kelas'][0]->id_jadwalharian;
             }
 
+            foreach ($data['kelas'] as $value_kelas) {
+                if ($value_kelas->id_jadwalharian == $id_jadwalharian) {
+                    $nama_kelas = $value_kelas->nama_kelas;
+                    break;
+                }
+            }
+
             $data['id_jadwalharian'] = $id_jadwalharian;
             $temp_datadokumentasi = $this->DokumentasiHarian->getDokumentasiFile($id_jadwalharian);
             $data['preview'] = $data['config'] = [];
@@ -129,6 +136,11 @@ class CdokumentasiHarian extends CI_Controller {
             $data['dokumentasi_file'] = [];
             $data['id_jadwalharian'] = 0;
         }
+
+        $data['nama_tema'] = $nama_tema;
+        $data['nama_subtema'] = $nama_subtema;
+        $data['tanggal_selected'] = $tanggal;
+        $data['nama_kelas'] = $nama_kelas;
 
 		$data['column'] = $this->DokumentasiHarian->getColumn();
 
