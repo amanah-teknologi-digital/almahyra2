@@ -190,7 +190,7 @@
                                                     <?php foreach ($capaian_indikator as $key => $value) { ?>
                                                         <tr>
                                                             <td class="border-gray-600" align="center"><?= $key+1 ?></td>
-                                                            <td class="border-gray-600 font-italic nowrap text-muted font-weight-bold"><?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))) ?></td>
+                                                            <td class="border-gray-600 font-italic nowrap text-muted font-weight-bold"><?= $value->nama_aspek.' - '. str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))).' <span class="text-success">('.$value->nama_usia.')</span>' ?></td>
                                                             <td class="border-gray-600" align="center">
                                                                 <div class="d-flex align-items-center justify-content-center">
                                                                     <span class="btn btn-sm btn-success btn-update" data-id="<?= $value->id_capaianindikator ?>" data-nama="<?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))) ?>"><span class="fas fa-eye"></span> Data</span>
