@@ -86,7 +86,7 @@
                                             <button type="button" class="btn btn-success btn-upload-4"><i class="fa fa-upload"></i> Upload File</button>
                                             <button type="button" class="btn btn-secondary btn-reset-4"><i class="fa fa-ban"></i> Clear</button>
                                         </div>
-                                        <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Dokumentasi Harian Anak per Kelas per Hari.</span></p>
+                                        <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Dokumentasi Harian Anak <b>per Kelas per Hari</b>, Jenis file bertipe <b>image/video</b> dengan <b>maksimal 20 MB</b>!</span></p>
                                     </div>
                                 </div>
                             </div>
