@@ -79,8 +79,12 @@
                                         <div class="table-responsive">
                                             <h5><b>Data Dokumentasi</b></h5>
                                             <div class="file-loading">
-                                                <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                                <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*,video/*" multiple>
                                             </div>
+                                        </div>
+                                        <div class="text-center mt-3">
+                                            <button type="button" class="btn btn-success btn-upload-4"><i class="fa fa-upload"></i> Upload File</button>
+                                            <button type="button" class="btn btn-secondary btn-reset-4"><i class="fa fa-ban"></i> Clear</button>
                                         </div>
                                         <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Dokumentasi Harian Anak per Kelas per Hari.</span></p>
                                     </div>
@@ -113,16 +117,19 @@
                     uploadUrl: url + '/uploadfile',
                     minFileCount: 1,
                     maxFileCount: 5,
+                    maxFileSize: 20000,
+                    previewThumbnail: true,
                     required: true,
                     showRemove: false,
                     showUpload: false,
-                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-                    previewFileType: 'image',
+                    previewFileType: ['image', 'video'], // Preview type is automatically handled (both images and videos)
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'avi', 'mov'], // Allowed image/video extensions
                     overwriteInitial: false,
+                    allowedPreviewTypes: ['image', 'video'],
                     initialPreview: initialPreview,
                     initialPreviewConfig: initialPreviewConfig,
                     initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
-                    initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                    previewVideo: true,
                     uploadExtraData: function () {
                         return {'id_jadwalharian': id_jadwalharian};
                     }
@@ -130,6 +137,13 @@
             };
 
             initPlugin();
+
+            $(".btn-upload-4").on("click", function() {
+                file_input.fileinput('upload');
+            });
+            $(".btn-reset-4").on("click", function() {
+                file_input.fileinput('clear');
+            });
         });
 
         function getDataTanggal(dom){

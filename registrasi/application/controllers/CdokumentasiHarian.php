@@ -21,7 +21,9 @@ class CdokumentasiHarian extends CI_Controller {
             'controller'=>'cdokumentasiharian',
             'redirect'=>'dokumentasi-harian',
             'title'=>'Dokumentasi Harian',
-            'parent'=>'absensi'
+            'parent'=>'absensi',
+            'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
+            'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
         );
 		## load model here 
 		$this->load->model('MdokumentasiHarian', 'DokumentasiHarian');
@@ -39,10 +41,14 @@ class CdokumentasiHarian extends CI_Controller {
         $id_jadwalharian = $this->session->userdata('id_jadwalharian_session_dokumentasi');
 
 		$data = $this->data;
-
         if (!empty($_POST)) {
             redirect(base_url().$this->data['redirect']);
         }
+
+        $nama_tema = "";
+        $nama_subtema = "";
+        $tanggal = "";
+        $nama_kelas = "";
 
         $data['tahun'] = $this->DokumentasiHarian->getListTahun();
         if (empty($tahun)) {
@@ -59,6 +65,17 @@ class CdokumentasiHarian extends CI_Controller {
         if (empty($id_rincianjadwal_mingguan)) {
             $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
         }
+
+        foreach ($data['tanggal'] as $value_tanggal) {
+            if ($value_tanggal->id_rincianjadwal_mingguan == $id_rincianjadwal_mingguan) {
+                $nama_tema = $value_tanggal->nama_tema;
+                $nama_subtema = $value_tanggal->nama_subtema;
+                $tanggal = $value_tanggal->tanggal;
+
+                break;
+            }
+        }
+
         $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
         $data['kelas'] = $this->DokumentasiHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
         if (!empty($data['kelas'])) {
@@ -70,16 +87,39 @@ class CdokumentasiHarian extends CI_Controller {
             $temp_datadokumentasi = $this->DokumentasiHarian->getDokumentasiFile($id_jadwalharian);
             $data['preview'] = $data['config'] = [];
             foreach ($temp_datadokumentasi as $row){
+                $temp_type = strtolower($row->ext);
+                if (in_array(strtolower($row->ext), $this->data['categori_image'])) {
+                    $temp_type = 'image';
+                }elseif (in_array(strtolower($row->ext), $this->data['categori_video'])) {
+                    $temp_type = 'video';
+                }
+
                 $fileId = $row->id_file; // some unique key to identify the file
                 $data['preview'][] = base_url().$row->download_url;
-                $data['config'][] = [
-                    'key' => $fileId,
-                    'caption' => $row->file_name,
-                    'size' => $row->size,
-                    'downloadUrl' => base_url().$row->download_url, // the url to download the file
-                    'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
-                ];
+                if ($temp_type == 'video'){
+                    $preview_file = '<video controls width="120px"><source src="'.base_url().$row->download_url.'" type="video/mp4"></video>'; // Video preview with controls
+                    $data['config'][] = [
+                        'type' => $temp_type,
+                        'key' => $fileId,
+                        'caption' => $row->file_name,
+                        'size' => $row->size,
+                        'filetype' => "video/".$row->ext,
+                        'downloadUrl' => base_url().$row->download_url, // the url to download the file
+                        'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                        'preview' => $preview_file
+                    ];
+                }else{
+                    $data['config'][] = [
+                        'type' => $temp_type,
+                        'key' => $fileId,
+                        'caption' => $row->file_name,
+                        'size' => $row->size,
+                        'downloadUrl' => base_url().$row->download_url, // the url to download the file
+                        'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                    ];
+                }
             }
+
             $data['dokumentasi_file'] = [
                 'preview' => $data['preview'],
                 'config' => $data['config']
@@ -171,14 +211,30 @@ class CdokumentasiHarian extends CI_Controller {
                 if(move_uploaded_file($tmpFilePath, $newFilePath)) {
                     $id_file = $this->DokumentasiHarian->insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $_POST['id_jadwalharian']);
                     if (!empty($id_file)) {
+                        $temp_type = strtolower($ext);
+                        if (in_array(strtolower($ext), $this->data['categori_image'])) {
+                            $temp_type = 'image';
+                        }elseif (in_array(strtolower($ext), $this->data['categori_video'])) {
+                            $temp_type = 'video';
+                        }
+
                         $fileId = $id_file; // some unique key to identify the file
                         $preview[] = $newFileUrl;
+                        if ($temp_type == 'video'){
+                            $preview_file = '<video controls width="120px"><source src="'.$newFileUrl.'" type="video/mp4"></video>'; // Video preview with controls
+                        }else{
+                            $preview_file = ''; // Image preview
+                        }
+
                         $config[] = [
+                            'type' => $temp_type,
                             'key' => $fileId,
                             'caption' => $fileName,
                             'size' => $fileSize,
+                            'filetype' => "video/".$ext,
                             'downloadUrl' => $newFileUrl, // the url to download the file
                             'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                            'preview' => $preview_file
                         ];
                     }else{
                         @unlink($newFilePath);

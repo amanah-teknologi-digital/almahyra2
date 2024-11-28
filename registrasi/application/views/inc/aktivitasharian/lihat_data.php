@@ -317,6 +317,7 @@
                     uploadUrl: url+'/uploadfile',
                     minFileCount: 1,
                     maxFileCount: 5,
+                    maxFileSize: 10000,
                     required: true,
                     showRemove: false,
                     showUpload: false,
