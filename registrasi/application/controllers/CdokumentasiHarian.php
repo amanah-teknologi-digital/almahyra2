@@ -65,18 +65,34 @@ class CdokumentasiHarian extends CI_Controller {
             if (empty($id_jadwalharian)) {
                 $id_jadwalharian = $data['kelas'][0]->id_jadwalharian;
             }
-            $data['aktivitas'] = $this->DokumentasiHarian->getAktivitasHarianByIdJadwal($id_jadwalharian);
-            $data['jumlah_kegiatan'] = $this->DokumentasiHarian->getJumlahKegiatan($id_jadwalharian);
+
             $data['id_jadwalharian'] = $id_jadwalharian;
+            $temp_datadokumentasi = $this->DokumentasiHarian->getDokumentasiFile($id_jadwalharian);
+            $data['preview'] = $data['config'] = [];
+            foreach ($temp_datadokumentasi as $row){
+                $fileId = $row->id_file; // some unique key to identify the file
+                $data['preview'][] = base_url().$row->download_url;
+                $data['config'][] = [
+                    'key' => $fileId,
+                    'caption' => $row->file_name,
+                    'size' => $row->size,
+                    'downloadUrl' => base_url().$row->download_url, // the url to download the file
+                    'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                ];
+            }
+            $data['dokumentasi_file'] = [
+                'preview' => $data['preview'],
+                'config' => $data['config']
+            ];
         }else{
             $data['aktivitas'] = [];
-            $data['jumlah_kegiatan'] = 0;
+            $data['dokumentasi_file'] = [];
             $data['id_jadwalharian'] = 0;
         }
 
 		$data['column'] = $this->DokumentasiHarian->getColumn();
 
-		$this->load->view('inc/aktivitasharian/list', $data);
+		$this->load->view('inc/dokumentasiharian/list', $data);
 	}
 
     public function getDataTanggal(){
@@ -149,11 +165,11 @@ class CdokumentasiHarian extends CI_Controller {
             if ($tmpFilePath != ""){
                 //Setup our new file path
                 $newFilePath = $path . $temp_filename.'.'.$ext;
-                $newFileUrl = base_url() . 'uploads/aktivitas_harian/' . $temp_filename.'.'.$ext;
+                $newFileUrl = base_url() . 'uploads/dokumentasi_harian/' . $temp_filename.'.'.$ext;
 
                 //Upload the file into the new path
                 if(move_uploaded_file($tmpFilePath, $newFilePath)) {
-                    $id_file = $this->DokumentasiHarian->insertCapaianIndikatorFile($temp_filename, $ext, $fileName, $fileSize, $_POST['id_capaianindikator']);
+                    $id_file = $this->DokumentasiHarian->insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $_POST['id_jadwalharian']);
                     if (!empty($id_file)) {
                         $fileId = $id_file; // some unique key to identify the file
                         $preview[] = $newFileUrl;
@@ -186,7 +202,7 @@ class CdokumentasiHarian extends CI_Controller {
     function hapusfile(){
         header('Content-Type: application/json'); // set json response headers
 
-        $err = $this->DokumentasiHarian->hapusCapaianIndikatorFile($_POST['key']);
+        $err = $this->DokumentasiHarian->hapusDokumentasiFile($_POST['key']);
 
         $out = ['initialPreview' => [], 'initialPreviewConfig' => [], 'initialPreviewAsData' => true];
         if ($err === FALSE) {
@@ -195,28 +211,5 @@ class CdokumentasiHarian extends CI_Controller {
 
         echo json_encode($out); // return json data
         exit(); // terminate
-    }
-
-    function getfile($id_capaianindikator){
-        $data_file = $this->DokumentasiHarian->getCapaianIndikatorFile($id_capaianindikator);
-
-        $data['preview'] = $data['config'] = [];
-        foreach ($data_file as $row){
-            $fileId = $row->id_file; // some unique key to identify the file
-            $data['preview'][] = base_url().$row->download_url;
-            $data['config'][] = [
-                'key' => $fileId,
-                'caption' => $row->file_name,
-                'size' => $row->size,
-                'downloadUrl' => base_url().$row->download_url, // the url to download the file
-                'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
-            ];
-        }
-
-        $this->output->set_content_type('application/json');
-
-        $this->output->set_output(json_encode($data));
-
-        return $data;
     }
 }

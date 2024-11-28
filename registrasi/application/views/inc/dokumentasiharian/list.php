@@ -77,7 +77,10 @@
                                         </form>
                                         <hr>
                                         <div class="table-responsive">
-
+                                            <h5><b>Data Dokumentasi</b></h5>
+                                            <div class="file-loading">
+                                                <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                            </div>
                                         </div>
                                         <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Dokumentasi Harian Anak per Kelas per Hari.</span></p>
                                     </div>
@@ -94,10 +97,40 @@
         </div>
     </body>
     <?php $this->load->view('layout/custom') ?>
+    <?php $this->load->view('layout/file_upload') ?>
+
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
+        let initialPreview = <?= json_encode($dokumentasi_file['preview'])?>;
+        let initialPreviewConfig = <?= json_encode($dokumentasi_file['config'])?>;
+        let id_jadwalharian = <?= $id_jadwalharian ?>;
+
+        $(document).ready(function() {
+            let file_input = $('#file_dukung'), initPlugin = function () {
+                file_input.fileinput({
+                    uploadUrl: url + '/uploadfile',
+                    minFileCount: 1,
+                    maxFileCount: 5,
+                    required: true,
+                    showRemove: false,
+                    showUpload: false,
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                    previewFileType: 'image',
+                    overwriteInitial: false,
+                    initialPreview: initialPreview,
+                    initialPreviewConfig: initialPreviewConfig,
+                    initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                    initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                    uploadExtraData: function () {
+                        return {'id_jadwalharian': id_jadwalharian};
+                    }
+                });
+            };
+
+            initPlugin();
+        });
 
         function getDataTanggal(dom){
             let tahun = $(dom).val();

@@ -354,8 +354,8 @@
             return $this->db->trans_status();
         }
 
-        function hapusCapaianIndikatorFile($id_file){
-            $sql = "SELECT download_url FROM file_capaianindikator WHERE id_file = $id_file";
+        function hapusDokumentasiFile($id_file){
+            $sql = "SELECT download_url FROM file_aktivitasharian WHERE id_file = $id_file";
             $query = $this->db->query($sql);
             $download_url = $query->row()->download_url;
             $path = './'.$download_url;
@@ -363,7 +363,7 @@
             $this->db->trans_start();
 
             $this->db->where('id_file', $id_file);
-            $this->db->delete('file_capaianindikator');
+            $this->db->delete('file_aktivitasharian');
 
             $this->db->trans_complete();
 
@@ -374,19 +374,19 @@
             return $this->db->trans_status();
         }
 
-        function insertCapaianIndikatorFile($temp_filename, $ext, $fileName, $fileSize, $id_capaianindikator){
+        function insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $id_jadwalharian){
             $user = $this->session->userdata['auth'];
 
-            $a_input['id_capaianindikator'] = $id_capaianindikator;
+            $a_input['id_jadwalharian'] = $id_jadwalharian;
             $a_input['file_name'] = $fileName;
             $a_input['size'] = $fileSize;
-            $a_input['download_url'] = 'uploads/aktivitas_harian/' . $temp_filename.'.'.$ext;
+            $a_input['download_url'] = 'uploads/dokumentasi_harian/' . $temp_filename.'.'.$ext;
             $a_input['temp_file_name'] = $temp_filename;
             $a_input['ext'] = $ext;
             $a_input['created_at'] = date('Y-m-d H:m:s');
             $a_input['updater'] = $user->id;
 
-            $this->db->insert('file_capaianindikator', $a_input);
+            $this->db->insert('file_aktivitasharian', $a_input);
 
             return $this->db->insert_id();
         }
@@ -474,6 +474,13 @@
 
         function getCapaianIndikatorFile($id_capaianindikator){
             $sql = "SELECT * FROM file_capaianindikator WHERE id_capaianindikator = $id_capaianindikator";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDokumentasiFile($id_jadwalharian){
+            $sql = "SELECT * FROM file_aktivitasharian WHERE id_jadwalharian = $id_jadwalharian";
             $query = $this->db->query($sql);
 
             return $query->result();
