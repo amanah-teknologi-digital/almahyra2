@@ -40,6 +40,10 @@ class CaktivitasHarian extends CI_Controller {
 
 		$data = $this->data;
 
+        if (!empty($_POST)) {
+            redirect(base_url().$this->data['redirect']);
+        }
+
         $data['tahun'] = $this->AktivitasHarian->getListTahun();
         if (empty($tahun)) {
             foreach ($data['tahun'] as $key => $value) {
@@ -245,6 +249,7 @@ class CaktivitasHarian extends CI_Controller {
         $temp_filename = date('dmyhis').rand(1, 1000000);
 
         for ($i = 0; $i < $total; $i++) {
+            $temp_filename = $temp_filename.$i;
             $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
             $fileName = $_FILES[$input]['name'][$i]; // the file name
             $fileSize = $_FILES[$input]['size'][$i]; // the file size
