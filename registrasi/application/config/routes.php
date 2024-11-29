@@ -55,6 +55,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 // dashboard
 $route['dashboard'] = 'cdashboard';
+$route['capaian-indikator'] = 'ccapaianindikator';
 
 // referensi
 $route['role'] = 'crole';

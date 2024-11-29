@@ -78,6 +78,12 @@
                         <span class="item-name">Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'capaian-indikator'; ?>">
+                        <i class="nav-icon i-Bar-Chart"></i>
+                        <span class="item-name">Capaian Indikator</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
