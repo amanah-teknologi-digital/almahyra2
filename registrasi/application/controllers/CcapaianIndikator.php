@@ -32,6 +32,8 @@ class CcapaianIndikator extends CI_Controller {
 	public function index()	{
         $data = $this->data;
 
+        $data['list_siswa_indikator'] = $this->CapaianIndikator->getListSiswaIndikator();
+
 		$data['column'] = $this->CapaianIndikator->getColumn();
 
 		$this->load->view('inc/capaianindikator/list', $data);

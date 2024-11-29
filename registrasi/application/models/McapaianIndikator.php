@@ -10,12 +10,12 @@
 	    }
 
 	    ## get all data in table
-	    function getAll() {
-            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role, d.tahun as is_pakai FROM ref_tahun a 
-                JOIN data_user b ON b.id = a.updater 
-                JOIN m_role c ON c.id = b.id_role 
-                LEFT JOIN (SELECT tahun FROM tema_bulanan GROUP BY tahun) d ON d.tahun = a.tahun                           
-                ORDER BY a.tahun DESC";
+        function getListSiswaIndikator() {
+            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role, d.tahun as is_pakai 
+                FROM registrasi_data_anak a 
+                LEFT JOIN (SELECT COUNT(id) as jml_indikator FROM v_kategori_usia a 
+                    JOIN m_kembang_anak c ON c.id_usia = c.id_usia
+                                                             )";
 
             $query = $this->db->query($sql);
 
