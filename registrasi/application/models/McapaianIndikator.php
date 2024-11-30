@@ -30,7 +30,7 @@
                                         FROM capaian_indikator a
                                                  JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas
                                         GROUP BY b.id_anak) e ON e.id_anak = a.id
-                    GROUP BY a.id, a.nama, a.is_active, a.tanggal_lahir, a.jenis_kelamin, b.usia_hari, f.nama";
+                    GROUP BY a.id, a.nama, a.is_active, a.tanggal_lahir, a.jenis_kelamin, b.usia_hari, f.nama ORDER BY a.is_active DESC, f.id_kelas DESC, a.nama ASC";
             $query = $this->db->query($sql);
 
 	        return $query->result();
