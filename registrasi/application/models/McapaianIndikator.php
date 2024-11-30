@@ -36,6 +36,32 @@
 	        return $query->result();
 		}
 
+        function getDataAnakById($id_anak){
+            $sql = "SELECT a.id, a.nama, a.tanggal_lahir, a.jenis_kelamin, b.usia_hari, c.nama as nama_kelas
+                    FROM registrasi_data_anak a
+                    JOIN v_kategori_usia b ON b.id = a.id
+                    JOIN map_kelasusia d ON d.id_usia = b.id_usia
+                    JOIN ref_kelas c ON c.id_kelas = d.id_kelas
+                    WHERE a.id = $id_anak";
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getCapaianIndikatorAnak($id_anak){
+            $sql = "SELECT a.id, a.name as nama_indikator, a.id_usia, a.id_aspek, b.name as nama_aspek, c.nama as nama_usia, d.id_capaianindikator as is_capai, e.id_aktivitas
+                    FROM m_kembang_anak a
+                    JOIN m_aspek b ON b.id = a.id_aspek
+                    JOIN ref_usia c ON c.id_usia = a.id_usia
+                    LEFT JOIN capaian_indikator d ON d.id_indikator = a.id
+                    LEFT JOIN aktivitas e ON e.id_aktivitas = d.id_aktivitas AND e.id_anak = $id_anak
+                    WHERE a.id_usia IN (SELECT b.id_usia FROM v_kategori_usia a JOIN ref_usia b ON b.days_min <= a.usia_hari WHERE a.id = $id_anak)
+                    ORDER BY c.days_min ASC, b.id ASC, a.id ASC";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
 		## get all data in table for list (select)
 	    function getList() {
 	    	

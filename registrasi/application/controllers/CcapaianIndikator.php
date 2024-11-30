@@ -39,6 +39,14 @@ class CcapaianIndikator extends CI_Controller {
 		$this->load->view('inc/capaianindikator/list', $data);
 	}
 
+    public function detailcapaian($id_anak){
+        $data = $this->data;
+        $data['data_anak'] = $this->CapaianIndikator->getDataAnakById($id_anak);
+        $data['capaian_indikator'] = $this->CapaianIndikator->getCapaianIndikatorAnak($id_anak);
+
+        $this->load->view('inc/capaianindikator/lihat_data', $data);
+    }
+
     public function getDataTanggal(){
         $tahun = $_POST['tahun'];
 

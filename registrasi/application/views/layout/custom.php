@@ -54,7 +54,7 @@
     if ('#tbl') {
         $('#tbl').dataTable({
             "ordering": false,
-            "searching": false,
+            "searching": true,
             "lengthChange": false
         });
     }   

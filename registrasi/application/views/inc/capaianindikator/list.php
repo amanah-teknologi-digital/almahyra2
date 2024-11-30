@@ -41,7 +41,7 @@
                                             <?php $no = 1; foreach ($list_siswa_indikator as $key => $value) { ?>
                                                 <tr>
                                                     <td><?= $no++ ?></td>
-                                                    <td><b><?= $value->nama_anak ?></b> <span class="font-italic text-muted">(<?= $value->nama_kelas ?>)</span>
+                                                    <td nowrap><b><?= $value->nama_anak ?></b> <span class="font-italic text-muted">(<?= $value->nama_kelas ?>)</span>
                                                         <?= $value->is_active ? '<span class="badge badge-success">aktif</span>':'<span class="badge badge-danger">tidak aktif</span>' ?>
                                                     </td>
                                                     <td nowrap><span class="text-muted font-italic" style="font-size: 12px;"><?= hitung_usia($value->tanggal_lahir); ?></span></td>
@@ -53,7 +53,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <a href="<?= base_url().$controller.'/detail/'.$value->id ?>" class="btn btn-success btn-sm"><span class="fas fa-eye"></span> Detail</a>
+                                                        <a href="<?= base_url().$redirect.'/detail/'.$value->id ?>" class="btn btn-success btn-sm"><span class="fas fa-eye"></span> Detail</a>
                                                     </td>
                                                 </tr>
                                             <?php } ?>
