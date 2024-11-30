@@ -38,6 +38,19 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            <?php $no = 1; foreach ($list_siswa_indikator as $key => $value) { ?>
+                                                <tr>
+                                                    <td><?= $no++ ?></td>
+                                                    <td><?= $value->nama_anak ?></td>
+                                                    <td><?= $value->usia_hari ?></td>
+                                                    <td><?= $value->jenis_kelamin ?></td>
+                                                    <td><?= $value->is_active ?></td>
+                                                    <td>
+                                                        <a href="<?= base_url().$controller.'/detail/'.$value->id ?>" class="btn btn-primary btn-sm">Detail</a>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>

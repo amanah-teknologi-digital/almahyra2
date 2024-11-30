@@ -11,12 +11,19 @@
 
 	    ## get all data in table
         function getListSiswaIndikator() {
-            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role, d.tahun as is_pakai 
+            $sql = "SELECT COUNT(d.id) jml_indikator, COALESCE(COUNT(e.jml_capaian), 0) as jml_capaian, a.id, a.nama as nama_anak,
+                a.is_active, a.jenis_kelamin, b.usia_hari, c.nama as nama_usia
                 FROM registrasi_data_anak a 
-                LEFT JOIN (SELECT COUNT(id) as jml_indikator FROM v_kategori_usia a 
-                    JOIN m_kembang_anak c ON c.id_usia = c.id_usia
-                                                             )";
-
+                JOIN v_kategori_usia b ON b.id = a.id
+                JOIN ref_usia c ON c.days_min <= b.usia_hari
+                JOIN m_kembang_anak d ON d.id_usia = c.id_usia
+                LEFT JOIN (
+                    SELECT COUNT(a.id_indikator) as jml_capaian, b.id_anak 
+                    FROM capaian_indikator a
+                    JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas 
+                    GROUP BY b.id_anak
+                ) e ON e.id_anak = a.id
+                GROUP BY a.id, a.nama, a.is_active, a.jenis_kelamin, b.usia_hari, c.nama";
             $query = $this->db->query($sql);
 
 	        return $query->result();
