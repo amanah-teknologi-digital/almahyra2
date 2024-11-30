@@ -11,19 +11,26 @@
 
 	    ## get all data in table
         function getListSiswaIndikator() {
-            $sql = "SELECT COUNT(d.id) jml_indikator, COALESCE(COUNT(e.jml_capaian), 0) as jml_capaian, a.id, a.nama as nama_anak,
-                a.is_active, a.jenis_kelamin, b.usia_hari, c.nama as nama_usia
-                FROM registrasi_data_anak a 
-                JOIN v_kategori_usia b ON b.id = a.id
-                JOIN ref_usia c ON c.days_min <= b.usia_hari
-                JOIN m_kembang_anak d ON d.id_usia = c.id_usia
-                LEFT JOIN (
-                    SELECT COUNT(a.id_indikator) as jml_capaian, b.id_anak 
-                    FROM capaian_indikator a
-                    JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas 
-                    GROUP BY b.id_anak
-                ) e ON e.id_anak = a.id
-                GROUP BY a.id, a.nama, a.is_active, a.jenis_kelamin, b.usia_hari, c.nama";
+            $sql = "SELECT COUNT(d.id)                          jml_indikator,
+                           COALESCE(e.jml_capaian, 0) as jml_capaian,
+                           a.id,
+                           a.nama                            as nama_anak,
+                           a.tanggal_lahir,
+                           a.is_active,
+                           a.jenis_kelamin,
+                           b.usia_hari,
+                           f.nama                            as nama_kelas
+                    FROM registrasi_data_anak a
+                             JOIN v_kategori_usia b ON b.id = a.id
+                             JOIN map_kelasusia g ON g.id_usia = b.id_usia
+                             JOIN ref_kelas f ON f.id_kelas = g.id_kelas
+                             JOIN ref_usia c ON c.days_min <= b.usia_hari
+                             JOIN m_kembang_anak d ON d.id_usia = c.id_usia
+                             LEFT JOIN (SELECT COUNT(a.id_indikator) as jml_capaian, b.id_anak
+                                        FROM capaian_indikator a
+                                                 JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas
+                                        GROUP BY b.id_anak) e ON e.id_anak = a.id
+                    GROUP BY a.id, a.nama, a.is_active, a.tanggal_lahir, a.jenis_kelamin, b.usia_hari, f.nama";
             $query = $this->db->query($sql);
 
 	        return $query->result();

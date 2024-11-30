@@ -33,7 +33,7 @@
                                                 <th style="width: 45%">Nama Anak</th>
                                                 <th style="width: 15%">Usia</th>
                                                 <th style="width: 10%">Kelamin</th>
-                                                <th style="width: 15%">Status</th>
+                                                <th style="width: 15%">Progress Indikator</th>
                                                 <th style="width: 10%">Action</th>
                                             </tr>
                                             </thead>
@@ -41,12 +41,19 @@
                                             <?php $no = 1; foreach ($list_siswa_indikator as $key => $value) { ?>
                                                 <tr>
                                                     <td><?= $no++ ?></td>
-                                                    <td><?= $value->nama_anak ?></td>
-                                                    <td><?= $value->usia_hari ?></td>
-                                                    <td><?= $value->jenis_kelamin ?></td>
-                                                    <td><?= $value->is_active ?></td>
+                                                    <td><b><?= $value->nama_anak ?></b> <span class="font-italic text-muted">(<?= $value->nama_kelas ?>)</span>
+                                                        <?= $value->is_active ? '<span class="badge badge-success">aktif</span>':'<span class="badge badge-danger">tidak aktif</span>' ?>
+                                                    </td>
+                                                    <td nowrap><span class="text-muted font-italic" style="font-size: 12px;"><?= hitung_usia($value->tanggal_lahir); ?></span></td>
+                                                    <td align="center"><?= $value->jenis_kelamin == 'L'? 'Laki - Laki':'Perempuan'; ?></td>
+                                                    <td align="center" nowrap>
+                                                        <?= $value->jml_capaian.' / '.$value->jml_indikator ?><br>
+                                                        <div class="progress">
+                                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: <?= round(($value->jml_capaian/$value->jml_indikator)*100) ?>%;"><?= round(($value->jml_capaian/$value->jml_indikator)*100) ?>%</div>
+                                                        </div>
+                                                    </td>
                                                     <td>
-                                                        <a href="<?= base_url().$controller.'/detail/'.$value->id ?>" class="btn btn-primary btn-sm">Detail</a>
+                                                        <a href="<?= base_url().$controller.'/detail/'.$value->id ?>" class="btn btn-success btn-sm"><span class="fas fa-eye"></span> Detail</a>
                                                     </td>
                                                 </tr>
                                             <?php } ?>
