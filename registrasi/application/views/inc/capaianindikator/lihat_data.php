@@ -104,7 +104,12 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Capaian Indikator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                    <?php echo form_open_multipart($controller.'/cetakcapaian', 'target="blank"'); ?>
+                                    <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Capaian Indikator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
+                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
+                                    </h5>
+                                    <input type="hidden" name="id_anak" value="<?= $data_anak->id ?>">
+                                    </form>
                                     <br>
                                         <div class="table-responsive">
                                             <table class="display table table-sm table-bordered" id="example">
@@ -127,12 +132,17 @@
                                                         <tr>
                                                             <td align="center"><?= $i++; ?></td>
                                                             <td align="center" nowrap><b><?= $indktr->nama_aspek ?></b></td>
-                                                            <td><span class="font-italic text-muted"><?= $indktr->nama_indikator ?></span></td>
+                                                            <td><span class="font-italic text-muted"><?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $indktr->nama_indikator))) ?></span></td>
                                                             <td align="center">
                                                                 <?= !empty($indktr->is_capai)? '<span class="badge badge-success">tercapai</span>':'<span class="badge badge-danger">belum tercapai</span>' ?>
                                                             </td>
-                                                            <td align="center">
-                                                                <span class="btn btn-sm btn-success"><span class="fas fa-eye"></span>&nbsp;Lihat</span>
+                                                            <td align="center" nowrap>
+                                                                <?php if(!empty($indktr->is_capai)){ ?>
+                                                                    <a href="<?= base_url().'aktivitas-harian/lihat-data/'.$indktr->id_aktivitas ?>" target="_blank" class="btn btn-sm btn-info btn-icon"><span class="fas fa-running"></span>&nbsp; Aktivitas</a>
+                                                                    <span class="btn btn-sm btn-success btn-update" data-id="<?= $indktr->is_capai ?>" data-nama="<?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $indktr->nama_indikator))) ?>"><span class="fas fa-eye"></span> Data Dukung</span>
+                                                                <?php }else{ ?>
+                                                                    -
+                                                                <?php } ?>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -150,6 +160,25 @@
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
                 <!--  Modal -->
+                <div class="modal fade" id="updating-indikator" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Capaian Indikator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5><b>Nama Indikator</b></h5>
+                                <p class="text-muted font-italic" id="label_nama_indikator"></p>
+                                <br>
+                                <h5><b>Data Dokumentasi</b></h5>
+                                <div class="file-loading">
+                                    <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
@@ -170,9 +199,13 @@
                     minFileCount: 1,
                     maxFileCount: 5,
                     maxFileSize: 10000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
                     required: true,
                     showRemove: false,
                     showUpload: false,
+                    showBrowse: false,
+                    showClose: false,
+                    showCaption: false,
                     allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
                     previewFileType: 'image',
                     overwriteInitial: false,
@@ -180,8 +213,10 @@
                     initialPreviewConfig: initialPreviewConfig,
                     initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
                     initialPreviewFileType: 'image', // image is the default and can be overridden in config below
-                    uploadExtraData: function() {
-                        return { 'id_capaianindikator': id_capaianindikator };
+                    fileActionSettings: {
+                        showDrag: false,
+                        showRemove: false,
+                        removeClass: 'd-none',
                     }
                 });
             };
@@ -211,13 +246,6 @@
                         $("#updating-indikator").modal('show');
                     }
                 });
-            });
-
-            $(".btn-upload-4").on("click", function() {
-                file_input.fileinput('upload');
-            });
-            $(".btn-reset-4").on("click", function() {
-                file_input.fileinput('clear');
             });
         });
     </script>

@@ -49,12 +49,11 @@
         }
 
         function getCapaianIndikatorAnak($id_anak){
-            $sql = "SELECT a.id, a.name as nama_indikator, a.id_usia, a.id_aspek, b.name as nama_aspek, c.nama as nama_usia, d.id_capaianindikator as is_capai, e.id_aktivitas
+            $sql = "SELECT a.id, a.name as nama_indikator, a.id_usia, a.id_aspek, b.name as nama_aspek, c.nama as nama_usia, d.id_capaianindikator as is_capai, d.id_aktivitas
                     FROM m_kembang_anak a
                     JOIN m_aspek b ON b.id = a.id_aspek
                     JOIN ref_usia c ON c.id_usia = a.id_usia
-                    LEFT JOIN capaian_indikator d ON d.id_indikator = a.id
-                    LEFT JOIN aktivitas e ON e.id_aktivitas = d.id_aktivitas AND e.id_anak = $id_anak
+                    LEFT JOIN (SELECT a.id_capaianindikator, a.id_indikator, b.id_aktivitas FROM capaian_indikator a JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas WHERE b.id_anak = $id_anak) d ON d.id_indikator = a.id
                     WHERE a.id_usia IN (SELECT b.id_usia FROM v_kategori_usia a JOIN ref_usia b ON b.days_min <= a.usia_hari WHERE a.id = $id_anak)
                     ORDER BY c.days_min ASC, b.id ASC, a.id ASC";
             $query = $this->db->query($sql);
