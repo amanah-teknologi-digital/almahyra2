@@ -18,7 +18,10 @@ class CSession extends CI_Controller {
 
 	}
 
-	public function index()	{	
+	public function index()	{
+        if (isset($this->session->userdata('auth')->id)) {
+            redirect('dashboard');
+        }
 
 		$data = $this->data;
 
