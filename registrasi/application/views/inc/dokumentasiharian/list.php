@@ -118,6 +118,7 @@
                     minFileCount: 1,
                     maxFileCount: 5,
                     maxFileSize: 20000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
                     previewThumbnail: true,
                     required: true,
                     showRemove: false,
