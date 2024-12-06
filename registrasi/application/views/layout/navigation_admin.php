@@ -84,6 +84,12 @@
                         <span class="item-name">Capaian Indikator</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'aktivitasharian-anak'; ?>">
+                        <i class="nav-icon i-Bar-Chart"></i>
+                        <span class="item-name">Aktivitas Harian Anak</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
