@@ -121,7 +121,7 @@
                                                     <div class="tab-pane fade show <?= $key==0 ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
                                                         <div class="card-body">
                                                             <?php echo form_open_multipart($controller.'/cetakjadwalharian', 'target="blank"'); ?>
-                                                                <h5 class="card-title d-flex align-items-center justify-content-between"><b class="float-left">Jadwal Harian</b>
+                                                                <h5 class="card-title d-flex align-items-center justify-content-between"><b class="float-left"><i class="fas fa-calendar"></i> Jadwal Harian</b>
                                                                     <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Jadwal</button>
                                                                 </h5>
                                                                 <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
@@ -154,7 +154,7 @@
                                                                 </tbody>
                                                             </table>
                                                             <br>
-                                                            <h5 class="card-title"><b>Data Stimulus</b></h5>
+                                                            <h5 class="card-title"><b><i class="fas fa-lightbulb"></i> Data Stimulus</b></h5>
                                                             <?php if (isset($data_jadwal_stimulus[$kelas->id_kelas])){ ?>
                                                                 <div class="callout callout-primary alert-dismissible fade show">
                                                                     <h4><i class="fas fa-fw fa-info-circle"></i> Fokus <?= $data_jadwal_stimulus[$kelas->id_kelas]->nama ?>&nbsp;<span class="text-muted">(<?= $kelas->nama ?>)</span></h4>
