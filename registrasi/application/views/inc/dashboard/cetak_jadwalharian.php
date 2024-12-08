@@ -66,14 +66,9 @@
             padding-right: 40px;
         }
 
-        .anak th {
-            border:0px solid #000000;
-        }
-
-        .anak td {
-            border:0px solid #000000;
-            height: 35px;
-        }
+        /*.anak td {*/
+        /*    height: 30px;*/
+        /*}*/
 
         img {
             max-width: 100%;
@@ -180,7 +175,7 @@
             <br>
             <h1>Jadwal Harian <?= $data_kelas->nama ?> <br><?= format_date_indonesia(Date('Y-m-d:H:i:s')).', '.date('d-m-Y'); ?></h1>
             <br>
-            <table class="table anak"  cellspacing="0" cellpadding="0" style="border-collapse: collapse; border: 1px solid #dee2e6;" border="">
+            <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
                 <thead>
                     <tr style="background-color: #bfdfff">
                         <th align="center" style="width: 5%">No</th>
@@ -192,7 +187,7 @@
                 <tbody>
                 <?php if (isset($data_jadwal_harian[$id_kelas])){
                     foreach ($data_jadwal_harian[$id_kelas] as $key => $kegiatan){ ?>
-                        <tr style="background-color: #d2eef7">
+                        <tr>
                             <td align="center"><?= $key+1; ?></td>
                             <td align="center"><?= Date('H:i',strtotime($kegiatan->jam_mulai)).' - '.Date('H:i',strtotime($kegiatan->jam_selesai)) ?></td>
                             <td><?= $kegiatan->uraian; ?></td>
@@ -206,15 +201,11 @@
                 <?php } ?>
                 </tbody>
             </table>
-        </div>
-    </section>
-    <section class="sheet padding-10mm">
-        <div class="container">
             <br>
             <h1>Kegiatan Stimulus</h1>
             <br>
             <?php if (isset($data_jadwal_stimulus[$id_kelas])){ ?>
-                <div class="callout callout-primary alert-dismissible fade show">
+                <div class="callout callout-primary alert-dismissible fade show" style="font-family: 'Open Sans', sans-serif;font-size: 12px">
                     <h4><i class="fas fa-fw fa-info-circle"></i> Fokus <?= $data_jadwal_stimulus[$id_kelas]->nama ?>&nbsp;<span class="text-muted">(<?= $data_kelas->nama ?>)</span></h4>
                     <span><?= isset($data_jadwal_stimulus[$id_kelas])? $data_jadwal_stimulus[$id_kelas]->rincian_kegiatan:'';  ?></span>
                     <span style="font-style: italic;color: gray">Keterangan: <?= isset($data_jadwal_stimulus[$id_kelas])? $data_jadwal_stimulus[$id_kelas]->keterangan:'-';  ?></span>

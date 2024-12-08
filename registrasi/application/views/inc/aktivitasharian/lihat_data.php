@@ -144,7 +144,7 @@
                                             </table>
                                         </div>
                                     <br>
-                                    <h5 class="card-title"><b>Data Konklusi</b></h5>
+                                    <h5 class="card-title"><b><i class="fas fa-fw fa-note-sticky"></i> Data Konklusi</b></h5>
                                     <fieldset>
                                         <?php foreach ($konklusi as $cls) { ?>
                                             <div class="form-group">
@@ -170,7 +170,7 @@
                                     <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
                                     </form>
                                     <br>
-                                    <h5 class="card-title"><b>Data Stimulus</b></h5>
+                                    <h5 class="card-title"><b><i class="fas fa-fw fa-lightbulb"></i> Data Stimulus</b></h5>
                                     <?php if (isset($data_stimulus)){ ?>
                                         <div class="callout callout-primary alert-dismissible fade show">
                                             <h4><i class="fas fa-fw fa-info-circle"></i> Fokus <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
