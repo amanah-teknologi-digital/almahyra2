@@ -241,8 +241,8 @@
             <?php if (count($capaian_indikator) > 0){ ?>
                 <table class="table table-sm table-bordered" style="font-size: 12px;font-family: 'Open Sans', sans-serif;">
                     <tr style="background-color: burlywood;">
-                        <td class="font-weight-bold border-gray-600" style="width: 5%" align="center">No</td>
-                        <td class="font-weight-bold border-gray-600" style="width: 90%" align="center">Nama Indikator</td>
+                        <td style="width: 5%;font-weight: bold" align="center">No</td>
+                        <td style="width: 90%;font-weight: bold" align="center">Nama Indikator</td>
                     </tr>
                     <?php foreach ($capaian_indikator as $key => $value) { ?>
                         <tr>
