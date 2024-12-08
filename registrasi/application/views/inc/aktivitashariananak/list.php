@@ -78,9 +78,14 @@
                                         </form>
                                         <hr>
                                         <?php if (!empty($data_anak)){ ?>
-                                            <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Aktifitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
-                                                <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
-                                            </h5>
+                                            <?php echo form_open_multipart($controller.'/cetakaktivitas', 'target="blank"'); ?>
+                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Aktifitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
+                                                    <?php if (!empty($id_aktivitas)){ ?>
+                                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
+                                                    <?php } ?>
+                                                </h5>
+                                                <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
+                                            </form>
                                         <?php }else{ ?>
                                             <h5 class="card-title mb-1 d-flex align-content-center justify-content-center"><span class="text-danger font-weight-bold">Pilih Anak terlebih dahulu, kemudian klik tombol <span class="text-success">Tampilkan</span> untuk menampilkan data!</span></h5>
                                         <?php } ?>
@@ -236,8 +241,8 @@
         var url = "<?= base_url().$controller ?>";
         let initialPreview = [];
         let initialPreviewConfig = [];
-        let initialPreview_all = <?= json_encode($dokumentasi_file['preview'])?>;
-        let initialPreviewConfig_all = <?= json_encode($dokumentasi_file['config'])?>;
+        let initialPreview_all = <?= isset($dokumentasi_file['preview']) ? json_encode($dokumentasi_file['preview']):'0' ?>;
+        let initialPreviewConfig_all = <?= isset($dokumentasi_file['config']) ? json_encode($dokumentasi_file['config']):'0' ?>;
 
         $(document).ready(function() {
             $('.select2').select2();
