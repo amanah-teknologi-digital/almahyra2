@@ -197,6 +197,16 @@
             return $query->row();
         }
 
+        public function getIdAktivitas($id_rincianjadwal_mingguan, $id_anak){
+            $sql = "SELECT id_aktivitas FROM aktivitas a 
+                    JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+                    WHERE b.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND a.id_anak = $id_anak";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
         public function getDataCapaianIndikator($id_aktivitas){
             $sql = "SELECT b.*, c.name as nama_indikator, d.nama as nama_usia, e.name as nama_aspek
                 FROM aktivitas a 

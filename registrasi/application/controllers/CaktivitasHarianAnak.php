@@ -68,9 +68,20 @@ class CaktivitasHarianAnak extends CI_Controller {
             $data['data_anak'] = [];
         }
 
-//        $data_aktivitas = $this->AktivitasHarianAnak->getDataAktivitas($id_rincianjadwal_mingguan, $id_anak);
+        $data_aktivitas = $this->AktivitasHarianAnak->getIdAktivitas($id_rincianjadwal_mingguan, $id_anak);
+        if (!empty($data_aktivitas)) {
+            $id_aktivitas = $data_aktivitas->id_aktivitas;
+            $data['data_subtema'] = $this->AktivitasHarianAnak->getDataSubtemaByAktivitas($id_aktivitas);
+            $data['list_kegiatan'] = $this->AktivitasHarianAnak->getKegiatanByAktivitas($id_aktivitas);
+            $data['data_stimulus'] = $this->AktivitasHarianAnak->getDataStimulusByAktivitas($id_aktivitas);
+            $data['capaian_indikator'] = $this->AktivitasHarianAnak->getDataCapaianIndikator($id_aktivitas);
+            $data['konklusi'] = $this->AktivitasHarianAnak->getDataKonklusi($id_aktivitas);
+            $data['indikator'] = $this->AktivitasHarianAnak->getDataIndikator($id_aktivitas);
+        }else{
+            $id_aktivitas = 0;
+        }
 
-        $data['data_aktivitas'] = [];
+        $data['id_aktivitas'] = $id_aktivitas;
         $data['tahun_selected'] = $tahun;
         $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
         $data['id_anak'] = $id_anak;
