@@ -89,13 +89,13 @@
                                             <h5 class="card-title mb-1 d-flex align-items-center justify-content-center"><b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
                                             <br>
                                             <div class="table-responsive">
-                                                <table class="display table table-sm table-bordered" id="example">
+                                                <table class="display table table-sm table-bordered" id="example" style="font-size: 11px;">
                                                     <thead style="background-color: #bfdfff">
                                                     <tr>
                                                         <th style="width: 5%">No</th>
                                                         <th style="width: 15%">Waktu</th>
-                                                        <th style="width: 35%">Nama Kegiatan</th>
-                                                        <th style="width: 20%">Status</th>
+                                                        <th style="width: 45%">Nama Kegiatan</th>
+                                                        <th style="width: 10%">Status</th>
                                                         <th style="width: 25%">Keterangan</th>
                                                     </tr>
                                                     </thead>
@@ -104,7 +104,7 @@
                                                         <tr>
                                                             <td align="center"><?= $no++ ?></td>
                                                             <td align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
-                                                            <td><b class="text-muted"><?= $value->uraian ?></b></td>
+                                                            <td><b class="text-muted font-italic"><?= $value->uraian ?></b></td>
                                                             <td align="center">
                                                                 <?php if ($value->status == 1 && !is_null($value->status)){ ?>
                                                                     <span class="badge badge-success">Ada</span>
@@ -113,7 +113,7 @@
                                                                 <?php } ?>
                                                             </td>
                                                             <td>
-                                                                <textarea class="form-control disabled" disabled name="keterangan<?= $value->id_rincianjadwal_harian ?>" id="keterangan<?= $value->id_rincianjadwal_harian ?>" cols="10" rows="2"><?= $value->keterangan? $value->keterangan:''; ?></textarea>
+                                                                <span class="text-muted font-italic"><?= $value->keterangan? $value->keterangan:''; ?></span>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
@@ -122,7 +122,7 @@
                                             </div>
                                             <br>
                                             <h5 class="card-title"><b>Data Konklusi</b></h5>
-                                            <table style="width: 100%">
+                                            <table style="width: 100%; font-size: 11px;">
                                                 <colgroup>
                                                     <col style="width: 50%">
                                                     <col style="width: 1%">
@@ -152,11 +152,6 @@
                                                 <?php } ?>
                                             </table>
                                             <br>
-                                            <h5 class="card-title"><b>Data Stimulus</b>
-                                                <?php if (isset($data_stimulus)){ ?>
-                                                    <i> Fokus <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></i>
-                                                <?php } ?>
-                                            </h5>
                                             <?php if (isset($data_stimulus)){ ?>
                                                 <div class="callout callout-primary alert-dismissible fade show">
                                                     <div class="d-flex align-items-center justify-content-between">
@@ -204,17 +199,94 @@
                 </div><!-- Footer Start -->
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
+                <div class="modal fade" id="updating-indikator" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Capaian Indikator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5><b>Nama Indikator</b></h5>
+                                <p class="text-muted font-italic" id="label_nama_indikator"></p>
+                                <br>
+                                <h5><b>Data Dokumentasi</b></h5>
+                                <div class="file-loading">
+                                    <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
     <?php $this->load->view('layout/custom') ?>
+    <?php $this->load->view('layout/file_upload') ?>
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
+        let initialPreview = [];
+        let initialPreviewConfig = [];
 
         $(document).ready(function() {
             $('.select2').select2();
+
+            let file_input = $('#file_dukung'), initPlugin = function() {
+                file_input.fileinput({
+                    uploadUrl: url+'/uploadfile',
+                    minFileCount: 1,
+                    maxFileCount: 5,
+                    maxFileSize: 10000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
+                    required: true,
+                    showRemove: false,
+                    showUpload: false,
+                    showBrowse: false,
+                    showClose: false,
+                    showCaption: false,
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                    previewFileType: 'image',
+                    overwriteInitial: false,
+                    initialPreview: initialPreview,
+                    initialPreviewConfig: initialPreviewConfig,
+                    initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                    initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                    fileActionSettings: {
+                        showDrag: false,
+                        showRemove: false,
+                        removeClass: 'd-none',
+                    }
+                });
+            };
+
+            initPlugin();
+
+            $('.btn-update').click(function(){
+                let nama_indikator = $(this).data('nama')
+                id_capaianindikator = $(this).data('id')
+
+                $("#label_nama_indikator").html(nama_indikator);
+
+                $.ajax({
+                    url: url + '/getfile/' + $(this).data('id'),
+                    type:'GET',
+                    dataType: 'json',
+                    success: function(data){
+                        initialPreview = data['preview'];
+                        initialPreviewConfig = data['config'];
+
+                        if (file_input.data('fileinput')) {
+                            file_input.fileinput('destroy');
+                        }
+
+                        initPlugin();
+
+                        $("#updating-indikator").modal('show');
+                    }
+                });
+            });
         });
 
         function resetInput(){
@@ -230,7 +302,6 @@
                 type: 'POST',
                 data: {tahun: tahun},
                 success: function(data){
-                    console.log(data);
                     let data_tanggal = data['tanggal'];
 
                     $.each(data_tanggal, function(key, value){
