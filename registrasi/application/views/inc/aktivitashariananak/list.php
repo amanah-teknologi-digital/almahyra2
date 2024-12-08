@@ -94,7 +94,7 @@
                                             <h5 class="card-title mb-1 d-flex align-items-center justify-content-center"><b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
                                             <br>
                                             <div class="table-responsive">
-                                                <table class="display table table-sm table-bordered" id="example" style="font-size: 11px;">
+                                                <table class="display table table-sm table-bordered" id="example" style="font-size: 12px;">
                                                     <thead style="background-color: #bfdfff">
                                                     <tr>
                                                         <th style="width: 5%">No</th>
@@ -128,7 +128,7 @@
                                             <br>
                                             <h5><b>Data Konklusi</b></h5>
                                             <div class="table-responsive">
-                                                <table style="width: 100%; font-size: 11px;">
+                                                <table style="width: 100%; font-size: 12px;">
                                                     <colgroup>
                                                         <col style="width: 50%">
                                                         <col style="width: 1%">
@@ -165,7 +165,7 @@
                                                 </div>
                                                 <?php if (count($capaian_indikator) > 0){ ?>
                                                     <div class="table-responsive">
-                                                        <table class="table table-sm table-bordered" style="font-size: 11px;">
+                                                        <table class="table table-sm table-bordered" style="font-size: 12px;">
                                                             <tr style="background-color: burlywood;">
                                                                 <td class="font-weight-bold border-gray-600" style="width: 5%" align="center">No</td>
                                                                 <td class="font-weight-bold border-gray-600" style="width: 80%" align="center">Nama Indikator</td>
@@ -191,7 +191,7 @@
                                                 <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
                                             <?php } ?>
                                             <br>
-                                            <h5><b>Dokumentasi Aktivitas/b></h5>
+                                            <h5><b>Dokumentasi Aktivitas</b></h5>
                                             <div class="file-loading">
                                                 <input id="file_dukungall" name="file_dukungall[]" type="file" accept="image/*,video/*" multiple>
                                             </div>

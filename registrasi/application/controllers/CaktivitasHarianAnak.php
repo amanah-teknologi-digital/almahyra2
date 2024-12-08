@@ -205,6 +205,7 @@ class CaktivitasHarianAnak extends CI_Controller {
         $data['data_anak'] = $this->AktivitasHarianAnak->getDataAnakByAktivitas($id_aktivitas);
         $data['konklusi'] = $this->AktivitasHarianAnak->getDataKonklusi($id_aktivitas);
         $data['indikator'] = $this->AktivitasHarianAnak->getDataIndikator($id_aktivitas);
+        $data['list_file'] = $this->AktivitasHarianAnak->getDokumentasiHarian($id_aktivitas);
 
         $this->load->view('inc/aktivitashariananak/cetak_aktivitas', $data);
     }

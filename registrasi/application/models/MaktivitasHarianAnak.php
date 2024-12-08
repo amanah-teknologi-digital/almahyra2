@@ -517,6 +517,17 @@
                 return $query->result();
             }
         }
+
+        function getDokumentasiHarian($id_aktivitas){
+            $sql = "SELECT b.id_file, b.file_name, b.download_url, b.temp_file_name, b.size, b.ext, b.created_at
+                FROM aktivitas a 
+                JOIN file_aktivitasharian b ON b.id_jadwalharian = a.id_jadwalharian
+                WHERE a.id_aktivitas = $id_aktivitas AND b.ext IN ('jpg','jpeg','png','gif')";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
 	}
 
 ?>

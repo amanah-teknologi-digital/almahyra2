@@ -67,13 +67,6 @@
             padding-right: 40px;
         }
 
-        img {
-            max-width: 100%;
-            /*max-height: 100%;*/
-            max-height: 360px;!important;
-            min-height: 360px;!important;
-        }
-
         .portrait {
             height: 80px;
             width: 30px;
@@ -202,7 +195,7 @@
             </tbody>
         </table>
         <br>
-        <h5><b>Data Konklusi</b></h5>
+        <h5><b><i class="fas fa-fw fa-note-sticky"></i> Data Konklusi</b></h5>
         <table style="width: 100%; font-size: 12px;font-family: 'Open Sans', sans-serif;">
             <colgroup>
                 <col style="width: 55%">
@@ -234,35 +227,91 @@
         </table>
     </div>
 </section>
-<section class="sheet padding-10mm">
-    <div class="container">
-        <?php if (isset($data_stimulus)){ ?>
-            <h5><b><i class="fas fa-fw fa-award"></i> Capaian Indikator</b></h5>
-            <?php if (count($capaian_indikator) > 0){ ?>
+<?php if (isset($data_stimulus)) { ?>
+    <?php if (count($capaian_indikator) > 0) { ?>
+        <?php $i = 0;
+        $iter = 0;
+        foreach ($capaian_indikator as $key => $value) { ?>
+            <?php if ($iter == 0 or $iter % 26 == 0) { ?>
+                <section class="sheet padding-10mm"><div class="container">
+                <?php if ($iter == 0) { ?>
+                    <h5><b><i class="fas fa-fw fa-award"></i> Capaian Indikator</b></h5>
+                <?php } ?>
                 <table class="table table-sm table-bordered" style="font-size: 12px;font-family: 'Open Sans', sans-serif;">
-                    <tr style="background-color: burlywood;">
-                        <td style="width: 5%;font-weight: bold" align="center">No</td>
-                        <td style="width: 90%;font-weight: bold" align="center">Nama Indikator</td>
-                    </tr>
-                    <?php foreach ($capaian_indikator as $key => $value) { ?>
-                        <tr>
-                            <td class="border-gray-600" align="center"><?= $key+1 ?></td>
-                            <td class="border-gray-600 font-italic nowrap text-muted font-weight-bold"><?= $value->nama_aspek.' - '. str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $value->nama_indikator))).' <span class="text-success">('.$value->nama_usia.')</span>' ?></td>
-                        </tr>
-                    <?php } ?>
-                </table>
-            <?php }else{ ?>
-                <span class="text-muted font-italic">Data Kosong!</span>
+                <tr style="background-color: burlywood;">
+                    <td style="width: 5%;font-weight: bold" align="center">No</td>
+                    <td style="width: 90%;font-weight: bold" align="center">Nama Indikator</td>
+                </tr>
+                <tbody>
             <?php } ?>
-        <?php }else{ ?>
-            <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
+            <tr>
+                <td class="border-gray-600" align="center"><?= $key + 1 ?></td>
+                <td class="border-gray-600 font-italic nowrap text-muted font-weight-bold"><?= $value->nama_aspek . ' - ' . str_replace('?', '', str_replace('ananda', '', str_replace('Apakah', '', $value->nama_indikator))) . ' <span class="text-success">(' . $value->nama_usia . ')</span>' ?></td>
+            </tr>
+            <?php if ($iter == count($capaian_indikator) - 1 or $iter % 26 == 25) { ?>
+                </tbody>
+                </table>
+                </div>
+                </section>
+            <?php } ?>
+            <?php $iter++;
+        } ?>
+    <?php } else { ?>
+        <section class="sheet padding-10mm">
+            <div class="container">
+                <h5><b><i class="fas fa-fw fa-award"></i> Capaian Indikator</b></h5>
+                <br>
+                <center><span style="color: red; font-style: italic">Data stimulus kosong!</span></center>
+            </div>
+        </section>
+    <?php } ?>
+<?php } else { ?>
+    <section class="sheet padding-10mm">
+        <div class="container">
+            <h5><b><i class="fas fa-fw fa-award"></i> Capaian Indikator</b></h5>
+            <br>
+            <center><span style="color: red; font-style: italic">Data Kosong!</span></center>
+        </div>
+    </section>
+<?php } ?>
+
+<?php if (count($list_file) > 0) { ?>
+    <?php $i = 0;
+    $iter = 0;
+    foreach ($list_file as $key => $value) { ?>
+        <?php if ($iter == 0 or $iter % 12 == 0) { ?>
+            <section class="sheet padding-10mm"><div class="container">
+            <?php if ($iter == 0) { ?>
+                <h5><b><i class="fas fa-fw fa-photo-film"></i> Dokumentasi Aktivitas</b></h5>
+            <?php }else{ ?>
+                <br>
+            <?php } ?>
+            <table style="border-collapse:separate; border-spacing: 0 1em;">
+            <tbody>
         <?php } ?>
-    </div>
-</section>
-<section class="sheet padding-10mm">
-    <div class="container">
-        <h5><b>Dokumentasi Aktivitas</b></h5>
-    </div>
-</section>
+            <?php if ($iter == 0 OR $iter % 3 == 0){ ?>
+                <tr>
+            <?php } ?>
+            <td align="center">
+                <img src="<?= base_url().$value->download_url ?>" border=1 height=180 width=180 />
+            </td>
+            <?php if ($iter == count($list_file) - 1 or $iter % 3 == 2){ ?>
+                </tr>
+            <?php } ?>
+        <?php if ($iter == count($list_file) - 1 or $iter % 12 == 11) { ?>
+            </tbody>
+            </table>
+            </div>
+            </section>
+        <?php } ?>
+        <?php $iter++;
+    } ?>
+<?php }else{ ?>
+    <section class="sheet padding-10mm">
+        <div class="container">
+            <h5><b><i class="fas fa-fw fa-photo-film"></i> Dokumentasi Aktivitas</b></h5>
+        </div>
+    </section>
+<?php } ?>
 </body>
 </html>
