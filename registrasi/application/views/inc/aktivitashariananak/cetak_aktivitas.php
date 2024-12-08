@@ -259,5 +259,10 @@
         <?php } ?>
     </div>
 </section>
+<section class="sheet padding-10mm">
+    <div class="container">
+        <h5><b>Dokumentasi Aktivitas</b></h5>
+    </div>
+</section>
 </body>
 </html>

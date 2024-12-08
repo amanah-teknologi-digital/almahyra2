@@ -191,7 +191,7 @@
                                                 <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
                                             <?php } ?>
                                             <br>
-                                            <h5><b>Data Dokumentasi</b></h5>
+                                            <h5><b>Dokumentasi Aktivitas/b></h5>
                                             <div class="file-loading">
                                                 <input id="file_dukungall" name="file_dukungall[]" type="file" accept="image/*,video/*" multiple>
                                             </div>
