@@ -198,7 +198,7 @@
         }
 
         public function getIdAktivitas($id_rincianjadwal_mingguan, $id_anak){
-            $sql = "SELECT id_aktivitas FROM aktivitas a 
+            $sql = "SELECT a.id_aktivitas, a.id_jadwalharian FROM aktivitas a 
                     JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
                     WHERE b.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND a.id_anak = $id_anak";
 

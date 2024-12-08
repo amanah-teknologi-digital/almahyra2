@@ -121,43 +121,45 @@
                                                 </table>
                                             </div>
                                             <br>
-                                            <h5 class="card-title"><b>Data Konklusi</b></h5>
-                                            <table style="width: 100%; font-size: 11px;">
-                                                <colgroup>
-                                                    <col style="width: 50%">
-                                                    <col style="width: 1%">
-                                                    <col style="width: 49%">
-                                                </colgroup>
-                                                <?php foreach ($konklusi as $cls) { ?>
-                                                    <tr style="border-bottom: 1px solid #c8c8c8">
-                                                        <td>
-                                                            <label>&bullet;&nbsp;<?= $cls->nama_konklusi ?>&nbsp;<?= empty($cls->flag)? '<b><i>(Optional)</i></b>':''; ?></label>
-                                                        </td>
-                                                        <td>:</td>
-                                                        <td>
-                                                            <?= !empty($cls->uraian)? $cls->uraian:''; ?>
-                                                        </td>
-                                                    </tr>
-                                                    <?php if ($cls->jenis == 'select'){ ?>
+                                            <h5><b>Data Konklusi</b></h5>
+                                            <div class="table-responsive">
+                                                <table style="width: 100%; font-size: 11px;">
+                                                    <colgroup>
+                                                        <col style="width: 50%">
+                                                        <col style="width: 1%">
+                                                        <col style="width: 49%">
+                                                    </colgroup>
+                                                    <?php foreach ($konklusi as $cls) { ?>
                                                         <tr style="border-bottom: 1px solid #c8c8c8">
                                                             <td>
-                                                                <label>&bullet;&nbsp;Keterangan Pilihan <b><i>(Optional)</i></b></label>
+                                                                <label>&bullet;&nbsp;<?= $cls->nama_konklusi ?>&nbsp;<?= empty($cls->flag)? '<b><i>(Optional)</i></b>':''; ?></label>
                                                             </td>
                                                             <td>:</td>
                                                             <td>
-                                                                <?= !empty($cls->keterangan)? $cls->keterangan:''; ?>
+                                                                <?= !empty($cls->uraian)? $cls->uraian:''; ?>
                                                             </td>
                                                         </tr>
+                                                        <?php if ($cls->jenis == 'select'){ ?>
+                                                            <tr style="border-bottom: 1px solid #c8c8c8">
+                                                                <td>
+                                                                    <label>&bullet;&nbsp;Keterangan Pilihan <b><i>(Optional)</i></b></label>
+                                                                </td>
+                                                                <td>:</td>
+                                                                <td>
+                                                                    <?= !empty($cls->keterangan)? $cls->keterangan:''; ?>
+                                                                </td>
+                                                            </tr>
+                                                        <?php } ?>
                                                     <?php } ?>
-                                                <?php } ?>
-                                            </table>
+                                                </table>
+                                            </div>
                                             <br>
                                             <?php if (isset($data_stimulus)){ ?>
-                                                <div class="callout callout-primary alert-dismissible fade show">
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <h4 class="text-warning font-weight-bold" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
-                                                    </div>
-                                                    <?php if (count($capaian_indikator) > 0){ ?>
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <h4 class="text-warning font-weight-bold" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
+                                                </div>
+                                                <?php if (count($capaian_indikator) > 0){ ?>
+                                                    <div class="table-responsive">
                                                         <table class="table table-sm table-bordered" style="font-size: 11px;">
                                                             <tr style="background-color: burlywood;">
                                                                 <td class="font-weight-bold border-gray-600" style="width: 5%" align="center">No</td>
@@ -176,13 +178,18 @@
                                                                 </tr>
                                                             <?php } ?>
                                                         </table>
-                                                    <?php }else{ ?>
-                                                        <span class="text-muted font-italic">Data Kosong!</span>
-                                                    <?php } ?>
-                                                </div>
+                                                    </div>
+                                                <?php }else{ ?>
+                                                    <span class="text-muted font-italic">Data Kosong!</span>
+                                                <?php } ?>
                                             <?php }else{ ?>
                                                 <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
                                             <?php } ?>
+                                            <br>
+                                            <h5><b>Data Dokumentasi</b></h5>
+                                            <div class="file-loading">
+                                                <input id="file_dukungall" name="file_dukungall[]" type="file" accept="image/*,video/*" multiple>
+                                            </div>
                                         <?php }else{ ?>
                                             <?php if (!empty($data_anak)){ ?>
                                                 <h5 class="card-title mb-1 d-flex align-content-center justify-content-center"><span class="text-danger font-weight-bold">Data aktivitas untuk hari ini kosong/belum diinputkan oleh educator!</span></h5>
@@ -229,6 +236,8 @@
         var url = "<?= base_url().$controller ?>";
         let initialPreview = [];
         let initialPreviewConfig = [];
+        let initialPreview_all = <?= json_encode($dokumentasi_file['preview'])?>;
+        let initialPreviewConfig_all = <?= json_encode($dokumentasi_file['config'])?>;
 
         $(document).ready(function() {
             $('.select2').select2();
@@ -261,7 +270,36 @@
                 });
             };
 
+            let file_input_all = $('#file_dukungall'), initPluginAll = function() {
+                file_input_all.fileinput({
+                    uploadUrl: url+'/uploadfile',
+                    minFileCount: 1,
+                    maxFileCount: 5,
+                    maxFileSize: 10000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
+                    required: true,
+                    showRemove: false,
+                    showUpload: false,
+                    showBrowse: false,
+                    showClose: false,
+                    showCaption: false,
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                    previewFileType: 'image',
+                    overwriteInitial: false,
+                    initialPreview: initialPreview_all,
+                    initialPreviewConfig: initialPreviewConfig_all,
+                    initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                    initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                    fileActionSettings: {
+                        showDrag: false,
+                        showRemove: false,
+                        removeClass: 'd-none',
+                    }
+                });
+            };
+
             initPlugin();
+            initPluginAll();
 
             $('.btn-update').click(function(){
                 let nama_indikator = $(this).data('nama')

@@ -21,10 +21,13 @@ class CaktivitasHarianAnak extends CI_Controller {
             'controller'=>'caktivitashariananak',
             'redirect'=>'aktivitasharian-anak',
             'title'=>'Aktivitas Harian Anak',
-            'parent'=>'dashboard'
+            'parent'=>'dashboard',
+            'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
+            'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
         );
 		## load model here 
 		$this->load->model('MaktivitasHarianAnak', 'AktivitasHarianAnak');
+		$this->load->model('MdokumentasiHarian', 'DokumentasiHarian');
 	}
 
 	public function index()	{
@@ -71,12 +74,56 @@ class CaktivitasHarianAnak extends CI_Controller {
         $data_aktivitas = $this->AktivitasHarianAnak->getIdAktivitas($id_rincianjadwal_mingguan, $id_anak);
         if (!empty($data_aktivitas)) {
             $id_aktivitas = $data_aktivitas->id_aktivitas;
+            $id_jadwalharian = $data_aktivitas->id_jadwalharian;
+
             $data['data_subtema'] = $this->AktivitasHarianAnak->getDataSubtemaByAktivitas($id_aktivitas);
             $data['list_kegiatan'] = $this->AktivitasHarianAnak->getKegiatanByAktivitas($id_aktivitas);
             $data['data_stimulus'] = $this->AktivitasHarianAnak->getDataStimulusByAktivitas($id_aktivitas);
             $data['capaian_indikator'] = $this->AktivitasHarianAnak->getDataCapaianIndikator($id_aktivitas);
             $data['konklusi'] = $this->AktivitasHarianAnak->getDataKonklusi($id_aktivitas);
             $data['indikator'] = $this->AktivitasHarianAnak->getDataIndikator($id_aktivitas);
+
+            $data['id_jadwalharian'] = $id_jadwalharian;
+            $temp_datadokumentasi = $this->DokumentasiHarian->getDokumentasiFile($id_jadwalharian);
+            $data['preview'] = $data['config'] = [];
+            foreach ($temp_datadokumentasi as $row){
+                $temp_type = strtolower($row->ext);
+                if (in_array(strtolower($row->ext), $this->data['categori_image'])) {
+                    $temp_type = 'image';
+                }elseif (in_array(strtolower($row->ext), $this->data['categori_video'])) {
+                    $temp_type = 'video';
+                }
+
+                $fileId = $row->id_file; // some unique key to identify the file
+                $data['preview'][] = base_url().$row->download_url;
+                if ($temp_type == 'video'){
+                    $preview_file = '<video controls width="120px"><source src="'.base_url().$row->download_url.'" type="video/mp4"></video>'; // Video preview with controls
+                    $data['config'][] = [
+                        'type' => $temp_type,
+                        'key' => $fileId,
+                        'caption' => $row->file_name,
+                        'size' => $row->size,
+                        'filetype' => "video/".$row->ext,
+                        'downloadUrl' => base_url().$row->download_url, // the url to download the file
+                        'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                        'preview' => $preview_file
+                    ];
+                }else{
+                    $data['config'][] = [
+                        'type' => $temp_type,
+                        'key' => $fileId,
+                        'caption' => $row->file_name,
+                        'size' => $row->size,
+                        'downloadUrl' => base_url().$row->download_url, // the url to download the file
+                        'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                    ];
+                }
+            }
+
+            $data['dokumentasi_file'] = [
+                'preview' => $data['preview'],
+                'config' => $data['config']
+            ];
         }else{
             $id_aktivitas = 0;
         }
@@ -90,22 +137,6 @@ class CaktivitasHarianAnak extends CI_Controller {
 
 		$this->load->view('inc/aktivitashariananak/list', $data);
 	}
-
-    public function lihatAktivitas($id_aktivitas){
-        $data = $this->data;
-        $data['data_subtema'] = $this->AktivitasHarianAnak->getDataSubtemaByAktivitas($id_aktivitas);
-        $id_rincianjadwal_mingguan = $data['data_subtema']->id_rincianjadwal_mingguan;
-        $data['id_aktivitas'] = $id_aktivitas;
-        $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
-        $data['list_kegiatan'] = $this->AktivitasHarianAnak->getKegiatanByAktivitas($id_aktivitas);
-        $data['data_stimulus'] = $this->AktivitasHarianAnak->getDataStimulusByAktivitas($id_aktivitas);
-        $data['capaian_indikator'] = $this->AktivitasHarianAnak->getDataCapaianIndikator($id_aktivitas);
-        $data['data_anak'] = $this->AktivitasHarianAnak->getDataAnakByAktivitas($id_aktivitas);
-        $data['konklusi'] = $this->AktivitasHarianAnak->getDataKonklusi($id_aktivitas);
-        $data['indikator'] = $this->AktivitasHarianAnak->getDataIndikator($id_aktivitas);
-
-        $this->load->view('inc/aktivitasharian/lihat_data', $data);
-    }
 
     public function getDataTanggal(){
         $tahun = $_POST['tahun'];
