@@ -388,6 +388,14 @@
             $(".btn-reset-4").on("click", function() {
                 file_input.fileinput('clear');
             });
+
+            file_input.on("filepredelete", function(jqXHR) {
+                var abort = true;
+                if (confirm("Apakah yakin menghapus file?")) {
+                    abort = false;
+                }
+                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+            });
         });
 
         function deleteList(id) {
