@@ -195,6 +195,8 @@
                 $jam_selesai = $_POST['jam_selesai'];
                 $nama_kegiatan = $_POST['nama_kegiatan'];
                 $keterangan = $_POST['keterangan'];
+                $standarisasi = $_POST['standarisasi'];
+                $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
 
                 $sql = "SELECT id_jadwalharian FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
                 $query = $this->db->query($sql);
@@ -216,6 +218,7 @@
                 $a_input['keterangan'] = $keterangan;
                 $a_input['created_at'] = date('Y-m-d H:m:s');
                 $a_input['updater'] = $user->id;
+                $a_input['standar_pilihan'] = $standarisasi;
 
                 $this->db->insert('rincian_jadwal_harian', $a_input);
                 $this->db->trans_complete();
@@ -356,6 +359,8 @@
                 $jam_selesai = $_POST['jam_selesai'];
                 $nama_kegiatan = $_POST['nama_kegiatan'];
                 $keterangan = $_POST['keterangan'];
+                $standarisasi = $_POST['standarisasi_update'];
+                $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
 
                 $a_input['jam_mulai'] = $jam_mulai;
                 $a_input['jam_selesai'] = $jam_selesai;
@@ -363,6 +368,7 @@
                 $a_input['keterangan'] = $keterangan;
                 $a_input['updated_at'] = date('Y-m-d H:m:s');
                 $a_input['updater'] = $user->id;
+                $a_input['standar_pilihan'] = $standarisasi;
 
                 $this->db->trans_start();
 
@@ -648,8 +654,8 @@
                 $created = date('Y-m-d H:m:s');
                 $user = $this->session->userdata['auth']->id;
 
-                $sql = "INSERT INTO rincian_jadwal_harian (id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, created_at, updater) 
-                    SELECT $id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, '$created', '$user' FROM jadwal_kegiatan WHERE id_templatejadwal = $id_templatejadwal";
+                $sql = "INSERT INTO rincian_jadwal_harian (id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, created_at, updater, standar_pilihan) 
+                    SELECT $id_jadwalharian, jam_mulai, jam_selesai, uraian, keterangan, '$created', '$user', standar_pilihan FROM jadwal_kegiatan WHERE id_templatejadwal = $id_templatejadwal";
                 $this->db->query($sql);
 
                 $this->db->trans_complete();
