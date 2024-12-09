@@ -38,6 +38,7 @@
                                                 <th align="center">Jam</th>
                                                 <th align="center">Kegiatan</th>
                                                 <th align="center">Keterangan</th>
+                                                <th align="center">Pilihan Standar</th>
                                                 <th align="center" style="width: 20%">Aksi</th>
                                             </tr>
                                             </thead>
@@ -46,10 +47,24 @@
                                                 foreach ($data_jadwal_template as $key => $kegiatan){ ?>
                                                     <tr>
                                                         <td align="center"><?= $key+1; ?></td>
-                                                        <td align="center"><?= Date('H:i',strtotime($kegiatan->jam_mulai)).' - '.Date('H:i',strtotime($kegiatan->jam_selesai)) ?></td>
-                                                        <td><?= $kegiatan->uraian; ?></td>
+                                                        <td nowrap align="center"><?= Date('H:i',strtotime($kegiatan->jam_mulai)).' - '.Date('H:i',strtotime($kegiatan->jam_selesai)) ?></td>
+                                                        <td nowrap><?= $kegiatan->uraian; ?></td>
                                                         <td><span class="text-muted font-italic text-small"><?= $kegiatan->keterangan; ?></span></td>
-                                                        <td align="center">
+                                                        <td nowrap>
+                                                            <span class="text-muted font-italic text-small">
+                                                                <?php $standar_pilihan = json_decode($kegiatan->standar_pilihan, true);
+                                                                    $jml_pil = count($standar_pilihan);
+                                                                    foreach ($standar_pilihan as $key => $value){
+                                                                        if ($key == $jml_pil-1){
+                                                                            echo $value;
+                                                                        }else{
+                                                                            echo $value.', ';
+                                                                        }
+                                                                    }
+                                                                ?>
+                                                            </span>
+                                                        </td>
+                                                        <td align="center" nowrap>
                                                             <span class="btn btn-sm btn-warning edit_kegiatan" data-id="<?= $kegiatan->id_kegiatan ?>" data-nama="<?= $kegiatan->uraian  ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
                                                             <span class="btn btn-sm btn-danger hapus_kegiatan" data-id="<?= $kegiatan->id_kegiatan ?>" data-nama="<?= $kegiatan->uraian  ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
                                                         </td>
@@ -96,6 +111,12 @@
                                         <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" autocomplete="off">
                                     </div>
                                     <div class="form-group">
+                                        <label>Standarisasi Pilihan</label>
+                                        <select name="standarisasi[]" id="standarisasi" class="form-control tagselect" multiple="multiple" required>
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label>Keterangan <i>(Optional)</i></label>
                                         <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" autocomplete="off"></textarea>
                                     </div>
@@ -131,6 +152,12 @@
                                     <div class="form-group">
                                         <label>Nama Kegiatan</label>
                                         <input type="text" name="nama_kegiatan" id="nama_kegiatan_update" class="form-control" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Standarisasi Pilihan</label>
+                                        <select name="standarisasi_update[]" id="standarisasi_update" class="form-control tagselectupdate" multiple="multiple" required>
+
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Keterangan <i>(Optional)</i></label>
@@ -179,6 +206,14 @@
         let url = "<?= base_url().$controller ?>";
 
         $(document).ready(function() {
+            $(".tagselect").select2({
+                tags: true
+            });
+
+            $(".tagselectupdate").select2({
+                tags: true
+            });
+
             $('.btn-tambahkegiatan').click(function(){
                 clearFormStatus("#frm_tambahkegiatan");
 
@@ -206,11 +241,22 @@
                     dataType: 'json',
                     success: function(data){
                         let data_kegiatan = data['list_edit'];
+                        let standar_pilihan = JSON.parse(data_kegiatan['standar_pilihan']);
+                        standar_pilihan = Object.values(standar_pilihan);
 
                         $("#jam_mulai_update").val(data_kegiatan['jam_mulai']);
                         $("#jam_selesai_update").val(data_kegiatan['jam_selesai']);
                         $("#nama_kegiatan_update").val(data_kegiatan['uraian']);
                         $("#keterangan_update").val(data_kegiatan['keterangan']);
+
+                        $('.tagselectupdate').empty();
+                        $.each(standar_pilihan, function (i, item) {
+                            $('.tagselectupdate').append($('<option>', {
+                                value: item,
+                                text : item
+                            }));
+                        });
+                        $('.tagselectupdate').val(standar_pilihan).trigger('change');
 
                         $("#update-kegitan").modal('show');
                     }

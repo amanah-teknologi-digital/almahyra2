@@ -127,6 +127,8 @@
             $jam_selesai = $_POST['jam_selesai'];
             $nama_kegiatan = $_POST['nama_kegiatan'];
             $keterangan = $_POST['keterangan'];
+            $standarisasi = $_POST['standarisasi'];
+            $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
 
             $this->db->trans_start();
 
@@ -137,6 +139,7 @@
             $a_input['keterangan'] = $keterangan;
             $a_input['created_at'] = date('Y-m-d H:m:s');
             $a_input['updater'] = $user->id;
+            $a_input['standar_pilihan'] = $standarisasi;
 
             $this->db->insert('jadwal_kegiatan', $a_input);
             $this->db->trans_complete();
@@ -160,6 +163,8 @@
             $jam_selesai = $_POST['jam_selesai'];
             $nama_kegiatan = $_POST['nama_kegiatan'];
             $keterangan = $_POST['keterangan'];
+            $standarisasi = $_POST['standarisasi_update'];
+            $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
 
             $a_input['jam_mulai'] = $jam_mulai;
             $a_input['jam_selesai'] = $jam_selesai;
@@ -167,6 +172,7 @@
             $a_input['keterangan'] = $keterangan;
             $a_input['updated_at'] = date('Y-m-d H:m:s');
             $a_input['updater'] = $user->id;
+            $a_input['standar_pilihan'] = $standarisasi;
 
             $this->db->trans_start();
 
