@@ -145,7 +145,7 @@
         }
 
         public function getKegiatanByAktivitas($id_aktivitas){
-            $sql = "SELECT c.id_rincianaktivitas, b.id_rincianjadwal_harian, b.jam_mulai, b.jam_selesai, b.uraian, c.status, c.keterangan, c.created_at, c.updated_at
+            $sql = "SELECT c.id_rincianaktivitas, b.id_rincianjadwal_harian, b.jam_mulai, b.jam_selesai, b.uraian, b.standar_pilihan, c.status, c.keterangan, c.created_at, c.updated_at
                 FROM aktivitas a 
                 JOIN rincian_jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
                 LEFT JOIN rincian_aktivitas c ON c.id_rincianjadwal_harian = b.id_rincianjadwal_harian AND c.id_aktivitas = a.id_aktivitas

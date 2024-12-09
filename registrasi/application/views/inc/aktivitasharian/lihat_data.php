@@ -120,20 +120,22 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php $no = 1; foreach ($list_kegiatan as $key => $value) { ?>
+                                                    <?php $no = 1; foreach ($list_kegiatan as $key => $value) {
+                                                        $temp_standar_pilihan = $value->standar_pilihan;
+                                                        $temp_standar_pilihan = json_decode($temp_standar_pilihan, true); ?>
                                                         <tr>
                                                             <td align="center"><?= $no++ ?></td>
                                                             <td align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
                                                             <td><b class="text-muted"><?= $value->uraian ?></b></td>
-                                                            <td align="center">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio1<?= $value->id_rincianjadwal_harian ?>" value="1" <?= $value->status == 1 && !is_null($value->status)? 'checked':''; ?> >
-                                                                    <label class="form-check-label" for="inlineRadio1">Ada</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio2<?= $value->id_rincianjadwal_harian ?>" value="0" <?= $value->status != 1 && !is_null($value->status)? 'checked':''; ?>>
-                                                                    <label class="form-check-label" for="inlineRadio2">Tidak</label>
-                                                                </div>
+                                                            <td nowrap>
+                                                                <fieldset style="margin-left: 20px;">
+                                                                <?php foreach ($temp_standar_pilihan as $keystandar => $standar){ ?>
+                                                                    <div class="form-group">
+                                                                        <input class="form-check-input" type="radio" name="status<?= $value->id_rincianjadwal_harian ?>" id="inlineRadio<?= $keystandar.$value->id_rincianjadwal_harian ?>" value="<?= $standar ?>" <?= $value->status == $standar && !is_null($value->status)? 'checked':''; ?> >
+                                                                        <label class="form-check-label" for="inlineRadio<?= $keystandar ?>"><?= $standar ?></label>
+                                                                    </div>
+                                                                <?php } ?>
+                                                                </fieldset>
                                                             </td>
                                                             <td>
                                                                 <textarea class="form-control" name="keterangan<?= $value->id_rincianjadwal_harian ?>" id="keterangan<?= $value->id_rincianjadwal_harian ?>" cols="10" rows="2"><?= $value->keterangan? $value->keterangan:''; ?></textarea>

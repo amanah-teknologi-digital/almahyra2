@@ -111,11 +111,7 @@
                                                             <td align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
                                                             <td><b class="text-muted font-italic"><?= $value->uraian ?></b></td>
                                                             <td align="center">
-                                                                <?php if ($value->status == 1 && !is_null($value->status)){ ?>
-                                                                    <span class="badge badge-success">Ada</span>
-                                                                <?php }else{ ?>
-                                                                    <span class="badge badge-danger">Tidak Ada</span>
-                                                                <?php } ?>
+                                                                <span class="text-muted"><?= $value->status ?></span>
                                                             </td>
                                                             <td>
                                                                 <span class="text-muted font-italic"><?= $value->keterangan? $value->keterangan:''; ?></span>
