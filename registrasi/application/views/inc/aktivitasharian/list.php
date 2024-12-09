@@ -49,7 +49,7 @@
                                                         <label>Tanggal</label>
                                                     </td>
                                                     <td>
-                                                        <select class="form-control" id="id_rincianjadwal_mingguan" name="id_rincianjadwal_mingguan" required onchange="getDataKelas(this)">
+                                                        <select class="form-control select2" id="id_rincianjadwal_mingguan" name="id_rincianjadwal_mingguan" required onchange="getDataKelas(this)">
                                                             <?php foreach ($tanggal as $key => $value) { ?>
                                                                 <option value="<?= $value->id_rincianjadwal_mingguan ?>" <?= $id_rincianjadwal_mingguan == $value->id_rincianjadwal_mingguan ? 'selected' : '' ?>><?= 'Tema: '.$value->nama_tema.', '.format_date_indonesia($value->tanggal).' '.date('d-m-Y', strtotime($value->tanggal)).' ('.$value->nama_subtema.')' ?></option>
                                                             <?php } ?>
@@ -146,6 +146,10 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
+
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
 
         $('.edit').click(function(){
             let id = $(this).data('id');
