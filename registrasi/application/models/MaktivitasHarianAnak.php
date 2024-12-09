@@ -185,11 +185,12 @@
         }
 
         public function getDataSubtemaByAktivitas($id_aktivitas){
-            $sql = "SELECT c.id_rincianjadwal_mingguan, c.tanggal, d.nama as nama_subtema
+            $sql = "SELECT c.id_rincianjadwal_mingguan, c.tanggal, d.nama as nama_subtema, e.name as nama_educator, a.created_at, a.updated_at
                 FROM aktivitas a 
                 JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
                 JOIN rincian_jadwal_mingguan c ON c.id_rincianjadwal_mingguan = b.id_rincianjadwal_mingguan
                 JOIN jadwal_mingguan d ON d.id_jadwalmingguan = c.id_jadwalmingguan
+                JOIN data_user e ON e.id = a.educator
                 WHERE a.id_aktivitas = $id_aktivitas";
 
             $query = $this->db->query($sql);

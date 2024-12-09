@@ -93,6 +93,22 @@
                                         <?php if (!empty($id_aktivitas)){ ?>
                                             <h5 class="card-title mb-1 d-flex align-items-center justify-content-center"><b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
                                             <br>
+                                            <table style="font-size: 11px; font-style: italic">
+                                                <tr>
+                                                    <td nowrap>Educator</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <span class="text-muted font-weight-bold"><?= $data_subtema->nama_educator ?></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td nowrap>Terakhir Update</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <span class="text-muted"><?= empty($data_subtema->updated_at)? timeAgo($data_subtema->created_at):timeAgo($data_subtema->updated_at); ?></span>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                             <div class="table-responsive">
                                                 <table class="display table table-sm table-bordered" id="example" style="font-size: 12px;">
                                                     <thead style="background-color: #bfdfff">

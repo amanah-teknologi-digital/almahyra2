@@ -127,6 +127,8 @@
         }
 
         function checkAktivitas($id_jadwalharian, $id_anak){
+            $user = $this->session->userdata['auth'];
+
             $sql = "SELECT id_aktivitas FROM aktivitas WHERE id_jadwalharian = $id_jadwalharian AND id_anak = $id_anak";
 
             $query = $this->db->query($sql);
@@ -137,6 +139,7 @@
                 $a_input['id_jadwalharian'] = $id_jadwalharian;
                 $a_input['id_anak'] = $id_anak;
                 $a_input['created_at'] = date('Y-m-d H:m:s');
+                $a_input['educator'] = $user->id;
 
                 $this->db->insert('aktivitas', $a_input);
 
@@ -302,6 +305,13 @@
                 }
             }
 
+            //updater aktivitas
+            $input_dataupdt['updated_at'] = date('Y-m-d H:m:s');
+            $input_dataupdt['educator'] = $user->id;
+
+            $this->db->where('id_aktivitas', $id_aktivitas);
+            $this->db->update('aktivitas', $input_dataupdt);
+
             $this->db->trans_complete();
 
             return $this->db->trans_status();
@@ -323,6 +333,13 @@
                 $this->db->insert('capaian_indikator', $input_data);
 
             }
+
+            //updater aktivitas
+            $input_dataupdt['updated_at'] = date('Y-m-d H:m:s');
+            $input_dataupdt['educator'] = $user->id;
+
+            $this->db->where('id_aktivitas', $id_aktivitas);
+            $this->db->update('aktivitas', $input_dataupdt);
 
             $this->db->trans_complete();
 
