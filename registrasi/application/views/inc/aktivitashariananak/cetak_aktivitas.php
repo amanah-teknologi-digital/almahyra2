@@ -178,9 +178,9 @@
             <?php $no = 1; foreach ($list_kegiatan as $key => $value) { ?>
                 <tr>
                     <td align="center"><?= $no++ ?></td>
-                    <td align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
-                    <td><?= $value->uraian ?></td>
-                    <td align="center">
+                    <td nowrap align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
+                    <td nowrap ><?= $value->uraian ?></td>
+                    <td align="center" nowrap>
                         <span style="color: grey"><?= $value->status; ?></span>
                     </td>
                     <td>
