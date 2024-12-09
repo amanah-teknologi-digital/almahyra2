@@ -127,7 +127,11 @@
                                                             <td nowrap align="center"><?= Date('H:i',strtotime($value->jam_mulai)).' - '.Date('H:i',strtotime($value->jam_selesai)) ?></td>
                                                             <td nowrap><b class="text-muted font-italic"><?= $value->uraian ?></b></td>
                                                             <td align="center" nowrap>
-                                                                <span class="text-muted"><?= $value->status ?></span>
+                                                                <?php if (!empty($value->status)){ ?>
+                                                                    <span class="text-muted"><?= $value->status ?></span>
+                                                                <?php }else{ ?>
+                                                                    <span style="color: red">data kosong!</span>
+                                                                <?php } ?>
                                                             </td>
                                                             <td>
                                                                 <span class="text-muted font-italic"><?= $value->keterangan? $value->keterangan:''; ?></span>
