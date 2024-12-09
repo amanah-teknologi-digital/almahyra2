@@ -163,7 +163,28 @@
 <section class="sheet padding-10mm">
     <div class="container">
         <h1>Aktivitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_anak->nama_kelas ?>)</i></span></span></h1>
-        <span style="font-size: 12px;float: right;font-style: italic; margin-bottom: 5px;" ><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></span>
+        <br>
+        <table style="font-size: 11px; font-style: italic;margin-bottom: 5px;">
+            <colgroup>
+                <col style="width: 20%">
+                <col style="width: 1%">
+                <col style="width: 79%">
+            </colgroup>
+            <tr>
+                <td nowrap>Educator</td>
+                <td>:</td>
+                <td>
+                    <span style="font-weight: bold"><?= $data_subtema->nama_educator ?></span>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap>Tanggal/Subtema</td>
+                <td>:</td>
+                <td>
+                    <span style="font-size: 12px;font-style: italic;" ><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></span>
+                </td>
+            </tr>
+        </table>
         <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
             <thead>
             <tr style="background-color: #bfdfff">
