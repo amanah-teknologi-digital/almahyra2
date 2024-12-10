@@ -101,7 +101,7 @@
                     <?php if (!empty($data_anak)): $now = date('Y-m-d'); ?>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <?php foreach ($data_anak as $key => $anak){ ?>
-                            <li class="nav-item"><a class="nav-link <?= $key==0 ?'active':''; ?>" data-toggle="tab" href="#tab<?= $anak->id ?>" role="tab"><?= $anak->nama ?></a></li>
+                            <li class="nav-item"><a class="nav-link <?= $key==0 ?'active':''; ?>" data-toggle="tab" href="#tab<?= $anak->id ?>" role="tab"><?= $anak->nama ?>&nbsp;<span class="text-muted">(<?= $anak->nama_kelas ?>)</span></a></li>
                         <?php } ?>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -109,7 +109,7 @@
                             <div class="tab-pane fade show <?= $key==0 ?'active':''; ?>" id="tab<?= $anak->id ?>" role="tabpanel">
                                 <div class="card-body">
                                     <?php echo form_open_multipart($controller.'/cetakjadwalharian', 'target="blank"'); ?>
-                                    <h5 class="card-title d-flex align-items-center justify-content-between"><span class="float-left"><i class="fas fa-calendar"></i> Jadwal Harian <span class="font-weight-bold"><?= format_date_indonesia($now).', '.date('d-m-Y'); ?></span> a.n <span class="text-success font-weight-bold"><?= $anak->nama ?></span>&nbsp; anak ke <?= $anak->anak_ke; ?>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($anak->tanggal_lahir) ?> <span class="text-muted">(<?= $anak->nama_kelas ?>)</span></span></span>
+                                    <h5 class="card-title d-flex align-items-center justify-content-between"><span class="float-left"><i class="fas fa-calendar"></i> Jadwal Hari <span class="font-weight-bold"><?= format_date_indonesia($now).', '.date('d-m-Y'); ?></span> a.n <span class="text-success font-weight-bold"><?= $anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($anak->tanggal_lahir) ?></span></span>
                                         <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Jadwal</button>
                                     </h5>
                                     <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
