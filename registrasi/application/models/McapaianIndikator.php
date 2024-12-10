@@ -60,11 +60,15 @@
         }
 
         function getCapaianIndikatorAnak($id_anak){
-            $sql = "SELECT a.id, a.name as nama_indikator, a.id_usia, a.id_aspek, b.name as nama_aspek, c.nama as nama_usia, d.id_capaianindikator as is_capai, d.id_aktivitas
+            $sql = "SELECT a.id, a.name as nama_indikator, a.id_usia, a.id_aspek, b.name as nama_aspek, c.nama as nama_usia, d.id_capaianindikator as is_capai, d.id_aktivitas, e.id_rincianjadwal_mingguan, g.tahun
                     FROM m_kembang_anak a
                     JOIN m_aspek b ON b.id = a.id_aspek
                     JOIN ref_usia c ON c.id_usia = a.id_usia
-                    LEFT JOIN (SELECT a.id_capaianindikator, a.id_indikator, b.id_aktivitas FROM capaian_indikator a JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas WHERE b.id_anak = $id_anak) d ON d.id_indikator = a.id
+                    LEFT JOIN (SELECT a.id_capaianindikator, a.id_indikator, b.id_aktivitas, b.id_jadwalharian FROM capaian_indikator a JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas WHERE b.id_anak = $id_anak) d ON d.id_indikator = a.id
+                    LEFT JOIN jadwal_harian e ON e.id_jadwalharian = d.id_jadwalharian
+                    LEFT JOIN rincian_jadwal_mingguan d ON d.id_rincianjadwal_mingguan = e.id_rincianjadwal_mingguan
+                    LEFT JOIN jadwal_mingguan f ON f.id_jadwalmingguan = d.id_jadwalmingguan
+                    LEFT JOIN tema_bulanan g ON g.id_temabulanan = f.id_temabulanan
                     WHERE a.id_usia IN (SELECT b.id_usia FROM v_kategori_usia a JOIN ref_usia b ON b.days_min <= a.usia_hari WHERE a.id = $id_anak)
                     ORDER BY c.days_min ASC, b.id ASC, a.id ASC";
             $query = $this->db->query($sql);

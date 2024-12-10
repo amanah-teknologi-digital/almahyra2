@@ -138,7 +138,7 @@
                                                             </td>
                                                             <td align="center" nowrap>
                                                                 <?php if(!empty($indktr->is_capai)){ ?>
-                                                                    <a href="<?= base_url().'aktivitas-harian/lihat-data/'.$indktr->id_aktivitas ?>" target="_blank" class="btn btn-sm btn-info btn-icon"><span class="fas fa-running"></span>&nbsp; Aktivitas</a>
+                                                                    <span class="btn btn-sm btn-info btn-icon" onclick="goDetailAktivitas('<?= $data_anak->id ?>', '<?= $indktr->tahun ?>', '<?= $indktr->id_rincianjadwal_mingguan ?>')"><span class="fas fa-running"></span>&nbsp; Aktivitas</span>
                                                                     <span class="btn btn-sm btn-success btn-update" data-id="<?= $indktr->is_capai ?>" data-nama="<?= str_replace('?','', str_replace('ananda','', str_replace('Apakah','', $indktr->nama_indikator))) ?>"><span class="fas fa-eye"></span> Data Dukung</span>
                                                                 <?php }else{ ?>
                                                                     -
@@ -179,6 +179,11 @@
                         </div>
                     </div>
                 </div>
+                <?php echo form_open_multipart('caktivitashariananak', 'id="frm_lihatdetail" target="_blank"' ); ?>
+                    <input type="hidden" name="tahun" id="tahun">
+                    <input type="hidden" name="id_rincianjadwal_mingguan" id="id_rincianjadwal_mingguan">
+                    <input type="hidden" name="id_anak" id="id_anak">
+                </form>
             </div>
         </div>
     </body>
@@ -248,5 +253,13 @@
                 });
             });
         });
+
+        function goDetailAktivitas(id_anak, tahun, id_rincianjadwal_mingguan){
+            $('#tahun').val(tahun);
+            $('#id_rincianjadwal_mingguan').val(id_rincianjadwal_mingguan);
+            $('#id_anak').val(id_anak);
+
+            $('#frm_lihatdetail').submit();
+        }
     </script>
 </html>
