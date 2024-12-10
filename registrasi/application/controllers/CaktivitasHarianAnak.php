@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CaktivitasHarianAnak extends CI_Controller {
 
 	var $data = array();
+    private $role ;
+
 	function __construct() {
 		parent::__construct();
 		
@@ -15,7 +17,9 @@ class CaktivitasHarianAnak extends CI_Controller {
             // if($this->session->userdata['auth']->activation == 0 || $this->session->userdata['auth']->activation == '0') {
             //     redirect('profile');
             // }
-        } 
+        }
+
+        $this->role = $this->session->userdata('auth')->id_role;
 
 		$this->data = array(
             'controller'=>'caktivitashariananak',
@@ -64,9 +68,10 @@ class CaktivitasHarianAnak extends CI_Controller {
             $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
         }
 
-        $data['list_anak'] = $this->AktivitasHarianAnak->getListAnak();
+        $data['list_anak'] = $this->AktivitasHarianAnak->getListAnak($this->role);
+
         if (!empty($id_anak)) {
-            $data['data_anak'] = $this->AktivitasHarianAnak->getListAnak($id_anak);
+            $data['data_anak'] = $this->AktivitasHarianAnak->getListAnak($this->role, $id_anak);
         }else{
             $data['data_anak'] = [];
         }

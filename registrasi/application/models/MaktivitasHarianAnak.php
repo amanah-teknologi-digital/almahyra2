@@ -490,12 +490,23 @@
             return $query->result();
         }
 
-        function getListAnak($id_anak = null){
+        function getListAnak($role, $id_anak = null){
+            $user = $this->session->userdata['auth'];
+
             if (!empty($id_anak)){
                 $where = "WHERE a.id = $id_anak";
             }else{
-                $where = "";
+                $where = "WHERE 1=1 ";
             }
+
+            if ($role == 1 OR $role == 2){ // admin
+                $where_anak = "";
+            }elseif ($role == 3){ // educator
+                $where_anak = "";
+            }elseif ($role == 4){ // orang tua
+                $where_anak = " AND a.id_orangtua = $user->id";
+            }
+
             $sql = "SELECT
                            a.id,
                            a.nama                            as nama_anak,
@@ -508,7 +519,7 @@
                              JOIN v_kategori_usia b ON b.id = a.id
                              JOIN map_kelasusia g ON g.id_usia = b.id_usia
                              JOIN ref_kelas f ON f.id_kelas = g.id_kelas
-                    $where
+                    $where $where_anak
                     ORDER BY a.is_active DESC, f.id_kelas DESC, a.nama ASC";
             $query = $this->db->query($sql);
 

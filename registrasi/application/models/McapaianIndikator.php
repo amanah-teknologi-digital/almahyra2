@@ -10,7 +10,17 @@
 	    }
 
 	    ## get all data in table
-        function getListSiswaIndikator() {
+        function getListSiswaIndikator($role) {
+            $user = $this->session->userdata['auth'];
+
+            if ($role == 1 OR $role == 2){ // admin
+                $where_anak = " 1=1 ";
+            }elseif ($role == 3){ // educator
+                $where_anak = " 1=1 ";
+            }elseif ($role == 4){ // orang tua
+                $where_anak = " a.id_orangtua = $user->id ";
+            }
+
             $sql = "SELECT COUNT(d.id)                          jml_indikator,
                            COALESCE(e.jml_capaian, 0) as jml_capaian,
                            a.id,
@@ -30,6 +40,7 @@
                                         FROM capaian_indikator a
                                                  JOIN aktivitas b ON b.id_aktivitas = a.id_aktivitas
                                         GROUP BY b.id_anak) e ON e.id_anak = a.id
+                    WHERE $where_anak
                     GROUP BY a.id, a.nama, a.is_active, a.tanggal_lahir, a.jenis_kelamin, b.usia_hari, f.nama ORDER BY a.is_active DESC, f.id_kelas DESC, a.nama ASC";
             $query = $this->db->query($sql);
 

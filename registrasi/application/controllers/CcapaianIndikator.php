@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CcapaianIndikator extends CI_Controller {
 
 	var $data = array();
+    private $role ;
 	function __construct() {
 		parent::__construct();
 		
@@ -15,7 +16,9 @@ class CcapaianIndikator extends CI_Controller {
             // if($this->session->userdata['auth']->activation == 0 || $this->session->userdata['auth']->activation == '0') {
             //     redirect('profile');
             // }
-        } 
+        }
+
+        $this->role = $this->session->userdata('auth')->id_role;
 
 		$this->data = array(
             'controller'=>'ccapaianindikator',
@@ -33,7 +36,7 @@ class CcapaianIndikator extends CI_Controller {
 	public function index()	{
         $data = $this->data;
 
-        $data['list_siswa_indikator'] = $this->CapaianIndikator->getListSiswaIndikator();
+        $data['list_siswa_indikator'] = $this->CapaianIndikator->getListSiswaIndikator($this->role);
 
 		$data['column'] = $this->CapaianIndikator->getColumn();
 
