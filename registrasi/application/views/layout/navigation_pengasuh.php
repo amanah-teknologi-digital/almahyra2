@@ -142,13 +142,13 @@
                 <li class="nav-item">
                     <a href="<?= base_url().'aktivitasharian-anak'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Aktivitas Harian Anak</span>
+                        <span class="item-name">Laporan Harian Anak</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?= base_url().'capaian-indikator'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Capaian Indikator</span>
+                        <span class="item-name">Laporan Indikator</span>
                     </a>
                 </li>
             </ul>
