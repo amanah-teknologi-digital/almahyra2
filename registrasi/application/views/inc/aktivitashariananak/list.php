@@ -93,7 +93,7 @@
                                         <?php if (!empty($id_aktivitas)){ ?>
                                             <h5 class="card-title mb-1 d-flex align-items-center justify-content-center"><b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
                                             <br>
-                                            <table style="font-size: 11px; font-style: italic">
+                                            <table style="font-size: 12px; font-style: italic">
                                                 <tr>
                                                     <td nowrap>Educator</td>
                                                     <td>:</td>
