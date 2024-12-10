@@ -21,7 +21,7 @@ class CaktivitasHarianAnak extends CI_Controller {
             'controller'=>'caktivitashariananak',
             'redirect'=>'aktivitasharian-anak',
             'title'=>'Aktivitas Harian Anak',
-            'parent'=>'dashboard',
+            'parent'=>'laporan',
             'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
             'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
         );

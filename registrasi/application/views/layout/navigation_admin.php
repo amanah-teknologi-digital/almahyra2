@@ -78,18 +78,6 @@
                         <span class="item-name">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= base_url().'aktivitasharian-anak'; ?>">
-                        <i class="nav-icon i-Bar-Chart"></i>
-                        <span class="item-name">Aktivitas Harian Anak</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= base_url().'capaian-indikator'; ?>">
-                        <i class="nav-icon i-Bar-Chart"></i>
-                        <span class="item-name">Capaian Indikator</span>
-                    </a>
-                </li>
             </ul>
         </div>
 
@@ -312,10 +300,22 @@
                         <span class="item-name">Pembayaran</span>
                     </a>
                 </li>
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'laporan-harian'; ?><!--">-->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Laporan Harian</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-harian'; ?>">
+                    <a href="<?= base_url().'aktivitasharian-anak'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Laporan Harian</span>
+                        <span class="item-name">Aktivitas Harian Anak</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'capaian-indikator'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Capaian Indikator</span>
                     </a>
                 </li>
             </ul>

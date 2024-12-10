@@ -14,7 +14,7 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Absensi</a></li>
+                            <li><a href="#">Laporan</a></li>
                             <li><?= $title ?></li>
                         </ul>
                     </div>

@@ -21,7 +21,7 @@ class CcapaianIndikator extends CI_Controller {
             'controller'=>'ccapaianindikator',
             'redirect'=>'capaian-indikator',
             'title'=>'Capaian Indikator',
-            'parent'=>'dashboard',
+            'parent'=>'laporan',
             'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
             'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
         );
