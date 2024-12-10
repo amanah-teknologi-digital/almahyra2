@@ -103,7 +103,18 @@
             return $query->result();
         }
 
-        function getAktivitasHarianByIdJadwal($id_jadwalharian){
+        function getAktivitasHarianByIdJadwal($role, $id_jadwalharian){
+            $user = $this->session->userdata['auth'];
+
+            if ($role == 1 OR $role == 2){ // admin
+                $where_anak = "";
+            }elseif ($role == 3){ // educator
+                $where_anak = " WHERE a.id IN (SELECT c.id FROM m_kelas a
+                    JOIN v_kategori_usia b ON b.id_usia = a.id_usia
+                    JOIN registrasi_data_anak c ON c.id = b.id
+                    WHERE a.id_pengasuh = $user->id)";
+            }
+
             $sql = "SELECT a.*, b.id_aktivitas, b.progres_aktivitas FROM registrasi_data_anak a 
                 JOIN(
                 SELECT c.id_aktivitas, c.id_jadwalharian, c.id_anak, COALESCE(d.progres_aktivitas,0) as progres_aktivitas
@@ -119,7 +130,7 @@
                 JOIN v_kategori_usia c ON c.id_usia = b.id_usia
                 JOIN registrasi_data_anak d ON d.id = c.id 
                 WHERE a.id_jadwalharian = $id_jadwalharian AND c.is_active = 1 AND d.id NOT IN (SELECT id_anak FROM aktivitas WHERE id_jadwalharian = $id_jadwalharian)
-                ) as b ON b.id_anak = a.id ORDER BY a.nama ASC";
+                ) as b ON b.id_anak = a.id $where_anak ORDER BY a.nama ASC";
 
             $query = $this->db->query($sql);
 
