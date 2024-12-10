@@ -173,7 +173,8 @@
     <section class="sheet padding-10mm">
         <div class="container">
             <br>
-            <h1>Jadwal Harian <?= $data_kelas->nama ?> <br><?= format_date_indonesia(Date('Y-m-d:H:i:s')).', '.date('d-m-Y'); ?></h1>
+            <?php $now = date('Y-m-d'); ?>
+            <h1>Jadwal Harian <?= $data_kelas->nama ?> <br><?= format_date_indonesia($now).', '.date('d-m-Y'); ?></h1>
             <br>
             <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
                 <thead>
