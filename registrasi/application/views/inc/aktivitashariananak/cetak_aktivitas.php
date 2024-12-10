@@ -164,7 +164,7 @@
     <div class="container">
         <h1>Aktivitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_anak->nama_kelas ?>)</i></span></span></h1>
         <br>
-        <table style="font-size: 11px; font-style: italic;margin-bottom: 5px;">
+        <table style="font-family: 'Open Sans', sans-serif;font-size: 11px; font-style: italic;margin-bottom: 5px;">
             <colgroup>
                 <col style="width: 20%">
                 <col style="width: 1%">
