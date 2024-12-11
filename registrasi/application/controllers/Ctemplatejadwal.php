@@ -24,7 +24,7 @@ class Ctemplatejadwal extends CI_Controller {
             'parent'=>'rencana'
         );
 		## load model here 
-		$this->load->model('MTemplateJadwal', 'TemplateJadwal');
+		$this->load->model('Mtemplatejadwal', 'TemplateJadwal');
 	}
 
 	public function index()	{

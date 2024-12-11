@@ -1,6 +1,6 @@
 <?php  
 
-	class MTemplateStimulus extends CI_Model
+	class Mtemplatestimulus extends CI_Model
 	{
 		public function __construct() {
 			parent::__construct();

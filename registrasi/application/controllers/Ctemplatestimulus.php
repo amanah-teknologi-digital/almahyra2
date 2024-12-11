@@ -24,7 +24,7 @@ class Ctemplatestimulus extends CI_Controller {
             'parent'=>'rencana'
         );
 		## load model here 
-		$this->load->model('MTemplateStimulus', 'TemplateStimulus');
+		$this->load->model('Mtemplatestimulus', 'TemplateStimulus');
 	}
 
 	public function index()	{	

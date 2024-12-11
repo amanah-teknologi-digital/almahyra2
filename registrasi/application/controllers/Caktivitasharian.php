@@ -27,7 +27,7 @@ class Caktivitasharian extends CI_Controller {
             'parent'=>'absensi'
         );
 		## load model here 
-		$this->load->model('MaktivitasHarian', 'AktivitasHarian');
+		$this->load->model('Maktivitasharian', 'AktivitasHarian');
 	}
 
 	public function index()	{

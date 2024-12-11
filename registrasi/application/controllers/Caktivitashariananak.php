@@ -30,8 +30,8 @@ class Caktivitashariananak extends CI_Controller {
             'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
         );
 		## load model here 
-		$this->load->model('MaktivitasHarianAnak', 'AktivitasHarianAnak');
-		$this->load->model('MdokumentasiHarian', 'DokumentasiHarian');
+		$this->load->model('Maktivitashariananak', 'AktivitasHarianAnak');
+		$this->load->model('Mdokumentasiharian', 'DokumentasiHarian');
 	}
 
 	public function index()	{

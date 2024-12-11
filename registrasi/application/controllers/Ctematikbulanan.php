@@ -30,8 +30,8 @@ class Ctematikbulanan extends CI_Controller {
         $this->active_tab_kelas = $this->session->userdata('active_tab_kelas');
 
 		## load model here 
-		$this->load->model('MTematikbulan', 'TematikBulan');
-		$this->load->model('MTahun', 'Tahun');
+		$this->load->model('Mtematikbulan', 'TematikBulan');
+		$this->load->model('Mtahun', 'Tahun');
 	}
 
 	public function index()	{	

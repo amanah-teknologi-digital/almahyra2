@@ -1,6 +1,6 @@
 <?php  
 
-	class MTematikBulan extends CI_Model
+	class Mtematikbulan extends CI_Model
 	{
 		public function __construct() {
 			parent::__construct();

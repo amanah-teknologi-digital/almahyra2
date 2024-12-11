@@ -1,6 +1,6 @@
 <?php  
 
-	class MaktivitasHarianAnak extends CI_Model
+	class Maktivitasharian extends CI_Model
 	{
 		public function __construct() {
 			parent::__construct();
@@ -103,7 +103,18 @@
             return $query->result();
         }
 
-        function getAktivitasHarianByIdJadwal($id_jadwalharian){
+        function getAktivitasHarianByIdJadwal($role, $id_jadwalharian){
+            $user = $this->session->userdata['auth'];
+
+            if ($role == 1 OR $role == 2){ // admin
+                $where_anak = "";
+            }elseif ($role == 3){ // educator
+                $where_anak = " WHERE a.id IN (SELECT c.id FROM m_kelas a
+                    JOIN v_kategori_usia b ON b.id_usia = a.id_usia
+                    JOIN registrasi_data_anak c ON c.id = b.id
+                    WHERE a.id_pengasuh = $user->id)";
+            }
+
             $sql = "SELECT a.*, b.id_aktivitas, b.progres_aktivitas FROM registrasi_data_anak a 
                 JOIN(
                 SELECT c.id_aktivitas, c.id_jadwalharian, c.id_anak, COALESCE(d.progres_aktivitas,0) as progres_aktivitas
@@ -119,7 +130,7 @@
                 JOIN v_kategori_usia c ON c.id_usia = b.id_usia
                 JOIN registrasi_data_anak d ON d.id = c.id 
                 WHERE a.id_jadwalharian = $id_jadwalharian AND c.is_active = 1 AND d.id NOT IN (SELECT id_anak FROM aktivitas WHERE id_jadwalharian = $id_jadwalharian)
-                ) as b ON b.id_anak = a.id ORDER BY a.nama ASC";
+                ) as b ON b.id_anak = a.id $where_anak ORDER BY a.nama ASC";
 
             $query = $this->db->query($sql);
 
@@ -127,6 +138,8 @@
         }
 
         function checkAktivitas($id_jadwalharian, $id_anak){
+            $user = $this->session->userdata['auth'];
+
             $sql = "SELECT id_aktivitas FROM aktivitas WHERE id_jadwalharian = $id_jadwalharian AND id_anak = $id_anak";
 
             $query = $this->db->query($sql);
@@ -137,6 +150,7 @@
                 $a_input['id_jadwalharian'] = $id_jadwalharian;
                 $a_input['id_anak'] = $id_anak;
                 $a_input['created_at'] = date('Y-m-d H:m:s');
+                $a_input['educator'] = $user->id;
 
                 $this->db->insert('aktivitas', $a_input);
 
@@ -145,7 +159,7 @@
         }
 
         public function getKegiatanByAktivitas($id_aktivitas){
-            $sql = "SELECT c.id_rincianaktivitas, b.id_rincianjadwal_harian, b.jam_mulai, b.jam_selesai, b.uraian, c.status, c.keterangan, c.created_at, c.updated_at
+            $sql = "SELECT c.id_rincianaktivitas, b.id_rincianjadwal_harian, b.jam_mulai, b.jam_selesai, b.uraian, b.standar_pilihan, c.status, c.keterangan, c.created_at, c.updated_at
                 FROM aktivitas a 
                 JOIN rincian_jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
                 LEFT JOIN rincian_aktivitas c ON c.id_rincianjadwal_harian = b.id_rincianjadwal_harian AND c.id_aktivitas = a.id_aktivitas
@@ -185,23 +199,12 @@
         }
 
         public function getDataSubtemaByAktivitas($id_aktivitas){
-            $sql = "SELECT c.id_rincianjadwal_mingguan, c.tanggal, d.nama as nama_subtema, e.name as nama_educator, a.created_at, a.updated_at
+            $sql = "SELECT c.id_rincianjadwal_mingguan, c.tanggal, d.nama as nama_subtema
                 FROM aktivitas a 
                 JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
                 JOIN rincian_jadwal_mingguan c ON c.id_rincianjadwal_mingguan = b.id_rincianjadwal_mingguan
                 JOIN jadwal_mingguan d ON d.id_jadwalmingguan = c.id_jadwalmingguan
-                JOIN data_user e ON e.id = a.educator
                 WHERE a.id_aktivitas = $id_aktivitas";
-
-            $query = $this->db->query($sql);
-
-            return $query->row();
-        }
-
-        public function getIdAktivitas($id_rincianjadwal_mingguan, $id_anak){
-            $sql = "SELECT a.id_aktivitas, a.id_jadwalharian FROM aktivitas a 
-                    JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
-                    WHERE b.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND a.id_anak = $id_anak";
 
             $query = $this->db->query($sql);
 
@@ -313,6 +316,13 @@
                 }
             }
 
+            //updater aktivitas
+            $input_dataupdt['updated_at'] = date('Y-m-d H:m:s');
+            $input_dataupdt['educator'] = $user->id;
+
+            $this->db->where('id_aktivitas', $id_aktivitas);
+            $this->db->update('aktivitas', $input_dataupdt);
+
             $this->db->trans_complete();
 
             return $this->db->trans_status();
@@ -334,6 +344,13 @@
                 $this->db->insert('capaian_indikator', $input_data);
 
             }
+
+            //updater aktivitas
+            $input_dataupdt['updated_at'] = date('Y-m-d H:m:s');
+            $input_dataupdt['educator'] = $user->id;
+
+            $this->db->where('id_aktivitas', $id_aktivitas);
+            $this->db->update('aktivitas', $input_dataupdt);
 
             $this->db->trans_complete();
 
@@ -485,60 +502,6 @@
 
         function getCapaianIndikatorFile($id_capaianindikator){
             $sql = "SELECT * FROM file_capaianindikator WHERE id_capaianindikator = $id_capaianindikator";
-            $query = $this->db->query($sql);
-
-            return $query->result();
-        }
-
-        function getListAnak($role, $id_anak = null){
-            $user = $this->session->userdata['auth'];
-
-            if (!empty($id_anak)){
-                $where = "WHERE a.id = $id_anak";
-            }else{
-                $where = "WHERE 1=1 ";
-            }
-
-            if ($role == 1 OR $role == 2){ // admin
-                $where_anak = "";
-            }elseif ($role == 3){ // educator
-                $where_anak = " AND a.id IN (SELECT c.id FROM m_kelas a
-                    JOIN v_kategori_usia b ON b.id_usia = a.id_usia
-                    JOIN registrasi_data_anak c ON c.id = b.id
-                    WHERE a.id_pengasuh = $user->id)";
-            }elseif ($role == 4){ // orang tua
-                $where_anak = " AND a.id_orangtua = $user->id";
-            }
-
-            $sql = "SELECT
-                           a.id,
-                           a.nama                            as nama_anak,
-                           a.tanggal_lahir,
-                           a.is_active,
-                           a.jenis_kelamin,
-                           b.usia_hari,
-                           f.nama                            as nama_kelas
-                    FROM registrasi_data_anak a
-                             JOIN v_kategori_usia b ON b.id = a.id
-                             JOIN map_kelasusia g ON g.id_usia = b.id_usia
-                             JOIN ref_kelas f ON f.id_kelas = g.id_kelas
-                    $where $where_anak
-                    ORDER BY a.is_active DESC, f.id_kelas DESC, a.nama ASC";
-            $query = $this->db->query($sql);
-
-            if (!empty($id_anak)) {
-                return $query->row();
-            }else {
-                return $query->result();
-            }
-        }
-
-        function getDokumentasiHarian($id_aktivitas){
-            $sql = "SELECT b.id_file, b.file_name, b.download_url, b.temp_file_name, b.size, b.ext, b.created_at
-                FROM aktivitas a 
-                JOIN file_aktivitasharian b ON b.id_jadwalharian = a.id_jadwalharian
-                WHERE a.id_aktivitas = $id_aktivitas AND b.ext IN ('jpg','jpeg','png','gif')";
-
             $query = $this->db->query($sql);
 
             return $query->result();
