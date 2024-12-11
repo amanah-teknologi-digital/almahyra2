@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CaktivitasHarian extends CI_Controller {
+class Caktivitasharian extends CI_Controller {
 
 	var $data = array();
     private $role;

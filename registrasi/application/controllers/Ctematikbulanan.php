@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CTematikBulanan extends CI_Controller {
+class Ctematikbulanan extends CI_Controller {
 
 	var $data = array();
     var $active_accordion_bulan = 0;

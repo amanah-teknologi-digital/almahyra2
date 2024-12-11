@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CcapaianIndikator extends CI_Controller {
+class Ccapaianindikator extends CI_Controller {
 
 	var $data = array();
     private $role ;

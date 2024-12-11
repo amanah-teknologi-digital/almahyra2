@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CdokumentasiHarian extends CI_Controller {
+class Cdokumentasiharian extends CI_Controller {
 
 	var $data = array();
 	function __construct() {
