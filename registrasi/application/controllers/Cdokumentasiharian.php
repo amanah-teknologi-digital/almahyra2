@@ -59,11 +59,19 @@ class Cdokumentasiharian extends CI_Controller {
             }
         }
 
+        if (empty($tahun)) {
+            $tahun = 0;
+        }
+
         $data['tahun_selected'] = $tahun;
 
         $data['tanggal'] = $this->DokumentasiHarian->getListTanggalByTahun($tahun);
         if (empty($id_rincianjadwal_mingguan)) {
-            $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+            if (!empty($data['tanggal'])) {
+                $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+            }else{
+                $id_rincianjadwal_mingguan = 0;
+            }
         }
 
         foreach ($data['tanggal'] as $value_tanggal) {
@@ -133,7 +141,10 @@ class Cdokumentasiharian extends CI_Controller {
             ];
         }else{
             $data['aktivitas'] = [];
-            $data['dokumentasi_file'] = [];
+            $data['dokumentasi_file'] = [
+                'preview' => [],
+                'config' => []
+            ];
             $data['id_jadwalharian'] = 0;
         }
 

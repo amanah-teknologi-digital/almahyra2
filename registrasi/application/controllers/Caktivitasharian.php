@@ -57,10 +57,16 @@ class Caktivitasharian extends CI_Controller {
         }
 
         $data['tahun_selected'] = $tahun;
-
+        if (empty($tahun)) {
+            $tahun = 0;
+        }
         $data['tanggal'] = $this->AktivitasHarian->getListTanggalByTahun($tahun);
         if (empty($id_rincianjadwal_mingguan)) {
-            $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+            if (!empty($data['tanggal'])) {
+                $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+            }else{
+                $id_rincianjadwal_mingguan = 0;
+            }
         }
         $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
         $data['kelas'] = $this->AktivitasHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
