@@ -24,7 +24,7 @@ class CDashboard extends CI_Controller {
         $this->load->model('Mregisteranak', 'RegisterAnak');
         $this->load->model('Mobservasizona', 'Observasizona');
         $this->load->model('Mregisterpengasuh', 'RegisterPengasuh');
-        $this->load->model('MTematikBulan', 'TematikBulan');
+        $this->load->model('Mtematikbulan', 'TematikBulan');
         $this->load->model('Mdashboard', 'Dashboard');
     }
 
