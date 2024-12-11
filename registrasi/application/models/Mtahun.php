@@ -1,6 +1,6 @@
 <?php  
 
-	class MTahun extends CI_Model
+	class Mtahun extends CI_Model
 	{
 		public function __construct() {
 			parent::__construct();
