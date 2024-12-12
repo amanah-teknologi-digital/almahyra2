@@ -362,12 +362,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'feeding-menu'; ?>">
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Feeding Menu<span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="<?= base_url().'template-jadwal'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Template Jadwal<span>
