@@ -124,7 +124,9 @@ $route['laporan-pelaksanaan-belajar/(:any)'] = 'crencanapelaksanaan/pelaksanaanr
 
 $route['tematik-bulanan'] = 'ctematikbulanan';
 $route['tematik-bulanan/(:num)'] = 'ctematikbulanan/lihatdata/$1';
-$route['tematik-bulanan/(:num)/jadwalharian/(:num)'] = 'ctematikbulanan/lihatjadwalharian/$1/$2';
+
+$route['jadwal-harian'] = 'cjadwalharian';
+$route['jadwal-harian/(:num)/jadwalharian/(:num)'] = 'cjadwalharian/lihatjadwalharian/$1/$2';
 
 $route['template-jadwal'] = 'ctemplatejadwal';
 $route['template-jadwal/edit/(:num)'] = 'ctemplatejadwal/lihatdata/$1';

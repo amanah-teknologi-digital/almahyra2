@@ -98,38 +98,6 @@ class Ctematikbulanan extends CI_Controller {
         $this->load->view('inc/tematikbulan/lihat_data', $data);
     }
 
-    public function lihatjadwalharian($tahun, $id_rincianjadwal_mingguan){
-        $bulan = $this->TematikBulan->getBulanByIdRincianJadwal($id_rincianjadwal_mingguan);
-        $this->session->set_userdata('active_accordion_bulan', $bulan);
-        $data = $this->data;
-        $data['tahun_tematik'] = $tahun;
-        $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
-        $data['data_rincianjadwal_mingguan'] = $this->TematikBulan->getRincianJadwalMingguanById($id_rincianjadwal_mingguan);
-        $data['data_subtema'] = $this->TematikBulan->getJadwalMingguanById($data['data_rincianjadwal_mingguan']->id_jadwalmingguan);
-        $data['data_kelas'] = $this->TematikBulan->getKelas();
-        $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($id_rincianjadwal_mingguan);
-        $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($id_rincianjadwal_mingguan);
-        $data_template_jadwal = $this->TematikBulan->getTemplateJadwal();
-        $data_template_stimulus = $this->TematikBulan->getTemplateStimulus();
-        $data['data_template_jadwal'] = $data_template_jadwal;
-        $data['data_template_stimulus'] = $data_template_stimulus;
-
-        $temp_jadwal_harian = [];
-        $temp_jadwal_stimulus = [];
-        foreach ($list_jadwalharian as $jadwal){
-            $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
-        }
-        foreach ($list_jadwalstimulus as $stimulus) {
-            $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
-        }
-
-        $data['data_jadwal_harian'] = $temp_jadwal_harian;
-        $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
-        $data['active_tab_kelas'] = empty($this->active_tab_kelas)? 0 : $this->active_tab_kelas;
-
-        $this->load->view('inc/tematikbulan/lihat_dataharian', $data);
-    }
-
 	public function insert() {
         try {
             $this->TematikBulan->insert();
@@ -154,32 +122,6 @@ class Ctematikbulanan extends CI_Controller {
         }
 
 		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
-	}
-
-    public function insertkegiatan() {
-        try {
-            $this->TematikBulan->insertKegiatan();
-            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
-
-            $this->session->set_flashdata('success', 'Berhasil Tambah Data');
-        } catch (Exception $e) {
-            $this->session->set_flashdata('failed', 'Gagal Tambah Data: ' . $e->getMessage());
-        }
-
-		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
-	}
-
-    public function updatekegiatan() {
-        try {
-            $this->TematikBulan->updateKegiatan();
-            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
-
-            $this->session->set_flashdata('success', 'Berhasil Update Data');
-        } catch (Exception $e) {
-            $this->session->set_flashdata('failed', 'Gagal Update Data: ' . $e->getMessage());
-        }
-
-		redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
 	}
 
     public function updatesubtema() {
@@ -235,17 +177,6 @@ class Ctematikbulanan extends CI_Controller {
 	    return $data;
 	}
 
-    public function editkegiatan($id) {
-		$data = $this->data;
-        $data['list_edit'] = $this->TematikBulan->getJadwalKegiatanHarianById($id) ;
-
-	    $this->output->set_content_type('application/json');
-
-	    $this->output->set_output(json_encode($data));
-
-	    return $data;
-	}
-
 	public function update() {
         try {
             $this->TematikBulan->update($this->input->post('id_temabulanan'));
@@ -271,57 +202,4 @@ class Ctematikbulanan extends CI_Controller {
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan']);
 	}
-
-    public function hapuskegiatan() {
-        try {
-            $this->TematikBulan->hapusKegiatan($_POST['id_rincianjadwal_harian']);
-            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
-
-            $this->session->set_flashdata('success', 'Berhasil Hapus Data');
-        } catch (Exception $e) {
-            $this->session->set_flashdata('failed', 'Gagal Hapus Data: ' . $e->getMessage());
-        }
-
-        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
-	}
-
-    public function simpanstimulus() {
-        try {
-            $this->TematikBulan->simpanStimulus($_POST['id_kelas']);
-            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
-
-            $this->session->set_flashdata('success', 'Berhasil Simpan Data');
-        } catch (Exception $e) {
-            $this->session->set_flashdata('failed', 'Gagal Simpan Data: ' . $e->getMessage());
-        }
-
-        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
-	}
-
-    public function gettemplatejadwal($id_templatejadwal){
-        $data = $this->TematikBulan->getTemplateJadwalById($id_templatejadwal);
-        $this->output->set_content_type('application/json');
-        $this->output->set_output(json_encode($data));
-
-    }
-
-    public function gettemplatestimulus($id_templatestimulus){
-        $data = $this->TematikBulan->getTemplateStimulusById($id_templatestimulus);
-        $this->output->set_content_type('application/json');
-        $this->output->set_output(json_encode($data));
-
-    }
-
-    public function terapkantemplatejadwal(){
-        try {
-            $this->TematikBulan->terapkanTemplateJadwal();
-            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
-
-            $this->session->set_flashdata('success', 'Berhasil Menerapkan Data');
-        } catch (Exception $e) {
-            $this->session->set_flashdata('failed', 'Gagal Menerapkan Data: ' . $e->getMessage());
-        }
-
-        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
-    }
 }

@@ -352,7 +352,13 @@
                 <li class="nav-item">
                     <a href="<?= base_url().'tematik-bulanan'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Jadwal Aktivitas<span>
+                        <span class="item-name">Tematik Bulanan<span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'jadwal-harian'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Jadwal Harian<span>
                     </a>
                 </li>
                 <li class="nav-item">

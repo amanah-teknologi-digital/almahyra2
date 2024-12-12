@@ -16,13 +16,12 @@
                         <ul>
                             <li><a href="#">Rencana Belajar</a></li>
                             <li><a href="#"><?= $title ?></a></li>
-                            <li><a href="#">Data Tematik</a></li>
-                            <li>Jadwal Harian</li>
+                            <li>Detail Jadwal</li>
                         </ul>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="<?= base_url().$redirect.'/'.$tahun_tematik ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
+                            <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
                                     <h5 class="card-title d-flex align-items-center justify-content-center">Data Jadwal Harian untuk Sub Tema&nbsp;<span class="text-success"><?= $data_subtema->nama ?></span>&nbsp;pada Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia($data_rincianjadwal_mingguan->tanggal).', '.date('d-m-Y', strtotime($data_rincianjadwal_mingguan->tanggal)); ?></span></h5>
