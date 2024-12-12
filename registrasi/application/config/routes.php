@@ -130,6 +130,8 @@ $route['template-jadwal'] = 'ctemplatejadwal';
 $route['template-jadwal/edit/(:num)'] = 'ctemplatejadwal/lihatdata/$1';
 $route['template-stimulus'] = 'ctemplatestimulus';
 
+$route['feeding-menu'] = 'cfeedingmenu';
+
 // $route['peminjaman-kendaraan'] = 'ctkendaraan';
 // $route['peminjaman-kendaraan/pengembalian'] = 'ctkendaraan/pengembalian';
 
