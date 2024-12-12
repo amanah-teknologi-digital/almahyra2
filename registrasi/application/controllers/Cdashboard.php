@@ -26,6 +26,7 @@ class CDashboard extends CI_Controller {
         $this->load->model('Mregisterpengasuh', 'RegisterPengasuh');
         $this->load->model('Mtematikbulan', 'TematikBulan');
         $this->load->model('Mdashboard', 'Dashboard');
+        $this->load->model('Mfeedingmenu', 'FeedingMenu');
     }
 
     public function index() {
@@ -58,19 +59,27 @@ class CDashboard extends CI_Controller {
                 if (!empty($data['data_subtema'])){
                     $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($data['data_subtema']->id_rincianjadwal_mingguan);
                     $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($data['data_subtema']->id_rincianjadwal_mingguan);
+                    $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
+
                     $temp_jadwal_harian = [];
                     $temp_jadwal_stimulus = [];
+                    $temp_feeding_menu = [];
                     foreach ($list_jadwalharian as $jadwal){
                         $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
                     }
                     foreach ($list_jadwalstimulus as $stimulus) {
                         $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
                     }
+                    foreach ($list_feedingmenu as $feeding) {
+                        $temp_feeding_menu[$feeding->id_kelas] = $feeding;
+                    }
 
+                    $data['data_feeding_menu'] = $temp_feeding_menu;
                     $data['data_jadwal_harian'] = $temp_jadwal_harian;
                     $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
                     $data['id_rincianjadwal_mingguan'] = $data['data_subtema']->id_rincianjadwal_mingguan;
                 }else{
+                    $data['data_feeding_menu'] = [];
                     $data['data_jadwal_harian'] = [];
                     $data['data_jadwal_stimulus'] = [];
                     $data['id_rincianjadwal_mingguan'] = '';
@@ -100,19 +109,27 @@ class CDashboard extends CI_Controller {
             if (!empty($data['data_subtema'])){
                 $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($data['data_subtema']->id_rincianjadwal_mingguan);
                 $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($data['data_subtema']->id_rincianjadwal_mingguan);
+                $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
+
                 $temp_jadwal_harian = [];
                 $temp_jadwal_stimulus = [];
+                $temp_feeding_menu = [];
                 foreach ($list_jadwalharian as $jadwal){
                     $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
                 }
                 foreach ($list_jadwalstimulus as $stimulus) {
                     $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
                 }
+                foreach ($list_feedingmenu as $feeding) {
+                    $temp_feeding_menu[$feeding->id_kelas] = $feeding;
+                }
 
+                $data['data_feeding_menu'] = $temp_feeding_menu;
                 $data['data_jadwal_harian'] = $temp_jadwal_harian;
                 $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
                 $data['id_rincianjadwal_mingguan'] = $data['data_subtema']->id_rincianjadwal_mingguan;
             }else{
+                $data['data_feeding_menu'] = [];
                 $data['data_jadwal_harian'] = [];
                 $data['data_jadwal_stimulus'] = [];
                 $data['id_rincianjadwal_mingguan'] = '';
@@ -136,19 +153,27 @@ class CDashboard extends CI_Controller {
             if (!empty($data['data_subtema'])){
                 $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($data['data_subtema']->id_rincianjadwal_mingguan);
                 $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($data['data_subtema']->id_rincianjadwal_mingguan);
+                $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
+
                 $temp_jadwal_harian = [];
                 $temp_jadwal_stimulus = [];
+                $temp_feeding_menu = [];
                 foreach ($list_jadwalharian as $jadwal){
                     $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
                 }
                 foreach ($list_jadwalstimulus as $stimulus) {
                     $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
                 }
+                foreach ($list_feedingmenu as $feeding) {
+                    $temp_feeding_menu[$feeding->id_kelas] = $feeding;
+                }
 
+                $data['data_feeding_menu'] = $temp_feeding_menu;
                 $data['data_jadwal_harian'] = $temp_jadwal_harian;
                 $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
                 $data['id_rincianjadwal_mingguan'] = $data['data_subtema']->id_rincianjadwal_mingguan;
             }else{
+                $data['data_feeding_menu'] = [];
                 $data['data_jadwal_harian'] = [];
                 $data['data_jadwal_stimulus'] = [];
                 $data['id_rincianjadwal_mingguan'] = '';
@@ -164,15 +189,22 @@ class CDashboard extends CI_Controller {
 
         $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($_POST['id_rincianjadwal_mingguan']);
         $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($_POST['id_rincianjadwal_mingguan']);
+        $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($_POST['id_rincianjadwal_mingguan']);
+
         $temp_jadwal_harian = [];
         $temp_jadwal_stimulus = [];
+        $temp_feeding_menu = [];
         foreach ($list_jadwalharian as $jadwal){
             $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
         }
         foreach ($list_jadwalstimulus as $stimulus) {
             $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
         }
+        foreach ($list_feedingmenu as $feeding) {
+            $temp_feeding_menu[$feeding->id_kelas] = $feeding;
+        }
 
+        $data['data_feeding_menu'] = $temp_feeding_menu;
         $data['data_jadwal_harian'] = $temp_jadwal_harian;
         $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
         $data['id_rincianjadwal_mingguan'] = $_POST['id_rincianjadwal_mingguan'];

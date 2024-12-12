@@ -216,5 +216,19 @@
             <?php } ?>
         </div>
     </section>
+    <section class="sheet padding-10mm">
+        <div class="container">
+            <h1>Feeding Menu</h1>
+            <br>
+            <?php if (isset($data_feeding_menu[$id_kelas])){ ?>
+                <div class="callout callout-primary alert-dismissible fade show" style="font-family: 'Open Sans', sans-serif;font-size: 12px">
+                    <span><?= isset($data_feeding_menu[$id_kelas])? $data_feeding_menu[$id_kelas]->uraian:'';  ?></span>
+                    <span style="font-style: italic;color: gray">Keterangan: <?= isset($data_feeding_menu[$id_kelas])? $data_feeding_menu[$id_kelas]->keterangan:'-';  ?></span>
+                </div>
+            <?php }else{ ?>
+                <center><p style="color: red">Data feeding menu kosong!</p></center>
+            <?php } ?>
+        </div>
+    </section>
 </body>
 </html>

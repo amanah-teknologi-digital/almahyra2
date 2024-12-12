@@ -493,6 +493,19 @@
             return $query->row();
         }
 
+        function getFeedingMenu($id_rincianjadwal_mingguan){
+            $sql = "SELECT a.*, b.id_kelas, c.name as nama_user, d.name as nama_role
+            FROM feeding_menu a 
+            JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+            JOIN data_user c ON c.id = a.updater               
+            JOIN m_role d ON d.id = c.id_role
+           WHERE b.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function updateFeedingMenu($id_jadwalharian){
             $user = $this->session->userdata['auth'];
 

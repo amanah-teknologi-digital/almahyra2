@@ -164,6 +164,16 @@
                                                     <?php }else{ ?>
                                                         <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data stimulus kosong!</span>
                                                     <?php } ?>
+                                                    <br>
+                                                    <h5 class="card-title"><b><i class="fas fa-hamburger"></i> Feeding Menu</b></h5>
+                                                    <?php if (isset($data_feeding_menu[$kelas->id_kelas])){ ?>
+                                                        <div class="callout callout-primary alert-dismissible fade show">
+                                                            <span><?= isset($data_feeding_menu[$kelas->id_kelas])? $data_feeding_menu[$kelas->id_kelas]->uraian:'';  ?></span>
+                                                            <span class="font-italic text-muted">Keterangan: <?= isset($data_feeding_menu[$kelas->id_kelas])? $data_feeding_menu[$kelas->id_kelas]->keterangan:'-';  ?></span>
+                                                        </div>
+                                                    <?php }else{ ?>
+                                                        <span class="text-danger font-italic text-small d-flex align-items-center justify-content-center font-weight-bold">Data feeding menu kosong!</span>
+                                                    <?php } ?>
                                                 </div>
                                             </div>
                                         <?php } ?>
