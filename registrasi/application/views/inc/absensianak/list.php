@@ -13,8 +13,8 @@
 
     </style>
     <body class="text-left">
-        <div class="app-admin-wrap layout-sidebar-compact sidebar-dark-purple sidenav-open clearfix">
-            <?php $this->load->view('layout/navigation') ?>     
+        <div class="app-admin-wrap layout-sidebar-compact sidebar-dark-purple <?= $role != 5 ? 'sidenav-open':''; ?> clearfix">
+            <?php $this->load->view('layout/navigation') ?>
 
             <!-- =============== Horizontal bar End ================-->
             <div class="main-content-wrap d-flex flex-column">
@@ -269,9 +269,9 @@
           });
         }
 
-        $(function() {
-            getCurrentLocation();
-        });        
+        // $(function() {
+        //     getCurrentLocation();
+        // });
     </script>
 
     <script>

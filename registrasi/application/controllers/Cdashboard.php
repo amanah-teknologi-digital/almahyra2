@@ -11,7 +11,11 @@ class CDashboard extends CI_Controller {
             $this->session->set_flashdata('failed', 'Anda Harus Login');
 
             redirect('login');
-        } 
+        }
+
+        if ($this->session->userdata['auth']->id_role == 5) { // absensi
+            redirect('absensi-anak');
+        }
 
         $this->data = array(
             'controller'=>'cdashboard',

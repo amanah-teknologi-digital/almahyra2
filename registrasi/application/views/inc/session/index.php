@@ -64,8 +64,10 @@
                                             <label>Role</label>
                                             <select class="form-control" required name="id_role">
                                                 <option>Pilih Role</option>
-                                                <option value="3">Pengasuh</option>
+                                                <option value="3">Educator</option>
                                                 <option value="4">Orang Tua</option>
+                                                <option value="5">Absensi</option>
+                                                <option value="6">Medical Checkup</option>
                                             </select>
                                         </div>
                                         <div class="form-group">

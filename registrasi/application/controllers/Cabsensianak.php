@@ -21,14 +21,15 @@ class Cabsensianak extends CI_Controller {
             'controller'=>'cabsensianak',
             'redirect'=>'absensi-anak',
             'title'=>'Absensi Anak',
-            'parent'=>'Absensi'
+            'parent'=>'absensi',
+            'role' => $this->session->userdata('auth')->id_role,
         );
         ## load model here 
         $this->load->model('Mabsensianak', 'Absensianak');
         $this->load->model('Mregisteranak', 'RegisterAnak');
     }
 
-    public function index() {   
+    public function index() {
 
         $data = $this->data;
 
