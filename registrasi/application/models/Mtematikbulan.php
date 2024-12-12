@@ -36,6 +36,73 @@
 	        return $query->result();
 		}
 
+        function getDataFeedingMenu($id_jadwalharian){
+            $sql = "SELECT * FROM feeding_menu WHERE id_jadwalharian = $id_jadwalharian";
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getJadwalHarian($id_kelas, $id_rincianjadwal_mingguan){
+            $sql = "SELECT * FROM jadwal_harian WHERE id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan AND id_kelas = $id_kelas";
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function updateFeedingMenu($id_kelas, $id_rincianjadwal_mingguan){
+            $user = $this->session->userdata['auth'];
+
+            $uraian = $_POST['editorContent'];
+            $keterangan = $_POST['keterangan'];
+
+            $getid_jadwalharian = $this->getJadwalHarian($id_kelas, $id_rincianjadwal_mingguan);
+            $id_jadwalharian = $getid_jadwalharian->id_jadwalharian;
+
+            if (empty($id_jadwalharian)) {
+                return false;
+            }else {
+                $chek_data = $this->getDataFeedingMenu($id_jadwalharian);
+
+                $this->db->trans_start();
+
+                if (empty($chek_data)) {
+                    $a_input['id_jadwalharian'] = $id_jadwalharian;
+                    $a_input['uraian'] = $uraian;
+                    $a_input['keterangan'] = $keterangan;
+                    $a_input['created_at'] = date('Y-m-d H:m:s');
+                    $a_input['updater'] = $user->id;
+
+                    $this->db->insert('feeding_menu', $a_input);
+                } else {
+                    $a_input['uraian'] = $uraian;
+                    $a_input['keterangan'] = $keterangan;
+                    $a_input['updated_at'] = date('Y-m-d H:m:s');
+                    $a_input['updater'] = $user->id;
+
+                    $this->db->where('id_jadwalharian', $id_jadwalharian);
+                    $this->db->update('feeding_menu', $a_input);
+                }
+
+                $this->db->trans_complete();
+
+                return $this->db->trans_status();
+            }
+        }
+
+        function getFeedingMenu($id_rincianjadwal_mingguan){
+            $sql = "SELECT a.*, b.id_kelas, c.name as nama_user, d.name as nama_role
+            FROM feeding_menu a 
+            JOIN jadwal_harian b ON b.id_jadwalharian = a.id_jadwalharian
+            JOIN data_user c ON c.id = a.updater               
+            JOIN m_role d ON d.id = c.id_role
+           WHERE b.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getDataTema($tahun, $bulan){
             $sql = "SELECT a.bulan, b.id_temabulanan, b.nama as nama_tema, b.deskripsi
                 FROM ref_bulan a 

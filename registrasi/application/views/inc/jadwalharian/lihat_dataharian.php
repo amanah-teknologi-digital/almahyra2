@@ -163,6 +163,29 @@
                                                         <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
                                                     </form>
                                                 </div>
+                                                <br>
+                                                <div class="card-body shadow">
+                                                    <h5 class="card-title"><b>Data Feeding Menu</b></h5>
+                                                    <?php echo form_open_multipart($controller.'/updatefeedingmenu', 'id="frm_feedingmenu'.$kelas->id_kelas.'"'); ?>
+                                                    <fieldset>
+                                                        <div class="form-group">
+                                                            <label>Uraian Feeding Menu</label>
+                                                            <div id="editor2<?= $kelas->id_kelas ?>" style="height: 200px;">
+                                                                <?= isset($data_feeding_menu[$kelas->id_kelas])? $data_feeding_menu[$kelas->id_kelas]->uraian:'';  ?>
+                                                            </div>
+                                                            <input type="hidden" name="editorContent" id="editorContent2<?= $kelas->id_kelas ?>" data-editor-index="<?= $kelas->id_kelas ?>" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Keterangan <i>(Optional)</i></label>
+                                                            <textarea class="form-control" name="keterangan" id="keterangan2<?= $kelas->id_kelas ?>" cols="30" rows="5" autocomplete="off"><?= isset($data_feeding_menu[$kelas->id_kelas])? $data_feeding_menu[$kelas->id_kelas]->keterangan:'';  ?></textarea>
+                                                        </div>
+                                                    </fieldset>
+                                                    <button class="btn btn-sm btn-success"><span class="fas fa-save"></span>&nbsp;Simpan Feeding Menu</button>
+                                                    <input type="hidden" name="id_kelas" value="<?= $kelas->id_kelas; ?>">
+                                                    <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
+                                                    <input type="hidden" name="tahun_penentuan" value="<?= $tahun_tematik ?>">
+                                                    </form>
+                                                </div>
                                             </div>
                                         <?php } ?>
                                     </div>
@@ -309,6 +332,7 @@
         let url = "<?= base_url().$controller ?>";
         let lis_kelas = <?= json_encode($data_kelas) ?>;
         let quill = [];
+        let quill2 = [];
         $(document).ready(function() {
             $(".tagselect").select2({
                 tags: true
@@ -321,6 +345,22 @@
             $.each(lis_kelas, function(index, value){
                 quill[value.id_kelas] =
                     new Quill('#editor'+value.id_kelas, {
+                        theme: 'snow',  // You can also choose 'bubble'
+                        modules: {
+                            toolbar: [
+                                [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                ['bold', 'italic', 'underline'],
+                                [{ 'align': [] }],
+                                ['link'],
+                                ['image'],
+                                ['blockquote']
+                            ]
+                        }
+                    });
+
+                quill2[value.id_kelas] =
+                    new Quill('#editor2'+value.id_kelas, {
                         theme: 'snow',  // You can also choose 'bubble'
                         modules: {
                             toolbar: [
@@ -460,6 +500,24 @@
                         }
 
                         $('#editorContent'+value.id_kelas).val(htmlcontent);
+                        form.submit(); // Mengirimkan form jika validasi lolos
+                    }
+                });
+
+                $("#frm_feedingmenu"+value.id_kelas).validate({
+                    rules: {},
+                    messages: {},
+                    submitHandler: function(form, event) {
+                        let content = quill2[value.id_kelas].getText().trim();
+                        let htmlcontent = quill2[value.id_kelas].root.innerHTML;
+
+                        if (htmlcontent === "<p><br></p>" || content === ""){
+                            alert('Uraian Feeding Menu harus diisi!');
+                            event.preventDefault();  // Prevent form submission
+                            return false;  // Prevent default action
+                        }
+
+                        $('#editorContent2'+value.id_kelas).val(htmlcontent);
                         form.submit(); // Mengirimkan form jika validasi lolos
                     }
                 });

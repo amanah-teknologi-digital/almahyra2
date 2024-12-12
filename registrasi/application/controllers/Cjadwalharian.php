@@ -5,6 +5,7 @@ class Cjadwalharian extends CI_Controller {
 
 	var $data = array();
     private $role ;
+    private $active_tab_kelas = 0;
 
 	function __construct() {
 		parent::__construct();
@@ -20,6 +21,7 @@ class Cjadwalharian extends CI_Controller {
         }
 
         $this->role = $this->session->userdata('auth')->id_role;
+        $this->active_tab_kelas = $this->session->userdata('active_tab_kelas');
 
 		$this->data = array(
             'controller'=>'cjadwalharian',
@@ -124,6 +126,7 @@ class Cjadwalharian extends CI_Controller {
         $data['data_kelas'] = $this->TematikBulan->getKelas();
         $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($id_rincianjadwal_mingguan);
         $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($id_rincianjadwal_mingguan);
+        $list_feedingmenu = $this->TematikBulan->getFeedingMenu($id_rincianjadwal_mingguan);
         $data_template_jadwal = $this->TematikBulan->getTemplateJadwal();
         $data_template_stimulus = $this->TematikBulan->getTemplateStimulus();
         $data['data_template_jadwal'] = $data_template_jadwal;
@@ -131,13 +134,18 @@ class Cjadwalharian extends CI_Controller {
 
         $temp_jadwal_harian = [];
         $temp_jadwal_stimulus = [];
+        $temp_feeding_menu = [];
         foreach ($list_jadwalharian as $jadwal){
             $temp_jadwal_harian[$jadwal->id_kelas][] = $jadwal;
         }
         foreach ($list_jadwalstimulus as $stimulus) {
             $temp_jadwal_stimulus[$stimulus->id_kelas] = $stimulus;
         }
+        foreach ($list_feedingmenu as $feeding) {
+            $temp_feeding_menu[$feeding->id_kelas] = $feeding;
+        }
 
+        $data['data_feeding_menu'] = $temp_feeding_menu;
         $data['data_jadwal_harian'] = $temp_jadwal_harian;
         $data['data_jadwal_stimulus'] = $temp_jadwal_stimulus;
         $data['active_tab_kelas'] = empty($this->active_tab_kelas)? 0 : $this->active_tab_kelas;
@@ -148,6 +156,7 @@ class Cjadwalharian extends CI_Controller {
     public function insertkegiatan() {
         try {
             $this->TematikBulan->insertKegiatan();
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
             $this->session->set_flashdata('success', 'Berhasil Tambah Data');
         } catch (Exception $e) {
@@ -160,6 +169,7 @@ class Cjadwalharian extends CI_Controller {
     public function updatekegiatan() {
         try {
             $this->TematikBulan->updateKegiatan();
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
             $this->session->set_flashdata('success', 'Berhasil Update Data');
         } catch (Exception $e) {
@@ -183,6 +193,7 @@ class Cjadwalharian extends CI_Controller {
     public function hapuskegiatan() {
         try {
             $this->TematikBulan->hapusKegiatan($_POST['id_rincianjadwal_harian']);
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
             $this->session->set_flashdata('success', 'Berhasil Hapus Data');
         } catch (Exception $e) {
@@ -195,6 +206,7 @@ class Cjadwalharian extends CI_Controller {
     public function simpanstimulus() {
         try {
             $this->TematikBulan->simpanStimulus($_POST['id_kelas']);
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
             $this->session->set_flashdata('success', 'Berhasil Simpan Data');
         } catch (Exception $e) {
@@ -221,10 +233,24 @@ class Cjadwalharian extends CI_Controller {
     public function terapkantemplatejadwal(){
         try {
             $this->TematikBulan->terapkanTemplateJadwal();
+            $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
 
             $this->session->set_flashdata('success', 'Berhasil Menerapkan Data');
         } catch (Exception $e) {
             $this->session->set_flashdata('failed', 'Gagal Menerapkan Data: ' . $e->getMessage());
+        }
+
+        redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);
+    }
+
+    public function updatefeedingmenu() {
+        $err = $this->TematikBulan->updateFeedingMenu($_POST['id_kelas'], $_POST['id_rincianjadwal_mingguan']);
+        $this->session->set_userdata('active_tab_kelas', $_POST['id_kelas']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Simpan Data');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Simpan Data');
         }
 
         redirect($this->data['redirect'].'/'.$_POST['tahun_penentuan'].'/jadwalharian/'.$_POST['id_rincianjadwal_mingguan']);

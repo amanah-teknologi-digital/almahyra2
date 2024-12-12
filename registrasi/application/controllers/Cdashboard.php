@@ -26,7 +26,6 @@ class CDashboard extends CI_Controller {
         $this->load->model('Mregisterpengasuh', 'RegisterPengasuh');
         $this->load->model('Mtematikbulan', 'TematikBulan');
         $this->load->model('Mdashboard', 'Dashboard');
-        $this->load->model('Mfeedingmenu', 'FeedingMenu');
     }
 
     public function index() {
@@ -59,7 +58,7 @@ class CDashboard extends CI_Controller {
                 if (!empty($data['data_subtema'])){
                     $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($data['data_subtema']->id_rincianjadwal_mingguan);
                     $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($data['data_subtema']->id_rincianjadwal_mingguan);
-                    $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
+                    $list_feedingmenu = $this->TematikBulan->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
 
                     $temp_jadwal_harian = [];
                     $temp_jadwal_stimulus = [];
@@ -109,7 +108,7 @@ class CDashboard extends CI_Controller {
             if (!empty($data['data_subtema'])){
                 $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($data['data_subtema']->id_rincianjadwal_mingguan);
                 $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($data['data_subtema']->id_rincianjadwal_mingguan);
-                $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
+                $list_feedingmenu = $this->TematikBulan->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
 
                 $temp_jadwal_harian = [];
                 $temp_jadwal_stimulus = [];
@@ -153,7 +152,7 @@ class CDashboard extends CI_Controller {
             if (!empty($data['data_subtema'])){
                 $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($data['data_subtema']->id_rincianjadwal_mingguan);
                 $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($data['data_subtema']->id_rincianjadwal_mingguan);
-                $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
+                $list_feedingmenu = $this->TematikBulan->getFeedingMenu($data['data_subtema']->id_rincianjadwal_mingguan);
 
                 $temp_jadwal_harian = [];
                 $temp_jadwal_stimulus = [];
@@ -189,7 +188,7 @@ class CDashboard extends CI_Controller {
 
         $list_jadwalharian = $this->TematikBulan->getJadwalHarianById($_POST['id_rincianjadwal_mingguan']);
         $list_jadwalstimulus = $this->TematikBulan->getJadwalStimulus($_POST['id_rincianjadwal_mingguan']);
-        $list_feedingmenu = $this->FeedingMenu->getFeedingMenu($_POST['id_rincianjadwal_mingguan']);
+        $list_feedingmenu = $this->TematikBulan->getFeedingMenu($_POST['id_rincianjadwal_mingguan']);
 
         $temp_jadwal_harian = [];
         $temp_jadwal_stimulus = [];
