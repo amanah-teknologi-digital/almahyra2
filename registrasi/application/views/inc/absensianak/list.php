@@ -37,17 +37,15 @@
                                         <table class="display table table-striped table-bordered" id="tbl-absensi" style="width:100%">
                                             <colgroup>
                                                 <col style="width: 5%">
-                                                <col style="width: 35%">
+                                                <col style="width: 40%">
                                                 <col style="width: 15%">
-                                                <col style="width: 15%">
-                                                <col style="width: 20%">
+                                                <col style="width: 30%">
                                                 <col style="width: 10%">
                                             </colgroup>
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nama</th>
-                                                    <th>Usia</th>
                                                     <th>Asal</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -58,8 +56,9 @@
                                                 foreach ($list as $key =>$row) { ?>
                                                     <tr>
                                                         <td align="center"><?= $i; ?></td>
-                                                        <td nowrap><b><?= ucwords($row->nama_anak) ?></b>&nbsp;<span class="text-muted font-italic">(<?= $row->nama_kelas ?>)</span></td>
-                                                        <td nowrap align="center"><span class="text-muted text-small"><?= hitung_usia($row->tanggal_lahir) ?></span></td>
+                                                        <td nowrap><b><?= ucwords($row->nama_anak) ?></b>&nbsp;<span class="text-muted font-italic">(<?= $row->nama_kelas ?>)</span><br>
+                                                            <span class="text-small font-italic text-success font-weight-bold"><?= hitung_usia($row->tanggal_lahir) ?></span>
+                                                        </td>
                                                         <td align="center"><?= ucwords($row->tempat_lahir) ?></td>
                                                         <td nowrap>
                                                             <?php if (empty($row->id_absensi)) { ?>
@@ -109,7 +108,7 @@
                             </div>
                             <div class="modal-body">
                                 <?php echo form_open_multipart($controller.'/absenmasuk','id="frm_absenmasuk"'); ?>
-                                    <h5><span class="fas fa-right-to-bracket"></span>&nbsp;Absen Masuk</h5>
+                                    <h5 class="text-success"><span class="fas fa-right-to-bracket"></span>&nbsp;Absen Masuk</h5>
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-md-6">
@@ -137,7 +136,7 @@
                                 <?php echo form_open_multipart($controller.'/absenpulang', 'id="frm_absenpulang"'); ?>
                                     <div id="form_absen_pulang" style="display: none;">
                                         <hr>
-                                        <h5><span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang</h5>
+                                        <h5 class="text-danger"><span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang</h5>
                                         <fieldset>
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -231,6 +230,9 @@
             });
 
             $('.edit').click(function(){
+                clearFormStatus('#frm_absenmasuk');
+                clearFormStatus('#frm_absenpulang');
+
                 var id_anak = $(this).data('id') ;
                 var nama_anak = $(this).data('nama') ;
                 var nama_kelas = $(this).data('kelas') ;
@@ -301,6 +303,16 @@
             $('#suhu_masuk').prop('disabled', false);
             $('#kondisi_pulang').prop('disabled', true);
             $('#suhu_pulang').prop('disabled', true);
+        }
+
+        function clearFormStatus(formId) {
+            // Reset the form values
+            $(formId)[0].reset();
+
+            // Clear validation messages and error/success classes
+            $(formId).find('.valid').removeClass('valid'); // Remove valid class
+            $(formId).find('label.error').remove(); // Remove error messages
+            $(formId).find('.error').removeClass('error'); // Remove error class
         }
     </script>
 </html>
