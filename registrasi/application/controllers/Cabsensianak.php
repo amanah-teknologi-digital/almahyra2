@@ -18,7 +18,7 @@ class Cabsensianak extends CI_Controller {
             // }
         }
 
-        $this->role = $this->session->userdata['auth']->id_role;
+        $this->role = $this->session->userdata('auth')->id_role;
 
         $this->data = array(
             'controller'=>'cabsensianak',
