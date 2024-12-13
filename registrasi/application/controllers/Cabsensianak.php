@@ -18,14 +18,13 @@ class Cabsensianak extends CI_Controller {
             // }
         }
 
-        $this->role = $this->session->userdata('auth')->id_role;
+        $this->role = $this->session->userdata['auth']->id_role;
 
         $this->data = array(
             'controller'=>'cabsensianak',
             'redirect'=>'absensi-anak',
             'title'=>'Absensi Anak',
-            'parent'=>'absensi',
-            'role' => $this->session->userdata('auth')->id_role,
+            'parent'=>'absensi'
         );
         ## load model here 
         $this->load->model('Mabsensianak', 'Absensianak');
