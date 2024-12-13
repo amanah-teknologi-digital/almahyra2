@@ -263,12 +263,12 @@
                             $('#kodisi_masuk').prop('disabled', true);
                             $('#suhu_masuk').prop('disabled', true);
                             $('#form_absen_pulang').show();
-                            $('#info_absen_masuk').html('<div class="alert alert-info" role="alert">Anak sudah absen <b>masuk</b> pada <b>'+data.waktu_checkin+'</b>'+' oleh '+ '<i>' +data.nama_user + ' ('+data.nama_role+')'+ '</i>' +'</div>');
+                            $('#info_absen_masuk').html('<div class="text-small font-italic"><span class="fas fa-circle-info"></span>&nbsp;Anak sudah absen <b>masuk</b> pada <b>'+data.waktu_checkin+'</b>'+' oleh '+ '<i>' +data.nama_user + ' ('+data.nama_role+')'+ '</i>' +'</div>');
 
                             if (data.waktu_checkout != null) {
                                 $('#kondisi_pulang').val(data.kondisi_checkout);
                                 $('#suhu_pulang').val(data.suhu_checkout);
-                                $('#info_absen_pulang').html('<div class="alert alert-info" role="alert">Anak sudah absen <b>pulang</b> pada <b>'+data.waktu_checkout+'</b>'+' oleh '+ '<i>' +data.nama_user2 + ' ('+data.nama_role2+')'+ '</i>' +'</div>');
+                                $('#info_absen_pulang').html('<div class="text-small font-italic"><span class="fas fa-circle-info"></span>&nbsp;Anak sudah absen <b>pulang</b> pada <b>'+data.waktu_checkout+'</b>'+' oleh '+ '<i>' +data.nama_user2 + ' ('+data.nama_role2+')'+ '</i>' +'</div>');
                                 $('#suhu_pulang').prop('disabled', true);
                                 $('#btn_absenpulang').hide();
                             } else {
