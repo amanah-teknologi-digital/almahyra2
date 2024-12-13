@@ -10,8 +10,23 @@
             $this->login = $this->session->userdata['auth'];
         }
 
-        function getListAnak(){
+        function getListAnak($id_role){
+            $user = $this->session->userdata['auth'];
+
             $tanggal_sekarang = date('Y-m-d');
+
+            if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
+                $where_anak = "";
+            }elseif ($id_role == 3){ // educator
+                $where_anak = " AND a.id IN (SELECT c.id FROM m_kelas a
+                    JOIN v_kategori_usia b ON b.id_usia = a.id_usia
+                    JOIN registrasi_data_anak c ON c.id = b.id
+                    WHERE a.id_pengasuh = $user->id)";
+            }elseif($id_role == 4){ // orangtua
+                $where_anak = " AND a.id_orangtua = $user->id";
+            }else{
+                $where_anak = " AND 1 = 0";
+            }
 
             $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
                 e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
@@ -24,7 +39,7 @@
                 LEFT JOIN m_role g ON g.id = f.id_role
                 LEFT JOIN data_user h ON h.id = e.updater2
                 LEFT JOIN m_role i ON i.id = h.id_role
-                WHERE a.is_active = 1 ORDER BY e.waktu_checkout DESC, e.id_absensi DESC, b.usia_hari ASC";
+                WHERE a.is_active = 1 $where_anak ORDER BY e.waktu_checkout ASC, e.id_absensi ASC, b.usia_hari ASC";
 
             $query = $this->db->query($sql);
 

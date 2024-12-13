@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cabsensianak extends CI_Controller {
 
     var $data = array();
+    private $role;
     function __construct() {
         parent::__construct();
         
@@ -15,7 +16,9 @@ class Cabsensianak extends CI_Controller {
             // if($this->session->userdata['auth']->activation == 0 || $this->session->userdata['auth']->activation == '0') {
             //     redirect('profile');
             // }
-        } 
+        }
+
+        $this->role = $this->session->userdata['auth']->id_role;
 
         $this->data = array(
             'controller'=>'cabsensianak',
@@ -32,7 +35,7 @@ class Cabsensianak extends CI_Controller {
 
         $data = $this->data;
 
-        $data['list'] = $this->Absensianak->getListAnak();
+        $data['list'] = $this->Absensianak->getListAnak($this->role);
 
         $this->load->view('inc/absensianak/list', $data);
     }
@@ -80,30 +83,6 @@ class Cabsensianak extends CI_Controller {
         }else{
             $this->session->set_flashdata('success', 'Berhasil Absen Pulang');
         }
-
-        redirect($this->data['redirect']);
-    }
-
-    public function update() {
-        $err = $this->Absensianak->update($this->input->post('id'));
-
-        if ($err['code'] == '0') {
-            $this->session->set_flashdata('success', 'Berhasil Merubah Data');
-        } else {
-            $this->session->set_flashdata('failed', 'Gagal Merubah Data');
-        }   
-
-        redirect($this->data['redirect']);
-    }
-
-    public function delete($id) {
-        $err = $this->Absensianak->delete($id);
-
-        if ($err['code'] == '0') {
-            $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
-        } else {
-            $this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
-        }   
 
         redirect($this->data['redirect']);
     }

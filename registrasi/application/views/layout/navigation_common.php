@@ -220,13 +220,13 @@
 
         <div class="submenu-area" data-parent="absensi">
             <header>
-                <h6>Item</h6>
+                <h6>Absensi</h6>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
                     <a href="<?= base_url().'absensi-anak'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Kehadiran</span>
+                        <span class="item-name">Absensi Anak</span>
                     </a>
                 </li>
                 <li class="nav-item">

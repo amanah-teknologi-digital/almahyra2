@@ -121,6 +121,12 @@
 <!--                    </a>-->
 <!--                </li>-->
                 <li class="nav-item">
+                    <a href="<?= base_url().'absensi-anak'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Absensi Anak</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= base_url().'aktivitas-harian'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Aktivitas Harian</span>
