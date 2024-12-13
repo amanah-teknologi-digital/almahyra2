@@ -24,7 +24,8 @@ class Cabsensianak extends CI_Controller {
             'controller'=>'cabsensianak',
             'redirect'=>'absensi-anak',
             'title'=>'Absensi Anak',
-            'parent'=>'absensi'
+            'parent'=>'absensi',
+            'role' => $this->session->userdata['auth']->id_role,
         );
         ## load model here 
         $this->load->model('Mabsensianak', 'Absensianak');
