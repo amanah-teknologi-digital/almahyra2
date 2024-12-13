@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cabsensianak extends CI_Controller {
 
     var $data = array();
-    var $role;
+    private $role;
     function __construct() {
         parent::__construct();
         
