@@ -31,37 +31,62 @@
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
                                 <div class="card-body">
+                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Absensi Anak Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
+                                    <br>
                                     <div class="table-responsive">
-                                        <table class="display table table-striped table-bordered" id="zero_configuration_table" style="width:100%">
+                                        <table class="display table table-striped table-bordered" id="tbl-absensi" style="width:100%">
+                                            <colgroup>
+                                                <col style="width: 5%">
+                                                <col style="width: 35%">
+                                                <col style="width: 15%">
+                                                <col style="width: 15%">
+                                                <col style="width: 20%">
+                                                <col style="width: 10%">
+                                            </colgroup>
                                             <thead>
                                                 <tr>
-                                                    <!-- <th>#</th> -->
+                                                    <th>No</th>
                                                     <th>Nama</th>
-                                                    <th>Panggilan</th>
-                                                    <th>Tempat Tanggal Lahir</th>
-                                                    <th>Jenis Kelamin</th>
-                                                    <th>Action</th>
+                                                    <th>Usia</th>
+                                                    <th>Asal</th>
+                                                    <th>Status</th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                              <tbody>
-                                                <?php 
-                                                $i = 1 ;
+                                                <?php $i = 1;
                                                 foreach ($list as $key =>$row) { ?>
                                                     <tr>
-                                                        <!-- <td><?= $i++ ?></td> -->
-                                                        <td><?= ucwords($row->nama) ?></td>
-                                                        <td><?= ucwords($row->nick) ?></td>
-                                                        <td><?= ucwords($row->tempat_lahir) ?>, <?= date("d M Y", strtotime($row->tanggal_lahir)) ?> </td>
-                                                        <td><?= strtoupper($row->jenis_kelamin) ?></td>
+                                                        <td align="center"><?= $i; ?></td>
+                                                        <td nowrap><b><?= ucwords($row->nama_anak) ?></b>&nbsp;<span class="text-muted font-italic">(<?= $row->nama_kelas ?>)</span></td>
+                                                        <td nowrap align="center"><span class="text-muted text-small"><?= hitung_usia($row->tanggal_lahir) ?></span></td>
+                                                        <td align="center"><?= ucwords($row->tempat_lahir) ?></td>
+                                                        <td nowrap>
+                                                            <?php if (empty($row->id_absensi)) { ?>
+                                                                <div align="center">
+                                                                    <span class="badge badge-danger">Belum Absen</span>
+                                                                </div>
+                                                            <?php } else { ?>
+                                                                <div class="font-italic" style="font-size: 12px;">
+                                                                    Absen masuk pada <b><?= $row->waktu_checkin ?></b>
+                                                                    <?php if (!empty($row->waktu_checkout)){ ?>
+                                                                        , Absen pulang pada <b><?= $row->waktu_checkout ?></b>
+                                                                        <br>
+                                                                        <center><span class="text-info font-italic font-weight-bold">Durasi : <?= hitung_durasi_waktu($row->waktu_checkin, $row->waktu_checkout); ?></span></center>
+                                                                    <?php }else{ ?>
+                                                                        <br>
+                                                                        <center><span align="center" class="badge badge-warning">Belum Absen Pulang</span></center>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            <?php } ?>
+                                                        </td>
                                                         <td align="center">
-                                                            <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->id; ?>">
-                                                                <span class="ul-btn__icon">
-                                                                    <i class="i-Pen-3"></i>
-                                                                </span>
-                                                            </button>                                   
+                                                            <button class="btn btn-outline-success btn-sm btn-icon edit" type="button" data-id="<?= $row->id; ?>" data-nama="<?= $row->nama_anak ?>" data-kelas="<?= $row->nama_kelas ?>" >
+                                                                <span class="fas fa-eye-dropper"></span>&nbsp;Absen
+                                                            </button>
                                                         </td>
                                                     </tr>
-                                                <?php } ?>
+                                                <?php $i++; } ?>
                                             </tbody>
                                             
                                         </table>
@@ -77,38 +102,20 @@
                 <!--  Modal -->
                 <div class="modal fade" id="updating-modal" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
-                        <?php echo form_open_multipart($controller.'/insert'); ?>
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Update Data</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                </div>
-                                <div class="modal-body">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success" id="label_namaanak"></b>&nbsp;<span id="label_namakelas" class="text-muted font-italic"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <?php echo form_open_multipart($controller.'/absenmasuk','id="frm_absenmasuk"'); ?>
+                                    <h5><span class="fas fa-right-to-bracket"></span>&nbsp;Absen Masuk</h5>
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Jenis Absensi</label>
-                                                    <select class="form-control" name="jenis" required>
-                                                        <option value="1">Check In</option>
-                                                        <option value="2">Check Out</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Suhu</label>
-                                                    <input class="form-control" type="text" name="suhu" placeholder="36.5 (Gunakan titik untuk koma)">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label> Kondisi </label>
-                                                    <select class="form-control" name="kondisi" required>
+                                                    <label>Kondisi</label>
+                                                    <select class="form-control" name="kondisi" id="kodisi_masuk" required>
                                                         <option value="1">Sehat</option>
                                                         <option value="2">Kurang Sehat</option>
                                                     </select>
@@ -117,49 +124,50 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label> Status </label>
-                                                    <select class="form-control" name="status" required>
-                                                        <option value="1">Suspect</option>
-                                                        <option value="2">Probable</option>
-                                                        <option value="3">Kontak Erat</option>
-                                                        <option value="4">Terkonfimasi Covid-19</option>
-                                                        <option value="5">Tidak Berstatus</option>
-                                                    </select>
+                                                    <label>Suhu</label>
+                                                    <input class="form-control" type="text" name="suhu" id="suhu_masuk" autocomplete="off" placeholder="36.5 (Gunakan titik untuk koma)">
                                                 </div>
                                             </div>
                                         </div>
-                                    </fieldset>  
+                                    </fieldset>
+                                    <div id="info_absen_masuk"></div>
+                                    <button class="btn btn-sm btn-success" id="btn_absenmasuk" type="submit"><span class="fas fa-save"></span>&nbsp;Absen Masuk</button>
+                                <input type="hidden" name="id_anak" id="id_anakmasuk">
+                                </form>
+                                <?php echo form_open_multipart($controller.'/absenpulang', 'id="frm_absenpulang"'); ?>
+                                    <div id="form_absen_pulang" style="display: none;">
+                                        <hr>
+                                        <h5><span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang</h5>
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Kondisi Pulang</label>
+                                                        <select class="form-control" name="kondisi" id="kondisi_pulang" required>
+                                                            <option value="1">Sehat</option>
+                                                            <option value="2">Kurang Sehat</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 
-                                    <div class="modal-footer">
-                                        <input type="hidden" name="id_anak" id="id_anak">
-                                        <input type="hidden" name="long" id="long">
-                                        <input type="hidden" name="lati" id="lati">                                    
-                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-                                        <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Suhu Pulang</label>
+                                                        <input class="form-control" type="text" name="suhu" id="suhu_pulang" autocomplete="off" placeholder="36.5 (Gunakan titik untuk koma)">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div id="info_absen_pulang"></div>
+                                        <button class="btn btn-sm btn-danger" id="btn_absenpulang" type="submit"><span class="fas fa-save"></span>&nbsp;Absen Pulang</button>
                                     </div>
-
-                                    <hr>
-                                    <div class="table-responsive">
-                                        <h5 id="tanggal_absen"></h5>
-                                        <table class="display table table-striped table-bordered" id="tblx" style="width:100%">
-                                            <thead>
-                                                <tr>
-                                                    <!-- <th>#</th> -->
-                                                    <th>Waktu</th>
-                                                    <th>Suhu</th>
-                                                    <th>Kondisi</th>
-                                                    <th>Status</th>
-                                                    <th>Jenis</th>
-                                                    <th>Lokasi</th>
-                                                </tr>
-                                            </thead>
-                                             <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>                                  
+                                <input type="hidden" name="id_anak" id="id_anakpulang">
+                                </form>
+                                <div class="modal-footer mt-5">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 <!--  Modal -->
@@ -172,141 +180,127 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
-        
         var role = "<?= $this->session->userdata['auth']->id_role ?>";
 
-        $('.edit').click(function(){
-            var id_anak = $(this).data('id') ;
-            $("#tblx > tbody").empty();
+        $(document).ready(function() {
+            $('#tbl-absensi').dataTable({
+                "ordering": false,
+                "searching": true,
+                "paging": false
+            });
 
-            $.ajax({
-                url: url + '/edit/' + $(this).data('id'),
-                type:'GET',
-                dataType: 'json',
-                success: function(data){
-                    
-                    $("#id_anak").val(id_anak);  
+            $.validator.addMethod("decimal", function(value, element) {
+                // Regular expression for decimal values (including optional negative sign)
+                return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
+            }, "Please enter a valid decimal number.");
 
-                    if (data['list_hasil'].length > 0) {
-                        $("#id").val(data['list_edit']['id']);
-                        // $("#tanggal_absen").text(data['list_hasil'][0]['tanggal']);
-
-                        var status = 'Suspect';
-
-                        $.each(data['list_hasil'], function( index, row ) {
-                            console.log(row);
-                            switch (row.status) {
-                              case '1':
-                                status = "Suspect";
-                                break;
-                              case '2':
-                                status = "Probable";
-                                break;
-                              case '3':
-                                 status = "Kontak Erat";
-                                break;
-                              case '4':
-                                status = "Terkonfimasih Covid19";
-                                break;
-                              case '5':
-                                status = "Tidak Berstatus";
-                                break;
-                            }
-
-                            $("#tblx > tbody").append(
-                                "<tr>"+
-                                    "<td align='center' width='15%'>"+row.tanggal+" "+row.waktu+"</td>"+
-                                    "<td align='center' width='15%'>"+row.suhu+"</td>"+
-                                    "<td align='center' width='15%'>"+(row.kondisi == 1 ? 'Sehat' : 'Tidak Sehat')+"</td>"+
-                                    "<td align='center' width='15%'>"+status+"</td>"+
-                                    "<td align='center' width='15%'>"+ (row.jenis == 1 ? 'Check In' : 'Check Out')+"</td>"+
-                                    "<td align='center'> <div class='map' id='map_"+index+"'></div> </td>"+
-                                "</tr>"
-                            );
-
-                            if (row.long !== null && row.lati !== null) {
-                                initMap(parseInt(row.long), parseInt(row.lati), index);
-                            }
-                        });
-                        
-                    } 
-
-                    $("#updating-modal").modal('show');
-                }                
-            }); 
-        })
-
-        function deleteList(id) {
-            swal({
-                title: 'Apakah yakin data ini ingin di hapus? ',
-                showCancelButton: true,
-                confirmButtonColor: '#4caf50',
-                cancelButtonColor: '#f44336',
-                confirmButtonText: 'Ya, Lanjutkan hapus!',
-                cancelButtonText: 'Batal',
-            }).then(function () {
-                window.location = url + '/delete/' + id ;
-            })
-        }
-        
-        // Initialize and add the map
-        function initMap(long, lat , id) {
-          // The location of Uluru
-          // const uluru = { lat: -25.344, lng: 131.031 };
-
-          const uluru = { lat: lat, lng: long };
-
-          console.log(uluru, lat, long , typeof lat, typeof long);
-          // The map, centered at Uluru
-          const map = new google.maps.Map(document.getElementById("map_"+id), {
-            zoom: 4,
-            center: uluru,
-          });
-          // The marker, positioned at Uluru
-          const marker = new google.maps.Marker({
-            position: uluru,
-            map: map,
-          });
-        }
-
-        // $(function() {
-        //     getCurrentLocation();
-        // });
-    </script>
-
-    <script>
-        /* Get current location*/
-        function getCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success,showError);
-            } else {
-                alert("Geolocation is not supported on your browser!");
-            }
-
-            function success(position) {
-                console.log("Latitude: " + position.coords.latitude +" Longitude: " + position.coords.longitude);
-                $("#lati").val(position.coords.latitude);
-                $("#long").val(position.coords.longitude);
-            }
-
-            function showError(error) {
-                switch(error.code) {
-                  case error.PERMISSION_DENIED:
-                    alert("Lokasi tidak terdeteksi, Mohon mengijinkan aplikasi mengakses lokasi anda. https://support.google.com/chrome/answer/142065?hl=id&co=GENIE.Platform%3DDesktop");
-                    break;
-                  case error.POSITION_UNAVAILABLE:
-                    alert("Lokasi tidak terdeteksi, Mohon mengijinkan aplikasi mengakses lokasi anda. https://support.google.com/chrome/answer/142065?hl=id&co=GENIE.Platform%3DDesktop");
-                    break;
-                  case error.TIMEOUT:
-                    alert("Lokasi tidak terdeteksi, Mohon mengijinkan aplikasi mengakses lokasi anda. https://support.google.com/chrome/answer/142065?hl=id&co=GENIE.Platform%3DDesktop");
-                    break;
-                  case error.UNKNOWN_ERROR:
-                    alert("Lokasi tidak terdeteksi, Mohon mengijinkan aplikasi mengakses lokasi anda. https://support.google.com/chrome/answer/142065?hl=id&co=GENIE.Platform%3DDesktop");
-                    break;
+            $("#frm_absenmasuk").validate({
+                rules: {
+                    suhu: {
+                        required: true,
+                        decimal: true
+                    }
+                },
+                messages: {
+                    suhu: {
+                        required: "Suhu anak harus diisi!",
+                        decimal: "Suhu harus berupa desimal!"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit(); // Mengirimkan form jika validasi lolos
                 }
+            });
 
-                window.location.replace("dashboard");
-            }
+            $("#frm_absenpulang").validate({
+                rules: {
+                    suhu: {
+                        required: true,
+                        decimal: true
+                    }
+                },
+                messages: {
+                    suhu: {
+                        required: "Suhu anak harus diisi!",
+                        decimal: "Suhu harus berupa desimal!"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
+            });
+
+            $('.edit').click(function(){
+                var id_anak = $(this).data('id') ;
+                var nama_anak = $(this).data('nama') ;
+                var nama_kelas = $(this).data('kelas') ;
+
+                $.ajax({
+                    url: url + '/edit/' + $(this).data('id'),
+                    type:'GET',
+                    dataType: 'json',
+                    success: function(data){
+                        resetForm();
+                        $("#id_anak").val(id_anak);
+                        $("#label_namaanak").html(nama_anak);
+                        $("#label_namakelas").html('('+nama_kelas+')');
+
+                        $("#id_anakmasuk").val(id_anak);
+                        $("#id_anakpulang").val(id_anak);
+
+                        if (data.id_absensi == null) {
+                            $('#form_absen_pulang').hide();
+                            $('#kodisi_masuk').prop('disabled', false);
+                            $('#suhu_masuk').prop('disabled', false);
+                            $('#kondisi_pulang').prop('disabled', true);
+                            $('#suhu_pulang').prop('disabled', true);
+                            $('#btn_absenmasuk').show();
+                            $('#btn_absenpulang').hide();
+                        } else {
+                            $('#kodisi_masuk').val(data.kondisi);
+                            $('#suhu_masuk').val(data.suhu);
+                            $('#btn_absenmasuk').hide();
+                            $('#kodisi_masuk').prop('disabled', true);
+                            $('#suhu_masuk').prop('disabled', true);
+                            $('#form_absen_pulang').show();
+                            $('#info_absen_masuk').html('<div class="alert alert-info" role="alert">Anak sudah absen <b>masuk</b> pada <b>'+data.waktu_checkin+'</b>'+' oleh '+ '<i>' +data.nama_user + ' ('+data.nama_role+')'+ '</i>' +'</div>');
+
+                            if (data.waktu_checkout != null) {
+                                $('#kondisi_pulang').val(data.kondisi_checkout);
+                                $('#suhu_pulang').val(data.suhu_checkout);
+                                $('#info_absen_pulang').html('<div class="alert alert-info" role="alert">Anak sudah absen <b>pulang</b> pada <b>'+data.waktu_checkout+'</b>'+' oleh '+ '<i>' +data.nama_user2 + ' ('+data.nama_role2+')'+ '</i>' +'</div>');
+                                $('#suhu_pulang').prop('disabled', true);
+                                $('#btn_absenpulang').hide();
+                            } else {
+                                $('#kondisi_pulang').prop('disabled', false);
+                                $('#suhu_pulang').prop('disabled', false);
+                                $('#btn_absenpulang').show();
+                            }
+                        }
+
+                        $("#updating-modal").modal('show');
+                    }
+                });
+            })
+        });
+
+        function resetForm(){
+            $('#kodisi_masuk').val(1);
+            $('#kondisi_pulang').val(1);
+            $('#suhu_masuk').val('');
+            $('#suhu_pulang').val('');
+            $('#id_anakmasuk').val('');
+            $('#id_anakpulang').val('');
+            $('#form_absen_pulang').hide();
+            $('#info_absen_masuk').html('');
+            $('#info_absen_pulang').html('');
+            $('#btn_absenmasuk').hide();
+            $('#btn_absenpulang').hide();
+
+            $('#kodisi_masuk').prop('disabled', false);
+            $('#suhu_masuk').prop('disabled', false);
+            $('#kondisi_pulang').prop('disabled', true);
+            $('#suhu_pulang').prop('disabled', true);
         }
     </script>
 </html>

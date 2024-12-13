@@ -99,3 +99,29 @@ if (!function_exists('hitung_usia_histori')) {
         return $usia ?: 'Usia Tidak Diketahui'; // Jika tidak ada usia, tampilkan default 'Usia Tidak Diketahui'
     }
 }
+
+if (!function_exists('hitung_durasi_waktu')) {
+    function hitung_durasi_waktu($start_time_str, $end_time_str){
+        // Create DateTime objects from the time strings
+        $start_time = new DateTime($start_time_str);
+        $end_time = new DateTime($end_time_str);
+
+        // Calculate the difference between the two times
+        $interval = $start_time->diff($end_time);
+
+        // Get the hours, minutes, and seconds from the interval
+        $hours = $interval->h;
+        $minutes = $interval->i;
+        $seconds = $interval->s;
+
+        // Check if the difference is negative (end time before start time)
+        if ($end_time < $start_time) {
+            // Add a day to account for the time difference crossing midnight
+            $interval->d = 1;
+            $hours += 24;
+        }
+
+        // Display the result
+        return $hours . " Jam, " . $minutes . " Menit, " . $seconds . " Detik";
+    }
+}

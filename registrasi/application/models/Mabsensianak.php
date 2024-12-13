@@ -10,6 +10,99 @@
             $this->login = $this->session->userdata['auth'];
         }
 
+        function getListAnak(){
+            $tanggal_sekarang = date('Y-m-d');
+
+            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
+                e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
+                FROM registrasi_data_anak a 
+                JOIN v_kategori_usia b ON b.id = a.id 
+                JOIN map_kelasusia c ON c.id_usia = b.id_usia
+                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
+                LEFT JOIN absen_anak e ON e.id_anak = a.id AND e.tanggal = '$tanggal_sekarang'
+                LEFT JOIN data_user f ON f.id = e.updater
+                LEFT JOIN m_role g ON g.id = f.id_role
+                LEFT JOIN data_user h ON h.id = e.updater2
+                LEFT JOIN m_role i ON i.id = h.id_role
+                WHERE a.is_active = 1 ORDER BY e.waktu_checkout DESC, e.id_absensi DESC, b.usia_hari ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDataAbsenByIdAnak($id_anak){
+            $tanggal_sekarang = date('Y-m-d');
+
+            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
+                e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, e.kondisi, e.kondisi_checkout, e.suhu, e.suhu_checkout,
+                f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
+                FROM registrasi_data_anak a 
+                JOIN v_kategori_usia b ON b.id = a.id 
+                JOIN map_kelasusia c ON c.id_usia = b.id_usia
+                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
+                LEFT JOIN absen_anak e ON e.id_anak = a.id AND e.tanggal = '$tanggal_sekarang'
+                LEFT JOIN data_user f ON f.id = e.updater
+                LEFT JOIN m_role g ON g.id = f.id_role
+                LEFT JOIN data_user h ON h.id = e.updater2
+                LEFT JOIN m_role i ON i.id = h.id_role
+                WHERE a.is_active = 1 AND a.id = $id_anak ORDER BY e.waktu_checkout DESC, e.id_absensi DESC, b.usia_hari ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function absenMasuk(){
+            $user = $this->session->userdata['auth'];
+            $tanggal_sekarang = date('Y-m-d');
+
+
+            $this->db->trans_start();
+
+            $a_input['id_anak'] = $_POST['id_anak'];
+            $a_input['tanggal'] = $tanggal_sekarang;
+            $a_input['waktu_checkin'] = date('H:i:s');
+            $a_input['kondisi'] = $_POST['kondisi'];
+            $a_input['suhu'] = $_POST['suhu'];
+            $a_input['created_at'] = date('Y-m-d H:m:s');
+            $a_input['updater'] = $user->id;
+
+            $this->db->insert('absen_anak', $a_input);
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
+        function absenPulang(){
+            $user = $this->session->userdata['auth'];
+            $tanggal_sekarang = date('Y-m-d');
+
+            $sql = "SELECT * FROM absen_anak WHERE id_anak = ".$_POST['id_anak']." AND tanggal = '$tanggal_sekarang'";
+            $query = $this->db->query($sql);
+            $data = $query->row();
+
+            if (!empty($data)){
+                $id_absensi = $data->id_absensi;
+                $this->db->trans_start();
+
+                $a_input['waktu_checkout'] = date('H:i:s');
+                $a_input['kondisi_checkout'] = $_POST['kondisi'];
+                $a_input['suhu_checkout'] = $_POST['suhu'];
+                $a_input['updater2'] = $user->id;
+
+                $this->db->where('id_absensi', $id_absensi);
+                $this->db->update('absen_anak', $a_input);
+
+                $this->db->trans_complete();
+
+                return $this->db->trans_status();
+            }else{
+                return false;
+            }
+        }
+
         ## get all data in table
         function getAll() {
             $this->db->where('is_active','1');

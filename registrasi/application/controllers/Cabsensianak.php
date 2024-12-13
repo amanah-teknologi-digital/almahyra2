@@ -26,14 +26,13 @@ class Cabsensianak extends CI_Controller {
         );
         ## load model here 
         $this->load->model('Mabsensianak', 'Absensianak');
-        $this->load->model('Mregisteranak', 'RegisterAnak');
     }
 
     public function index() {
 
         $data = $this->data;
 
-        $data['list'] = $this->RegisterAnak->getAll();
+        $data['list'] = $this->Absensianak->getListAnak();
 
         $this->load->view('inc/absensianak/list', $data);
     }
@@ -52,17 +51,37 @@ class Cabsensianak extends CI_Controller {
     }
 
     public function edit($id) {
-        $data = $this->data;
-
-        $data['list_edit'] = $this->Absensianak->getByID($id) ;
-
-        $data['list_hasil'] = $this->Absensianak->getByIDanak($id) ;
+        $data = $this->Absensianak->getDataAbsenByIdAnak($id);
 
         $this->output->set_content_type('application/json');
         
         $this->output->set_output(json_encode($data));
 
         return $data;
+    }
+
+    public function absenmasuk(){
+        $err = $this->Absensianak->absenMasuk();
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Absen Masuk');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Absen Masuk');
+        }
+
+        redirect($this->data['redirect']);
+    }
+
+    public function absenpulang(){
+        $err = $this->Absensianak->absenPulang();
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Absen Pulang');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Absen Pulang');
+        }
+
+        redirect($this->data['redirect']);
     }
 
     public function update() {
