@@ -71,6 +71,7 @@
                                                     <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
                                                 </h5>
                                                 <input type="hidden" name="id_anak" value="<?= $id_anak ?>">
+                                                <input type="hidden" name="tahun" value="<?= $tahun_selected ?>">
                                             </form>
                                             <br>
                                             <div class="table-responsive">

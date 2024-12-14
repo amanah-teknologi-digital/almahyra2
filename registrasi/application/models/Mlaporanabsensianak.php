@@ -75,9 +75,9 @@
                 JOIN absen_anak e ON e.id_anak = a.id AND YEAR(e.tanggal) = $tahun
                 JOIN data_user f ON f.id = e.updater
                 JOIN m_role g ON g.id = f.id_role
-                JOIN data_user h ON h.id = e.updater2
-                JOIN m_role i ON i.id = h.id_role
-                WHERE a.id = $id_anak ORDER BY e.tanggal ASC";
+                LEFT JOIN data_user h ON h.id = e.updater2
+                LEFT JOIN m_role i ON i.id = h.id_role
+                WHERE a.id = $id_anak ORDER BY e.tanggal DESC";
 
             $query = $this->db->query($sql);
 
