@@ -139,12 +139,12 @@
                 <h6>Laporan</h6>
             </header>
             <ul class="childNav">
-<!--                <li class="nav-item">-->
-<!--                    <a href="--><?php //= base_url().'laporan-kegiatan'; ?><!--">-->
-<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
-<!--                        <span class="item-name">Kegiatan</span>-->
-<!--                    </a>-->
-<!--                </li>-->
+                <li class="nav-item">
+                    <a href="<?= base_url().'laporan-absensianak'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Absensi Anak</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="<?= base_url().'aktivitasharian-anak'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
