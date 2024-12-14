@@ -105,6 +105,7 @@ $route['aktivitas-harian'] = 'caktivitasharian';
 $route['aktivitas-harian/lihat-data/(:any)'] = 'caktivitasharian/lihataktivitas/$1';
 $route['dokumentasi-harian'] = 'cdokumentasiharian';
 $route['aktivitasharian-anak'] = 'caktivitashariananak';
+$route['laporan-absensianak'] = 'claporanabsensianak';
 
 // laporan 
 $route['laporan-tumbuh-kembang'] = 'claporan/tumbuhkembangf';
