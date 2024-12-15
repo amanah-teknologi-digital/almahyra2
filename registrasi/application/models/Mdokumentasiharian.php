@@ -93,10 +93,22 @@
             return $query->result();
         }
 
-        function getKelasByIdRincian($id_rincianjadwal_mingguan){
+        function getKelasByIdRincian($role, $id_rincianjadwal_mingguan){
+            $user = $this->session->userdata['auth'];
+
+            if ($role == 3){
+                $where = " AND a.id_kelas IN(
+                SELECT c.id_kelas FROM registrasi_data_anak a
+                JOIN v_kategori_usia b ON b.id = a.id
+                JOIN map_kelasusia c ON c.id_usia = b.id_usia
+                WHERE a.educator = $user->id)";
+            }else{
+                $where = '';
+            }
+
             $sql = "SELECT a.id_jadwalharian, b.nama as nama_kelas FROM jadwal_harian a 
             JOIN ref_kelas b ON b.id_kelas = a.id_kelas
-            WHERE a.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan";
+            WHERE a.id_rincianjadwal_mingguan = $id_rincianjadwal_mingguan $where";
 
             $query = $this->db->query($sql);
 

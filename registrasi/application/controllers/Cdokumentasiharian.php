@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cdokumentasiharian extends CI_Controller {
 
 	var $data = array();
+
+    private $role;
 	function __construct() {
 		parent::__construct();
 		
@@ -15,7 +17,9 @@ class Cdokumentasiharian extends CI_Controller {
             // if($this->session->userdata['auth']->activation == 0 || $this->session->userdata['auth']->activation == '0') {
             //     redirect('profile');
             // }
-        } 
+        }
+
+        $this->role = $this->session->userdata['auth']->id_role;
 
 		$this->data = array(
             'controller'=>'cdokumentasiharian',
@@ -85,7 +89,7 @@ class Cdokumentasiharian extends CI_Controller {
         }
 
         $data['id_rincianjadwal_mingguan'] = $id_rincianjadwal_mingguan;
-        $data['kelas'] = $this->DokumentasiHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
+        $data['kelas'] = $this->DokumentasiHarian->getKelasByIdRincian($this->role, $id_rincianjadwal_mingguan);
         if (!empty($data['kelas'])) {
             if (empty($id_jadwalharian)) {
                 $id_jadwalharian = $data['kelas'][0]->id_jadwalharian;
