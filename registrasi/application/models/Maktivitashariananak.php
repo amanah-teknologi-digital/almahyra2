@@ -502,10 +502,7 @@
             if ($role == 1 OR $role == 2){ // admin
                 $where_anak = "";
             }elseif ($role == 3){ // educator
-                $where_anak = " AND a.id IN (SELECT c.id FROM m_kelas a
-                    JOIN v_kategori_usia b ON b.id_usia = a.id_usia
-                    JOIN registrasi_data_anak c ON c.id = b.id
-                    WHERE a.id_pengasuh = $user->id)";
+                $where_anak = " AND a.educator = $user->id";
             }elseif ($role == 4){ // orang tua
                 $where_anak = " AND a.id_orangtua = $user->id";
             }

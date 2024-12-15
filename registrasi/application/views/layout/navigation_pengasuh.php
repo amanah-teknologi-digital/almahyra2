@@ -9,17 +9,17 @@
                 </a>
                 <div class="triangle"></div>
             </li>
-            <li class="nav-item <?= $parent=='register'?'active':'' ?>" data-item="registrasi">
-                <a class="nav-item-hold" href="#">
-                    <i class="nav-icon i-Arrow-Loop"></i>
-                    <span class="nav-text">Registrasi</span>
-                </a>
-                <div class="triangle"></div>
-            </li>
+<!--            <li class="nav-item --><?php //= $parent=='register'?'active':'' ?><!--" data-item="registrasi">-->
+<!--                <a class="nav-item-hold" href="#">-->
+<!--                    <i class="nav-icon i-Arrow-Loop"></i>-->
+<!--                    <span class="nav-text">Registrasi</span>-->
+<!--                </a>-->
+<!--                <div class="triangle"></div>-->
+<!--            </li>-->
             <li class="nav-item <?= $parent=='absensi'?'active':'' ?>" data-item="absensi">
                 <a class="nav-item-hold" href="#">
                     <i class="nav-icon i-Teacher"></i>
-                    <span class="nav-text">Absensi</span>
+                    <span class="nav-text">Aktivitas</span>
                 </a>
                 <div class="triangle"></div>
             </li>
@@ -88,30 +88,30 @@
             </ul>
         </div>
 
-        <div class="submenu-area" data-parent="registrasi">
-            <header>
-                <h6>Registrasi</h6>
-            </header>
-            <ul class="childNav">
-                <li class="nav-item">
-                    <a href="<?= base_url().'register-pengasuh'; ?>">
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Educator / Pengasuh</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= base_url().'register-berkas-pengasuh'; ?>"> 
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Upload Berkas</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+<!--        <div class="submenu-area" data-parent="registrasi">-->
+<!--            <header>-->
+<!--                <h6>Registrasi</h6>-->
+<!--            </header>-->
+<!--            <ul class="childNav">-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'register-pengasuh'; ?><!--">-->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Educator / Pengasuh</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'register-berkas-pengasuh'; ?><!--"> -->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Upload Berkas</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
         
 
         <div class="submenu-area" data-parent="absensi">
             <header>
-                <h6>Absensi</h6>
+                <h6>Aktivitas</h6>
             </header>
             <ul class="childNav">
 <!--                <li class="nav-item">-->
@@ -120,16 +120,22 @@
 <!--                        <span class="item-name">Kehadiran</span>-->
 <!--                    </a>-->
 <!--                </li>-->
-                <li class="nav-item">
-                    <a href="<?= base_url().'absensi-anak'; ?>">
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Absensi Anak</span>
-                    </a>
-                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a href="--><?php //= base_url().'absensi-anak'; ?><!--">-->
+<!--                        <i class="nav-icon i-Duplicate-Window"></i>-->
+<!--                        <span class="item-name">Absensi Anak</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-item">
                     <a href="<?= base_url().'aktivitas-harian'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Aktivitas Harian</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'dokumentasi-harian'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Dokumentasi Harian</span>
                     </a>
                 </li>
             </ul>

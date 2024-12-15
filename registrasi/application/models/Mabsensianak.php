@@ -18,10 +18,7 @@
             if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
                 $where_anak = "";
             }elseif ($id_role == 3){ // educator
-                $where_anak = " AND a.id IN (SELECT c.id FROM m_kelas a
-                    JOIN v_kategori_usia b ON b.id_usia = a.id_usia
-                    JOIN registrasi_data_anak c ON c.id = b.id
-                    WHERE a.id_pengasuh = $user->id)";
+                $where_anak = " AND a.educator = $user->id";
             }elseif($id_role == 4){ // orangtua
                 $where_anak = " AND a.id_orangtua = $user->id";
             }else{
