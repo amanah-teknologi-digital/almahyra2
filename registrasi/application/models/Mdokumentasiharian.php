@@ -58,11 +58,7 @@
         }
 
         function getListTanggalByTahun($tahun){
-            if ($this->session->userdata['auth']->id == 1) {
-                $tanggal_sekarang = '2024-12-20';
-            }else{
-                $tanggal_sekarang = date('Y-m-d');
-            }
+            $tanggal_sekarang = date('Y-m-d');
 
             $sql = "SELECT b.nama as nama_subtema, e.nama as nama_bulan, a.nama as nama_tema, c.id_rincianjadwal_mingguan, c.tanggal
                 FROM tema_bulanan a 

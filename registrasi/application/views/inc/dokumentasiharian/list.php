@@ -117,6 +117,7 @@
                     uploadUrl: url + '/uploadfile',
                     minFileCount: 1,
                     maxFileCount: 10,
+                    maxFileSize: 20000,
                     dropZoneTitle: 'File Pendukung Kosong!',
                     previewThumbnail: true,
                     required: true,
@@ -145,6 +146,13 @@
                 file_input.fileinput('clear');
             });
 
+            file_input.on("filepredelete", function(jqXHR) {
+                var abort = true;
+                if (confirm("Apakah yakin menghapus file?")) {
+                    abort = false;
+                }
+                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+            });
         });
 
         function getDataTanggal(dom){
