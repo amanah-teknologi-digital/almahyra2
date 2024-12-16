@@ -72,7 +72,15 @@ class Cdokumentasiharian extends CI_Controller {
         $data['tanggal'] = $this->DokumentasiHarian->getListTanggalByTahun($tahun);
         if (empty($id_rincianjadwal_mingguan)) {
             if (!empty($data['tanggal'])) {
-                $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+                $tanggal_sekarang = date('Y-m-d');
+                foreach ($data['tanggal'] as $key => $value) {
+                    if ($value->tanggal == $tanggal_sekarang) {
+                        $id_rincianjadwal_mingguan = $value->id_rincianjadwal_mingguan;
+                    }
+                }
+                if (empty($id_rincianjadwal_mingguan)) {
+                    $id_rincianjadwal_mingguan = $data['tanggal'][0]->id_rincianjadwal_mingguan;
+                }
             }else{
                 $id_rincianjadwal_mingguan = 0;
             }
