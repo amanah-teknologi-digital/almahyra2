@@ -10,55 +10,72 @@
             $this->login = $this->session->userdata['auth'];
         }
 
-        function getListAnak($id_role){
+        function getListEducator($id_role){
             $user = $this->session->userdata['auth'];
 
-            $tanggal_sekarang = date('Y-m-d');
-
             if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
-                $where_anak = "";
+                $where = "";
             }elseif ($id_role == 3){ // educator
-                $where_anak = " AND a.educator = $user->id";
+                $where = " AND a.id = $user->id";
             }elseif($id_role == 4){ // orangtua
-                $where_anak = " AND a.id_orangtua = $user->id";
+                $where = " AND 1 = 0";
             }else{
-                $where_anak = " AND 1 = 0";
+                $where = " AND 1 = 0";
             }
 
-            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
-                FROM registrasi_data_anak a 
-                JOIN v_kategori_usia b ON b.id = a.id 
-                JOIN map_kelasusia c ON c.id_usia = b.id_usia
-                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                LEFT JOIN absen_anak e ON e.id_anak = a.id AND e.tanggal = '$tanggal_sekarang'
-                LEFT JOIN data_user f ON f.id = e.updater
-                LEFT JOIN m_role g ON g.id = f.id_role
-                LEFT JOIN data_user h ON h.id = e.updater2
-                LEFT JOIN m_role i ON i.id = h.id_role
-                WHERE a.is_active = 1 $where_anak ORDER BY e.waktu_checkout ASC, e.id_absensi ASC, b.usia_hari ASC";
+            $sql = "SELECT *
+                FROM data_user a 
+                WHERE a.id_role = 3 AND a.is_active = 1 $where ORDER BY a.name ASC";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDataEducator($educator){
+            $sql = "SELECT a.id, a.name as nama_educator
+                FROM data_user a 
+                WHERE a.id = $educator AND a.is_active = 1";
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getAbsensiEducator($educator){
+            $tanggal_sekarang = date('Y-m-d');
+
+            $sql = "SELECT a.id_absensi, a.tanggal, a.id_jenisabsen, a.id_jenislembur, a.waktu_checkin,
+                a.waktu_checkout, a.kondisi, a.kondisi_checkout, a.keterangan, b.nama as jenis_absen, c.nama as jenis_lembur
+                FROM absen_educator a 
+                JOIN ref_jenisabsen b ON b.id_jenisabsen = a.id_jenisabsen
+                LEFT JOIN ref_jenislembur c ON c.id_jenislembur = a.id_jenislembur
+                WHERE a.tanggal = '$tanggal_sekarang' AND a.id_user = $educator 
+                ORDER BY a.waktu_checkin DESC";
 
             $query = $this->db->query($sql);
 
             return $query->result();
         }
 
-        function getDataAbsenByIdAnak($id_anak){
+        function getListJenisAbsensi(){
+            $sql = "SELECT * FROM ref_jenisabsen ORDER BY id_jenisabsen ASC";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getListJenisLembur(){
+            $sql = "SELECT * FROM ref_jenislembur ORDER BY id_jenislembur ASC";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function checkOnprogressAbsensi($educator){
             $tanggal_sekarang = date('Y-m-d');
 
-            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, e.kondisi, e.kondisi_checkout, e.suhu, e.suhu_checkout,
-                f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
-                FROM registrasi_data_anak a 
-                JOIN v_kategori_usia b ON b.id = a.id 
-                JOIN map_kelasusia c ON c.id_usia = b.id_usia
-                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                LEFT JOIN absen_anak e ON e.id_anak = a.id AND e.tanggal = '$tanggal_sekarang'
-                LEFT JOIN data_user f ON f.id = e.updater
-                LEFT JOIN m_role g ON g.id = f.id_role
-                LEFT JOIN data_user h ON h.id = e.updater2
-                LEFT JOIN m_role i ON i.id = h.id_role
-                WHERE a.is_active = 1 AND a.id = $id_anak ORDER BY e.waktu_checkout DESC, e.id_absensi DESC, b.usia_hari ASC";
+            $sql = "SELECT a.id_absensi
+                FROM absen_educator a 
+                WHERE a.tanggal = '$tanggal_sekarang' AND a.id_user = $educator AND a.waktu_checkout IS NULL";
 
             $query = $this->db->query($sql);
 
@@ -69,43 +86,24 @@
             $user = $this->session->userdata['auth'];
             $tanggal_sekarang = date('Y-m-d');
 
-
-            $this->db->trans_start();
-
-            $a_input['id_anak'] = $_POST['id_anak'];
-            $a_input['tanggal'] = $tanggal_sekarang;
-            $a_input['waktu_checkin'] = date('H:i:s');
-            $a_input['kondisi'] = $_POST['kondisi'];
-            $a_input['suhu'] = $_POST['suhu'];
-            $a_input['created_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
-
-            $this->db->insert('absen_anak', $a_input);
-
-            $this->db->trans_complete();
-
-            return $this->db->trans_status();
-        }
-
-        function absenPulang(){
-            $user = $this->session->userdata['auth'];
-            $tanggal_sekarang = date('Y-m-d');
-
-            $sql = "SELECT * FROM absen_anak WHERE id_anak = ".$_POST['id_anak']." AND tanggal = '$tanggal_sekarang'";
-            $query = $this->db->query($sql);
-            $data = $query->row();
-
-            if (!empty($data)){
-                $id_absensi = $data->id_absensi;
+            $checkOnprogresAbsensi = $this->checkOnprogressAbsensi($_POST['educator']);
+            if (empty($checkOnprogresAbsensi)) {
                 $this->db->trans_start();
 
-                $a_input['waktu_checkout'] = date('H:i:s');
-                $a_input['kondisi_checkout'] = $_POST['kondisi'];
-                $a_input['suhu_checkout'] = $_POST['suhu'];
-                $a_input['updater2'] = $user->id;
+                $a_input['id_user'] = $_POST['educator'];
+                $a_input['tanggal'] = $tanggal_sekarang;
+                $a_input['id_jenisabsen'] = $_POST['jenis_absen'];
+                if (isset($_POST['jenis_lembur']) && !empty($_POST['jenis_lembur'])){
+                    $a_input['id_jenislembur'] = $_POST['jenis_lembur'];
+                }
+                $a_input['waktu_checkin'] = date('H:i:s');
+                $a_input['kondisi'] = $_POST['kondisi'];
+                if (isset($_POST['keterangan']) && !empty($_POST['keterangan'])){
+                    $a_input['keterangan'] = $_POST['keterangan'];
+                }
+                $a_input['created_at'] = date('Y-m-d H:m:s');
 
-                $this->db->where('id_absensi', $id_absensi);
-                $this->db->update('absen_anak', $a_input);
+                $this->db->insert('absen_educator', $a_input);
 
                 $this->db->trans_complete();
 
@@ -113,6 +111,33 @@
             }else{
                 return false;
             }
+        }
+
+        function getDataAbsenByIdAbsensi($id_absensi){
+            $sql = "SELECT *
+                FROM absen_educator a
+                WHERE a.id_absensi = $id_absensi";
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function absenPulang(){
+            $user = $this->session->userdata['auth'];
+
+            $id_absensi = $_POST['id_absensi'];
+            $this->db->trans_start();
+
+            $a_input['waktu_checkout'] = date('H:i:s');
+            $a_input['kondisi_checkout'] = $_POST['kondisi'];
+            $a_input['updated_at'] = date('Y-m-d H:m:s');
+
+            $this->db->where('id_absensi', $id_absensi);
+            $this->db->update('absen_educator', $a_input);
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
         }
 
         ## get all data in table

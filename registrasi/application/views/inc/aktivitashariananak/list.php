@@ -81,7 +81,7 @@
                                             <?php echo form_open_multipart($controller.'/cetakaktivitas', 'target="blank"'); ?>
                                                 <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Aktifitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
                                                     <?php if (!empty($id_aktivitas)){ ?>
-                                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
+                                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Aktivitas</button>
                                                     <?php } ?>
                                                 </h5>
                                                 <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">

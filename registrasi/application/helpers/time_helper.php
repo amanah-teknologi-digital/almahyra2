@@ -125,3 +125,24 @@ if (!function_exists('hitung_durasi_waktu')) {
         return $hours . " Jam, " . $minutes . " Menit, " . $seconds . " Detik";
     }
 }
+
+if (!function_exists('hitungDurasiDalamMenit')) {
+    function hitungDurasiDalamMenit($waktuAwal, $waktuAkhir) {
+        // Pastikan waktu diformat dalam format yang didukung, misalnya "H:i" (jam:menit)
+        $awal = DateTime::createFromFormat('H:i:s', $waktuAwal);
+        $akhir = DateTime::createFromFormat('H:i:s', $waktuAkhir);
+
+        // Jika salah satu waktu tidak valid, kembalikan pesan error
+        if (!$awal || !$akhir) {
+            return "Format waktu tidak valid. Gunakan format 'HH:mm'.";
+        }
+
+        // Hitung selisih waktu
+        $interval = $awal->diff($akhir);
+
+        // Konversi durasi ke dalam menit
+        $durasiDalamMenit = ($interval->h * 60) + $interval->i;
+
+        return $durasiDalamMenit;
+    }
+}
