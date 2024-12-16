@@ -257,6 +257,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?= base_url().'absensi-educator'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Absensi Educator</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= base_url().'absensi-items'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Absensi Barang</span>
