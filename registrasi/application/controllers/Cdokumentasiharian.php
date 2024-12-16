@@ -27,7 +27,7 @@ class Cdokumentasiharian extends CI_Controller {
             'title'=>'Dokumentasi Harian',
             'parent'=>'absensi',
             'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
-            'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
+            'categori_video' => ['mp4', '3gp', 'avi', 'mkv','mov'],
         );
 		## load model here 
 		$this->load->model('Mdokumentasiharian', 'DokumentasiHarian');

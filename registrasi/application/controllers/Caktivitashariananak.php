@@ -27,7 +27,7 @@ class Caktivitashariananak extends CI_Controller {
             'title'=>'Aktivitas Harian Anak',
             'parent'=>'laporan',
             'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
-            'categori_video' => ['mp4', '3gp', 'avi', 'mkv'],
+            'categori_video' => ['mp4', '3gp', 'avi', 'mkv', 'mov'],
         );
 		## load model here 
 		$this->load->model('Maktivitashariananak', 'AktivitasHarianAnak');
