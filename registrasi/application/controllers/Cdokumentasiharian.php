@@ -168,7 +168,7 @@ class Cdokumentasiharian extends CI_Controller {
         $data = $this->DokumentasiHarian->getListTanggalByTahun($tahun);
         if (!empty($data)) {
             $id_rincianjadwal_mingguan = $data[0]->id_rincianjadwal_mingguan;
-            $kelas = $this->DokumentasiHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
+            $kelas = $this->DokumentasiHarian->getKelasByIdRincian($this->role, $id_rincianjadwal_mingguan);
 
             $data_list = [];
             foreach ($data as $key => $value) {
@@ -194,7 +194,7 @@ class Cdokumentasiharian extends CI_Controller {
     public function getDataKelas(){
         $id_rincianjadwal_mingguan =  $_POST['id_rincianjadwal_mingguan'];
 
-        $data['kelas'] = $this->DokumentasiHarian->getKelasByIdRincian($id_rincianjadwal_mingguan);
+        $data['kelas'] = $this->DokumentasiHarian->getKelasByIdRincian($this->role, $id_rincianjadwal_mingguan);
 
         $this->output->set_content_type('application/json');
 
