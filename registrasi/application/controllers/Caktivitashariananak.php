@@ -118,7 +118,7 @@ class Caktivitashariananak extends CI_Controller {
                 $fileId = $row->id_file; // some unique key to identify the file
                 $data['preview'][] = base_url().$row->download_url;
                 if ($temp_type == 'video'){
-                    $preview_file = '<video controls width="120px"><source src="'.base_url().$row->download_url.'" type="video/mp4"></video>'; // Video preview with controls
+                    $preview_file = '<video controls width="120px"><source src="'.base_url().$row->download_url.'" type="video/'.$row->ext.'"></video>'; // Video preview with controls
                     $data['config'][] = [
                         'type' => $temp_type,
                         'key' => $fileId,
