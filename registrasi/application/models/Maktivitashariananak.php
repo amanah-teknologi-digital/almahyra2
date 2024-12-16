@@ -58,13 +58,15 @@
         }
 
         function getListTanggalByTahun($tahun){
+            $tanggal_sekarang = date('Y-m-d');
+
             $sql = "SELECT b.nama as nama_subtema, e.nama as nama_bulan, a.nama as nama_tema, c.id_rincianjadwal_mingguan, c.tanggal
                 FROM tema_bulanan a 
                 JOIN jadwal_mingguan b ON b.id_temabulanan = a.id_temabulanan
                 JOIN rincian_jadwal_mingguan c ON c.id_jadwalmingguan = b.id_jadwalmingguan
                 JOIN jadwal_harian d ON d.id_rincianjadwal_mingguan = c.id_rincianjadwal_mingguan
                 JOIN ref_bulan e ON e.bulan = a.bulan  
-                WHERE a.tahun = $tahun
+                WHERE a.tahun = $tahun AND c.tanggal <= '$tanggal_sekarang'
                 GROUP BY b.nama, e.nama, a.nama, c.id_rincianjadwal_mingguan, c.tanggal
                 ORDER BY c.tanggal DESC ";
 
