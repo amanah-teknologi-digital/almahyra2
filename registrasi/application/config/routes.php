@@ -99,6 +99,7 @@ $route['absensi-anak'] = 'cabsensianak';
 $route['absensi-educator'] = 'cabsensieducator';
 $route['absensi-items'] = 'cabsensiitems';
 $route['absensi-pengasuh'] = 'cabsensipengasuh';
+$route['medical-checkup'] = 'cmedicalcheckup';
 
 // aktivitas
 $route['aktivitas-anak'] = 'caktivitas';

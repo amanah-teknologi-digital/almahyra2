@@ -17,6 +17,10 @@ class CDashboard extends CI_Controller {
             redirect('absensi-anak');
         }
 
+        if ($this->session->userdata['auth']->id_role == 6) { // medical checkup
+            redirect('medical-checkup');
+        }
+
         $this->data = array(
             'controller'=>'cdashboard',
             'redirect'=>'dahsboard',
