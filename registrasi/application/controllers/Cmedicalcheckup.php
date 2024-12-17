@@ -34,13 +34,23 @@ class Cmedicalcheckup extends CI_Controller {
     public function index() {
         $data = $this->data;
 
-        $data['list_educator'] = $this->Absensieducator->getListEducator($this->role);
-        $data['absensi'] = $this->Absensieducator->getAbsensiEducator($this->role);
+        $data['hasil_checkup'] = $this->MedicalCheckup->getHasilCheckup();
+        $data['role'] = $this->role;
 
-        $data['list_jenisabsensi'] = $this->Absensieducator->getListJenisAbsensi();
-        $data['list_jenislembur'] = $this->Absensieducator->getListJenisLembur();
+        $this->load->view('inc/medicalcheckup/list', $data);
+    }
 
-        $this->load->view('inc/absensieducator/list', $data);
+    public function checkAktivitas(){
+        $tanggal = $this->input->post('tanggal');
+        $id_anak = $this->input->post('id_anak');
+
+        $id_checkup  = $this->MedicalCheckup->checkAktivitas($tanggal, $id_anak);
+
+        redirect($this->data['redirect'].'/lihat-data/'.$id_checkup);
+    }
+
+    public function lihatdata($id_checkup){
+        var_dump($id_checkup); exit();
     }
 
     public function insert() {
