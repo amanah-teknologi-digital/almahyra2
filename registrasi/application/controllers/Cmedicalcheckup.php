@@ -50,7 +50,13 @@ class Cmedicalcheckup extends CI_Controller {
     }
 
     public function lihatdata($id_checkup){
-        var_dump($id_checkup); exit();
+        $data = $this->data;
+
+        $data['data_checkup'] = $this->MedicalCheckup->getDataCheckup($id_checkup);
+        $data['data_rinciancheckup'] = $this->MedicalCheckup->getDataRincianCheckup($id_checkup);
+        $data['role'] = $this->role;
+
+        $this->load->view('inc/medicalcheckup/lihat_data', $data);
     }
 
     public function insert() {
