@@ -313,6 +313,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?= base_url().'laporan-absensieducator'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Absensi Educator</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= base_url().'aktivitasharian-anak'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Harian Anak</span>

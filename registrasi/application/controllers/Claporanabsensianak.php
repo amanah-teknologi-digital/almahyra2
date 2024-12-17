@@ -88,6 +88,8 @@ class Claporanabsensianak extends CI_Controller {
             $data['data_absensi'] = [];
         }
 
+        $data['tahun_selected'] = $tahun;
+
         $this->load->view('inc/laporanabsensianak/cetak_absensi', $data);
     }
 }

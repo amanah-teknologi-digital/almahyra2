@@ -113,7 +113,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Kondisi</label>
+                                                    <label>Kondisi Masuk</label>
                                                     <select class="form-control" name="kondisi" id="kodisi_masuk" required>
                                                         <option value="1">Sehat</option>
                                                         <option value="2">Kurang Sehat</option>
@@ -123,7 +123,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Suhu</label>
+                                                    <label>Suhu Masuk</label>
                                                     <input class="form-control" type="text" name="suhu" id="suhu_masuk" autocomplete="off" placeholder="36.5 (Gunakan titik untuk koma)">
                                                 </div>
                                             </div>

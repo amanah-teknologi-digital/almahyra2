@@ -105,7 +105,7 @@
                                                             <td nowrap>
                                                                 <?php if (!empty($value->id_absensi)) { ?>
                                                                     &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 11px">
-                                                                        Suhu Tubuh: <b><?= $value->suhu ?> °C</b>, Kondisi: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b>
+                                                                        Suhu Tubuh Masuk: <b><?= $value->suhu ?> °C</b>, Kondisi Masuk: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b>
                                                                     </span>
                                                                     <?php if (!empty($value->waktu_checkout)){ ?>
                                                                         <br>
