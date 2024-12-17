@@ -83,9 +83,8 @@
                                                         <col style="width: 15%">
                                                         <col style="width: 15%">
                                                         <col style="width: 15%">
-                                                        <col style="width: 15%">
                                                         <col style="width: 20%">
-                                                        <col style="width: 10%">
+                                                        <col style="width: 25%">
                                                     </colgroup>
                                                     <thead>
                                                     <tr>
@@ -95,7 +94,6 @@
                                                         <th>Waktu Pulang</th>
                                                         <th>Status</th>
                                                         <th>Keterangan</th>
-                                                        <th>Aksi</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -125,15 +123,6 @@
                                                                     <i>Ket: </i>
                                                                     <span class="text-muted font-italic" style="font-size: 11px;"><?= !empty($row->keterangan)? $row->keterangan:'-'; ?></span>
                                                                 <?php } ?>
-                                                            </td>
-                                                            <td align="center">
-                                                                <button class="btn <?= !empty($row->waktu_checkout) ? 'btn-outline-success':'btn-outline-danger' ?> btn-sm btn-icon edit" type="button" data-id="<?= $row->id_absensi; ?>" data-nama="<?= $row->nama_educator; ?>" >
-                                                                    <?php if (!empty($row->waktu_checkout)){ ?>
-                                                                        <span class="fas fa-eye"></span>&nbsp;Data Absen
-                                                                    <?php }else{ ?>
-                                                                        <span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang
-                                                                    <?php } ?>
-                                                                </button>
                                                             </td>
                                                         </tr>
                                                         <?php $i++; } ?>
