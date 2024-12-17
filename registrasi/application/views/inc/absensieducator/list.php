@@ -34,107 +34,75 @@
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Absensi Educator Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
                                     <br>
                                     <div class="table-responsive">
-                                        <?php echo form_open_multipart($controller, 'id="frm_filter"'); ?>
-                                        <table style="width: 100%;padding: 10px 10px;">
+                                        <h5 class="mb-3 d-flex justify-content-between align-items-center">
+                                            <button class="btn btn-success" type="button" data-toggle="modal" data-target="#absen-masuk">
+                                                <span class="fas fa-plus"></span>&nbsp;Absen
+                                            </button>
+                                        </h5>
+                                        <table class="display table table-striped table-bordered table-sm" id="tbl-absensi" style="width:100%">
                                             <colgroup>
+                                                <col style="width: 10%">
+                                                <col style="width: 15%">
+                                                <col style="width: 15%">
+                                                <col style="width: 15%">
+                                                <col style="width: 15%">
                                                 <col style="width: 20%">
-                                                <col style="width: 80%">
+                                                <col style="width: 10%">
                                             </colgroup>
-                                            <tr>
-                                                <td>
-                                                    <label>Nama Educator</label>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control select2" id="educator" name="educator" onchange="submitForm()">
-                                                        <?php if (count($list_educator) > 1){ ?>
-                                                            <option value="" selected>-- Pilih Educator --</option>
-                                                        <?php } ?>
-                                                        <?php foreach ($list_educator as $key => $value) { ?>
-                                                            <option value="<?= $value->id ?>" <?= $educator == $value->id ? 'selected' : '' ?>><?= $value->name ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        </form>
-                                        <hr>
-                                        <?php if (!empty($educator)){ ?>
-                                            <h5 class="mb-3 d-flex justify-content-between align-items-center">
-                                                <button class="btn btn-success" type="button" data-toggle="modal" data-target="#absen-masuk" <?= !empty($status_absen)? 'disabled':''; ?>>
-                                                    <span class="fas fa-plus"></span>&nbsp;Absen
-                                                </button>
-                                            </h5>
-                                            <table class="display table table-striped table-bordered table-sm" style="width:100%">
-                                                <colgroup>
-                                                    <col style="width: 15%">
-                                                    <col style="width: 15%">
-                                                    <col style="width: 15%">
-                                                    <col style="width: 20%">
-                                                    <col style="width: 25%">
-                                                    <col style="width: 10%">
-                                                </colgroup>
-                                                <thead>
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama Educator</th>
+                                                    <th>Jenis Absensi</th>
+                                                    <th>Waktu Masuk</th>
+                                                    <th>Waktu Pulang</th>
+                                                    <th>Status</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                             <tbody>
+                                                <?php $i = 1;
+                                                foreach ($absensi as $key =>$row) { ?>
                                                     <tr>
-                                                        <th>Jenis Absensi</th>
-                                                        <th>Waktu Masuk</th>
-                                                        <th>Waktu Pulang</th>
-                                                        <th>Status</th>
-                                                        <th>Keterangan</th>
-                                                        <th>Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                 <tbody>
-                                                    <?php $i = 1;
-                                                    foreach ($absensi as $key =>$row) { ?>
-                                                        <tr>
-                                                            <td align="center" nowrap><b><?= $row->jenis_absen; ?></b>
-                                                            <?php if (!empty($row->id_jenislembur)){ ?>
-                                                                <br>
-                                                                <span class="badge badge-primary">Lembur</span>
+                                                        <td nowrap><b><?= $row->nama_educator; ?></b>
+                                                        <td align="center" nowrap class="text-muted"><b><?= $row->jenis_absen; ?></b>
+                                                        <?php if (!empty($row->id_jenislembur)){ ?>
+                                                            <br>
+                                                            <span class="badge badge-primary">Lembur</span>
+                                                        <?php } ?>
+                                                        </td>
+                                                        <td align="center" nowrap class="text-muted"><b><?= $row->waktu_checkin ?></b></td>
+                                                        <td align="center" nowrap class="text-muted"><b><?= !empty($row->waktu_checkout)? $row->waktu_checkout:'-'; ?></b></td>
+                                                        <td nowrap align="center">
+                                                            <?php if (!empty($row->waktu_checkout)){ ?>
+                                                                <span class="text-info text-small font-italic font-weight-bold">Durasi : <?= hitungDurasiDalamMenit($row->waktu_checkin, $row->waktu_checkout); ?> Menit</span>
+                                                            <?php }else{ ?>
+                                                                <span class="badge badge-warning">Belum Absen Pulang</span>
                                                             <?php } ?>
-                                                            </td>
-                                                            <td align="center" nowrap class="text-muted"><b><?= $row->waktu_checkin ?></b></td>
-                                                            <td align="center" nowrap class="text-muted"><b><?= !empty($row->waktu_checkout)? $row->waktu_checkout:'-'; ?></b></td>
-                                                            <td nowrap align="center">
+                                                        </td>
+                                                        <td style="font-size: 11px;">
+                                                            <?php if (!empty($row->id_jenislembur)){ ?>
+                                                                <i>Jenis Lembur : </i><b><?= $row->jenis_lembur; ?></b>
+                                                                <br>
+                                                                <i>Ket: </i>
+                                                                <span class="text-muted font-italic" style="font-size: 11px;"><?= !empty($row->keterangan)? $row->keterangan:'-'; ?></span>
+                                                            <?php } ?>
+                                                        </td>
+                                                        <td align="center">
+                                                            <button class="btn <?= !empty($row->waktu_checkout) ? 'btn-outline-success':'btn-outline-danger' ?> btn-sm btn-icon edit" type="button" data-id="<?= $row->id_absensi; ?>" data-nama="<?= $row->nama_educator; ?>" >
                                                                 <?php if (!empty($row->waktu_checkout)){ ?>
-                                                                    <span class="text-info text-small font-italic font-weight-bold">Durasi : <?= hitungDurasiDalamMenit($row->waktu_checkin, $row->waktu_checkout); ?> Menit</span>
+                                                                    <span class="fas fa-eye"></span>&nbsp;Data Absen
                                                                 <?php }else{ ?>
-                                                                    <span class="badge badge-warning">Belum Absen Pulang</span>
+                                                                    <span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang
                                                                 <?php } ?>
-                                                            </td>
-                                                            <td style="font-size: 11px;">
-                                                                <?php if (!empty($row->id_jenislembur)){ ?>
-                                                                    <i>Jenis Lembur : </i><b><?= $row->jenis_lembur; ?></b>
-                                                                    <br>
-                                                                    <i>Ket: </i>
-                                                                    <span class="text-muted font-italic" style="font-size: 11px;"><?= !empty($row->keterangan)? $row->keterangan:'-'; ?></span>
-                                                                <?php } ?>
-                                                            </td>
-                                                            <td align="center">
-                                                                <button class="btn <?= !empty($row->waktu_checkout) ? 'btn-outline-success':'btn-outline-danger' ?> btn-sm btn-icon edit" type="button" data-id="<?= $row->id_absensi; ?>" >
-                                                                    <?php if (!empty($row->waktu_checkout)){ ?>
-                                                                        <span class="fas fa-eye"></span>&nbsp;Data Absen
-                                                                    <?php }else{ ?>
-                                                                        <span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang
-                                                                    <?php } ?>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    <?php $i++; } ?>
-                                                 <?php if($i == 1){ ?>
-                                                     <tr>
-                                                        <td colspan="6" align="center">Data kosong</td>
-                                                     </tr>
-                                                 <?php } ?>
-                                                </tbody>
-                                            </table>
-                                        <?php }else{ ?>
-                                            <div class="alert alert-warning" role="alert">
-                                                <span class="fas fa-exclamation-triangle"></span>&nbsp;Silahkan pilih educator terlebih dahulu!
-                                            </div>
-                                        <?php } ?>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                <?php $i++; } ?>
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Tombol absen masuk <b>tersedia</b> jika tidak ada absen yang statusnya <b>belum absen pulang</b></span></p>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Educator bisa absen <b>lebih dari 1</b>, jika tidak ada absen yang statusnya <b>belum absen pulang</b></span></p>
                                 </div>
                             </div>
                         </div>
@@ -148,13 +116,28 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success"><?= $data_educator->nama_educator ?></b></h5>
+                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
                                 <?php echo form_open_multipart($controller.'/absenmasuk','id="frm_absenmasuk"'); ?>
                                 <h5 class="text-success"><span class="fas fa-right-to-bracket"></span>&nbsp;Absen Masuk</h5>
                                 <fieldset>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Nama Educator</label>
+                                                <select class="form-control select2" id="educator" name="educator">
+                                                    <?php if (count($list_educator) > 1){ ?>
+                                                        <option value="" selected>-- Pilih Educator --</option>
+                                                    <?php } ?>
+                                                    <?php foreach ($list_educator as $key => $value) { ?>
+                                                        <option value="<?= $value->id ?>" ><?= $value->name ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -210,7 +193,6 @@
                                 </fieldset>
                                 <br>
                                 <button class="btn btn-sm btn-success" id="btn_absenmasuk" type="submit"><span class="fas fa-save"></span>&nbsp;Absen Masuk</button>
-                                <input type="hidden" name="educator" value="<?= $educator; ?>">
                                 </form>
                                 <div class="modal-footer mt-3">
                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
@@ -223,7 +205,7 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success"><?= $data_educator->nama_educator ?></b></h5>
+                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success" id="label_namaeducator"></b></h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
@@ -327,6 +309,12 @@
             $('.select2').select2();
             resetAbsenMasuk();
 
+            $('#tbl-absensi').dataTable({
+                "ordering": false,
+                "searching": true,
+                "paging": false
+            });
+
             $('#absen-masuk').on('shown.bs.modal', function () {
                 resetAbsenMasuk();
                 clearFormStatus('#frm_absenmasuk');
@@ -334,6 +322,9 @@
 
             $("#frm_absenmasuk").validate({
                 rules: {
+                    educator: {
+                        required: true
+                    },
                     kondisi: {
                         required: true
                     },
@@ -345,6 +336,9 @@
                     }
                 },
                 messages: {
+                    educator: {
+                        required: "Educator harus dipilih!"
+                    },
                     kondisi: {
                         required: "Kondisi harus dipilih!"
                     },
@@ -380,7 +374,9 @@
                 clearFormStatus('#frm_absenpulang');
 
                 var id_absensi = $(this).data('id') ;
+                var nama = $(this).data('nama') ;
                 $('#id_absensi').val(id_absensi);
+                $('#label_namaeducator').html(nama);
 
                 $.ajax({
                     url: url + '/edit/' + $(this).data('id'),
@@ -412,6 +408,7 @@
         });
 
         function resetAbsenMasuk(){
+            $('#educator').val('');
             $('#kondisi_masuk').val(1);
             $('#jenis_absen').val('');
             $('#is_lembur').val(0);

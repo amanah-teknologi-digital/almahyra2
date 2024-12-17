@@ -40,15 +40,27 @@
             return $query->row();
         }
 
-        function getAbsensiEducator($educator){
+        function getAbsensiEducator($id_role){
             $tanggal_sekarang = date('Y-m-d');
+            $user = $this->session->userdata['auth'];
+
+            if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
+                $where = "";
+            }elseif ($id_role == 3){ // educator
+                $where = " AND a.id_user = $user->id";
+            }elseif($id_role == 4){ // orangtua
+                $where = " AND 1 = 0";
+            }else{
+                $where = " AND 1 = 0";
+            }
 
             $sql = "SELECT a.id_absensi, a.tanggal, a.id_jenisabsen, a.id_jenislembur, a.waktu_checkin,
-                a.waktu_checkout, a.kondisi, a.kondisi_checkout, a.keterangan, b.nama as jenis_absen, c.nama as jenis_lembur
+                a.waktu_checkout, a.kondisi, a.kondisi_checkout, a.keterangan, b.nama as jenis_absen, c.nama as jenis_lembur, d.name as nama_educator
                 FROM absen_educator a 
                 JOIN ref_jenisabsen b ON b.id_jenisabsen = a.id_jenisabsen
+                JOIN data_user d ON d.id = a.id_user
                 LEFT JOIN ref_jenislembur c ON c.id_jenislembur = a.id_jenislembur
-                WHERE a.tanggal = '$tanggal_sekarang' AND a.id_user = $educator 
+                WHERE a.tanggal = '$tanggal_sekarang' $where
                 ORDER BY a.waktu_checkin DESC";
 
             $query = $this->db->query($sql);
