@@ -79,6 +79,8 @@ class Mmedicalcheckup extends CI_Model
     }
 
     function simpanRekamMedic(){
+        date_default_timezone_set('Asia/Jakarta');
+
         $id_checkup = $this->input->post('id_checkup');
         $list_form = $this->getDataRincianCheckup($id_checkup);
 
