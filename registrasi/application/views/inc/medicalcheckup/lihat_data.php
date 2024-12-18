@@ -178,8 +178,8 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         let url = "<?= base_url().$controller ?>";
-        let initialPreview = [];
-        let initialPreviewConfig = [];
+        let initialPreview = <?= json_encode($dokumentasi_file['preview'])?>;
+        let initialPreviewConfig = <?= json_encode($dokumentasi_file['config'])?>;
         const list_form = <?= json_encode($data_rinciancheckup) ?>;
 
         $(document).ready(function() {
@@ -210,7 +210,9 @@
                     allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
                     allowedPreviewTypes: ['image'],
                     initialPreview: initialPreview,
-                    initialPreviewConfig: initialPreviewConfig
+                    initialPreviewConfig: initialPreviewConfig,
+                    initialPreviewAsData: true,
+                    overwriteInitial: false
                 });
             };
 

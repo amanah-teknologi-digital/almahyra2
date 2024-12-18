@@ -107,9 +107,98 @@ class Mmedicalcheckup extends CI_Model
             }
         }
 
+        if (isset($_FILES['file_dukung'])){
+            $this->uploadfiles();
+        }
+
         $this->db->trans_complete();
 
         return $this->db->trans_status();
+    }
+
+    function uploadfiles() {
+        $input = 'file_dukung'; // the input name for the fileinput plugin
+        if (empty($_FILES[$input])) {
+            return [];
+        }
+        $total = count($_FILES[$input]['name']); // multiple files
+        $path = './uploads/medical_checkup/'; // your upload path
+
+        for ($i = 0; $i < $total; $i++) {
+            $temp_filename = date('dmyhis').rand(1, 1000000);
+            $temp_filename = $temp_filename.$i;
+            $tmpFilePath = $_FILES[$input]['tmp_name'][$i]; // the temp file path
+            $fileName = $_FILES[$input]['name'][$i]; // the file name
+            $fileSize = $_FILES[$input]['size'][$i]; // the file size
+            $ext = pathinfo($_FILES[$input]['name'][$i], PATHINFO_EXTENSION);
+
+            //Make sure we have a file path
+            if ($tmpFilePath != ""){
+                //Setup our new file path
+                $newFilePath = $path . $temp_filename.'.'.$ext;
+
+                //Upload the file into the new path
+                if(move_uploaded_file($tmpFilePath, $newFilePath)) {
+                    $id_file = $this->insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $_POST['id_checkup']);
+                    if (empty($id_file)) {
+                        @unlink($newFilePath);
+                        break;
+                    }else{
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    function hapusDokumentasiFile($id_file){
+        $sql = "SELECT download_url FROM file_medicalcheckup WHERE id_file = $id_file";
+        $query = $this->db->query($sql);
+        $download_url = $query->row()->download_url;
+        $path = './'.$download_url;
+
+        $this->db->trans_start();
+
+        $this->db->where('id_file', $id_file);
+        $this->db->delete('file_medicalcheckup');
+
+        $this->db->trans_complete();
+
+        if($this->db->trans_status()){
+            @unlink($path);
+        }
+
+        return $this->db->trans_status();
+    }
+
+    function insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $id_checkup){
+        $user = $this->session->userdata['auth'];
+
+        $a_input['id_checkup'] = $id_checkup;
+        $a_input['file_name'] = $fileName;
+        $a_input['size'] = $fileSize;
+        $a_input['download_url'] = 'uploads/medical_checkup/' . $temp_filename.'.'.$ext;
+        $a_input['temp_file_name'] = $temp_filename;
+        $a_input['ext'] = $ext;
+        $a_input['created_at'] = date('Y-m-d H:m:s');
+        $a_input['updater'] = $user->id;
+
+        $this->db->insert('file_medicalcheckup', $a_input);
+
+        return $this->db->insert_id();
+    }
+
+    function getDokumentasiFile($id_checkup){
+        $sql = "SELECT * FROM file_medicalcheckup WHERE id_checkup = $id_checkup";
+        $query = $this->db->query($sql);
+
+        return $query->result();
     }
 }
 
