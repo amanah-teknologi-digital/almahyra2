@@ -108,18 +108,14 @@
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></span></h5>
                                     <hr>
                                     <h5><span class="fas fa-stethoscope"></span>&nbsp;Rekam Medik</h5>
-                                    <br>
+                                    <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_checkup->updated_at)? timeAgo($data_checkup->created_at):timeAgo($data_checkup->updated_at); ?> </i></span></p>
                                     <?php echo form_open_multipart($controller.'/simpanrekammedik', 'id="frm_simpan" enctype="multipart/form-data"'); ?>
                                         <fieldset>
                                             <?php foreach ($data_rinciancheckup as $row){ ?>
                                                 <div class="row">
-                                                    <?php if (empty($row->action)){ ?>
-                                                        <div class="col-md-6">
-                                                    <?php }else{ ?>
-                                                        <div class="col-md-6">
-                                                    <?php } ?>
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label><?= $row->nama_kolom ?><?= (!empty($row->satuan))? '&nbsp;<i>('.$row->satuan.')</i>':'' ?></label>
+                                                            <label><b><?= $row->nama_kolom ?></b><?= (!empty($row->satuan))? '&nbsp;<i>('.$row->satuan.')</i>':'' ?></label>
                                                             <?php if ($row->jenis_kolom == 'number'){ ?>
                                                                 <input type="text" class="form-control" name="<?= $row->kolom ?>" id="<?= $row->kolom ?>" value="<?= (!empty($row->nilai))? $row->nilai:'' ?>" required placeholder="(Gunakan titik untuk koma)" autocomplete="off">
                                                             <?php }elseif ($row->jenis_kolom == 'select'){ $temp_pilihan = json_decode($row->pilihan, true); ?>
@@ -135,7 +131,7 @@
                                                     <?php if (!empty($row->action)){ $temp_pilihan = json_decode($row->action, true); ?>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label>Action <?= $row->nama_kolom ?></label>
+                                                                <label><b>Action <?= $row->nama_kolom ?></b></label>
                                                                 <select class="form-control" name="action_<?= $row->kolom ?>" id="action_<?= $row->kolom ?>" required>
                                                                     <option value="">-- Pilih Action <?= $row->nama_kolom ?> --</option>
                                                                     <?php foreach ($temp_pilihan as $pil){ ?>
@@ -147,12 +143,20 @@
                                                     <?php } ?>
                                                 </div>
                                             <?php } ?>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label><b>Keterangan</b> <i>(Optional)</i></label>
+                                                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"><?= !empty($data_checkup->keterangan)? $data_checkup->keterangan:''; ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </fieldset>
                                         <br>
                                         <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
                                         <br>
                                         <div class="file-loading">
-                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple required>
+                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
                                         </div>
                                         <br>
                                         <center><button class="btn btn-success" id="btn_simpan" type="submit"><span class="fas fa-save"></span>&nbsp;Simpan Hasil Checkup</button></center>
@@ -206,6 +210,7 @@
                     showRemove: false,
                     showUpload: false,
                     required: true,
+                    validateInitialCount: true,
                     previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
                     allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
                     allowedPreviewTypes: ['image'],
@@ -270,11 +275,7 @@
 
             $("#frm_simpan").validate({
                 rules: rules,
-                messages: message,
-                submitHandler: function(form) {
-                    // If validation passes, submit the form
-                    form.submit();
-                }
+                messages: message
             });
         });
     </script>

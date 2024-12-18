@@ -84,6 +84,11 @@ class Mmedicalcheckup extends CI_Model
 
         $this->db->trans_start();
 
+        $update_checkup['updated_at'] = date('Y-m-d H:m:s');
+        $update_checkup['keterangan'] = $this->input->post('keterangan');
+        $this->db->where('id_checkup', $id_checkup);
+        $this->db->update('medical_checkup', $update_checkup);
+
         foreach ($list_form as $form){
             $id_rinciancheckup = $form->id_rinciancheckup;
             if (!empty($id_rinciancheckup)){ //update
@@ -142,8 +147,6 @@ class Mmedicalcheckup extends CI_Model
                     $id_file = $this->insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $_POST['id_checkup']);
                     if (empty($id_file)) {
                         @unlink($newFilePath);
-                        break;
-                    }else{
                         break;
                     }
                 } else {
