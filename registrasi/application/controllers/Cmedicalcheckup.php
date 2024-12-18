@@ -59,50 +59,15 @@ class Cmedicalcheckup extends CI_Controller {
         $this->load->view('inc/medicalcheckup/lihat_data', $data);
     }
 
-    public function insert() {
-
-        $err = $this->Absensianak->insert();
-
-        if ($err['code'] == '0') {
-            $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
-        } else {
-            $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-        }
-
-        redirect($this->data['redirect']);
-    }
-
-    public function edit($id) {
-        $data = $this->Absensieducator->getDataAbsenByIdAbsensi($id);
-
-        $this->output->set_content_type('application/json');
-
-        $this->output->set_output(json_encode($data));
-
-        return $data;
-    }
-
-    public function absenmasuk(){
-        $err = $this->Absensieducator->absenMasuk();
+    public function simpanrekammedik(){
+        $err = $this->MedicalCheckup->simpanRekamMedic();
 
         if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Mohon memulangkan absen sebelumnya, jika ingin absen masuk kembali');
+            $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
         }else{
-            $this->session->set_flashdata('success', 'Berhasil Absen Masuk');
+            $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
         }
 
-        redirect($this->data['redirect']);
-    }
-
-    public function absenpulang(){
-        $err = $this->Absensieducator->absenPulang();
-
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Absen Pulang');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Absen Pulang');
-        }
-
-        redirect($this->data['redirect']);
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_checkup']);
     }
 }

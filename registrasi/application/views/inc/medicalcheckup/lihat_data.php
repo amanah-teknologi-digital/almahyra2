@@ -106,8 +106,58 @@
                                 <div class="card-body">
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Medical Checkup Hari&nbsp;<b><?= format_date_indonesia($data_checkup->tanggal).', '.date('d-m-Y', strtotime($data_checkup->tanggal)) ?></b></h5>
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></span></h5>
+                                    <hr>
+                                    <h5><span class="fas fa-stethoscope"></span>&nbsp;Rekam Medik</h5>
                                     <br>
-
+                                    <?php echo form_open_multipart($controller.'/simpanrekammedik', 'id="frm_simpan" enctype="multipart/form-data"'); ?>
+                                        <fieldset>
+                                            <?php foreach ($data_rinciancheckup as $row){ ?>
+                                                <div class="row">
+                                                    <?php if (empty($row->action)){ ?>
+                                                        <div class="col-md-6">
+                                                    <?php }else{ ?>
+                                                        <div class="col-md-6">
+                                                    <?php } ?>
+                                                        <div class="form-group">
+                                                            <label><?= $row->nama_kolom ?><?= (!empty($row->satuan))? '&nbsp;<i>('.$row->satuan.')</i>':'' ?></label>
+                                                            <?php if ($row->jenis_kolom == 'number'){ ?>
+                                                                <input type="text" class="form-control" name="<?= $row->kolom ?>" id="<?= $row->kolom ?>" value="<?= (!empty($row->nilai))? $row->nilai:'' ?>" required placeholder="(Gunakan titik untuk koma)" autocomplete="off">
+                                                            <?php }elseif ($row->jenis_kolom == 'select'){ $temp_pilihan = json_decode($row->pilihan, true); ?>
+                                                                <select class="form-control" name="<?= $row->kolom ?>" id="<?= $row->kolom ?>" required>
+                                                                    <option value="">-- Pilih <?= $row->nama_kolom ?> --</option>
+                                                                    <?php foreach ($temp_pilihan as $pil){ ?>
+                                                                        <option value="<?= $pil ?>" <?= $pil == $row->nilai? 'selected':''; ?>><?= $pil ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            <?php } ?>
+                                                        </div>
+                                                    </div>
+                                                    <?php if (!empty($row->action)){ $temp_pilihan = json_decode($row->action, true); ?>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label>Action <?= $row->nama_kolom ?></label>
+                                                                <select class="form-control" name="action_<?= $row->kolom ?>" id="action_<?= $row->kolom ?>" required>
+                                                                    <option value="">-- Pilih Action <?= $row->nama_kolom ?> --</option>
+                                                                    <?php foreach ($temp_pilihan as $pil){ ?>
+                                                                        <option value="<?= $pil ?>" <?= $pil == $row->aksi_medic? 'selected':''; ?>><?= $pil ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                </div>
+                                            <?php } ?>
+                                        </fieldset>
+                                        <br>
+                                        <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
+                                        <br>
+                                        <div class="file-loading">
+                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple required>
+                                        </div>
+                                        <br>
+                                        <center><button class="btn btn-success" id="btn_simpan" type="submit"><span class="fas fa-save"></span>&nbsp;Simpan Hasil Checkup</button></center>
+                                        <input type="hidden" name="id_checkup" value="<?= $data_checkup->id_checkup ?>">
+                                    </form>
                                     <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data medical checkup sesuai uraian yang diberikan!.</span></p>
                                 </div>
                             </div>
@@ -130,9 +180,100 @@
         let url = "<?= base_url().$controller ?>";
         let initialPreview = [];
         let initialPreviewConfig = [];
+        const list_form = <?= json_encode($data_rinciancheckup) ?>;
 
         $(document).ready(function() {
+            $.validator.addMethod("decimal", function(value, element) {
+                // Regular expression for decimal values (including optional negative sign)
+                return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
+            }, "Please enter a valid decimal number.");
 
+            $.validator.addMethod("filesize", function(value, element, param) {
+                var files = element.files;
+                for (var i = 0; i < files.length; i++) {
+                    if (files[i].size > param) {
+                        return false; // If any file is too large, return false
+                    }
+                }
+                return true; // All files are within size limit
+            }, "File is too large.");
+
+            let file_input = $('#file_dukung'), initPlugin = function () {
+                file_input.fileinput({
+                    maxFileSize: 20000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
+                    previewThumbnail: true,
+                    showRemove: false,
+                    showUpload: false,
+                    required: true,
+                    previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
+                    allowedPreviewTypes: ['image'],
+                    initialPreview: initialPreview,
+                    initialPreviewConfig: initialPreviewConfig
+                });
+            };
+
+            initPlugin();
+
+            let temp_rules, temp_message, rules = {}, message = {};
+            $.each(list_form, function(index, value){
+                temp_rules = {}; temp_message = {};
+                if (value['jenis_kolom'] === 'number'){
+                    temp_rules = {
+                        required: true,
+                        decimal: true
+                    };
+
+                    temp_message = {
+                        required: value['nama_kolom']+" harus diisi!",
+                        decimal: value['nama_kolom']+" harus berupa angka!"
+                    };
+
+                }else{
+                    temp_rules = {
+                        required: true
+                    };
+
+                    temp_message = {
+                        required: value['nama_kolom']+" harus diisi!",
+                    };
+                }
+
+                rules[value['kolom']] = temp_rules;
+                message[value['kolom']] = temp_message
+
+                if (value['action'] !== null){
+                    rules['action_'+value['kolom']] = {
+                        required: true
+                    };
+
+                    message['action_'+value['kolom']] = {
+                        required: "Action "+value['nama_kolom']+" harus dipilih!"
+                    };
+                }
+            });
+
+            file_input.on("filepredelete", function(jqXHR) {
+                var abort = true;
+                if (confirm("Apakah yakin menghapus file?")) {
+                    abort = false;
+                }
+                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+            });
+
+            file_input.on('change', function(event) {
+                $("#frm_simpan").valid();
+            });
+
+            $("#frm_simpan").validate({
+                rules: rules,
+                messages: message,
+                submitHandler: function(form) {
+                    // If validation passes, submit the form
+                    form.submit();
+                }
+            });
         });
     </script>
 </html>

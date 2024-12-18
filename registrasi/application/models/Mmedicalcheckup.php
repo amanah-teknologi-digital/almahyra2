@@ -77,6 +77,40 @@ class Mmedicalcheckup extends CI_Model
 
         return $query->result();
     }
+
+    function simpanRekamMedic(){
+        $id_checkup = $this->input->post('id_checkup');
+        $list_form = $this->getDataRincianCheckup($id_checkup);
+
+        $this->db->trans_start();
+
+        foreach ($list_form as $form){
+            $id_rinciancheckup = $form->id_rinciancheckup;
+            if (!empty($id_rinciancheckup)){ //update
+                $a_input['nilai'] = $this->input->post($form->kolom);
+                if (!empty($form->action)) {
+                    $a_input['aksi_medic'] = $this->input->post('action_' . $form->kolom);
+                }
+
+                $this->db->where('id_rinciancheckup', $id_rinciancheckup);
+                $this->db->update('rincian_medicalcheckup', $a_input);
+            }else{ //insert
+                $a_input['id_rinciancheckup'] = $id_rinciancheckup;
+                $a_input['id_checkup'] = $id_checkup;
+                $a_input['id_formmedical'] = $form->id_formmedical;
+                $a_input['nilai'] = $this->input->post($form->kolom);
+                if (!empty($form->action)) {
+                    $a_input['aksi_medic'] = $this->input->post('action_' . $form->kolom);
+                }
+
+                $this->db->insert('rincian_medicalcheckup', $a_input);
+            }
+        }
+
+        $this->db->trans_complete();
+
+        return $this->db->trans_status();
+    }
 }
 
 ?>
