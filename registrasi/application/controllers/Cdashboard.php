@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // require 'vendor/phpspreadsheet/autoload.php';
 
 class CDashboard extends CI_Controller {
+    private $role;
     function __construct() {
         parent::__construct();
 
@@ -20,6 +21,8 @@ class CDashboard extends CI_Controller {
         if ($this->session->userdata['auth']->id_role == 6) { // medical checkup
             redirect('medical-checkup');
         }
+
+        $this->role = $this->session->userdata['auth']->id_role;
 
         $this->data = array(
             'controller'=>'cdashboard',
@@ -186,6 +189,13 @@ class CDashboard extends CI_Controller {
                 $data['id_rincianjadwal_mingguan'] = '';
             }
 
+            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            if (!empty($data['list_anak'])) {
+                $data['id_anak'] = $data['list_anak'][0]->id;
+            }else{
+                $data['id_anak'] = 0;
+            }
+
             $this->load->view('inc/dashboard/admin', $data);
         }
         
@@ -219,6 +229,61 @@ class CDashboard extends CI_Controller {
         $data['data_kelas'] = $this->TematikBulan->getKelasById($_POST['id_kelas']);
 
         $this->load->view('inc/dashboard/cetak_jadwalharian', $data);
+    }
+
+    public function getDataMedicalCheckup($id_anak){
+        $data_medic = $this->Dashboard->getDataMedicalCheckup($id_anak);
+
+        $data_form = [];
+        $data_inside_from = [];
+
+        $color = [1=>'#FF0000', 2=>'#00FF00', 3=>'#0000FF', 4=>'#FFFF00'];
+        $dom = [1=>'chart_bb', 2=>'chart_tb', 3=>'chart_lila', 4=>'chart_lk'];
+        $nama_kolom = [1=>'Berat Badan', 2=>'Tinggi Badan', 3=>'Lingkar Lengan', 4=>'Lingkar Kepala'];
+
+        foreach ($data_medic as $medic){
+            $temp_id_form = array_column($data_form, 'id_formmedical');
+            if (empty($data_form) OR !in_array($medic->id_formmedical, $temp_id_form)){
+                $data_form[] =[
+                    'id_formmedical' => $medic->id_formmedical,
+                    'nama_form' => $medic->nama_kolom,
+                    'satuan' => $medic->satuan,
+                    'color' => $color[$medic->id_formmedical],
+                    'dom' => $dom[$medic->id_formmedical]
+                ];
+            }
+
+            $data_inside_from[$medic->id_formmedical][] = [
+                'tanggal' => $medic->tanggal,
+                'nilai' => $medic->nilai,
+                'satuan' => $medic->satuan
+            ];
+        }
+
+        foreach ($data_form as $key => $form){
+            $data_form[$key]['data'] = $data_inside_from[$form['id_formmedical']];
+        }
+
+        if (empty($data_form)){
+            foreach ($color as $key => $col){
+                $data_form[] =[
+                    'id_formmedical' => $key,
+                    'nama_form' => $nama_kolom[$key],
+                    'satuan' => '',
+                    'color' => $col,
+                    'dom' => $dom[$key],
+                    'data' => []
+                ];
+            }
+        }
+
+        $data = $data_form;
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
     }
 
 }
