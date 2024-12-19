@@ -110,6 +110,7 @@ $route['dokumentasi-harian'] = 'cdokumentasiharian';
 $route['aktivitasharian-anak'] = 'caktivitashariananak';
 $route['laporan-absensianak'] = 'claporanabsensianak';
 $route['laporan-absensieducator'] = 'claporanabsensieducator';
+$route['laporan-medicalcheckup'] = 'claporanmedicalcheckup';
 
 // laporan 
 $route['laporan-tumbuh-kembang'] = 'claporan/tumbuhkembangf';
