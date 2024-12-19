@@ -25,6 +25,12 @@
             </header>
             <ul class="childNav">
                 <li class="nav-item">
+                    <a href="<?= base_url().'dashboard'; ?>">
+                        <i class="nav-icon i-Bar-Chart-2"></i>
+                        <span class="item-name">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= base_url().'medical-checkup'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Hasil Checkup</span>

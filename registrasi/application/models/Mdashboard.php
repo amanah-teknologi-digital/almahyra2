@@ -23,7 +23,7 @@
 
         function getListAnak($role){
             $user = $this->session->userdata['auth'];
-            if ($role == 1 OR $role == 2) { // admin & superadmin & system absen
+            if ($role == 1 OR $role == 2 OR $role == 6) { // admin & superadmin & system absen
                 $where = "";
             }elseif ($role == 3) { // educator
                 $where = " AND a.educator = $user->id";

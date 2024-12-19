@@ -326,7 +326,8 @@
                         data: data_value,
                         borderWidth: 1,
                         borderColor: data['color'],
-                        pointStyle: 'circle'
+                        pointStyle: 'circle',
+                        pointBackgroundColor: 'blue'
                     }]
                 },
                 options: {
