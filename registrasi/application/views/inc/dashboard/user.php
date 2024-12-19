@@ -138,24 +138,24 @@
                                     <div id="ctx_graph">
                                         <div class="row">
                                             <div class="col-sm-6 mb-4">
-                                                <div class="chart-container" style="position: relative; height:25vh;">
+                                                <div class="chart-container">
                                                     <canvas id="chart_bb"></canvas>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4">
-                                                <div class="chart-container" style="position: relative; height:25vh;">
+                                                <div class="chart-container">
                                                     <canvas id="chart_tb"></canvas>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6 mb-4">
-                                                <div class="chart-container" style="position: relative; height:25vh;">
+                                                <div class="chart-container">
                                                     <canvas id="chart_lila"></canvas>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4">
-                                                <div class="chart-container" style="position: relative; height:25vh;">
+                                                <div class="chart-container">
                                                     <canvas id="chart_lk"></canvas>
                                                 </div>
                                             </div>
