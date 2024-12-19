@@ -99,6 +99,13 @@ class CDashboard extends CI_Controller {
                 $data['data_anak'] = [];
             }
 
+            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            if (!empty($data['list_anak'])) {
+                $data['id_anak'] = $data['list_anak'][0]->id;
+            }else{
+                $data['id_anak'] = 0;
+            }
+
             $this->load->view('inc/dashboard/user', $data);
         } else if ($this->session->userdata['auth']->id_role == 3) {
             // pengasuh
@@ -143,6 +150,13 @@ class CDashboard extends CI_Controller {
                 $data['data_jadwal_harian'] = [];
                 $data['data_jadwal_stimulus'] = [];
                 $data['id_rincianjadwal_mingguan'] = '';
+            }
+
+            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            if (!empty($data['list_anak'])) {
+                $data['id_anak'] = $data['list_anak'][0]->id;
+            }else{
+                $data['id_anak'] = 0;
             }
 
             $this->load->view('inc/dashboard/pengasuh', $data);
