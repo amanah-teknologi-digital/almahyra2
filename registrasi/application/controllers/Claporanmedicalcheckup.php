@@ -178,6 +178,23 @@ class Claporanmedicalcheckup extends CI_Controller {
             'config' => $data['config']
         ];
 
+        $data['id_checkup'] = $id_checkup;
+
         $this->load->view('inc/laporanmedicalcheckup/lihat_data', $data);
+    }
+
+    function cetakrekammedik(){
+        $data = $this->data;
+
+        $id_checkup = $_POST['id_checkup'];
+
+        $data['data_checkup'] = $this->LaporanMedicalCheckup->getDataCheckup($id_checkup);
+        $data['data_rinciancheckup'] = $this->LaporanMedicalCheckup->getDataRincianCheckup($id_checkup);
+        $data['role'] = $this->role;
+        $data['list_file'] = $this->LaporanMedicalCheckup->getDokumentasiFile($id_checkup);
+
+        $data['id_checkup'] = $id_checkup;
+
+        $this->load->view('inc/laporanmedicalcheckup/cetak_rekammedic', $data);
     }
 }

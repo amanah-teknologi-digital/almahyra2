@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Laporan Medical Checkup</title>
+    <title>Laporan Rekam Medik</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <link href="<?= base_url().'dist-assets/'?>css/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <style>
@@ -167,42 +167,70 @@
     </style>
 </head>
 <body class="A4">
-<?php $i = 0; $iter = 0;
-foreach ($data_medical_checkup as $key => $value){ ?>
-    <?php if ($iter == 0 OR $iter % 26 == 0){ ?>
-        <section class="sheet padding-10mm"><div class="container">
-        <?php if ($iter == 0){ ?>
-            <br>
-            <h1>Laporan Medical Checkup&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Tahun <?= $tahun_selected?><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_anak->nama_kelas ?>)</i></span></span></h1>
-        <?php } ?>
+<section class="sheet padding-10mm">
+    <div class="container">
+        <h1>Rekam Medic&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_checkup->nama_kelas ?>)</i></span></span></h1>
         <br>
-        <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
-        <thead>
-        <tr style="background-color: #bfdfff">
-            <th style="width: 15%">Tanggal</th>
-            <th style="width: 15%">Berat Badan</th>
-            <th style="width: 15%">Tinggi Badan</th>
-            <th style="width: 15%">Lingkar Lengan</th>
-            <th style="width: 15%">Lingkar Kepala</th>
-            <th style="width: 25%">Keterangan</th>
-        </tr>
-        </thead>
-        <tbody>
-    <?php } ?>
-    <tr>
-        <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value['tanggal']).', '.date('d-m-Y', strtotime($value['tanggal'])) ?></td>
-        <td nowrap align="center"><?= $value['berat_badan'].' '.$value['satuanberat_badan']; ?></td>
-        <td nowrap align="center"><?= $value['tinggi_badan'].' '.$value['satuantinggi_badan']; ?></td>
-        <td nowrap align="center"><?= $value['lingkar_lengan'].' '.$value['satuanlingkar_lengan']; ?></td>
-        <td nowrap align="center"><?= $value['lingkar_kepala'].' '.$value['satuanlingkar_kepala']; ?></td>
-        <td><span class="text-muted text-small font-italic"><?= $value['keterangan']; ?></span></td>
-    </tr>
-    <?php if ($iter == count($data_medical_checkup)-1 OR $iter % 26 == 25){ ?>
-        </tbody>
+        <table style="font-family: 'Open Sans', sans-serif; font-style: italic;margin-bottom: 5px; border-collapse: collapse" border="1">
+            <colgroup>
+                <col style="width: 20%">
+                <col style="width: 80%">
+            </colgroup>
+            <tr>
+                <th style="padding: 10px;">Deskripsi</th>
+                <th style="padding: 10px;">Nilai</th>
+            </tr>
+            <?php foreach ($data_rinciancheckup as $row){ ?>
+                <tr>
+                    <td nowrap style="padding: 10px;"><?= $row->nama_kolom ?></td>
+                    <td style="padding: 10px;">
+                        <span style="font-weight: bold"><?= $row->nilai.' '.$row->satuan; ?></span>
+                        <?php if(!empty($row->aksi)){ ?>
+                            &nbsp;<span>Aksi: <?= !empty($row->aksi_medic)? $row->aksi_medic:''; ?></span>
+                        <?php } ?>
+                    </td>
+                </tr>
+            <?php } ?>
         </table>
-        </div>
-        </section>
+    </div>
+</section>
+<?php if (count($list_file) > 0) { ?>
+    <?php $i = 0;
+    $iter = 0;
+    foreach ($list_file as $key => $value) { ?>
+        <?php if ($iter == 0 or $iter % 12 == 0) { ?>
+            <section class="sheet padding-10mm"><div class="container">
+            <?php if ($iter == 0) { ?>
+                <h5><b><i class="fas fa-fw fa-photo-film"></i> Dokumentasi Rekam Medik</b></h5>
+            <?php }else{ ?>
+                <br>
+            <?php } ?>
+            <table style="border-collapse:separate; border-spacing: 0 1em;">
+            <tbody>
+        <?php } ?>
+        <?php if ($iter == 0 OR $iter % 3 == 0){ ?>
+    <tr>
     <?php } ?>
-    <?php $iter++; } ?>
+        <td align="center">
+            <img src="<?= base_url().$value->download_url ?>" border=1 height=180 width=180 />
+        </td>
+        <?php if ($iter == count($list_file) - 1 or $iter % 3 == 2){ ?>
+    </tr>
+    <?php } ?>
+        <?php if ($iter == count($list_file) - 1 or $iter % 12 == 11) { ?>
+            </tbody>
+            </table>
+            </div>
+            </section>
+        <?php } ?>
+        <?php $iter++;
+    } ?>
+<?php }else{ ?>
+    <section class="sheet padding-10mm">
+        <div class="container">
+            <h5><b><i class="fas fa-fw fa-photo-film"></i> Dokumentasi Rekam Medik</b></h5>
+        </div>
+    </section>
+<?php } ?>
 </body>
 </html>

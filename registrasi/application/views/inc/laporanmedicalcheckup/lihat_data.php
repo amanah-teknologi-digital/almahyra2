@@ -106,6 +106,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Medical Checkup Hari&nbsp;<b><?= format_date_indonesia($data_checkup->tanggal).', '.date('d-m-Y', strtotime($data_checkup->tanggal)) ?></b></h5>
                                     <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></span></h5>
+                                    <?php echo form_open_multipart($controller.'/cetakrekammedik', 'target="blank"'); ?>
+                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Rekam Medic</button>
+                                    <input type="hidden" name="id_checkup" value="<?= $id_checkup ?>">
+                                    </form>
                                     <hr>
                                     <h5><span class="fas fa-stethoscope"></span>&nbsp;Rekam Medik</h5>
                                     <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_checkup->updated_at)? timeAgo($data_checkup->created_at):timeAgo($data_checkup->updated_at); ?> </i></span></p>
