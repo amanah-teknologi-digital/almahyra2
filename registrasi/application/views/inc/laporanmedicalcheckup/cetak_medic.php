@@ -168,54 +168,36 @@
 </head>
 <body class="A4">
 <?php $i = 0; $iter = 0;
-foreach ($data_absensi as $key => $value){ ?>
+foreach ($data_medical_checkup as $key => $value){ ?>
     <?php if ($iter == 0 OR $iter % 26 == 0){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
-            <h1>Laporan Absensi Anak&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Tahun <?= $tahun_selected?><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_anak->nama_kelas ?>)</i></span></span></h1>
+            <h1>Laporan Medical Checkup&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Tahun <?= $tahun_selected?><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_anak->nama_kelas ?>)</i></span></span></h1>
         <?php } ?>
         <br>
         <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
         <thead>
         <tr style="background-color: #bfdfff">
             <th style="width: 15%">Tanggal</th>
-            <th style="width: 20%">Waktu Masuk</th>
-            <th style="width: 20%">Waktu Pulang</th>
-            <th style="width: 20%">Status</th>
+            <th style="width: 15%">Berat Badan</th>
+            <th style="width: 15%">Tinggi Badan</th>
+            <th style="width: 15%">Lingkar Lengan</th>
+            <th style="width: 15%">Lingkar Kepala</th>
             <th style="width: 25%">Keterangan</th>
         </tr>
         </thead>
         <tbody>
     <?php } ?>
     <tr>
-        <td nowrap align="center" style="font-weight: bold ;font-style: italic; color: grey"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
-        <td nowrap align="center"><?= $value->waktu_checkin ?></td>
-        <td nowrap align="center"><?= $value->waktu_checkout ?></td>
-        <td align="center" nowrap style="font-size: 10px">
-            <?php if (empty($value->id_absensi)) { ?>
-                <span style="color: red">Belum Absen</span>
-            <?php } else { ?>
-                <?php if (!empty($value->waktu_checkout)){ ?>
-                    <span style="font-style: italic; font-weight: bold">Durasi : <?= hitung_durasi_waktu($value->waktu_checkin, $value->waktu_checkout); ?></span>
-                <?php }else{ ?>
-                    <span style="color: orangered">Belum Absen Pulang</span>
-                <?php } ?>
-            <?php } ?>
-        </td>
-        <td nowrap>
-            <?php if (!empty($value->id_absensi)) { ?>
-                &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 10px; color: grey; font-style: italic">Suhu Tubuh Masuk: <b><?= $value->suhu ?> °C</b>, Kondisi Masuk: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b></span>
-                <?php if (!empty($value->waktu_checkout)){ ?>
-                    <br>
-                    &bullet;&nbsp;<span style="font-size: 10px; color: grey; font-style: italic">Suhu Tubuh Pulang: <b><?= $value->suhu_checkout ?> °C</b>, Kondisi Pulang: <b><?= $value->kondisi_checkout == 1 ? 'Sehat':'Kurang Sehat' ?></b></span>
-                <?php } ?>
-            <?php } else { ?>
-                <center>-</center>
-            <?php } ?>
-        </td>
+        <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value['tanggal']).', '.date('d-m-Y', strtotime($value['tanggal'])) ?></td>
+        <td nowrap align="center"><?= $value['berat_badan'].' '.$value['satuanberat_badan']; ?></td>
+        <td nowrap align="center"><?= $value['tinggi_badan'].' '.$value['satuantinggi_badan']; ?></td>
+        <td nowrap align="center"><?= $value['lingkar_lengan'].' '.$value['satuanlingkar_lengan']; ?></td>
+        <td nowrap align="center"><?= $value['lingkar_kepala'].' '.$value['satuanlingkar_kepala']; ?></td>
+        <td><span class="text-muted text-small font-italic"><?= $value['keterangan']; ?></span></td>
     </tr>
-    <?php if ($iter == count($data_absensi)-1 OR $iter % 26 == 25){ ?>
+    <?php if ($iter == count($data_medical_checkup)-1 OR $iter % 26 == 25){ ?>
         </tbody>
         </table>
         </div>

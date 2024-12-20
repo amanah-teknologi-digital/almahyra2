@@ -66,9 +66,9 @@
                                         </form>
                                         <hr>
                                         <?php if (!empty($data_anak)){ ?>
-                                            <?php echo form_open_multipart($controller.'/cetakabsensianak', 'target="blank"'); ?>
-                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Absensi Anak&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
-                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Absensi</button>
+                                            <?php echo form_open_multipart($controller.'/cetakmedicalcheckup', 'target="blank"'); ?>
+                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Medical Chekup&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
+                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Data Checkup</button>
                                                 </h5>
                                                 <input type="hidden" name="id_anak" value="<?= $id_anak ?>">
                                                 <input type="hidden" name="tahun" value="<?= $tahun_selected ?>">
@@ -79,43 +79,25 @@
                                                     <thead>
                                                     <tr>
                                                         <th style="width: 15%">Tanggal</th>
-                                                        <th style="width: 20%">Waktu Masuk</th>
-                                                        <th style="width: 20%">Waktu Pulang</th>
-                                                        <th style="width: 20%">Status</th>
-                                                        <th style="width: 25%">Keterangan</th>
+                                                        <th style="width: 10%">Berat Badan</th>
+                                                        <th style="width: 10%">Tinggi Badan</th>
+                                                        <th style="width: 10%">Lingkar Lengan</th>
+                                                        <th style="width: 10%">Lingkar Kepala</th>
+                                                        <th style="width: 30%">Keterangan</th>
+                                                        <th style="width: 15%">Aksi</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <?php $no = 1; foreach ($data_absensi as $key => $value) { ?>
+                                                    <?php $no = 1; foreach ($data_medical_checkup as $key => $value) { ?>
                                                         <tr>
-                                                            <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
-                                                            <td nowrap align="center"><?= $value->waktu_checkin ?></td>
-                                                            <td nowrap align="center"><?= $value->waktu_checkout ?></td>
-                                                            <td align="center" nowrap style="font-size: 11px">
-                                                                <?php if (empty($value->id_absensi)) { ?>
-                                                                    <span class="badge badge-danger">Belum Absen</span>
-                                                                <?php } else { ?>
-                                                                    <?php if (!empty($value->waktu_checkout)){ ?>
-                                                                        <span class="text-info font-italic font-weight-bold">Durasi : <?= hitung_durasi_waktu($value->waktu_checkin, $value->waktu_checkout); ?></span>
-                                                                    <?php }else{ ?>
-                                                                        <span class="badge badge-warning">Belum Absen Pulang</span>
-                                                                    <?php } ?>
-                                                                <?php } ?>
-                                                            </td>
-                                                            <td nowrap>
-                                                                <?php if (!empty($value->id_absensi)) { ?>
-                                                                    &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 11px">
-                                                                        Suhu Tubuh Masuk: <b><?= $value->suhu ?> °C</b>, Kondisi Masuk: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b>
-                                                                    </span>
-                                                                    <?php if (!empty($value->waktu_checkout)){ ?>
-                                                                        <br>
-                                                                        &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 11px">
-                                                                        Suhu Tubuh Pulang: <b><?= $value->suhu_checkout ?> °C</b>, Kondisi Pulang: <b><?= $value->kondisi_checkout == 1 ? 'Sehat':'Kurang Sehat' ?></b>
-                                                                    </span>
-                                                                    <?php } ?>
-                                                                <?php } else { ?>
-                                                                    <center>-</center>
-                                                                <?php } ?>
+                                                            <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value['tanggal']).', '.date('d-m-Y', strtotime($value['tanggal'])) ?></td>
+                                                            <td nowrap align="center"><?= $value['berat_badan'].' '.$value['satuanberat_badan']; ?></td>
+                                                            <td nowrap align="center"><?= $value['tinggi_badan'].' '.$value['satuantinggi_badan']; ?></td>
+                                                            <td nowrap align="center"><?= $value['lingkar_lengan'].' '.$value['satuanlingkar_lengan']; ?></td>
+                                                            <td nowrap align="center"><?= $value['lingkar_kepala'].' '.$value['satuanlingkar_kepala']; ?></td>
+                                                            <td><span class="text-muted text-small font-italic"><?= $value['keterangan']; ?></span></td>
+                                                            <td align="center">
+                                                                <a href="<?= base_url().$redirect.'/lihat-data/'.$value['id_checkup'] ?>" class="btn btn-sm btn-icon btn-success" data-id="<?= $value['id_checkup']; ?>"><span class="fas fa-eye-dropper"></span>&nbsp;Data Checkup</a>
                                                             </td>
                                                         </tr>
                                                     <?php } ?>
