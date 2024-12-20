@@ -104,8 +104,16 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Belajar Aktivitas Harian&nbsp;<b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h5 class="text-center card-title mb-1">Hasil Belajar Aktivitas Harian&nbsp;<b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h5 class="text-center card-title mb-1">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia_histori($data_anak->tanggal_lahir, $data_anak->tanggal_aktivitas) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></h5>
+                                        </div>
+                                    </div>
                                     <br>
                                     <?php echo form_open_multipart($controller.'/simpan', 'id="frm_simpan"'); ?>
                                         <div class="table-responsive">
@@ -178,9 +186,13 @@
                                             <h4><i class="fas fa-fw fa-info-circle"></i> Fokus <?= $data_stimulus->nama ?>&nbsp;<span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></h4>
                                             <span><?= isset($data_stimulus)? $data_stimulus->rincian_kegiatan:'';  ?></span>
                                             <span class="font-italic text-muted">Keterangan: <?= isset($data_stimulus)? $data_stimulus->keterangan:'-';  ?></span>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <h4 class="mt-3 text-warning font-weight-bold" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
-                                                <a href="#" class="btn btn-sm btn-primary tambahindikator"><i class="fas fa-fw fa-plus"></i> Tambah Capaian Indikator</a>
+                                            <div class="row d-flex justify-content-center align-items-center">
+                                                <div class="col-sm-8">
+                                                    <h4 class="mt-3 text-warning font-weight-bold" style="text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;"><i class="fas fa-fw fa-award"></i> Capaian Indikator</h4>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <a href="#" class="btn btn-sm btn-primary tambahindikator float-right"><i class="fas fa-fw fa-plus"></i> Tambah Capaian Indikator</a>
+                                                </div>
                                             </div>
                                             <?php if (count($capaian_indikator) > 0){ ?>
                                                 <table class="table table-sm table-bordered" style="font-size: 11px;">

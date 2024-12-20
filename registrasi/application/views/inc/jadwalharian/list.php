@@ -81,7 +81,11 @@
                                         } ?>
 
                                         <?php if (!empty($data_bulan->id_temabulanan)){ ?>
-                                            <h5 class="card-title d-flex align-items-center justify-content-center">Tematik Bulan&nbsp;<b><?= $data_bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $data_bulan->nama_temabulanan ?></span></h5>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5 class="card-title text-center">Tematik Bulan&nbsp;<b><?= $data_bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $data_bulan->nama_temabulanan ?></span></h5>
+                                                </div>
+                                            </div>
                                             <br>
                                             <div class="mb-3 d-flex justify-content-between align-items-center"><span class="text-muted font-italic text-small">
                                                 <?php if (!empty($data_bulan->deskripsi)){ ?>

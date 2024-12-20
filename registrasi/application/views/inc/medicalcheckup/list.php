@@ -31,7 +31,11 @@
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Medical Checkup Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h5 class="card-title text-center">Hasil Medical Checkup Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
+                                        </div>
+                                    </div>
                                     <br>
                                     <div class="table-responsive">
                                         <table class="display table table-striped table-bordered table-sm" id="tbl-absensi" style="width:100%">

@@ -79,19 +79,29 @@
                                         <hr>
                                         <?php if (!empty($data_anak)){ ?>
                                             <?php echo form_open_multipart($controller.'/cetakaktivitas', 'target="blank"'); ?>
-                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Aktifitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
+                                            <div class="row d-flex justify-content-center align-items-center">
+                                                <div class="col-sm-10">
+                                                    <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Aktifitas Harian&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span></span></h5>
+                                                </div>
+                                                <div class="col-sm-2">
                                                     <?php if (!empty($id_aktivitas)){ ?>
                                                         <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Aktivitas</button>
                                                     <?php } ?>
-                                                </h5>
-                                                <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="id_aktivitas" value="<?= $id_aktivitas ?>">
                                             </form>
                                         <?php }else{ ?>
                                             <h5 class="card-title mb-1 d-flex align-content-center justify-content-center"><span class="text-danger font-weight-bold">Pilih Anak terlebih dahulu, kemudian klik tombol <span class="text-success">Tampilkan</span> untuk menampilkan data!</span></h5>
                                         <?php } ?>
                                         <br>
                                         <?php if (!empty($id_aktivitas)){ ?>
-                                            <h5 class="card-title mb-1 d-flex align-items-center justify-content-center"><b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h5 class="card-title text-center"><b><?= format_date_indonesia($data_subtema->tanggal).', '.date('d-m-Y', strtotime($data_subtema->tanggal)) ?></b>&nbsp;subtema&nbsp;<b><?= $data_subtema->nama_subtema ?></b></h5>
+
+                                                </div>
+                                            </div>
                                             <br>
                                             <table style="font-size: 12px; font-style: italic">
                                                 <tr>

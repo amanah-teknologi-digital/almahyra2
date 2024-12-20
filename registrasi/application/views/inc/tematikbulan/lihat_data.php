@@ -24,7 +24,11 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title d-flex align-items-center justify-content-center">Rencana Belajar Bulanan untuk Tematik Tahun <?= $tahun_tematik ?>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $tema_tahun->uraian ?></span></h5>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h5 class="card-title text-center">Rencana Belajar Bulanan untuk Tematik Tahun <?= $tahun_tematik ?>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $tema_tahun->uraian ?></span></h5>
+                                        </div>
+                                    </div>
                                     <fieldset>
                                         <div class="accordion" id="accordionRightIcon">
                                             <?php foreach ($list_bulan as $bulan){
@@ -51,7 +55,11 @@
                                                     <div class="collapse" id="accordion-item-icon-right-<?= $bulan->bulan ?>" data-parent="#accordionRightIcon">
                                                         <div class="card-body ">
                                                             <?php if (!empty($bulan->id_temabulanan)){ ?>
-                                                                <h5 class="card-title d-flex align-items-center justify-content-center">Tematik Bulan&nbsp;<b><?= $bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $bulan->nama_temabulanan ?></span></h5>
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <h5 class="card-title text-center">Tematik Bulan&nbsp;<b><?= $bulan->nama_bulan ?></b>&nbsp;dengan Tema&nbsp;<span class="text-success font-weight-bold"><?= $bulan->nama_temabulanan ?></span></h5>
+                                                                    </div>
+                                                                </div>
                                                                 <br>
                                                                 <div class="mb-3 d-flex justify-content-between align-items-center">
                                                                     <span class="text-muted font-italic text-small">

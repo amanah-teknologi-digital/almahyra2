@@ -104,10 +104,17 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Hasil Medical Checkup Hari&nbsp;<b><?= format_date_indonesia($data_checkup->tanggal).', '.date('d-m-Y', strtotime($data_checkup->tanggal)) ?></b></h5>
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></span></h5>
+                                    <div class="row">
+                                        <div class="col-sm-10">
+                                            <h5 class="card-title">Hasil Medical Checkup Hari&nbsp;<b><?= format_date_indonesia($data_checkup->tanggal).', '.date('d-m-Y', strtotime($data_checkup->tanggal)) ?></b>
+                                                a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></span>
+                                            </h5>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Rekam Medic</button>
+                                        </div>
+                                    </div>
                                     <?php echo form_open_multipart($controller.'/cetakrekammedik', 'target="blank"'); ?>
-                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Rekam Medic</button>
                                     <input type="hidden" name="id_checkup" value="<?= $id_checkup ?>">
                                     </form>
                                     <hr>

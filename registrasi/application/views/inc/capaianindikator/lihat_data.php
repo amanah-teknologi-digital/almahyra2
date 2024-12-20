@@ -105,9 +105,14 @@
                             <div class="card text-left">
                                 <div class="card-body">
                                     <?php echo form_open_multipart($controller.'/cetakcapaian', 'target="blank"'); ?>
-                                    <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Capaian Indikator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
-                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
-                                    </h5>
+                                    <div class="row d-flex justify-content-center align-items-center">
+                                        <div class="col-sm-10">
+                                            <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Capaian Indikator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span></h5>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Capaian</button>
+                                        </div>
+                                    </div>
                                     <input type="hidden" name="id_anak" value="<?= $data_anak->id ?>">
                                     </form>
                                     <br>

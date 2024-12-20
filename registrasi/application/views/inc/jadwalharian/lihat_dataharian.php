@@ -24,7 +24,11 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title d-flex align-items-center justify-content-center">Data Jadwal Harian untuk Sub Tema&nbsp;<span class="text-success"><?= $data_subtema->nama ?></span>&nbsp;pada Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia($data_rincianjadwal_mingguan->tanggal).', '.date('d-m-Y', strtotime($data_rincianjadwal_mingguan->tanggal)); ?></span></h5>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <h5 class="card-title text-center">Data Jadwal Harian untuk Sub Tema&nbsp;<span class="text-success"><?= $data_subtema->nama ?></span>&nbsp;pada Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia($data_rincianjadwal_mingguan->tanggal).', '.date('d-m-Y', strtotime($data_rincianjadwal_mingguan->tanggal)); ?></span></h5>
+                                        </div>
+                                    </div>
                                     <br>
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <?php foreach ($data_kelas as $key => $kelas){
@@ -41,7 +45,7 @@
                                         <?php foreach ($data_kelas as $key => $kelas){ ?>
                                             <div class="tab-pane fade show <?= $active_tab_kelas==$kelas->id_kelas ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
                                                 <div class="card-body shadow">
-                                                    <h5 class="card-title"><b>Jadwal Harian</b></h5>
+                                                    <h5 class="card-title"><b><span class="fas fa-calendar"></span> Jadwal Harian</b></h5>
                                                     <?php echo form_open_multipart('', 'id="frm_gettemplate_jadwal'.$kelas->id_kelas.'"'); ?>
                                                         <div class="row mb-3 d-flex align-items-center justify-content-center">
                                                             <div class="col-sm-4">
@@ -119,7 +123,7 @@
                                                 </div>
                                                 <br>
                                                 <div class="card-body shadow">
-                                                    <h5 class="card-title"><b>Data Stimulus</b></h5>
+                                                    <h5 class="card-title"><b><i class="fas fa-lightbulb"></i> Data Stimulus</b></h5>
                                                     <?php echo form_open_multipart('', 'id="frm_gettemplate_stimulus'.$kelas->id_kelas.'"'); ?>
                                                         <div class="row mb-3 d-flex align-items-center justify-content-center">
                                                             <div class="col-sm-4">
@@ -165,7 +169,7 @@
                                                 </div>
                                                 <br>
                                                 <div class="card-body shadow">
-                                                    <h5 class="card-title"><b>Data Feeding Menu</b></h5>
+                                                    <h5 class="card-title"><b><i class="fas fa-burger"></i> Data Feeding Menu</b></h5>
                                                     <?php echo form_open_multipart($controller.'/updatefeedingmenu', 'id="frm_feedingmenu'.$kelas->id_kelas.'"'); ?>
                                                     <fieldset>
                                                         <div class="form-group">

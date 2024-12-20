@@ -192,9 +192,9 @@
                                                     <div class="tab-pane fade show <?= $key==0 ?'active':''; ?>" id="tab<?= $kelas->id_kelas ?>" role="tabpanel">
                                                         <div class="card-body">
                                                             <?php echo form_open_multipart($controller.'/cetakjadwalharian', 'target="blank"'); ?>
-                                                                <h5 class="card-title d-flex align-items-center justify-content-between"><b class="float-left"><i class="fas fa-calendar"></i> Jadwal Harian</b>
-                                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Jadwal</button>
-                                                                </h5>
+                                                                <span class="card-title d-flex align-items-center justify-content-between">
+                                                                    <button class="btn btn-sm btn-primary float-left"><span class="fas fa-print"></span>&nbsp;Cetak Jadwal <?= $kelas->nama ?></button>
+                                                                </span>
                                                                 <input type="hidden" name="id_rincianjadwal_mingguan" value="<?= $id_rincianjadwal_mingguan ?>">
                                                                 <input type="hidden" name="id_kelas" value="<?= $kelas->id_kelas ?>">
                                                             </form>

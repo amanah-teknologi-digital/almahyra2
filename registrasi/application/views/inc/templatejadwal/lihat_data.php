@@ -24,7 +24,9 @@
                             <a href="<?= base_url().$redirect ?>" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Kembali</a>
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title d-flex align-items-center justify-content-center">Data Template Jadwal Harian&nbsp;<span class="text-success font-weight-bold"><?= $data_template->nama ?></span></h5>
+                                    <div class="row mb-3 d-flex align-items-center justify-content-center">
+                                        <h5 class="card-title text-center">Data Template Jadwal Harian&nbsp;<span class="text-success font-weight-bold"><?= $data_template->nama ?></span></h5>
+                                    </div>
                                     <div class="row mb-3 d-flex align-items-center justify-content-center">
                                         <div class="col-sm-12">
                                             <button class="btn btn-sm btn-primary btn-tambahkegiatan float-right" ><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</button>

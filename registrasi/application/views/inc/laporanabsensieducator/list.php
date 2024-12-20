@@ -69,9 +69,14 @@
                                         <hr>
                                         <?php if (!empty($data_educator)){ ?>
                                             <?php echo form_open_multipart($controller.'/cetakabsensieducator', 'target="blank"'); ?>
-                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Absensi Educator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_educator->nama_educator ?></span></span>
-                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Absensi</button>
-                                                </h5>
+                                                <div class="row d-flex justify-content-center align-items-center">
+                                                    <div class="col-sm-10">
+                                                        <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Absensi Educator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_educator->nama_educator ?></span></span></h5>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Absensi</button>
+                                                    </div>
+                                                </div>
                                                 <input type="hidden" name="id_user" value="<?= $id_user ?>">
                                                 <input type="hidden" name="tahun" value="<?= $tahun_selected ?>">
                                             </form>

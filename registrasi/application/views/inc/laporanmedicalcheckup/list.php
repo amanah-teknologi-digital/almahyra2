@@ -67,9 +67,14 @@
                                         <hr>
                                         <?php if (!empty($data_anak)){ ?>
                                             <?php echo form_open_multipart($controller.'/cetakmedicalcheckup', 'target="blank"'); ?>
-                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Medical Chekup&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span>
-                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Data Checkup</button>
-                                                </h5>
+                                                <div class="row d-flex justify-content-center align-items-center">
+                                                    <div class="col-sm-10">
+                                                        <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Medical Chekup&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span></h5>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Data Checkup</button>
+                                                    </div>
+                                                </div>
                                                 <input type="hidden" name="id_anak" value="<?= $id_anak ?>">
                                                 <input type="hidden" name="tahun" value="<?= $tahun_selected ?>">
                                             </form>
