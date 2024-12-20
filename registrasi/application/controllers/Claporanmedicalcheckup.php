@@ -26,7 +26,14 @@ class Claporanmedicalcheckup extends CI_Controller {
             'redirect'=>'laporan-medicalcheckup',
             'title'=>'Laporan Medical Checkup',
             'parent'=>'laporan',
+            'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
+            'categori_video' => ['mp4', '3gp', 'avi', 'mkv','mov']
         );
+
+        if ($this->role == 6) {
+            $this->data['parent'] = 'checkup';
+        }
+
 		## load model here 
 		$this->load->model('Mlaporanmedicalcheckup', 'LaporanMedicalCheckup');
 	}
