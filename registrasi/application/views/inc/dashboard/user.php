@@ -123,7 +123,7 @@
                         <div class="col-md-12">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Perkembangan Anak</b></span>
+                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Pertumbuhan Anak</b></span>
                                     <hr>
                                     <div class="form-group row">
                                         <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
