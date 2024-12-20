@@ -43,7 +43,7 @@
 
             $tanggal_sekarang = date('Y-m-d');
 
-            if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
+            if ($id_role == 1 OR $id_role == 2 OR $id_role == 6){ // admin & superadmin & system absen
                 $where_anak = "";
             }elseif ($id_role == 3){ // educator
                 $where_anak = " AND a.educator = $user->id";
