@@ -106,67 +106,44 @@
                                 <div class="card-body">
                                     <div class="row text-center d-flex align-items-center justify-content-center">
                                         <div class="col-sm-12">
-                                            <h5 class="card-title mb-1">Hasil Medical Checkup Hari&nbsp;<b><?= format_date_indonesia($data_checkup->tanggal).', '.date('d-m-Y', strtotime($data_checkup->tanggal)) ?></b></h5>
-                                            <h5 class="card-title mb-1">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_checkup->tanggal_lahir) ?> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></span></h5>
+                                            <h5 class="card-title mb-1">Pencatatan Barang Hari&nbsp;<b><?= format_date_indonesia($data_checkup->tanggal).', '.date('d-m-Y', strtotime($data_checkup->tanggal)) ?></b></h5>
+                                            <h5 class="card-title mb-1">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_checkup->nama_anak ?></span> <span class="text-muted">(<?= $data_checkup->nama_kelas ?>)</span></h5>
                                         </div>
                                     </div>
                                     <hr>
-                                    <h5><span class="fas fa-stethoscope"></span>&nbsp;Rekam Medik</h5>
-                                    <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_checkup->updated_at)? timeAgo($data_checkup->created_at):timeAgo($data_checkup->updated_at); ?> </i></span></p>
-                                    <?php echo form_open_multipart($controller.'/simpanrekammedik', 'id="frm_simpan" enctype="multipart/form-data"'); ?>
-                                        <fieldset>
-                                            <?php foreach ($data_rinciancheckup as $row){ ?>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label><b><?= $row->nama_kolom ?></b><?= (!empty($row->satuan))? '&nbsp;<i>('.$row->satuan.')</i>':'' ?></label>
-                                                            <?php if ($row->jenis_kolom == 'number'){ ?>
-                                                                <input type="text" class="form-control" name="<?= $row->kolom ?>" id="<?= $row->kolom ?>" value="<?= (!empty($row->nilai))? $row->nilai:'' ?>" required placeholder="(Gunakan titik untuk koma)" autocomplete="off">
-                                                            <?php }elseif ($row->jenis_kolom == 'select'){ $temp_pilihan = json_decode($row->pilihan, true); ?>
-                                                                <select class="form-control" name="<?= $row->kolom ?>" id="<?= $row->kolom ?>" required>
-                                                                    <option value="">-- Pilih <?= $row->nama_kolom ?> --</option>
-                                                                    <?php foreach ($temp_pilihan as $pil){ ?>
-                                                                        <option value="<?= $pil ?>" <?= $pil == $row->nilai? 'selected':''; ?>><?= $pil ?></option>
-                                                                    <?php } ?>
-                                                                </select>
-                                                            <?php } ?>
-                                                        </div>
-                                                    </div>
-                                                    <?php if (!empty($row->action)){ $temp_pilihan = json_decode($row->action, true); ?>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label><b>Action <?= $row->nama_kolom ?></b></label>
-                                                                <select class="form-control" name="action_<?= $row->kolom ?>" id="action_<?= $row->kolom ?>" required>
-                                                                    <option value="">-- Pilih Action <?= $row->nama_kolom ?> --</option>
-                                                                    <?php foreach ($temp_pilihan as $pil){ ?>
-                                                                        <option value="<?= $pil ?>" <?= $pil == $row->aksi_medic? 'selected':''; ?>><?= $pil ?></option>
-                                                                    <?php } ?>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                </div>
-                                            <?php } ?>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label><b>Keterangan</b> <i>(Optional)</i></label>
-                                                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"><?= !empty($data_checkup->keterangan)? $data_checkup->keterangan:''; ?></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <br>
-                                        <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
-                                        <br>
-                                        <div class="file-loading">
-                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h5><span class="fas fa-briefcase"></span>&nbsp;List Barang</h5>
                                         </div>
-                                        <br>
-                                        <center><button class="btn btn-success" id="btn_simpan" type="submit"><span class="fas fa-save"></span>&nbsp;Simpan Hasil Checkup</button></center>
-                                        <input type="hidden" name="id_checkup" value="<?= $data_checkup->id_checkup ?>">
-                                    </form>
-                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data medical checkup sesuai uraian yang diberikan!.</span></p>
+                                        <div class="col-sm-4">
+                                            <button class="btn btn-sm btn-primary float-right" id="btn-tambahbarang"><span class="fas fa-plus"></span>&nbsp;Tambah Barang</button>
+                                        </div>
+                                    </div>
+                                    <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_checkup->updated_at)? timeAgo($data_checkup->created_at):timeAgo($data_checkup->updated_at); ?> </i></span></p>
+                                    <table class="table-sm table table-bordered">
+                                        <thead style="background-color: #bfdfff">
+                                            <tr>
+                                                <th style="width: 5%">No</th>
+                                                <th style="width: 20%">Nama Barang</th>
+                                                <th style="width: 15%">Kondisi</th>
+                                                <th style="width: 15%">Jumlah</th>
+                                                <th style="width: 30%">Keterangan</th>
+                                                <th style="width: 15%">Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php if (count($data_rinciancheckup) > 0){ ?>
+                                            <tr>
+                                                <td colspan="6" class="text-center">Data kosong</td>
+                                            </tr>
+                                        <?php }else{ ?>
+                                            <tr>
+                                                <td colspan="6" class="text-center">Data kosong</td>
+                                            </tr>
+                                        <?php } ?>
+                                        </tbody>
+                                    </table>
+                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Pencatatan barang bisa dilakukan selama <b>belum ada approve</b>. dan pencatatan barang waktu pulang harus dalam keaadaan <b>sudah approve</b> terlebih dahulu.</span></p>
                                 </div>
                             </div>
                         </div>

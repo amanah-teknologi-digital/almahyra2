@@ -65,7 +65,7 @@
 
         function getDataAbsensiBarang($id_absensi){
             $sql = "SELECT a.*, b.nama as nama_anak, b.tanggal_lahir, c.name as nama_user, d.name as nama_role,
-                g.nama as nam_kelas
+                g.nama as nama_kelas
                 FROM absen_barang a 
                 JOIN registrasi_data_anak b ON b.id = a.id_anak
                 JOIN data_user c ON c.id = a.updater
