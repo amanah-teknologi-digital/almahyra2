@@ -263,7 +263,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'absensi-items'; ?>">
+                    <a href="<?= base_url().'absensi-barang'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Absensi Barang</span>
                     </a>

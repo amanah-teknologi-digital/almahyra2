@@ -96,6 +96,8 @@ $route['pembayaran-tagihan'] = 'cptagihan';
 
 // absensi
 $route['absensi-anak'] = 'cabsensianak';
+$route['absensi-barang'] = 'cabsensibarang';
+$route['absensi-barang/lihat-data/(:any)'] = 'cabsensibarang/lihatdata/$1';
 $route['absensi-educator'] = 'cabsensieducator';
 $route['absensi-items'] = 'cabsensiitems';
 $route['absensi-pengasuh'] = 'cabsensipengasuh';
