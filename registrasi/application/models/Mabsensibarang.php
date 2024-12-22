@@ -63,6 +63,35 @@
             }
         }
 
+        function getDataAbsensiBarang($id_absensi){
+            $sql = "SELECT a.*, b.nama as nama_anak, b.tanggal_lahir, c.name as nama_user, d.name as nama_role,
+                g.nama as nam_kelas
+                FROM absen_barang a 
+                JOIN registrasi_data_anak b ON b.id = a.id_anak
+                JOIN data_user c ON c.id = a.updater
+                JOIN m_role d ON d.id = c.id_role
+                JOIN v_kategori_usia e ON e.id = b.id
+                JOIN map_kelasusia f ON f.id_usia = e.id_usia
+                JOIN ref_kelas g ON g.id_kelas = f.id_kelas
+                WHERE a.id_absensi = $id_absensi";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getDataRincianBarang($id_absensi){
+            $sql = "SELECT a.*, b.*, c.name as nama_barang
+                FROM absen_barang a 
+                JOIN rincian_absensibarang b ON b.id_absensi = a.id_absensi
+                JOIN m_items c ON c.id = b.id_barang
+                WHERE a.id_absensi = $id_absensi";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getDataAbsenByIdAnak($id_anak){
             $tanggal_sekarang = date('Y-m-d');
 

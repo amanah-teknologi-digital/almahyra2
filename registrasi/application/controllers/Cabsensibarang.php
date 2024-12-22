@@ -49,10 +49,11 @@ class Cabsensibarang extends CI_Controller {
         redirect($this->data['redirect'].'/lihat-data/'.$id_checkup);
     }
 
-    public function lihatdata($id_checkup){
+    public function lihatdata($id_absensi){
         $data = $this->data;
 
-        var_dump($id_checkup);exit();
+        $data['data_checkup'] = $this->Absensibarang->getDataAbsensiBarang($id_absensi);
+        $data['data_rinciancheckup'] = $this->Absensibarang->getDataRincianBarang($id_absensi);
 
         $this->load->view('inc/absensibarang/lihat_data', $data);
     }
