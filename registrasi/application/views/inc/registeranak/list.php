@@ -35,6 +35,7 @@
                                                     <th>Gol.Darah</th>
                                                     <th>Keterangan</th>
                                                     <th>Status</th>
+                                                    <th>Educator</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -62,6 +63,7 @@
                                                                 <label class="form-check-label" for="inlineRadio2">Non Aktif</label>
                                                             </div>
                                                         </td>
+                                                        <td nowrap><b><?= $row->nama_educator; ?></b></td>
                                                         <td align="center" nowrap>
                                                             <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->id; ?>">
                                                                 <span class="ul-btn__icon">
@@ -256,6 +258,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Educator-</label>
+                                                    <select name="educator" id="educator" class="form-control select2" required>
+                                                        <option value="">-- Pilih Educator --</option>
+                                                        <?php foreach ($list_educator as $key => $value) { ?>
+                                                            <option value="<?= $value->id ?>"><?= $value->nama_educator ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </fieldset>                                    
                                 </div>
                                 <div class="modal-footer">
@@ -282,7 +297,13 @@
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
 
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+
         $('.edit').click(function(){
+            $('#educator').val('').trigger('change');
+
             $.ajax({
                 url: url + '/edit/' + $(this).data('id'),
                 type:'GET',
@@ -298,6 +319,7 @@
                     $("#golongan_darah").val(data['list_edit']['golongan_darah']);
                     $("#anak_ke").val(data['list_edit']['anak_ke']);
                     $("#jumlah_saudara").val(data['list_edit']['jumlah_saudara']);
+                    $('#educator').val(data['list_edit']['educator']).trigger('change');
                     $("#updating-modal").modal('show');
                 }                
             }); 

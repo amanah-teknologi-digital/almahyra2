@@ -10,6 +10,15 @@
             $this->login = $this->session->userdata['auth'];
 	    }
 
+        function getListEducator(){
+            $sql = "SELECT a.id, a.name as nama_educator
+                FROM data_user a 
+                WHERE a.id_role = 3 AND a.is_active = 1";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
 	    ## get all data in table
 	    function getAll() {
             
@@ -20,6 +29,8 @@
                 $this->db->where('id_orangtua', $this->login->id);                
             }
             $this->db->order_by('is_active', 'desc')->order_by('id', 'desc');
+            $this->db->join('data_user', 'data_user.id = registrasi_data_anak.educator', 'left');
+            $this->db->select('registrasi_data_anak.*, data_user.name as nama_educator');
 	        $query = $this->db->get($this->table_name);
 
 	        return $query->result();

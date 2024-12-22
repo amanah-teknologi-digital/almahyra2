@@ -32,7 +32,8 @@ class CRanak extends CI_Controller {
 		$data = $this->data;
 
 		$data['list'] = $this->RegisterAnak->getAll();
-		$data['column'] = $this->RegisterAnak->getColumn();	
+		$data['column'] = $this->RegisterAnak->getColumn();
+        $data['list_educator'] = $this->RegisterAnak->getListEducator();
 
 		$this->load->view('inc/registeranak/list', $data);
 	}
