@@ -30,6 +30,7 @@
                                                 <tr>
                                                     <!-- <th>#</th> -->
                                                     <th>Nama <?= $title ?></th>
+                                                    <th>Pilihan <?= $title ?></th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -40,6 +41,20 @@
                                                     <tr>
                                                         <!-- <td><?= $i++ ?></td> -->
                                                         <td><?= ucwords($row->name) ?></td>
+                                                        <td nowrap>
+                                                            <span class="text-muted font-italic text-small">
+                                                                <?php $standar_pilihan = json_decode($row->pilihan, true);
+                                                                $jml_pil = count($standar_pilihan);
+                                                                foreach ($standar_pilihan as $key => $value){
+                                                                    if ($key == $jml_pil-1){
+                                                                        echo $value;
+                                                                    }else{
+                                                                        echo $value.', ';
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </span>
+                                                        </td>
                                                         <td align="center">
                                                             <button class="btn btn-outline-warning btn-icon edit" type="button" data-id="<?= $row->id; ?>">
                                                                 <span class="ul-btn__icon">
@@ -59,6 +74,7 @@
                                                 <tr>
                                                     <!-- <th>#</th> -->
                                                     <th>Nama <?= $title ?></th>
+                                                    <th>Pilihan <?= $title ?></th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
@@ -87,6 +103,12 @@
                                             <label>Nama <?= $title ?></label>
                                             <input class="form-control" type="text" required name="name">
                                         </div>
+                                        <div class="form-group">
+                                            <label>Standarisasi Pilihan</label>
+                                            <select name="standarisasi[]" id="standarisasi" class="form-control tagselect" multiple="multiple" required>
+
+                                            </select>
+                                        </div>
                                     </fieldset>                                    
                                 </div>
                                 <div class="modal-footer">
@@ -112,6 +134,12 @@
                                             <label>Nama <?= $title ?></label>
                                             <input class="form-control" type="text" required name="name" id="name">
                                         </div>
+                                        <div class="form-group">
+                                            <label>Standarisasi Pilihan</label>
+                                            <select name="standarisasi_update[]" id="standarisasi_update" class="form-control tagselectupdate" multiple="multiple" required>
+
+                                            </select>
+                                        </div>
                                         <input type="hidden" name="id" id="id">
                                     </fieldset>                                    
                                 </div>
@@ -134,15 +162,37 @@
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
 
+        $(document).ready(function() {
+            $(".tagselect").select2({
+                tags: true
+            });
+
+            $(".tagselectupdate").select2({
+                tags: true
+            });
+        });
+
         $('.edit').click(function(){
             $.ajax({
                 url: url + '/edit/' + $(this).data('id'),
                 type:'GET',
                 dataType: 'json',
                 success: function(data){
+                    let data_kegiatan = data['list_edit'];
+                    let standar_pilihan = JSON.parse(data_kegiatan['pilihan']);
+                    standar_pilihan = Object.values(standar_pilihan);
                     
                     $("#id").val(data['list_edit']['id']);  
-                    $("#name").val(data['list_edit']['name']);                                    
+                    $("#name").val(data['list_edit']['name']);
+                    $('.tagselectupdate').empty();
+                    $.each(standar_pilihan, function (i, item) {
+                        $('.tagselectupdate').append($('<option>', {
+                            value: item,
+                            text : item
+                        }));
+                    });
+                    $('.tagselectupdate').val(standar_pilihan).trigger('change');
+
                     $("#updating-modal").modal('show');
                 }                
             }); 

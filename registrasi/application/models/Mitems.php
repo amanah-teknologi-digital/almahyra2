@@ -48,13 +48,13 @@
 	    ## insert data into table
 	    function insert() {
 	        $a_input = array();
-	       
-	        foreach ($_POST as $key => $row) {
-	            $a_input[$key] = $row;
-	        }
 
+            $standarisasi = $_POST['standarisasi'];
+            $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
+	        $a_input['pilihan'] = $standarisasi;
 	        $a_input['date_created'] = date('Y-m-d H:m:s');
 	        $a_input['is_active']	 = '1';
+	        $a_input['name']	 = $_POST['name'];
 
 	        $this->db->insert($this->table_name, $a_input);
 
@@ -63,13 +63,12 @@
 
 	    ## update data in table
 	    function update($id) {
-	    	$_data = $this->input->post() ;
-	    	
-	        foreach ($_data as $key => $row) {
-	            $a_input[$key] = $row;
-	        }
+            $standarisasi = $_POST['standarisasi_update'];
+            $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
 
-	        $a_input['date_updated'] = date('Y-m-d H:m:s');	        
+	        $a_input['name'] = $_POST['name'];
+	        $a_input['date_updated'] = date('Y-m-d H:m:s');
+	        $a_input['pilihan'] = $standarisasi;
 
 	        $this->db->where('id', $id);
 	        
