@@ -35,7 +35,7 @@
                 LEFT JOIN data_user f ON f.id = e.updater
                 LEFT JOIN m_role g ON g.id = f.id_role
                 LEFT JOIN (SELECT id_absensi FROM rincian_absensibarang GROUP BY id_absensi) h ON h.id_absensi = e.id_absensi
-                WHERE a.is_active = 1 $where_barang ORDER BY e.created_at ASC, e.id_absensi ASC, b.usia_hari ASC";
+                WHERE a.is_active = 1 $where_barang ORDER BY h.id_absensi DESC, b.usia_hari ASC";
 
             $query = $this->db->query($sql);
 
