@@ -132,22 +132,23 @@
             return $query->row();
         }
 
-        function absenMasuk(){
+        function insertBarang(){
             $user = $this->session->userdata['auth'];
-            $tanggal_sekarang = date('Y-m-d');
-
 
             $this->db->trans_start();
 
-            $a_input['id_anak'] = $_POST['id_anak'];
-            $a_input['tanggal'] = $tanggal_sekarang;
-            $a_input['waktu_checkin'] = date('H:i:s');
-            $a_input['kondisi'] = $_POST['kondisi'];
-            $a_input['suhu'] = $_POST['suhu'];
-            $a_input['created_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
+            $a_input['id_absensi'] = $_POST['id_absensi'];
+            $a_input['id_barang'] = $_POST['barang'];
+            $a_input['kondisi_awal'] = $_POST['kondisi'];
+            $a_input['jumlah_awal'] = $_POST['jumlah'];
 
-            $this->db->insert('absen_anak', $a_input);
+            $this->db->insert('rincian_absensibarang', $a_input);
+
+            $input['updater'] = $user->id;
+            $input['updated_at'] = date('Y-m-d H:m:s');
+
+            $this->db->where('id_absensi', $_POST['id_absensi']);
+            $this->db->update('absen_barang', $input);
 
             $this->db->trans_complete();
 

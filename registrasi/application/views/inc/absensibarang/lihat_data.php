@@ -203,7 +203,7 @@
                                 <button class="btn btn-primary ml-2" type="submit">Simpan</button>
                             </div>
                         </div>
-                        <input type="hidden" name="id_absensi" <?= $id_absensi ?>>
+                        <input type="hidden" name="id_absensi" value="<?= $id_absensi ?>" >
                         </form>
                     </div>
                 </div>
@@ -222,6 +222,11 @@
         $(document).ready(function() {
             $(".select2").select2();
 
+            $.validator.addMethod("decimal", function(value, element) {
+                // Regular expression for decimal values (including optional negative sign)
+                return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
+            }, "Please enter a valid decimal number.");
+
             $('#btn-tambahbarang').click(function(){
                 clearFormStatus("#frm_tambahbarang");
 
@@ -230,6 +235,36 @@
                 $('#keterangan_tambah').val('');
 
                 $("#tambah-barang").modal('show');
+            });
+
+            $("#frm_tambahbarang").validate({
+                rules: {
+                    barang: {
+                        required: true
+                    },
+                    jumlah: {
+                        required: true,
+                        decimal: true
+                    },
+                    kondisi: {
+                        required: true
+                    }
+                },
+                messages: {
+                    barang: {
+                        required: "Barang harus dipilih!"
+                    },
+                    jumlah: {
+                        required: "Jumlah Barang harus diisi!",
+                        decimal: "Jumlah Barang harus berupa angka!"
+                    },
+                    kondisi: {
+                        required: "Kondisi barang harus diisi!"
+                    }
+                },
+                submitHandler: function(form) {
+                    form.submit(); // Mengirimkan form jika validasi lolos
+                }
             });
         });
 

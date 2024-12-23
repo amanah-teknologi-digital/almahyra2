@@ -83,16 +83,16 @@ class Cabsensibarang extends CI_Controller {
         return $data;
     }
 
-    public function absenmasuk(){
-        $err = $this->Absensibarang->absenMasuk();
+    public function insertbarang(){
+        $err = $this->Absensibarang->insertBarang();
 
         if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Absen Masuk');
+            $this->session->set_flashdata('failed', 'Gagal Simpan Masuk');
         }else{
-            $this->session->set_flashdata('success', 'Berhasil Absen Masuk');
+            $this->session->set_flashdata('success', 'Berhasil Simpan Masuk');
         }
 
-        redirect($this->data['redirect']);
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_absensi']);
     }
 
     public function absenpulang(){
