@@ -115,34 +115,47 @@
                                         <div class="col-sm-8">
                                             <h5><span class="fas fa-briefcase"></span>&nbsp;List Barang</h5>
                                         </div>
-                                        <div class="col-sm-4">
-                                            <button class="btn btn-sm btn-primary float-right" id="btn-tambahbarang"><span class="fas fa-plus"></span>&nbsp;Tambah Barang</button>
-                                        </div>
+                                        <?php if ($data_checkup->is_aprove == 0){ ?>
+                                            <div class="col-sm-4">
+                                                <button class="btn btn-sm btn-primary float-right" id="btn-tambahbarang"><span class="fas fa-plus"></span>&nbsp;Tambah Barang</button>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                     <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_checkup->updated_at)? timeAgo($data_checkup->created_at):timeAgo($data_checkup->updated_at); ?> </i></span></p>
-                                    <table class="table-sm table table-bordered">
-                                        <thead style="background-color: #bfdfff">
-                                            <tr>
-                                                <th style="width: 5%">No</th>
-                                                <th style="width: 20%">Nama Barang</th>
-                                                <th style="width: 15%">Kondisi</th>
-                                                <th style="width: 15%">Jumlah</th>
-                                                <th style="width: 30%">Keterangan</th>
-                                                <th style="width: 15%">Aksi</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php if (count($data_rinciancheckup) > 0){ ?>
-                                            <tr>
-                                                <td colspan="6" class="text-center">Data kosong</td>
-                                            </tr>
+                                    <div class="row">
+                                        <?php if ($data_checkup->is_aprove == 1){ ?>
+                                            <div class="col-sm-6">
                                         <?php }else{ ?>
-                                            <tr>
-                                                <td colspan="6" class="text-center">Data kosong</td>
-                                            </tr>
+                                            <div class="col-sm-12">
                                         <?php } ?>
-                                        </tbody>
-                                    </table>
+                                                <table class="table-sm table table-bordered">
+                                                    <thead style="background-color: #bfdfff">
+                                                    <tr>
+                                                        <th style="width: 5%">No</th>
+                                                        <th style="width: 20%">Nama Barang</th>
+                                                        <th style="width: 15%">Kondisi</th>
+                                                        <th style="width: 15%">Jumlah</th>
+                                                        <th style="width: 30%">Keterangan</th>
+                                                        <th style="width: 15%">Aksi</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <?php if (count($data_rinciancheckup) > 0){ ?>
+                                                        <tr>
+                                                            <td colspan="6" class="text-center">Data kosong</td>
+                                                        </tr>
+                                                    <?php }else{ ?>
+                                                        <tr>
+                                                            <td colspan="6" class="text-center">Data kosong</td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        <?php if ($data_checkup->is_aprove == 1){ ?>
+                                            <div class="col-sm-6"></div>
+                                        <?php } ?>
+                                    </div>
                                     <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Pencatatan barang bisa dilakukan selama <b>belum ada approve</b>. dan pencatatan barang waktu pulang harus dalam keaadaan <b>sudah approve</b> terlebih dahulu.</span></p>
                                 </div>
                             </div>
@@ -152,6 +165,48 @@
                     <!-- end of main-content -->
                 </div><!-- Footer Start -->
                 <!--  Modal -->
+                <div class="modal fade" id="tambah-barang" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/insertbarang', 'id="frm_tambahbarang"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tambah Absensi Barang</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label>Pilih Nama Barang</label>
+                                        <select name="barang" id="barang_tambah" class="form-control select2" required onchange="getListKondisi(this)">
+                                            <option value="">-- Pilih Barang --</option>
+                                            <?php foreach ($list_barang as $key => $row) { ?>
+                                                <option value="<?= $row->id ?>"><?= $row->name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Jumlah Barang</label>
+                                        <input type="text" name="jumlah" id="jumlah_tambah" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Kondisi Barang</label>
+                                        <select name="kondisi" id="kondisi_tambah" class="form-control" required></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Keterangan Masuk<i>(Optional)</i></label>
+                                        <textarea class="form-control" name="keterangan" id="keterangan_tambah" cols="30" rows="5" autocomplete="off"></textarea>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_absensi" <?= $id_absensi ?>>
+                        </form>
+                    </div>
+                </div>
                 <?php $this->load->view('layout/footer') ?>
                 <!--  Modal -->
             </div>
@@ -163,101 +218,55 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         let url = "<?= base_url().$controller ?>";
-        let initialPreview = <?= json_encode($dokumentasi_file['preview'])?>;
-        let initialPreviewConfig = <?= json_encode($dokumentasi_file['config'])?>;
-        const list_form = <?= json_encode($data_rinciancheckup) ?>;
 
         $(document).ready(function() {
-            $.validator.addMethod("decimal", function(value, element) {
-                // Regular expression for decimal values (including optional negative sign)
-                return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
-            }, "Please enter a valid decimal number.");
+            $(".select2").select2();
 
-            $.validator.addMethod("filesize", function(value, element, param) {
-                var files = element.files;
-                for (var i = 0; i < files.length; i++) {
-                    if (files[i].size > param) {
-                        return false; // If any file is too large, return false
-                    }
-                }
-                return true; // All files are within size limit
-            }, "File is too large.");
+            $('#btn-tambahbarang').click(function(){
+                clearFormStatus("#frm_tambahbarang");
 
-            let file_input = $('#file_dukung'), initPlugin = function () {
-                file_input.fileinput({
-                    maxFileSize: 20000,
-                    dropZoneTitle: 'File Pendukung Kosong!',
-                    previewThumbnail: true,
-                    showRemove: false,
-                    showUpload: false,
-                    required: true,
-                    validateInitialCount: true,
-                    previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
-                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
-                    allowedPreviewTypes: ['image'],
-                    initialPreview: initialPreview,
-                    initialPreviewConfig: initialPreviewConfig,
-                    initialPreviewAsData: true,
-                    overwriteInitial: false
-                });
-            };
+                $('#barang_tambah').val('').trigger('change');
+                $('#kondisi_tambah').html('');
+                $('#keterangan_tambah').val('');
 
-            initPlugin();
-
-            let temp_rules, temp_message, rules = {}, message = {};
-            $.each(list_form, function(index, value){
-                temp_rules = {}; temp_message = {};
-                if (value['jenis_kolom'] === 'number'){
-                    temp_rules = {
-                        required: true,
-                        decimal: true
-                    };
-
-                    temp_message = {
-                        required: value['nama_kolom']+" harus diisi!",
-                        decimal: value['nama_kolom']+" harus berupa angka!"
-                    };
-
-                }else{
-                    temp_rules = {
-                        required: true
-                    };
-
-                    temp_message = {
-                        required: value['nama_kolom']+" harus diisi!",
-                    };
-                }
-
-                rules[value['kolom']] = temp_rules;
-                message[value['kolom']] = temp_message
-
-                if (value['action'] !== null){
-                    rules['action_'+value['kolom']] = {
-                        required: true
-                    };
-
-                    message['action_'+value['kolom']] = {
-                        required: "Action "+value['nama_kolom']+" harus dipilih!"
-                    };
-                }
-            });
-
-            file_input.on("filepredelete", function(jqXHR) {
-                var abort = true;
-                if (confirm("Apakah yakin menghapus file?")) {
-                    abort = false;
-                }
-                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
-            });
-
-            file_input.on('change', function(event) {
-                $("#frm_simpan").valid();
-            });
-
-            $("#frm_simpan").validate({
-                rules: rules,
-                messages: message
+                $("#tambah-barang").modal('show');
             });
         });
+
+        function getListKondisi(dom){
+            let id_barang = $(dom).val();
+            $('#kondisi_tambah').html('');
+
+            if (id_barang != '') {
+                $.ajax({
+                    url: url + '/getDataBarang/' + id_barang,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        let standar_pilihan = {};
+                        let standar = data['pilihan'];
+                        if (standar != '' || standar != null) {
+                            console.log(standar);
+                            standar_pilihan = JSON.parse(standar);
+                            standar_pilihan = Object.values(standar_pilihan);
+                        }
+
+                        $.each(standar_pilihan, function (i, val) {
+                            $('#kondisi_tambah').append('<option value="' + val + '">' + val + '</option>');
+                        });
+                    }
+                });
+            }
+        }
+
+        function clearFormStatus(formId) {
+            // Reset the form values
+            $(formId)[0].reset();
+
+            // Clear validation messages and error/success classes
+            $(formId).find('.valid').removeClass('valid'); // Remove valid class
+            $(formId).find('label.error').remove(); // Remove error messages
+            $(formId).find('.error').removeClass('error'); // Remove error class
+        }
     </script>
 </html>

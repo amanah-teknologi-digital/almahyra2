@@ -92,6 +92,24 @@
             return $query->result();
         }
 
+        function getDataBarang($id_barang = null){
+            if ($id_barang != null){
+                $where = " AND id = $id_barang";
+            }else{
+                $where = "";
+            }
+
+            $sql = "SELECT * FROM m_items WHERE is_active = 1 $where ORDER BY name ASC";
+
+            $query = $this->db->query($sql);
+
+            if ($id_barang != null) {
+                return $query->row();
+            }else {
+                return $query->result();
+            }
+        }
+
         function getDataAbsenByIdAnak($id_anak){
             $tanggal_sekarang = date('Y-m-d');
 

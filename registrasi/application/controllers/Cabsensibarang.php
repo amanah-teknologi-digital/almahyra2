@@ -52,8 +52,10 @@ class Cabsensibarang extends CI_Controller {
     public function lihatdata($id_absensi){
         $data = $this->data;
 
+        $data['list_barang'] = $this->Absensibarang->getDataBarang();
         $data['data_checkup'] = $this->Absensibarang->getDataAbsensiBarang($id_absensi);
         $data['data_rinciancheckup'] = $this->Absensibarang->getDataRincianBarang($id_absensi);
+        $data['id_absensi'] = $id_absensi;
 
         $this->load->view('inc/absensibarang/lihat_data', $data);
     }
@@ -71,8 +73,8 @@ class Cabsensibarang extends CI_Controller {
         redirect($this->data['redirect']);
     }
 
-    public function edit($id) {
-        $data = $this->Absensibarang->getDataAbsenByIdAnak($id);
+    public function getDataBarang($id) {
+        $data = $this->Absensibarang->getDataBarang($id);
 
         $this->output->set_content_type('application/json');
         
