@@ -195,5 +195,10 @@
                 }
             });
         }
+
+        function resetInput(){
+            $('#id_rincianjadwal_mingguan').html('');
+            $('#id_jadwalharian').html('');
+        }
     </script>
 </html>
