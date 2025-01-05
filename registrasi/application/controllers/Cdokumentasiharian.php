@@ -127,7 +127,7 @@ class Cdokumentasiharian extends CI_Controller {
                     if ($row->ext == 'mov'){
                         $row->ext = 'mp4';
                     }
-                    $preview_file = '<video controls style="width: 100%"><source src="'.base_url().$row->download_url.'" type="video/mp4"></video>'; // Video preview with controls
+                    $preview_file = '<video controls style="width: 100%" height="auto"><source src="'.base_url().$row->download_url.'" type="video/mp4"></video>'; // Video preview with controls
                     $data['config'][] = [
                         'type' => $temp_type,
                         'key' => $fileId,
