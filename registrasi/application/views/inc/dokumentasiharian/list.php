@@ -3,18 +3,6 @@
 
     <?php $this->load->view('layout/head') ?>
     <style>
-        .video-preview {
-            max-width: 100%;
-            max-height: 100%; /* Optional, if you want to limit both dimensions */
-            object-fit: contain;
-        }
-
-        @media (max-width: 768px) {
-            .video-preview-container {
-                width: 100%;
-                height: auto;
-            }
-        }
 
     </style>
     <body class="text-left">
