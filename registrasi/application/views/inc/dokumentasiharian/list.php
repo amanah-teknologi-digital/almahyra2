@@ -131,6 +131,9 @@
                     allowedPreviewTypes: ['image', 'video'],
                     initialPreview: initialPreview,
                     initialPreviewConfig: initialPreviewConfig,
+                    previewSettingsSmall: {
+                        video: {width: "100%", height: "100%"},
+                    },
                     initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
                     previewVideo: true,
                     uploadExtraData: function () {
