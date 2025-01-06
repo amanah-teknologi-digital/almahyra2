@@ -127,7 +127,7 @@ class Cdokumentasiharian extends CI_Controller {
                     if ($row->ext == 'mov'){
                         $row->ext = 'mp4';
                     }
-                    $preview_file = '<iframe src="'.base_url().$row->download_url.'" type="video/mp4"></iframe>'; // Video preview with controls
+                    $preview_file = "<img src='/images/desert.jpg' class='file-preview-image' alt='Desert' title='Desert'>"; // Video preview with controls
                     $data['config'][] = [
                         'type' => $temp_type,
                         'key' => $fileId,
@@ -135,8 +135,8 @@ class Cdokumentasiharian extends CI_Controller {
                         'size' => $row->size,
                         'filetype' => "video/".$row->ext,
                         'downloadUrl' => base_url().$row->download_url, // the url to download the file
-                        'url' => base_url() . $this->data['controller'] . '/hapusfile' // server api to delete the file based on key
-//                        'preview' => $preview_file
+                        'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
+                        'preview' => $preview_file
                     ];
                 }else{
                     $data['config'][] = [
