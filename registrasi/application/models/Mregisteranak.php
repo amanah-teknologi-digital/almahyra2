@@ -117,13 +117,11 @@
 
 	    ## delete data in table
 		function delete($id) {
-			$a_input['is_active'] = '0';    
-			
-			$this->db->where('id', $id);
+            $this->db->where('id', $id);
 
-			$this->db->update($this->table_name, $a_input);
+            $this->db->delete($this->table_name);
 
-			return $this->db->error();	      
+            return $this->db->affected_rows();
 		}
 
 		## get data by id in table

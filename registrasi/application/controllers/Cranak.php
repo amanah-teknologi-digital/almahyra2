@@ -90,7 +90,7 @@ class CRanak extends CI_Controller {
 	public function delete($id) {
 		$err = $this->RegisterAnak->delete($id);
 
-		if ($err['code'] == '0') {
+		if ($err) {
 			$this->session->set_flashdata('success', 'Berhasil Menghapus Data');
 		} else {
 			$this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
