@@ -2,7 +2,9 @@
 <html lang="en" dir="/">
 
     <?php $this->load->view('layout/head') ?>
+    <style>
 
+    </style>
     <body class="text-left">
         <div class="app-admin-wrap layout-sidebar-compact sidebar-dark-purple sidenav-open clearfix">
             <?php $this->load->view('layout/navigation') ?>     
@@ -118,6 +120,7 @@
                     minFileCount: 1,
                     maxFileCount: 10,
                     maxFileSize: 20000,
+                    maxFilePreviewSize: 5120,
                     dropZoneTitle: 'File Pendukung Kosong!',
                     previewThumbnail: true,
                     required: true,
@@ -129,6 +132,9 @@
                     allowedPreviewTypes: ['image', 'video'],
                     initialPreview: initialPreview,
                     initialPreviewConfig: initialPreviewConfig,
+                    previewSettingsSmall: {
+                        video: {width: "100%", height: "100%"},
+                    },
                     initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
                     previewVideo: true,
                     uploadExtraData: function () {
