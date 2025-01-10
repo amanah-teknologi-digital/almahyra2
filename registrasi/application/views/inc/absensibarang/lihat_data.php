@@ -186,7 +186,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Jumlah Barang</label>
-                                        <input type="text" name="jumlah" id="jumlah_tambah" class="form-control" required>
+                                        <input type="text" name="jumlah" id="jumlah_tambah" class="form-control" required autocomplete="off">
                                     </div>
                                     <div class="form-group">
                                         <label>Kondisi Barang</label>

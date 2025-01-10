@@ -66,9 +66,15 @@
                                                                     <span class="badge badge-danger">Belum Input</span>
                                                                 </div>
                                                             <?php } else { ?>
-                                                                <div class="font-italic" style="font-size: 12px;">
-
-                                                                </div>
+                                                                <?php if (empty($row->is_aprove)){ ?>
+                                                                    <div align="center">
+                                                                        <span class="badge badge-warning">Belum Disetujui</span>
+                                                                    </div>
+                                                                <?php }else{ ?>
+                                                                    <div align="center">
+                                                                        <span class="badge badge-warning">Belum Disetujui</span>
+                                                                    </div>
+                                                                <?php } ?>
                                                             <?php } ?>
                                                         </td>
                                                         <td align="center">
