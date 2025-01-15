@@ -115,6 +115,34 @@
             }
         }
 
+        function resetAbsenPulang(){
+            $user = $this->session->userdata['auth'];
+            $tanggal_sekarang = date('Y-m-d');
+
+            $sql = "SELECT * FROM absen_anak WHERE id_anak = ".$_POST['id_anak']." AND tanggal = '$tanggal_sekarang' AND waktu_checkout IS NOT NULL";
+            $query = $this->db->query($sql);
+            $data = $query->row();
+
+            if (!empty($data)){
+                $id_absensi = $data->id_absensi;
+                $this->db->trans_start();
+
+                $a_input['waktu_checkout'] = null;
+                $a_input['kondisi_checkout'] = null;
+                $a_input['suhu_checkout'] = null;
+                $a_input['updater2'] = null;
+
+                $this->db->where('id_absensi', $id_absensi);
+                $this->db->update('absen_anak', $a_input);
+
+                $this->db->trans_complete();
+
+                return $this->db->trans_status();
+            }else{
+                return false;
+            }
+        }
+
         ## get all data in table
         function getAll() {
             $this->db->where('is_active','1');

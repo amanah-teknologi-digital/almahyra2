@@ -79,10 +79,15 @@
                                                                 </div>
                                                             <?php } ?>
                                                         </td>
-                                                        <td align="center">
+                                                        <td align="center" nowrap>
                                                             <button class="btn btn-outline-success btn-sm btn-icon edit" type="button" data-id="<?= $row->id; ?>" data-nama="<?= $row->nama_anak ?>" data-kelas="<?= $row->nama_kelas ?>" >
                                                                 <span class="fas fa-eye-dropper"></span>&nbsp;Absen
                                                             </button>
+                                                            <?php if (!empty($row->waktu_checkout) && $this->session->userdata['auth']->id_role == 1){ ?>
+                                                            <button class="btn btn-outline-danger btn-sm btn-icon resetpulang" type="button" data-id="<?= $row->id; ?>" data-nama="<?= $row->nama_anak ?>" data-kelas="<?= $row->nama_kelas ?>" >
+                                                                <span class="fas fa-window-close"></span>&nbsp;Reset Pulang
+                                                            </button>
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
                                                 <?php $i++; } ?>
@@ -161,6 +166,27 @@
                                         <button class="btn btn-sm btn-danger" id="btn_absenpulang" type="submit"><span class="fas fa-save"></span>&nbsp;Absen Pulang</button>
                                     </div>
                                 <input type="hidden" name="id_anak" id="id_anakpulang">
+                                </form>
+                                <div class="modal-footer mt-5">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="reset-modal" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success" id="label_namaanak_reset"></b>&nbsp;<span id="label_namakelas_reset" class="text-muted font-italic"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <?php echo form_open_multipart($controller.'/resetpulang','id="frm_resetpulang"'); ?>
+                                <p class="text-muted">Apakah yakin reset jam pulang anak ini?</p>
+
+                                <input type="hidden" name="id_anak" id="id_anakreset">
+                                <button class="btn btn-sm btn-danger" type="submit"><span class="fas fa-window-close"></span>&nbsp;Reset Absen Pulang</button>
                                 </form>
                                 <div class="modal-footer mt-5">
                                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
@@ -283,6 +309,18 @@
                         $("#updating-modal").modal('show');
                     }
                 });
+            });
+
+            $('.resetpulang').click(function(){
+                var id_anak = $(this).data('id') ;
+                var nama_anak = $(this).data('nama') ;
+                var nama_kelas = $(this).data('kelas') ;
+
+                $("#id_anakreset").val(id_anak);
+                $("#label_namaanak_reset").html(nama_anak);
+                $("#label_namakelas_reset").html('('+nama_kelas+')');
+
+                $("#reset-modal").modal('show');
             })
         });
 
