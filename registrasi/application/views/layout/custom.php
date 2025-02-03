@@ -55,7 +55,8 @@
         $('#tbl').dataTable({
             "ordering": false,
             "searching": true,
-            "lengthChange": false
+            "info": true,
+            "lengthMenu": [5, 10, 25, 50]
         });
     }   
 </script>
