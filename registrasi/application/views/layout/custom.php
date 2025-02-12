@@ -64,7 +64,8 @@
         $('#tbl2').dataTable({
             "ordering": false,
             "searching": true,
-            "lengthChange": false
+            "lengthChange": false,
+            "bPaginate": false
         });
     }
 </script>
