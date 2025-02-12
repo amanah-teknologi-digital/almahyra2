@@ -77,7 +77,7 @@
                                         </form>
                                         <hr>
                                         <div class="table-responsive">
-                                            <table class="display table table-striped table-bordered" id="tbl" style="width:100%">
+                                            <table class="display table table-striped table-bordered" id="tbl2" style="width:100%">
                                                 <thead>
                                                 <tr>
                                                     <!-- <th>#</th> -->

@@ -58,5 +58,13 @@
             "info": true,
             "lengthMenu": [[5, 10, 25, 50, 100, 200, -1], [5, 10, 25, 50, 100, 200, "Tampilkan Semua"]]
         });
-    }   
+    }
+
+    if ('#tbl2') {
+        $('#tbl2').dataTable({
+            "ordering": false,
+            "searching": true,
+            "lengthChange": false
+        });
+    }
 </script>
