@@ -143,6 +143,29 @@
             }
         }
 
+        function resetAbsenMasuk(){
+            $user = $this->session->userdata['auth'];
+            $tanggal_sekarang = date('Y-m-d');
+
+            $sql = "SELECT * FROM absen_anak WHERE id_anak = ".$_POST['id_anak']." AND tanggal = '$tanggal_sekarang'";
+            $query = $this->db->query($sql);
+            $data = $query->row();
+
+            if (!empty($data)){
+                $id_absensi = $data->id_absensi;
+                $this->db->trans_start();
+
+                $this->db->where('id_absensi', $id_absensi);
+                $this->db->delete('absen_anak');
+
+                $this->db->trans_complete();
+
+                return $this->db->trans_status();
+            }else{
+                return false;
+            }
+        }
+
         ## get all data in table
         function getAll() {
             $this->db->where('is_active','1');

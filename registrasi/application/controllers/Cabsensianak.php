@@ -98,4 +98,16 @@ class Cabsensianak extends CI_Controller {
 
         redirect($this->data['redirect']);
     }
+
+    public function resetmasuk(){
+        $err = $this->Absensianak->resetAbsenMasuk();
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Reset Absen Masuk');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Reset Absen Masuk');
+        }
+
+        redirect($this->data['redirect']);
+    }
 }
