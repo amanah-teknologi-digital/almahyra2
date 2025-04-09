@@ -26,7 +26,9 @@
             }
 
             $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
+                e.id_absensi, e.tanggal, e.tanggal_checkout, e.waktu_checkin, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2,
+                j.id_absensi as id_absennow, j.tanggal as tanggal_now, j.waktu_checkin as waktu_checkinnow,
+                j.waktu_checkout as waktu_checkoutnow, j.tanggal_checkout as tanggal_checkoutnow
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
@@ -36,6 +38,18 @@
                 LEFT JOIN m_role g ON g.id = f.id_role
                 LEFT JOIN data_user h ON h.id = e.updater2
                 LEFT JOIN m_role i ON i.id = h.id_role
+                LEFT JOIN (
+                    SELECT id_absensi, id_anak, tanggal, waktu_checkin, waktu_checkout, tanggal_checkout FROM absen_anak
+                        WHERE (id_anak, tanggal) IN (
+                        SELECT
+                            id_anak,
+                            MAX(tanggal) AS terakhir_tanggal
+                        FROM
+                            absen_anak
+                        WHERE
+                            tanggal < '$tanggal_sekarang'  -- Mengambil data dengan tanggal kurang dari hari ini
+                        GROUP BY id_anak) ORDER BY id_anak, tanggal DESC
+                ) j ON a.id = j.id_anak
                 WHERE a.is_active = 1 $where_anak ORDER BY e.waktu_checkout ASC, e.id_absensi ASC, b.usia_hari ASC";
 
             $query = $this->db->query($sql);
@@ -59,6 +73,26 @@
                 LEFT JOIN data_user h ON h.id = e.updater2
                 LEFT JOIN m_role i ON i.id = h.id_role
                 WHERE a.is_active = 1 AND a.id = $id_anak ORDER BY e.waktu_checkout DESC, e.id_absensi DESC, b.usia_hari ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
+        function getDataAbsenByIdAbsen($id_absensi){
+            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
+                e.id_absensi, e.tanggal, e.waktu_checkin, e.waktu_checkout, e.kondisi, e.kondisi_checkout, e.suhu, e.suhu_checkout,
+                f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
+                FROM registrasi_data_anak a 
+                JOIN v_kategori_usia b ON b.id = a.id 
+                JOIN map_kelasusia c ON c.id_usia = b.id_usia
+                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
+                JOIN absen_anak e ON e.id_anak = a.id
+                LEFT JOIN data_user f ON f.id = e.updater
+                LEFT JOIN m_role g ON g.id = f.id_role
+                LEFT JOIN data_user h ON h.id = e.updater2
+                LEFT JOIN m_role i ON i.id = h.id_role
+                WHERE a.is_active = 1 AND e.id_absensi = $id_absensi ORDER BY e.waktu_checkout DESC, e.id_absensi DESC, b.usia_hari ASC";
 
             $query = $this->db->query($sql);
 

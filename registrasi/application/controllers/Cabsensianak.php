@@ -55,9 +55,19 @@ class Cabsensianak extends CI_Controller {
 
     public function edit($id) {
         $data = $this->Absensianak->getDataAbsenByIdAnak($id);
-
+        $data->tgl_absen = format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y');
         $this->output->set_content_type('application/json');
         
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+    }
+
+    public function editAbsenLama($id) {
+        $data = $this->Absensianak->getDataAbsenByIdAbsen($id);
+        $data->tgl_absen = format_date_indonesia(date($data->tanggal)).', '.date('d-m-Y', strtotime($data->tanggal));
+        $this->output->set_content_type('application/json');
+
         $this->output->set_output(json_encode($data));
 
         return $data;
