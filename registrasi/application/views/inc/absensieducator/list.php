@@ -205,7 +205,7 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success" id="label_namaeducator"></b></h5>
+                                <h5 class="modal-title">Absensi Hari <span class="font-weight-bold" id="label_hari_absen"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span>&nbsp;a.n.&nbsp;<b class="text-success" id="label_namaeducator"></b></h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
@@ -387,6 +387,8 @@
 
                         $('#kondisi_masukedit').val(data.kondisi);
                         $('#jenis_absenedit').val(data.id_jenisabsen);
+                        $("#label_hari_absen").html(data['tgl_absen']);
+
                         if (data.id_jenislembur != null) {
                             $('#is_lemburedit').val(1);
                             $('#jenis_lemburedit').val(data.id_jenislembur);

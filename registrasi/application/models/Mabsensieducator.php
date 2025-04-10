@@ -152,6 +152,7 @@
             $id_absensi = $_POST['id_absensi'];
             $this->db->trans_start();
 
+            $a_input['tanggal_checkout'] = date('Y-m-d');
             $a_input['waktu_checkout'] = date('H:i:s');
             $a_input['kondisi_checkout'] = $_POST['kondisi'];
             $a_input['updated_at'] = date('Y-m-d H:m:s');
