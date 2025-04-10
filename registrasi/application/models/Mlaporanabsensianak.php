@@ -64,7 +64,7 @@
 
         function getDataAbsensi($id_anak, $tahun){
             $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_absensi, e.tanggal, e.waktu_checkin, e.suhu, e.suhu_checkout, e.kondisi, e.kondisi_checkout, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
+                e.id_absensi, e.tanggal, e.tanggal_checkout, e.waktu_checkin, e.suhu, e.suhu_checkout, e.kondisi, e.kondisi_checkout, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia

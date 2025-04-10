@@ -124,28 +124,55 @@
         function absenPulang(){
             $user = $this->session->userdata['auth'];
             $tanggal_sekarang = date('Y-m-d');
+            $id_absennow = $_POST['id_absennow'];
 
-            $sql = "SELECT * FROM absen_anak WHERE id_anak = ".$_POST['id_anak']." AND tanggal = '$tanggal_sekarang'";
-            $query = $this->db->query($sql);
-            $data = $query->row();
+            if (empty($id_absennow)) {
+                $sql = "SELECT * FROM absen_anak WHERE id_anak = " . $_POST['id_anak'] . " AND tanggal = '$tanggal_sekarang'";
+                $query = $this->db->query($sql);
+                $data = $query->row();
 
-            if (!empty($data)){
-                $id_absensi = $data->id_absensi;
-                $this->db->trans_start();
+                if (!empty($data)) {
+                    $id_absensi = $data->id_absensi;
+                    $this->db->trans_start();
 
-                $a_input['waktu_checkout'] = date('H:i:s');
-                $a_input['kondisi_checkout'] = $_POST['kondisi'];
-                $a_input['suhu_checkout'] = $_POST['suhu'];
-                $a_input['updater2'] = $user->id;
+                    $a_input['tanggal_checkout'] = $tanggal_sekarang;
+                    $a_input['waktu_checkout'] = date('H:i:s');
+                    $a_input['kondisi_checkout'] = $_POST['kondisi'];
+                    $a_input['suhu_checkout'] = $_POST['suhu'];
+                    $a_input['updater2'] = $user->id;
 
-                $this->db->where('id_absensi', $id_absensi);
-                $this->db->update('absen_anak', $a_input);
+                    $this->db->where('id_absensi', $id_absensi);
+                    $this->db->update('absen_anak', $a_input);
 
-                $this->db->trans_complete();
+                    $this->db->trans_complete();
 
-                return $this->db->trans_status();
+                    return $this->db->trans_status();
+                } else {
+                    return false;
+                }
             }else{
-                return false;
+                $sql = "SELECT * FROM absen_anak WHERE id_absensi = " . $id_absennow;
+                $query = $this->db->query($sql);
+                $data = $query->row();
+
+                if (!empty($data)) {
+                    $this->db->trans_start();
+
+                    $a_input['tanggal_checkout'] = $tanggal_sekarang;
+                    $a_input['waktu_checkout'] = date('H:i:s');
+                    $a_input['kondisi_checkout'] = $_POST['kondisi'];
+                    $a_input['suhu_checkout'] = $_POST['suhu'];
+                    $a_input['updater2'] = $user->id;
+
+                    $this->db->where('id_absensi', $id_absennow);
+                    $this->db->update('absen_anak', $a_input);
+
+                    $this->db->trans_complete();
+
+                    return $this->db->trans_status();
+                } else {
+                    return false;
+                }
             }
         }
 

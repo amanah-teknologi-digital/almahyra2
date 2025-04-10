@@ -109,20 +109,17 @@ if (!function_exists('hitung_durasi_waktu')) {
         // Calculate the difference between the two times
         $interval = $start_time->diff($end_time);
 
-        // Get the hours, minutes, and seconds from the interval
+        // Ambil total durasi dalam hari, jam, menit, dan detik
+        $days = $interval->d;
         $hours = $interval->h;
         $minutes = $interval->i;
         $seconds = $interval->s;
 
-        // Check if the difference is negative (end time before start time)
-        if ($end_time < $start_time) {
-            // Add a day to account for the time difference crossing midnight
-            $interval->d = 1;
-            $hours += 24;
-        }
+        // Tambahkan hari ke jam jika ingin dijadikan total jam (opsional)
+        $total_hours = $days * 24 + $hours;
 
         // Display the result
-        return $hours . " Jam, " . $minutes . " Menit, " . $seconds . " Detik";
+        return $total_hours . " Jam, " . $minutes . " Menit, " . $seconds . " Detik";
     }
 }
 

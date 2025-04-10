@@ -94,13 +94,13 @@
                                                     <tr>
                                                         <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
                                                         <td nowrap align="center"><?= $value->waktu_checkin ?></td>
-                                                        <td nowrap align="center"><?= $value->waktu_checkout ?></td>
+                                                        <td nowrap align="center"><?= format_date_indonesia(date($value->tanggal_checkout)).', '.date('d-m-Y', strtotime($value->tanggal_checkout)).' jam '.$value->waktu_checkout ?></td>
                                                         <td align="center" nowrap style="font-size: 11px">
                                                             <?php if (empty($value->id_absensi)) { ?>
                                                                 <span class="badge badge-danger">Belum Absen</span>
                                                             <?php } else { ?>
                                                                 <?php if (!empty($value->waktu_checkout)){ ?>
-                                                                    <span class="text-info font-italic font-weight-bold">Durasi : <?= hitung_durasi_waktu($value->waktu_checkin, $value->waktu_checkout); ?></span>
+                                                                    <span class="text-info font-italic font-weight-bold">Durasi : <?= hitung_durasi_waktu(date('Y-m-d', strtotime($value->tanggal)).' '.$value->waktu_checkin, date('Y-m-d', strtotime($value->tanggal_checkout)).' '.$value->waktu_checkout); ?></span>
                                                                 <?php }else{ ?>
                                                                     <span class="badge badge-warning">Belum Absen Pulang</span>
                                                                 <?php } ?>

@@ -191,19 +191,19 @@ foreach ($data_absensi as $key => $value){ ?>
     <tr>
         <td nowrap align="center" style="font-weight: bold ;font-style: italic; color: grey"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
         <td nowrap align="center"><?= $value->waktu_checkin ?></td>
-        <td nowrap align="center"><?= $value->waktu_checkout ?></td>
+        <td align="center"><?= format_date_indonesia(date($value->tanggal_checkout)).', '.date('d-m-Y', strtotime($value->tanggal_checkout)).' jam '.$value->waktu_checkout ?></td>
         <td align="center" nowrap style="font-size: 10px">
             <?php if (empty($value->id_absensi)) { ?>
                 <span style="color: red">Belum Absen</span>
             <?php } else { ?>
                 <?php if (!empty($value->waktu_checkout)){ ?>
-                    <span style="font-style: italic; font-weight: bold">Durasi : <?= hitung_durasi_waktu($value->waktu_checkin, $value->waktu_checkout); ?></span>
+                    <span style="font-style: italic; font-weight: bold">Durasi : <?= hitung_durasi_waktu(date('Y-m-d', strtotime($value->tanggal)).' '.$value->waktu_checkin, date('Y-m-d', strtotime($value->tanggal_checkout)).' '.$value->waktu_checkout); ?></span>
                 <?php }else{ ?>
                     <span style="color: orangered">Belum Absen Pulang</span>
                 <?php } ?>
             <?php } ?>
         </td>
-        <td nowrap>
+        <td>
             <?php if (!empty($value->id_absensi)) { ?>
                 &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 10px; color: grey; font-style: italic">Suhu Tubuh Masuk: <b><?= $value->suhu ?> °C</b>, Kondisi Masuk: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b></span>
                 <?php if (!empty($value->waktu_checkout)){ ?>

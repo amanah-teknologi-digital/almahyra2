@@ -62,6 +62,15 @@
                                                         <td align="center"><?= ucwords($row->tempat_lahir) ?></td>
                                                         <td nowrap>
                                                             <?php if (empty($row->id_absennow) OR !empty($row->waktu_checkoutnow)) { ?>
+                                                                <?php if (!empty($row->waktu_checkoutnow) && date('Y-m-d', strtotime($row->tanggal_checkoutnow)) == date('Y-m-d')) { ?>
+                                                                    <div class="font-italic" style="font-size: 12px;">
+                                                                        Absen masuk pada tgl <?= format_date_indonesia(date($row->tanggal_now)).', '.date('d-m-Y', strtotime($row->tanggal_now)); ?> jam <b><?= $row->waktu_checkinnow ?></b>
+                                                                        , Absen pulang pada tgl <?= format_date_indonesia(date($row->tanggal_checkoutnow)).', '.date('d-m-Y', strtotime($row->tanggal_checkoutnow)); ?> jam <b><?= $row->waktu_checkoutnow ?></b>
+                                                                        <br>
+                                                                        <center><span class="text-info font-italic font-weight-bold">Durasi : <?= hitung_durasi_waktu(date('Y-m-d', strtotime($row->tanggal_now)).' '.$row->waktu_checkinnow, date('Y-m-d', strtotime($row->tanggal_checkoutnow)).' '.$row->waktu_checkoutnow); ?></span></center>
+                                                                    </div>
+                                                                    <hr>
+                                                                <?php } ?>
                                                                 <?php if (empty($row->id_absensi)) { ?>
                                                                     <div align="center">
                                                                         <span class="badge badge-danger">Belum Absen</span>
@@ -159,6 +168,7 @@
                                 </form>
                                 <?php echo form_open_multipart($controller.'/absenpulang', 'id="frm_absenpulang"'); ?>
                                     <div id="form_absen_pulang" style="display: none;">
+                                        <input type="hidden" name="id_absennow" id="id_absennow">
                                         <hr>
                                         <h5 class="text-danger"><span class="fas fa-right-from-bracket"></span>&nbsp;Absen Pulang</h5>
                                         <fieldset>
@@ -305,6 +315,7 @@
                 var id_absennow = $(this).data('idabsennow') ;
 
                 if (id_absennow === undefined) {
+                    $("#id_absennow").val('');
                     $.ajax({
                         url: url + '/edit/' + $(this).data('id'),
                         type: 'GET',
@@ -353,6 +364,7 @@
                         }
                     });
                 }else{
+                    $("#id_absennow").val(id_absennow);
                     $.ajax({
                         url: url + '/editAbsenLama/' + id_absennow,
                         type: 'GET',
