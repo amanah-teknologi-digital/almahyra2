@@ -54,13 +54,24 @@
                 $where = " AND 1 = 0";
             }
 
-            $sql = "SELECT a.id_absensi, a.tanggal, a.id_jenisabsen, a.id_jenislembur, a.waktu_checkin,
+            $sql = "SELECT a.id_absensi, a.tanggal, a.tanggal_checkout, a.id_jenisabsen, a.id_jenislembur, a.waktu_checkin,
                 a.waktu_checkout, a.kondisi, a.kondisi_checkout, a.keterangan, b.nama as jenis_absen, c.nama as jenis_lembur, d.name as nama_educator
                 FROM absen_educator a 
                 JOIN ref_jenisabsen b ON b.id_jenisabsen = a.id_jenisabsen
                 JOIN data_user d ON d.id = a.id_user
                 LEFT JOIN ref_jenislembur c ON c.id_jenislembur = a.id_jenislembur
-                WHERE a.tanggal = '$tanggal_sekarang' $where
+                WHERE (a.tanggal = '$tanggal_sekarang' $where ) OR (
+                    (a.id_user, a.tanggal) IN (
+                        SELECT
+                            a.id_user,
+                            MAX(a.tanggal) AS terakhir_tanggal
+                        FROM
+                            absen_educator a
+                        WHERE
+                            a.tanggal < '$tanggal_sekarang' AND a.waktu_checkout is null  $where  -- Mengambil data dengan tanggal kurang dari hari ini
+                        GROUP BY a.id_user)
+                ) OR a.tanggal_checkout = '$tanggal_sekarang' $where
+                        
                 ORDER BY a.waktu_checkin DESC";
 
             $query = $this->db->query($sql);

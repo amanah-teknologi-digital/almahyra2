@@ -126,8 +126,8 @@ if (!function_exists('hitung_durasi_waktu')) {
 if (!function_exists('hitungDurasiDalamMenit')) {
     function hitungDurasiDalamMenit($waktuAwal, $waktuAkhir) {
         // Pastikan waktu diformat dalam format yang didukung, misalnya "H:i" (jam:menit)
-        $awal = DateTime::createFromFormat('H:i:s', $waktuAwal);
-        $akhir = DateTime::createFromFormat('H:i:s', $waktuAkhir);
+        $awal = DateTime::createFromFormat('Y-m-d H:i:s', $waktuAwal);
+        $akhir = DateTime::createFromFormat('Y-m-d H:i:s', $waktuAkhir);
 
         // Jika salah satu waktu tidak valid, kembalikan pesan error
         if (!$awal || !$akhir) {
@@ -138,7 +138,7 @@ if (!function_exists('hitungDurasiDalamMenit')) {
         $interval = $awal->diff($akhir);
 
         // Konversi durasi ke dalam menit
-        $durasiDalamMenit = ($interval->h * 60) + $interval->i;
+        $durasiDalamMenit = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
 
         return $durasiDalamMenit;
     }
