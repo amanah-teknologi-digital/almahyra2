@@ -61,18 +61,19 @@
                 JOIN data_user d ON d.id = a.id_user
                 LEFT JOIN ref_jenislembur c ON c.id_jenislembur = a.id_jenislembur
                 WHERE (a.tanggal = '$tanggal_sekarang' $where ) OR (
-                    (a.id_user, a.tanggal) IN (
+                    (a.id_user, a.tanggal, a.id_absensi) IN (
                         SELECT
                             a.id_user,
-                            MAX(a.tanggal) AS terakhir_tanggal
+                            MAX(a.tanggal) AS terakhir_tanggal,
+                            a.id_absensi
                         FROM
                             absen_educator a
                         WHERE
                             a.tanggal < '$tanggal_sekarang' AND a.waktu_checkout is null  $where  -- Mengambil data dengan tanggal kurang dari hari ini
-                        GROUP BY a.id_user)
-                ) OR a.tanggal_checkout = '$tanggal_sekarang' $where
+                        GROUP BY a.id_user, a.tanggal)
+                ) OR (a.tanggal_checkout = '$tanggal_sekarang' $where)
                         
-                ORDER BY a.waktu_checkin DESC";
+                ORDER BY a.tanggal, a.waktu_checkin DESC";
 
             $query = $this->db->query($sql);
 
