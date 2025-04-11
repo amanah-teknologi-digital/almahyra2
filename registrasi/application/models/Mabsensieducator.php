@@ -99,7 +99,7 @@
 
             $sql = "SELECT a.id_absensi
                 FROM absen_educator a 
-                WHERE a.tanggal = '$tanggal_sekarang' AND a.id_user = $educator AND a.waktu_checkout IS NULL";
+                WHERE a.id_user = $educator AND a.waktu_checkout IS NULL";
 
             $query = $this->db->query($sql);
 
