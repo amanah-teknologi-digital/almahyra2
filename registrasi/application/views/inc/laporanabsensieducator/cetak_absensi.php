@@ -169,7 +169,7 @@
 <body class="A4">
 <?php $i = 0; $iter = 0;
 foreach ($data_absensi as $key => $row){ ?>
-    <?php if ($iter == 0 OR $iter % 26 == 0){ ?>
+    <?php if ($iter == 0 OR $iter % 15 == 0){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
@@ -198,10 +198,10 @@ foreach ($data_absensi as $key => $row){ ?>
             <?php } ?>
         </td>
         <td align="center" nowrap style="color: gray"><b><?= $row->waktu_checkin ?></b></td>
-        <td align="center" nowrap style="color: gray"><b><?= !empty($row->waktu_checkout)? $row->waktu_checkout:'-'; ?></b></td>
+        <td align="center" style="color: gray"><b><?= !empty($row->waktu_checkout)? format_date_indonesia($row->tanggal_checkout).', '.date('d-m-Y', strtotime($row->tanggal_checkout)).' jam '.$row->waktu_checkout:'-'; ?></b></td>
         <td nowrap align="center" style="font-size: 11px;">
             <?php if (!empty($row->waktu_checkout)){ ?>
-                <span style="color: blue; font-weight: bold;">Durasi : <?= hitungDurasiDalamMenit($row->waktu_checkin, $row->waktu_checkout); ?> Menit</span>
+                <span style="color: blue; font-weight: bold;">Durasi : <?= hitungDurasiDalamMenit(date('Y-m-d', strtotime($row->tanggal)).' '.$row->waktu_checkin, date('Y-m-d', strtotime($row->tanggal_checkout)).' '.$row->waktu_checkout); ?> Menit</span>
             <?php }else{ ?>
                 <span style="color: orangered">Belum Absen Pulang</span>
             <?php } ?>
@@ -215,7 +215,7 @@ foreach ($data_absensi as $key => $row){ ?>
             <?php } ?>
         </td>
     </tr>
-    <?php if ($iter == count($data_absensi)-1 OR $iter % 26 == 25){ ?>
+    <?php if ($iter == count($data_absensi)-1 OR $iter % 15 == 14){ ?>
         </tbody>
         </table>
         </div>

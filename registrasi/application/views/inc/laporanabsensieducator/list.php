@@ -113,10 +113,10 @@
                                                                 <?php } ?>
                                                             </td>
                                                             <td align="center" nowrap class="text-muted"><b><?= $row->waktu_checkin ?></b></td>
-                                                            <td align="center" nowrap class="text-muted"><b><?= !empty($row->waktu_checkout)? $row->waktu_checkout:'-'; ?></b></td>
+                                                            <td align="center" nowrap class="text-muted"><b><?= !empty($row->waktu_checkout)? format_date_indonesia($row->tanggal_checkout).', '.date('d-m-Y', strtotime($row->tanggal_checkout)).' jam '.$row->waktu_checkout:'-'; ?></b></td>
                                                             <td nowrap align="center">
                                                                 <?php if (!empty($row->waktu_checkout)){ ?>
-                                                                    <span class="text-info text-small font-italic font-weight-bold">Durasi : <?= hitungDurasiDalamMenit($row->waktu_checkin, $row->waktu_checkout); ?> Menit</span>
+                                                                    <span class="text-info text-small font-italic font-weight-bold">Durasi : <?= hitungDurasiDalamMenit(date('Y-m-d', strtotime($row->tanggal)).' '.$row->waktu_checkin, date('Y-m-d', strtotime($row->tanggal_checkout)).' '.$row->waktu_checkout); ?> Menit</span>
                                                                 <?php }else{ ?>
                                                                     <span class="badge badge-warning">Belum Absen Pulang</span>
                                                                 <?php } ?>

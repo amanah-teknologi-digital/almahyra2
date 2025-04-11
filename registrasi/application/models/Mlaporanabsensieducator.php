@@ -61,14 +61,14 @@
         }
 
         function getDataAbsensi($id_user, $tahun){
-            $sql = "SELECT a.id_absensi, a.tanggal, a.id_jenisabsen, a.id_jenislembur, a.waktu_checkin,
+            $sql = "SELECT a.id_absensi, a.tanggal, a.tanggal_checkout, a.id_jenisabsen, a.id_jenislembur, a.waktu_checkin,
                 a.waktu_checkout, a.kondisi, a.kondisi_checkout, a.keterangan, b.nama as jenis_absen, c.nama as jenis_lembur, d.name as nama_educator
                 FROM absen_educator a 
                 JOIN ref_jenisabsen b ON b.id_jenisabsen = a.id_jenisabsen
                 JOIN data_user d ON d.id = a.id_user
                 LEFT JOIN ref_jenislembur c ON c.id_jenislembur = a.id_jenislembur
                 WHERE a.id_user = '$id_user' AND YEAR(a.tanggal) = $tahun
-                ORDER BY a.waktu_checkin DESC";
+                ORDER BY a.tanggal DESC, a.waktu_checkin DESC";
 
             $query = $this->db->query($sql);
 

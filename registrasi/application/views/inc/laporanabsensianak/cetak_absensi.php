@@ -169,7 +169,7 @@
 <body class="A4">
 <?php $i = 0; $iter = 0;
 foreach ($data_absensi as $key => $value){ ?>
-    <?php if ($iter == 0 OR $iter % 26 == 0){ ?>
+    <?php if ($iter == 0 OR $iter % 10 == 0){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
@@ -215,7 +215,7 @@ foreach ($data_absensi as $key => $value){ ?>
             <?php } ?>
         </td>
     </tr>
-    <?php if ($iter == count($data_absensi)-1 OR $iter % 26 == 25){ ?>
+    <?php if ($iter == count($data_absensi)-1 OR $iter % 10 == 9){ ?>
         </tbody>
         </table>
         </div>
