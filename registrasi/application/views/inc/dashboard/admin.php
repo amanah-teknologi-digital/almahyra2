@@ -140,24 +140,24 @@
                                         <div class="row">
                                             <div class="col-sm-6 mb-4">
                                                 <div class="chart-container">
-                                                    <canvas id="chart_bb"></canvas>
+                                                    <div id="chart_bb"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4">
                                                 <div class="chart-container">
-                                                    <canvas id="chart_tb"></canvas>
+                                                    <div id="chart_tb"></div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6 mb-4">
                                                 <div class="chart-container">
-                                                    <canvas id="chart_lila"></canvas>
+                                                    <div id="chart_lila"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 mb-4">
                                                 <div class="chart-container">
-                                                    <canvas id="chart_lk"></canvas>
+                                                    <div id="chart_lk"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -271,6 +271,7 @@
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         var url = "<?= base_url().$controller ?>";
         const arr_domctx = ['chart_bb', 'chart_tb', 'chart_lila', 'chart_lk'];
@@ -298,7 +299,7 @@
                 success: function(data){
                     if (data.length > 0){
                         $.each(data, function(index, value){
-                            generateGraph(value['dom'], value);
+                            generateGraph(value['dom'], value, value['nama_form']);
                         });
                     }
 
@@ -312,7 +313,7 @@
             });
         }
 
-        function generateGraph(ctx, data){
+        function generateGraph(ctx, data, title){
             let temp_ctx = document.getElementById(ctx);
 
             if (charts[ctx]) {
@@ -327,43 +328,40 @@
                 data_value.push(value['nilai']);
             });
 
-            const chart = new Chart(temp_ctx, {
-                type: 'line',
-                data: {
-                    labels: data_label,
-                    datasets: [{
-                        data: data_value,
-                        borderWidth: 1,
-                        borderColor: data['color'],
-                        pointStyle: 'circle',
-                        pointBackgroundColor: 'blue'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + ' ' + data['satuan']; // Adding "kg" unit to the Y-axis values
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: data['nama_form']
+            var options = {
+                chart: {
+                    type: 'line',
+                    animations: {
+                        enabled: true
+                    },toolbar: {
+                        tools: {
+                            zoom: false,
+                            zoomin: false,
+                            zoomout: false,
+                            pan: true,  // ✅ aktifkan pan
+                            reset: false
                         },
-                        legend: {
-                            display: false
-                        }
+                        autoSelected: 'pan'  // ✅ set default jadi pan
+                    }
+                },
+                series: [{
+                    name: title,
+                    data: data_value
+                }],
+                xaxis: {
+                    categories: data_label,
+                    range: 7
+                },
+                tooltip: {
+                    x: {
+                        format: 'yyyy-MM-dd'
                     }
                 }
-            });
+            }
 
+            var chart = new ApexCharts(document.querySelector("#"+ctx), options);
+
+            chart.render();
             charts[ctx] = chart;
         }
     </script>
