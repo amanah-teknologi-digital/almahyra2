@@ -364,6 +364,7 @@
                             width: '100%',  // Responsif agar menyesuaikan dengan layar
                         },
                         xaxis: {
+                            type: 'datetime',
                             labels: {
                                 rotate: -45,  // Rotate label agar lebih mudah terbaca
                             }
