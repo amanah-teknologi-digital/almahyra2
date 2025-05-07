@@ -349,7 +349,7 @@
                 }],
                 xaxis: {
                     categories: data_label,
-                    range: 7
+                    range: 5
                 },
                 tooltip: {
                     x: {
@@ -360,12 +360,23 @@
                     breakpoint: 768, // Untuk ukuran layar mobile
                     options: {
                         chart: {
-                            height: 300  // Mengurangi tinggi chart di perangkat mobile
+                            height: 250,  // Mengurangi tinggi chart di perangkat mobile
+                            width: '100%',  // Responsif agar menyesuaikan dengan layar
                         },
                         xaxis: {
                             labels: {
-                                rotate: -45  // Putar label agar lebih jelas di layar kecil
+                                rotate: -45,  // Rotate label agar lebih mudah terbaca
                             }
+                        },
+                        grid: {
+                            padding: {
+                                left: 0,
+                                right: 0
+                            }
+                        },
+                        // Menonaktifkan animasi di perangkat mobile
+                        animations: {
+                            enabled: false  // Nonaktifkan animasi di layar kecil
                         }
                     }
                 }]
