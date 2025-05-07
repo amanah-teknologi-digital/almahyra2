@@ -332,7 +332,9 @@
                 chart: {
                     type: 'line',
                     animations: {
-                        enabled: true
+                        enabled: true,
+                        easing: 'linear',  // Menggunakan easing linear untuk kecepatan konstan
+                        speed: 150,  // Kurangi durasi animasi agar lebih cepat
                     },toolbar: {
                         tools: {
                             zoom: false,
