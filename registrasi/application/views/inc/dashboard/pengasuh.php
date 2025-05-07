@@ -271,6 +271,7 @@
 <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
 <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
 <script src="<?= base_url().'dist-assets/'?>js/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     var url = "<?= base_url().$controller ?>";
     const arr_domctx = ['chart_bb', 'chart_tb', 'chart_lila', 'chart_lk'];
