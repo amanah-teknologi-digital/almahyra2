@@ -334,11 +334,11 @@
                     animations: { enabled: true },
                     toolbar: {
                         tools: {
-                            zoom: false,
+                            zoom: true,
                             zoomin: false,
                             zoomout: false,
                             pan: false,  // ✅ aktifkan pan
-                            reset: false
+                            reset: true
                         },
                         autoSelected: 'pan'  // ✅ set default jadi pan
                     }
