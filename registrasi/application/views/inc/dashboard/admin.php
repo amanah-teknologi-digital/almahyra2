@@ -331,11 +331,8 @@
             var options = {
                 chart: {
                     type: 'line',
-                    animations: {
-                        enabled: true,
-                        easing: 'linear',  // Menggunakan easing linear untuk kecepatan konstan
-                        speed: 150,  // Kurangi durasi animasi agar lebih cepat
-                    },toolbar: {
+                    animations: { enabled: false },
+                    toolbar: {
                         tools: {
                             zoom: false,
                             zoomin: false,
@@ -358,7 +355,20 @@
                     x: {
                         format: 'yyyy-MM-dd'
                     }
-                }
+                },
+                responsive: [{
+                    breakpoint: 768, // Untuk ukuran layar mobile
+                    options: {
+                        chart: {
+                            height: 300  // Mengurangi tinggi chart di perangkat mobile
+                        },
+                        xaxis: {
+                            labels: {
+                                rotate: -45  // Putar label agar lebih jelas di layar kecil
+                            }
+                        }
+                    }
+                }]
             }
 
             var chart = new ApexCharts(document.querySelector("#"+ctx), options);
