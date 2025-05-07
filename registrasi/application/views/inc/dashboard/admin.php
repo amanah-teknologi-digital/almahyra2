@@ -331,13 +331,13 @@
             var options = {
                 chart: {
                     type: 'line',
-                    animations: { enabled: false },
+                    animations: { enabled: true },
                     toolbar: {
                         tools: {
                             zoom: false,
                             zoomin: false,
                             zoomout: false,
-                            pan: true,  // ✅ aktifkan pan
+                            pan: false,  // ✅ aktifkan pan
                             reset: false
                         },
                         autoSelected: 'pan'  // ✅ set default jadi pan
@@ -349,7 +349,6 @@
                 }],
                 xaxis: {
                     categories: data_label,
-                    range: 5
                 },
                 tooltip: {
                     x: {
