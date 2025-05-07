@@ -343,12 +343,32 @@
                         autoSelected: 'pan'  // ✅ set default jadi pan
                     }
                 },
+                title: {
+                    text: title,
+                    align: 'center',
+                    margin: 10,
+                    offsetX: 0,
+                    offsetY: 0,
+                    floating: false,
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#263238'
+                    }
+                },
                 series: [{
                     name: title,
                     data: data_value
                 }],
                 xaxis: {
                     categories: data_label,
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value + ' cm'; // Ganti 'kg' dengan satuan yang diinginkan
+                        }
+                    }
                 },
                 tooltip: {
                     x: {

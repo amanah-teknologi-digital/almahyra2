@@ -164,17 +164,29 @@
             var options = {
                 chart: {
                     type: 'line',
-                    animations: {
-                        enabled: true
-                    },toolbar: {
+                    animations: { enabled: true },
+                    toolbar: {
                         tools: {
-                            zoom: false,
+                            zoom: true,
                             zoomin: false,
                             zoomout: false,
-                            pan: true,  // ✅ aktifkan pan
-                            reset: false
+                            pan: false,  // ✅ aktifkan pan
+                            reset: true
                         },
                         autoSelected: 'pan'  // ✅ set default jadi pan
+                    }
+                },
+                title: {
+                    text: title,
+                    align: 'center',
+                    margin: 10,
+                    offsetX: 0,
+                    offsetY: 0,
+                    floating: false,
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold',
+                        color: '#263238'
                     }
                 },
                 series: [{
@@ -183,13 +195,44 @@
                 }],
                 xaxis: {
                     categories: data_label,
-                    range: 7
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (value) {
+                            return value + ' cm'; // Ganti 'kg' dengan satuan yang diinginkan
+                        }
+                    }
                 },
                 tooltip: {
                     x: {
                         format: 'yyyy-MM-dd'
                     }
-                }
+                },
+                responsive: [{
+                    breakpoint: 768, // Untuk ukuran layar mobile
+                    options: {
+                        chart: {
+                            height: 250,  // Mengurangi tinggi chart di perangkat mobile
+                            width: '100%',  // Responsif agar menyesuaikan dengan layar
+                        },
+                        xaxis: {
+                            type: 'datetime',
+                            labels: {
+                                rotate: -45,  // Rotate label agar lebih mudah terbaca
+                            }
+                        },
+                        grid: {
+                            padding: {
+                                left: 0,
+                                right: 0
+                            }
+                        },
+                        // Menonaktifkan animasi di perangkat mobile
+                        animations: {
+                            enabled: false  // Nonaktifkan animasi di layar kecil
+                        }
+                    }
+                }]
             }
 
             var chart = new ApexCharts(document.querySelector("#"+ctx), options);
