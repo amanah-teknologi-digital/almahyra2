@@ -4,14 +4,14 @@
     <?php $this->load->view('layout/head') ?>
 
     <body>
-        <div class="auth-layout-wrap" style="background-image: url(<?= base_url().'dist-assets/'?>images/bg_login.png)">
+        <div class="auth-layout-wrap" style="background-image: url(<?= base_url().'dist-assets/'?>images/bg_login.jpg);">
             <div class="auth-content">
                 <div class="card o-hidden">
                     <div class="row">
-                        <div class="col-md-6">                                    
-                            <div class="p-5">
+                        <div class="col-md-6">
+                            <div class="p-4">
                                 <div class="text-center mb-4">
-                                    <img src="<?= base_url().'dist-assets/'?>images/logo_namira.png" alt=""/>
+                                    <img src="<?= base_url().'dist-assets/'?>images/logo_almahyra_panjang.png" alt="" style="width: 170px; height: 65px"/>
                                 </div>
 
                                 <?php echo form_open_multipart($controller.'/login'); ?>

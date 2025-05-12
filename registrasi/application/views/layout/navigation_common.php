@@ -84,7 +84,7 @@
     <div class="sidebar-left-secondary rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
         <header class="p-4">
             <div class="logos mb-2 text-center">
-                <img src="<?= base_url().'dist-assets/'?>images/logo_namira.png" alt="">
+                <img src="<?= base_url().'dist-assets/'?>images/logo_almahyra_panjang.png" alt="" style="width: 170px; height: 65px">
             </div>
         </header>
         <!-- Submenu Dashboards -->
