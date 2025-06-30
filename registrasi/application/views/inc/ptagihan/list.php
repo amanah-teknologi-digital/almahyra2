@@ -176,7 +176,7 @@
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 </div>
                                 <div class="modal-body">
-                                    <h5>Silahkan melakukan transfer ke no rekening <b>BCA 5123001221</b> (Zainul Arifin)</h5>
+                                    <h5>Silahkan melakukan transfer ke no rekening <b>BCA 216-28-33333</b> (YAY SADINNUN INSAN CENDEKIA)</h5>
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-md-12">
