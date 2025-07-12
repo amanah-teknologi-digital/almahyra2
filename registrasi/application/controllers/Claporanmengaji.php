@@ -96,22 +96,20 @@ class Claporanmengaji extends CI_Controller {
         return null; // jika tidak ditemukan
     }
 
-    function cetakabsensianak(){
+    function cetaklaporanmengaji(){
         $data = $this->data;
 
-        $id_anak = $_POST['id_anak'];
-        $tahun = $_POST['tahun'];
+        $tanggal = $_POST['tanggal'];
+        $sesi = $_POST['sesi'];
+        $id_ustadzah = $_POST['id_ustadzah'];
 
-        if (!empty($id_anak)) {
-            $data['data_anak'] = $this->LaporanMengaji->getDataAnak($id_anak);
-            $data['data_absensi'] = $this->LaporanMengaji->getDataAbsensi($id_anak, $tahun);
-        }else{
-            $data['data_anak'] = [];
-            $data['data_absensi'] = [];
-        }
+        $data['list_sesi'] = $this->LaporanMengaji->getListSesi();
+        $data['nama_sesi'] = $this->getNamaByIdSesi($data['list_sesi'], $sesi);
+        $data['list_ustadzah'] = $this->LaporanMengaji->getListUstadzah($this->role);
+        $data['nama_ustadzah'] = $this->getNamaByIdUstadzah($data['list_ustadzah'], $id_ustadzah);
+        $data['hasil_mengaji'] = $this->LaporanMengaji->getHasilMengaji($this->role, $tanggal, $sesi, $id_ustadzah);
+        $data['tanggal'] = $tanggal;
 
-        $data['tahun_selected'] = $tahun;
-
-        $this->load->view('inc/laporanabsensianak/cetak_absensi', $data);
+        $this->load->view('inc/laporanmengaji/cetak_absensi', $data);
     }
 }
