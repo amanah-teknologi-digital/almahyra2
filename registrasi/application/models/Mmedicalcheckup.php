@@ -10,8 +10,10 @@ class Mmedicalcheckup extends CI_Model
         $this->login = $this->session->userdata['auth'];
     }
 
-    function getHasilCheckup(){
-        $tanggal_sekarang = date('Y-m-d');
+    function getHasilCheckup($tanggal_sekarang = ''){
+        if (empty($tanggal_sekarang)) {
+            $tanggal_sekarang = date('Y-m-d');
+        }
 
         $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
                 e.id_checkup, h.id_checkup as rinci, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_medic, g.name as nama_role

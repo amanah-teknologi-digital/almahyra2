@@ -58,6 +58,13 @@
                 </a>
                 <div class="triangle"></div>
             </li>
+            <li class="nav-item <?= $parent=='checkup'?'active':'' ?>" data-item="checkup">
+                <a class="nav-item-hold" href="#">
+                    <i class="nav-icon i-Doctor"></i>
+                    <span class="nav-text">Medical Checkup</span>
+                </a>
+                <div class="triangle"></div>
+            </li>
         </ul>
     </div>
     <div class="sidebar-left-secondary rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
@@ -389,6 +396,19 @@
                     <a href="<?= base_url().'template-stimulus'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Template Stimulus<span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="submenu-area" data-parent="checkup">
+            <header>
+                <h6>Medical Checkup</h6>
+            </header>
+            <ul class="childNav">
+                <li class="nav-item">
+                    <a href="<?= base_url().'mc-backdate'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">MC Backdate</span>
                     </a>
                 </li>
             </ul>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/registrasi/application/third_party/Google/src" isTestSource="false" packagePrefix="Google\" />
+      <sourceFolder url="file://$MODULE_DIR$/registrasi/dist-assets/file-upload-plugin/" isTestSource="false" packagePrefix="kartik\plugins\fileinput\" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/ezyang/htmlpurifier" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/firebase/php-jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/google/apiclient" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/google/apiclient-services" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/google/auth" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/maennchen/zipstream-php" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/markbaker/complex" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/markbaker/matrix" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/mikey179/vfsstream" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/monolog/monolog" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/myclabs/php-enum" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpdocumentor/reflection-common" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpdocumentor/reflection-docblock" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpdocumentor/type-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpoffice/phpspreadsheet" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpseclib/phpseclib" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpspec/prophecy" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpspreadsheet/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/registrasi/vendor/phpspreadsheet/composer" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

@@ -101,8 +101,12 @@ $route['absensi-barang/lihat-data/(:any)'] = 'cabsensibarang/lihatdata/$1';
 $route['absensi-educator'] = 'cabsensieducator';
 $route['absensi-items'] = 'cabsensiitems';
 $route['absensi-pengasuh'] = 'cabsensipengasuh';
+
+//medical checkup
 $route['medical-checkup'] = 'cmedicalcheckup';
 $route['medical-checkup/lihat-data/(:any)'] = 'cmedicalcheckup/lihatdata/$1';
+$route['mc-backdate'] = 'cmedicalcheckup/backdate';
+$route['mc-backdate/lihat-data/(:any)'] = 'cmedicalcheckup/lihatdatabackdate/$1';
 
 // aktivitas
 $route['aktivitas-anak'] = 'caktivitas';
