@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Laporan Absensi Educator</title>
+    <title>Laporan Absensi <?= $label ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <link href="<?= base_url().'dist-assets/'?>css/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <style>
@@ -173,7 +173,7 @@ foreach ($data_absensi as $key => $row){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
-            <h1>Laporan Absensi Educator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_educator->nama_educator ?></span>&nbsp;Tahun <?= $tahun_selected?></h1>
+            <h1><?= $title ?>&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_educator->nama_educator ?></span>&nbsp;Tahun <?= $tahun_selected?></h1>
         <?php } ?>
         <br>
         <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">

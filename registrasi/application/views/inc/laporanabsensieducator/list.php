@@ -46,12 +46,12 @@
                                                 </tr>
                                                 <tr>
                                                     <td>
-                                                        <label>Nama Educator</label>
+                                                        <label>Nama <?= $label ?></label>
                                                     </td>
                                                     <td>
                                                         <select class="form-control select2" id="id_user" name="id_user" required>
                                                             <?php if (count($list_educator) > 1) { ?>
-                                                                <option value="">-- Pilih Educator --</option>
+                                                                <option value="">-- Pilih <?= $label ?> --</option>
                                                             <?php } ?>
                                                             <?php foreach ($list_educator as $key => $value) { ?>
                                                                 <option value="<?= $value->id ?>" <?= $id_user == $value->id ? 'selected' : '' ?>><?= $value->nama_educator ?></option>
@@ -71,7 +71,7 @@
                                             <?php echo form_open_multipart($controller.'/cetakabsensieducator', 'target="blank"'); ?>
                                                 <div class="row d-flex justify-content-center align-items-center">
                                                     <div class="col-sm-10">
-                                                        <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Absensi Educator&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_educator->nama_educator ?></span></span></h5>
+                                                        <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data <?= $title ?>&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_educator->nama_educator ?></span></span></h5>
                                                     </div>
                                                     <div class="col-sm-2">
                                                         <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Absensi</button>
@@ -135,9 +135,9 @@
                                                 </table>
                                             </div>
                                         <?php }else{ ?>
-                                            <h5 class="card-title mb-1 d-flex align-content-center justify-content-center"><span class="text-danger font-weight-bold">Pilih Educator terlebih dahulu, kemudian klik tombol <span class="text-success">Tampilkan</span> untuk menampilkan data!</span></h5>
+                                            <h5 class="card-title mb-1 d-flex align-content-center justify-content-center"><span class="text-danger font-weight-bold">Pilih <?= $label ?> terlebih dahulu, kemudian klik tombol <span class="text-success">Tampilkan</span> untuk menampilkan data!</span></h5>
                                         <?php } ?>
-                                        <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Laporan absensi harian educator.</span></p>
+                                        <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Laporan absensi harian <?= $label ?>.</span></p>
                                     </div>
                                 </div>
                             </div>
