@@ -76,10 +76,11 @@
                                             <colgroup>
                                                 <col style="width: 5%">
                                                 <col style="width: 20%">
-                                                <col style="width: 20%">
+                                                <col style="width: 15%">
                                                 <col style="width: 10%">
                                                 <col style="width: 10%">
-                                                <col style="width: 20%">
+                                                <col style="width: 10%">
+                                                <col style="width: 15%">
                                                 <col style="width: 10%">
                                             </colgroup>
                                             <thead>
@@ -89,6 +90,7 @@
                                                     <th>Umur</th>
                                                     <th>Jenis Kelamin</th>
                                                     <th>Status</th>
+                                                    <th>Nama Ustadzah</th>
                                                     <th>Keterangan</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -102,6 +104,7 @@
                                                         <td align="center" class="text-muted font-italic"><?= hitung_usia($row->tanggal_lahir) ?></td>
                                                         <td align="center"><?= $row->jenis_kelamin == 'L'? 'Laki - Laki':'Perempuan' ?></td>
                                                         <td align="center"><?= empty($row->id_catatan) ? '<div class="badge badge-danger">Belum Dicatat</div>':'<div class="badge badge-success">Sudah Dicatat</div>' ?></td>
+                                                        <td class="text-success font-weight-bold text-small text-center"><?= empty($row->nama_ustadzah) ? '<center class="text-black-50">-</center>':$row->nama_ustadzah ?></td>
                                                         <td class="text-muted font-italic text-small"><?= empty($row->keterangan) ? '<center>-</center>':$row->keterangan ?></td>
                                                         <td align="center" nowrap>
                                                             <button class="btn btn-sm btn-icon btn-success edit" type="button" data-id="<?= $row->id; ?>"><span class="fas fa-eye-dropper"></span>&nbsp;Data Mengaji</button>

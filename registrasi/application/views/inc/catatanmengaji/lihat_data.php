@@ -106,7 +106,7 @@
                                 <div class="card-body">
                                     <div class="row text-center d-flex align-items-center justify-content-center">
                                         <div class="col-sm-12">
-                                            <h5 class="card-title mb-1">Catatan Mengaji Hari&nbsp;<b><?= format_date_indonesia($data_mengaji->tanggal).', '.date('d-m-Y', strtotime($data_mengaji->tanggal)) ?></b></h5>
+                                            <h5 class="card-title mb-1">Catatan Mengaji <b>Sesi <?= $data_mengaji->namasesi ?></b> Hari&nbsp;<?= format_date_indonesia($data_mengaji->tanggal).', '.date('d-m-Y', strtotime($data_mengaji->tanggal)) ?></h5>
                                             <h5 class="card-title mb-1">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_mengaji->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_mengaji->tanggal_lahir) ?> <span class="text-muted">(<?= $data_mengaji->nama_kelas ?>)</span></span></h5>
                                         </div>
                                     </div>

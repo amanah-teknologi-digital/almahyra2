@@ -12,7 +12,7 @@ class Mcatatanmengaji extends CI_Model
 
     function getHasilMengaji($tanggal_mc, $sesi){
         $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_catatan, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_medic, g.name as nama_role, h.nama as sesi
+                e.id_catatan, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_ustadzah, g.name as nama_role, h.nama as sesi
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
@@ -65,12 +65,14 @@ class Mcatatanmengaji extends CI_Model
 
     function getDataMengaji($id_mengaji){
         $sql = "SELECT a.id, a.nama as nama_anak, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_catatan, e.tanggal, e.id_jilidmengaji, e.id_sesi, e.halaman, e.keterangan, e.nilai, e.created_at, e.updated_at, f.name as nama_ustadzah, g.name as nama_role
+                e.id_catatan, e.tanggal, e.id_jilidmengaji, e.id_sesi, e.halaman, e.keterangan, e.nilai, e.created_at, e.updated_at,
+                f.name as nama_ustadzah, g.name as nama_role, j.nama as namasesi
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
                 JOIN ref_kelas d ON d.id_kelas = c.id_kelas
                 JOIN mengaji_catatan e ON e.id_anak = a.id
+                JOIN mengaji_sesi j ON j.id_sesi = e.id_sesi
                 LEFT JOIN data_user f ON f.id = e.id_ustadzah
                 LEFT JOIN m_role g ON g.id = f.id_role
                 WHERE e.id_catatan = $id_mengaji";
