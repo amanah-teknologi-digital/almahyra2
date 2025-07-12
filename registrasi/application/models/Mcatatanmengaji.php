@@ -12,7 +12,7 @@ class Mcatatanmengaji extends CI_Model
 
     function getHasilMengaji($tanggal_mc, $sesi){
         $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_catatan, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_ustadzah, g.name as nama_role, h.nama as sesi
+                e.id_catatan, e.tanggal, e.keterangan, e.created_at, e.updated_at, e.is_catat, f.name as nama_ustadzah, g.name as nama_role, h.nama as sesi
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia

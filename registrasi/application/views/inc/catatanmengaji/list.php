@@ -103,7 +103,7 @@
                                                         <td><b><?= $row->nama_anak; ?></b>&nbsp;<span class="font-italic">(<?= $row->nama_kelas; ?>)</span></td>
                                                         <td align="center" class="text-muted font-italic"><?= hitung_usia($row->tanggal_lahir) ?></td>
                                                         <td align="center"><?= $row->jenis_kelamin == 'L'? 'Laki - Laki':'Perempuan' ?></td>
-                                                        <td align="center"><?= empty($row->id_catatan) ? '<div class="badge badge-danger">Belum Dicatat</div>':'<div class="badge badge-success">Sudah Dicatat</div>' ?></td>
+                                                        <td align="center"><?= empty($row->is_catat) ? '<div class="badge badge-danger">Belum Dicatat</div>':'<div class="badge badge-success">Sudah Dicatat</div>' ?></td>
                                                         <td class="text-success font-weight-bold text-small text-center"><?= empty($row->nama_ustadzah) ? '<center class="text-black-50">-</center>':$row->nama_ustadzah ?></td>
                                                         <td class="text-muted font-italic text-small"><?= empty($row->keterangan) ? '<center>-</center>':$row->keterangan ?></td>
                                                         <td align="center" nowrap>
