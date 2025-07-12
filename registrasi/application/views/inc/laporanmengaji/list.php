@@ -58,7 +58,9 @@
                                                 </td>
                                                 <td>
                                                     <select class="form-control" id="id_ustadzah" name="id_ustadzah" required">
-                                                    <option value="" selected>-- Semua --</option>
+                                                    <?php if (count($list_ustadzah) > 1) { ?>
+                                                        <option value="" selected>-- Semua --</option>
+                                                    <?php } ?>
                                                     <?php foreach ($list_ustadzah as $key => $value) { ?>
                                                         <option value="<?= $value->id ?>" <?= $id_ustadzah == $value->id ? 'selected' : '' ?>><?= $value->name ?></option>
                                                     <?php } ?>
