@@ -88,7 +88,7 @@
                 <li class="nav-item">
                     <a href="<?= base_url().'dashboard-perkembangan'; ?>">
                         <i class="nav-icon i-Bar-Chart-2"></i>
-                        <span class="item-name">Perkembangan Anak</span>
+                        <span class="item-name">Pertumbuhan Anak</span>
                     </a>
                 </li>
                 <li class="nav-item">

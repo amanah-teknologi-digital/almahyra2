@@ -85,6 +85,18 @@
                         <span class="item-name">Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'dashboard-perkembangan'; ?>">
+                        <i class="nav-icon i-Bar-Chart-2"></i>
+                        <span class="item-name">Pertumbuhan Anak</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'dashboard-mengaji'; ?>">
+                        <i class="nav-icon i-Bar-Chart-2"></i>
+                        <span class="item-name">Progres Mengaji</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
