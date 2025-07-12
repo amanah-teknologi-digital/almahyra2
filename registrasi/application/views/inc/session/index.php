@@ -68,6 +68,8 @@
                                                 <option value="4">Orang Tua</option>
                                                 <option value="5">Absensi</option>
                                                 <option value="6">Medical Checkup</option>
+                                                <option value="7">Ustadzah</option>
+                                                <option value="8">Kepala TPQ</option>
                                             </select>
                                         </div>
                                         <div class="form-group">

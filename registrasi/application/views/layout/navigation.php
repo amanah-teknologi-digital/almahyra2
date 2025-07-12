@@ -9,6 +9,10 @@
         $this->load->view('layout/navigation_absensi');
     } else if ($this->session->userdata('auth')->id_role == '6'){ //Medical Checkup
         $this->load->view('layout/navigation_medic');
+    }else if ($this->session->userdata('auth')->id_role == '7'){ //Ustadzah
+        $this->load->view('layout/navigation_ustadzah');
+    }else if ($this->session->userdata('auth')->id_role == '8'){ //Kepala TPQ
+        $this->load->view('layout/navigation_kepalatpq');
     } else {
         show_error('You are not allowed to access this page.', 403);
     }

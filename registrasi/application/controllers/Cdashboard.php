@@ -114,6 +114,28 @@ class CDashboard extends CI_Controller {
             }
 
             $this->load->view('inc/dashboard/medic', $data);
+        }elseif ($this->session->userdata['auth']->id_role == 7) { //ustadzah
+            $data = $this->data;
+            $data['parent'] = 'mengaji';
+            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            if (!empty($data['list_anak'])) {
+                $data['id_anak'] = $data['list_anak'][0]->id;
+            }else{
+                $data['id_anak'] = 0;
+            }
+
+            $this->load->view('inc/dashboard/medic', $data);
+        }elseif ($this->session->userdata['auth']->id_role == 8) { //kepala tpq
+            $data = $this->data;
+            $data['parent'] = 'kepalatpq';
+            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            if (!empty($data['list_anak'])) {
+                $data['id_anak'] = $data['list_anak'][0]->id;
+            }else{
+                $data['id_anak'] = 0;
+            }
+
+            $this->load->view('inc/dashboard/medic', $data);
         } else if ($this->session->userdata['auth']->id_role == 3) {
             // pengasuh
 
