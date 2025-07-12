@@ -39,17 +39,23 @@ class Claporanmengaji extends CI_Controller {
 
 	public function index()	{
         if (!empty($_POST)) {
+            $this->session->set_userdata('tahun_session_lapmengaji', $_POST['tahun']);
             $this->session->set_userdata('tanggal_session_lapmengaji', $_POST['tanggal']);
             $this->session->set_userdata('sesi_session_lapmengaji', $_POST['sesi']);
             $this->session->set_userdata('ustadzah_session_lapmengaji', $_POST['id_ustadzah']);
         }
 
+        $tahun = $this->session->userdata('tahun_session_lapmengaji');
         $tanggal = $this->session->userdata('tanggal_session_lapmengaji');
         $sesi = $this->session->userdata('sesi_session_lapmengaji');
         $id_ustadzah = $this->session->userdata('ustadzah_session_lapmengaji');
 
+        if (empty($tahun)) {
+            $tahun = Date('Y');
+        }
+
         if (empty($tanggal)) {
-            $tanggal = date('Y-m-d');
+            $tanggal = -1;
         }
 
         if (empty($sesi)) {
@@ -66,14 +72,17 @@ class Claporanmengaji extends CI_Controller {
             redirect(base_url().$this->data['redirect']);
         }
 
+        $data['list_tahun'] = $this->LaporanMengaji->getListTahun();
+        $data['list_tanggal'] = $this->LaporanMengaji->getListTanggalByTahun($tahun);
+        $data['list_sesi'] = $this->LaporanMengaji->getListSesi();
+        $data['list_ustadzah'] = $this->LaporanMengaji->getListUstadzah($this->role);
+        $data['tahun'] = $tahun;
         $data['tanggal'] = $tanggal;
         $data['sesi'] = $sesi;
         $data['id_ustadzah'] = $id_ustadzah;
-        $data['list_sesi'] = $this->LaporanMengaji->getListSesi();
         $data['nama_sesi'] = $this->getNamaByIdSesi($data['list_sesi'], $sesi);
-        $data['list_ustadzah'] = $this->LaporanMengaji->getListUstadzah($this->role);
         $data['nama_ustadzah'] = $this->getNamaByIdUstadzah($data['list_ustadzah'], $id_ustadzah);
-        $data['hasil_mengaji'] = $this->LaporanMengaji->getHasilMengaji($this->role, $tanggal, $sesi, $id_ustadzah);
+        $data['hasil_mengaji'] = $this->LaporanMengaji->getHasilMengaji($this->role, $tahun, $tanggal, $sesi, $id_ustadzah);
 
 		$this->load->view('inc/laporanmengaji/list', $data);
 	}
@@ -99,17 +108,44 @@ class Claporanmengaji extends CI_Controller {
     function cetaklaporanmengaji(){
         $data = $this->data;
 
+        $tahun = $_POST['tahun'];
         $tanggal = $_POST['tanggal'];
         $sesi = $_POST['sesi'];
         $id_ustadzah = $_POST['id_ustadzah'];
 
+        $data['tahun'] = $tahun;
         $data['list_sesi'] = $this->LaporanMengaji->getListSesi();
         $data['nama_sesi'] = $this->getNamaByIdSesi($data['list_sesi'], $sesi);
         $data['list_ustadzah'] = $this->LaporanMengaji->getListUstadzah($this->role);
         $data['nama_ustadzah'] = $this->getNamaByIdUstadzah($data['list_ustadzah'], $id_ustadzah);
-        $data['hasil_mengaji'] = $this->LaporanMengaji->getHasilMengaji($this->role, $tanggal, $sesi, $id_ustadzah);
+        $data['hasil_mengaji'] = $this->LaporanMengaji->getHasilMengaji($this->role, $tahun, $tanggal, $sesi, $id_ustadzah);
         $data['tanggal'] = $tanggal;
 
         $this->load->view('inc/laporanmengaji/cetak_absensi', $data);
+    }
+
+    public function getDataTanggal(){
+        $tahun = $_POST['tahun'];
+
+        $data = $this->LaporanMengaji->getListTanggalByTahun($tahun);
+        if (!empty($data)) {
+            $data_list = [];
+            foreach ($data as $key => $value) {
+                $value->nama_hari = format_date_indonesia($value->tanggal);
+                $value->tanggal = date('d-m-Y', strtotime($value->tanggal));
+                $data_list[] = $value;
+            }
+            $data['tanggal'] = $data_list;
+        }else{
+            $data['tanggal'] = [];
+            $data['kelas'] = [];
+        }
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+
     }
 }

@@ -33,10 +33,29 @@
                                             </colgroup>
                                             <tr>
                                                 <td>
+                                                    <label>Tahun</label>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" id="tahun" name="tahun" onchange="getDataTanggal(this)" required">
+                                                    <?php foreach ($list_tahun as $key => $value) { ?>
+                                                        <option value="<?= $value->tahun ?>" <?= $tahun == $value->tahun ? 'selected' : '' ?>><?= $value->tahun ?></option>
+                                                    <?php } ?>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
                                                     <label>Tanggal Mengaji</label>
                                                 </td>
                                                 <td>
-                                                    <input type="date" class="form-control" name="tanggal" value="<?= $tanggal ?>" required>
+                                                    <select class="form-control" id="tanggal" name="tanggal" required">
+                                                    <?php if (count($list_tanggal) > 0){ ?>
+                                                        <option value="-1" selected>-- Semua --</option>
+                                                        <?php foreach ($list_tanggal as $key => $value) { ?>
+                                                            <option value="<?= $value->tanggal ?>" <?= $tanggal == $value->tanggal ? 'selected' : '' ?>><?= format_date_indonesia($value->tanggal) . ', ' . date('d-m-Y', strtotime($value->tanggal)); ?></option>
+                                                        <?php } ?>
+                                                    <?php } ?>
+                                                    </select>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -78,12 +97,13 @@
                                     <?php echo form_open_multipart($controller.'/cetaklaporanmengaji', 'target="blank"'); ?>
                                         <div class="row d-flex justify-content-center align-items-center">
                                             <div class="col-sm-10">
-                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Laporan Mengaji Hari&nbsp;<span><?= format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)); ?></span>&nbsp;<span class="text-success font-weight-bold"><?= !empty($sesi)? 'Sesi '.$nama_sesi:''; ?></span>&nbsp;<span class="font-weight-bold"><?= !empty($id_ustadzah) ? 'Ustadzah: '.$nama_ustadzah:'' ?> </span></span></h5>
+                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Laporan Mengaji Tahun <?= $tahun ?><span><?= $tanggal != -1 ? '&nbsp;Hari '. format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)):''; ?></span>&nbsp;<span class="text-success font-weight-bold"><?= !empty($sesi)? 'Sesi '.$nama_sesi:''; ?></span>&nbsp;<span class="font-weight-bold"><?= !empty($id_ustadzah) ? 'Ustadzah: '.$nama_ustadzah:'' ?> </span></span></h5>
                                             </div>
                                             <div class="col-sm-2">
                                                 <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Laporan</button>
                                             </div>
                                         </div>
+                                        <input type="hidden" name="tahun" value="<?= $tahun ?>">
                                         <input type="hidden" name="tanggal" value="<?= $tanggal ?>">
                                         <input type="hidden" name="sesi" value="<?= $sesi ?>">
                                         <input type="hidden" name="id_ustadzah" value="<?= $id_ustadzah ?>">
@@ -141,5 +161,30 @@
         $(document).ready(function() {
             $('.select2').select2();
         });
+
+        function resetInput(){
+            $('#tanggal').html('');
+        }
+
+        function getDataTanggal(dom){
+            let tahun = $(dom).val();
+            resetInput();
+
+            $.ajax({
+                url: url+'/getDataTanggal',
+                type: 'POST',
+                data: {tahun: tahun},
+                success: function(data){
+                    let data_tanggal = data['tanggal'];
+
+                    if (data_tanggal.length > 0){
+                        $('#tanggal').append('<option value="-1">-- Semua --</option>');
+                    }
+                    $.each(data_tanggal, function(key, value){
+                        $('#tanggal').append('<option value="'+value.tanggal+'">'+ value.nama_hari + ' ' +value.tanggal + '</option>');
+                    });
+                }
+            });
+        }
     </script>
 </html>

@@ -34,8 +34,22 @@
             return $query->result();
         }
 
-        function getHasilMengaji($id_role, $tanggal, $sesi, $id_ustadzah){
-            $kondisi = " AND e.tanggal = '$tanggal' AND e.is_catat = 1 ";
+        function getListTahun(){
+            $sql = "SELECT DISTINCT YEAR(tanggal) as tahun FROM mengaji_catatan ORDER BY YEAR(tanggal) DESC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getHasilMengaji($id_role, $tahun, $tanggal, $sesi, $id_ustadzah){
+            $kondisi = " AND YEAR(e.tanggal) = ".$tahun;
+
+            if ($tanggal == -1){
+                $kondisi .= " AND e.is_catat = 1 ";
+            }else{
+                $kondisi .= " AND e.tanggal = '$tanggal' AND e.is_catat = 1 ";
+            }
 
             if (!empty($sesi)) {
                 $kondisi .= " AND e.id_sesi = '$sesi' ";
@@ -81,16 +95,8 @@
 	        return $query->result();
 		}
 
-        function getListTahun(){
-            $sql = "SELECT DISTINCT YEAR(tanggal) as tahun FROM absen_anak ORDER BY YEAR(tanggal) DESC";
-
-            $query = $this->db->query($sql);
-
-            return $query->result();
-        }
-
         function getListTanggalByTahun($tahun){
-            $sql = "SELECT DISTINCT tanggal FROM absen_anak WHERE YEAR(tanggal) = $tahun ORDER BY tanggal DESC";
+            $sql = "SELECT DISTINCT tanggal FROM mengaji_catatan WHERE YEAR(tanggal) = $tahun ORDER BY tanggal DESC";
 
             $query = $this->db->query($sql);
 
