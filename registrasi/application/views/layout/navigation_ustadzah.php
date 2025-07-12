@@ -37,15 +37,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="<?= base_url().'absensi-educator'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Absensi Ustadzah</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="<?= base_url().'laporan-mengaji'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Mengaji</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-ustadzah'; ?>">
+                    <a href="<?= base_url().'laporan-absensieducator'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Laporan Ustadzah</span>
+                        <span class="item-name">Laporan Absensi Ustadzah</span>
                     </a>
                 </li>
             </ul>

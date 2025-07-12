@@ -31,7 +31,7 @@
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Absensi Educator Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
+                                    <h5 class="card-title mb-1 d-flex align-items-center justify-content-center"><?= $title ?> Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
                                     <br>
                                     <div class="table-responsive">
                                         <h5 class="mb-3 d-flex justify-content-between align-items-center">

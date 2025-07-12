@@ -15,7 +15,7 @@
 
             if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
                 $where = "";
-            }elseif ($id_role == 3){ // educator
+            }elseif ($id_role == 3 || $id_role == 7){ // educator
                 $where = " AND a.id = $user->id";
             }elseif($id_role == 4){ // orangtua
                 $where = " AND 1 = 0";
@@ -25,7 +25,7 @@
 
             $sql = "SELECT *
                 FROM data_user a 
-                WHERE a.id_role = 3 AND a.is_active = 1 $where ORDER BY a.name ASC";
+                WHERE a.id_role IN(3,7) AND a.is_active = 1 $where ORDER BY a.name ASC";
             $query = $this->db->query($sql);
 
             return $query->result();
@@ -46,7 +46,7 @@
 
             if ($id_role == 1 OR $id_role == 2 OR $id_role == 5){ // admin & superadmin & system absen
                 $where = "";
-            }elseif ($id_role == 3){ // educator
+            }elseif ($id_role == 3 || $id_role == 7){ // educator
                 $where = " AND a.id_user = $user->id";
             }elseif($id_role == 4){ // orangtua
                 $where = " AND 1 = 0";

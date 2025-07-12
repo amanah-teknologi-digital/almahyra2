@@ -20,11 +20,22 @@ class Cabsensieducator extends CI_Controller {
 
         $this->role = $this->session->userdata['auth']->id_role;
 
+        if ($this->role == 7) {
+            $parent = 'mengaji';
+            $label = "Ustadzah";
+            $title = 'Absensi Ustadzah';
+        }else{
+            $parent = 'absensi';
+            $label = "Educator";
+            $title = 'Absensi Educator';
+        }
+
         $this->data = array(
             'controller'=>'cabsensieducator',
             'redirect'=>'absensi-educator',
-            'title'=>'Absensi Educator',
-            'parent'=>'absensi',
+            'title'=>$title,
+            'parent'=>$parent,
+            'label'=>$label,
             'role' => $this->session->userdata['auth']->id_role,
         );
         ## load model here 

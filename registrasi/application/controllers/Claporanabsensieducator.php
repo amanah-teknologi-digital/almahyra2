@@ -21,11 +21,22 @@ class Claporanabsensieducator extends CI_Controller {
 
         $this->role = $this->session->userdata('auth')->id_role;
 
+        if ($this->role == 7 || $this->role == 8) {
+            $parent = 'mengaji';
+            $label = "Ustadzah";
+            $title = 'Laporan Absensi Ustadzah';
+        }else{
+            $parent = 'absensi';
+            $label = "Educator";
+            $title = 'Laporan Absensi Educator';
+        }
+
 		$this->data = array(
             'controller'=>'claporanabsensieducator',
             'redirect'=>'laporan-absensieducator',
-            'title'=>'Laporan Absensi Educator',
-            'parent'=>'laporan',
+            'title'=>$title,
+            'label'=>$label,
+            'parent'=>$parent,
         );
 		## load model here 
 		$this->load->model('Mlaporanabsensieducator', 'LaporanAbsensiEducator');

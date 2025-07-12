@@ -37,9 +37,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-ustadzah'; ?>">
+                    <a href="<?= base_url().'laporan-absensieducator'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Laporan Ustadzah</span>
+                        <span class="item-name">Laporan Absensi Ustadzah</span>
                     </a>
                 </li>
             </ul>
