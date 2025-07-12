@@ -364,4 +364,30 @@ class CDashboard extends CI_Controller {
         return $data;
     }
 
+    public function perkembangan(){
+        $data = $this->data;
+        $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+        if (!empty($data['list_anak'])) {
+            $data['id_anak'] = $data['list_anak'][0]->id;
+        }else{
+            $data['id_anak'] = 0;
+        }
+
+        $this->load->view('inc/dashboard/perkembangan', $data);
+    }
+
+    public function mengaji(){
+        $data = $this->data;
+        
+        $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+        $data['list_jilid'] = $this->Dashboard->getListJilid();
+        if (!empty($data['list_anak'])) {
+            $data['id_anak'] = $data['list_anak'][0]->id;
+        }else{
+            $data['id_anak'] = 0;
+        }
+
+        $this->load->view('inc/dashboard/ustadzah', $data);
+    }
+
 }

@@ -115,63 +115,12 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Dashboard Admin</a></li>
-                            <li><?= $title ?></li>
+                            <li><a href="#">Dashboard</a></li>
                         </ul>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="card text-left">
-                                <div class="card-body">
-                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Pertumbuhan Anak</b></span>
-                                    <hr>
-                                    <div class="form-group row">
-                                        <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
-                                        <div class="col-sm-10">
-                                            <select name="anak" id="anak" class="form-control" onchange="refreshGraph(this)">
-                                                <?php foreach ($list_anak as $anak){ ?>
-                                                    <option value="<?= $anak->id ?>" <?= $anak->id == $id_anak ? 'selected':'' ?>><?= $anak->nama_anak ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div id="ctx_graph">
-                                        <div class="row">
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_bb"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_tb"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_lila"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_lk"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row" id="loader" style="display: none">
-                                        <div class="col-sm-12">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="loader"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
                             <div class="card text-left">
                                 <div class="card-body">
                                     <?php if (!empty($data_tema)){
