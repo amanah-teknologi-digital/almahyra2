@@ -124,7 +124,7 @@ class CDashboard extends CI_Controller {
                 $data['id_anak'] = 0;
             }
 
-            $this->load->view('inc/dashboard/medic', $data);
+            $this->load->view('inc/dashboard/ustadzah', $data);
         }elseif ($this->session->userdata['auth']->id_role == 8) { //kepala tpq
             $data = $this->data;
             $data['parent'] = 'mengaji';
@@ -135,7 +135,7 @@ class CDashboard extends CI_Controller {
                 $data['id_anak'] = 0;
             }
 
-            $this->load->view('inc/dashboard/medic', $data);
+            $this->load->view('inc/dashboard/ustadzah', $data);
         } else if ($this->session->userdata['auth']->id_role == 3) {
             // pengasuh
 
