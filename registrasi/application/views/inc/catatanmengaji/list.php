@@ -23,7 +23,7 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Medical Checkup</a></li>
+                            <li><a href="#">Qiro'ati</a></li>
                             <li><?= $title ?></li>
                         </ul>
                     </div>
@@ -31,9 +31,43 @@
                         <div class="col-md-12 mb-4">
                             <div class="card text-left">
                                 <div class="card-body">
+                                    <?php echo form_open_multipart($controller); ?>
+                                    <table style="width: 100%;padding: 10px 10px;">
+                                        <colgroup>
+                                            <col style="width: 20%">
+                                            <col style="width: 80%">
+                                        </colgroup>
+                                        <tr>
+                                            <td>
+                                                <label>Tanggal Mengaji</label>
+                                            </td>
+                                            <td>
+                                                <input type="date" class="form-control" name="tanggal_mc" value="<?= $tanggal_mc ?>" required>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Sesi Mengaji</label>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" id="sesi" name="sesi" required">
+                                                <?php foreach ($list_sesi as $key => $value) { ?>
+                                                    <option value="<?= $value->id_sesi ?>" <?= $sesi_mc == $value->id_sesi ? 'selected' : '' ?>><?= $value->nama ?></option>
+                                                <?php } ?>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" >
+                                                <button class="btn btn-sm btn-primary mt-4">Tampilkan</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </form>
+                                    <br>
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <h5 class="card-title text-center">Hasil Medical Checkup Hari&nbsp;<span class="font-weight-bold"><?= format_date_indonesia(date('Y-m-d')).', '.date('d-m-Y'); ?></span></h5>
+                                            <h5 class="card-title text-center">Catatan Mengaji <b>Sesi <?= $nama_sesi ?></b> Hari&nbsp;<span><?= format_date_indonesia($tanggal_mc).', '.date('d-m-Y', strtotime($tanggal_mc)); ?></span></h5>
                                         </div>
                                     </div>
                                     <br>
@@ -61,16 +95,16 @@
                                             </thead>
                                              <tbody>
                                                 <?php $i = 1;
-                                                foreach ($hasil_checkup as $key =>$row) { ?>
+                                                foreach ($hasil_mengaji as $key =>$row) { ?>
                                                     <tr>
                                                         <td align="center"><?= $i; ?></td>
                                                         <td><b><?= $row->nama_anak; ?></b>&nbsp;<span class="font-italic">(<?= $row->nama_kelas; ?>)</span></td>
                                                         <td align="center" class="text-muted font-italic"><?= hitung_usia($row->tanggal_lahir) ?></td>
                                                         <td align="center"><?= $row->jenis_kelamin == 'L'? 'Laki - Laki':'Perempuan' ?></td>
-                                                        <td align="center"><?= empty($row->rinci) ? '<div class="badge badge-danger">Belum Chekup</div>':'<div class="badge badge-success">Sudah Chekup</div>' ?></td>
+                                                        <td align="center"><?= empty($row->id_catatan) ? '<div class="badge badge-danger">Belum Dicatat</div>':'<div class="badge badge-success">Sudah Dicatat</div>' ?></td>
                                                         <td class="text-muted font-italic text-small"><?= empty($row->keterangan) ? '<center>-</center>':$row->keterangan ?></td>
                                                         <td align="center" nowrap>
-                                                            <button class="btn btn-sm btn-icon btn-success edit" type="button" data-id="<?= $row->id; ?>"><span class="fas fa-eye-dropper"></span>&nbsp;Data Checkup</button>
+                                                            <button class="btn btn-sm btn-icon btn-success edit" type="button" data-id="<?= $row->id; ?>"><span class="fas fa-eye-dropper"></span>&nbsp;Data Mengaji</button>
                                                         </td>
                                                     </tr>
 
@@ -78,7 +112,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Pencatatan medical checkup anak <b>otomatis</b> akan tercatat pada hari dimana <b>data diinputkan</b> oleh medic</span></p>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Ustadzah yang mencatat mengaji anak <b>otomatis</b> akan tercatat pada system</span></p>
                                 </div>
                             </div>
                         </div>
@@ -88,7 +122,8 @@
                 </div><!-- Footer Start -->
                 <form action="<?= $controller.'/checkAktivitas' ?>" id="frm_lihatdetail" method="POST">
                     <input type="hidden" name="id_anak" id="id_anak">
-                    <input type="hidden" name="tanggal" value="<?= date('Y-m-d'); ?>" >
+                    <input type="hidden" name="tanggal" value="<?= $tanggal_mc ?>" >
+                    <input type="hidden" name="sesi" value="<?= $sesi_mc ?>" >
                 </form>
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>

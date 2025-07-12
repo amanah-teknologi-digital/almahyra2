@@ -34,62 +34,62 @@ class Ccatatanmengaji extends CI_Controller {
     }
 
     public function index() {
-        $data = $this->data;
-
-        $data['hasil_checkup'] = $this->CatatanMengaji->getHasilCheckup();
-        $data['role'] = $this->role;
-
-        $this->load->view('inc/medicalcheckup/list', $data);
-    }
-
-    public function backdate() {
         if (!empty($_POST)) {
-            $this->session->set_userdata('tgl_session_mc', $_POST['tanggal_mc']);
+            $this->session->set_userdata('tgl_session_mengaji', $_POST['tanggal_mc']);
+            $this->session->set_userdata('sesi_session_mengaji', $_POST['sesi']);
         }
 
-        $tanggal_mc = $this->session->userdata('tgl_session_mc');
+        $tanggal_mc = $this->session->userdata('tgl_session_mengaji');
+        $sesi = $this->session->userdata('sesi_session_mengaji');
 
         $data = $this->data;
         if (!empty($_POST)) {
-            redirect(base_url().$this->data['redirect2']);
+            redirect(base_url().$this->data['redirect']);
         }
 
         if (empty($tanggal_mc)) {
             $tanggal_mc = date('Y-m-d');
         }
 
+        if (empty($sesi)) {
+            $sesi = 1;
+        }
+
         $data['tanggal_mc'] = $tanggal_mc;
-        $data['hasil_checkup'] = $this->CatatanMengaji->getHasilCheckup($tanggal_mc);
+        $data['sesi_mc'] = $sesi;
+        $data['hasil_mengaji'] = $this->CatatanMengaji->getHasilMengaji($tanggal_mc, $sesi);
+        $data['list_sesi'] = $this->CatatanMengaji->getListSesi();
+        $data['nama_sesi'] = $this->getNamaByIdSesi($data['list_sesi'], $sesi);
         $data['role'] = $this->role;
 
-        $this->load->view('inc/mc-backdate/list', $data);
+        $this->load->view('inc/catatanmengaji/list', $data);
+    }
+
+    public function getNamaByIdSesi($data, $id_sesi) {
+        foreach ($data as $item) {
+            if ($item->id_sesi == $id_sesi) {
+                return $item->nama;
+            }
+        }
+        return null; // jika tidak ditemukan
     }
 
     public function checkAktivitas(){
         $tanggal = $this->input->post('tanggal');
+        $sesi = $this->input->post('sesi');
         $id_anak = $this->input->post('id_anak');
 
-        $id_checkup  = $this->CatatanMengaji->checkAktivitas($tanggal, $id_anak);
+        $id_mengaji  = $this->CatatanMengaji->checkAktivitas($tanggal, $id_anak, $sesi);
 
-        redirect($this->data['redirect'].'/lihat-data/'.$id_checkup);
+        redirect($this->data['redirect'].'/lihat-data/'.$id_mengaji);
     }
 
-    public function checkAktivitasBackdate(){
-        $tanggal = $this->input->post('tanggal');
-        $id_anak = $this->input->post('id_anak');
-
-        $id_checkup  = $this->CatatanMengaji->checkAktivitas($tanggal, $id_anak);
-
-        redirect($this->data['redirect2'].'/lihat-data/'.$id_checkup);
-    }
-
-    public function lihatdata($id_checkup){
+    public function lihatdata($id_mengaji){
         $data = $this->data;
 
-        $data['data_checkup'] = $this->CatatanMengaji->getDataCheckup($id_checkup);
-        $data['data_rinciancheckup'] = $this->CatatanMengaji->getDataRincianCheckup($id_checkup);
+        $data['data_mengaji'] = $this->CatatanMengaji->getDataCheckup($id_mengaji);
         $data['role'] = $this->role;
-        $temp_datadokumentasi = $this->CatatanMengaji->getDokumentasiFile($id_checkup);
+        $temp_datadokumentasi = $this->CatatanMengaji->getDokumentasiFile($id_mengaji);
         $data['preview'] = $data['config'] = [];
         foreach ($temp_datadokumentasi as $row){
             $temp_type = strtolower($row->ext);
@@ -136,60 +136,7 @@ class Ccatatanmengaji extends CI_Controller {
         $this->load->view('inc/medicalcheckup/lihat_data', $data);
     }
 
-    public function lihatdatabackdate($id_checkup){
-        $data = $this->data;
-
-        $data['data_checkup'] = $this->CatatanMengaji->getDataCheckup($id_checkup);
-        $data['data_rinciancheckup'] = $this->CatatanMengaji->getDataRincianCheckup($id_checkup);
-        $data['role'] = $this->role;
-        $temp_datadokumentasi = $this->CatatanMengaji->getDokumentasiFile($id_checkup);
-        $data['preview'] = $data['config'] = [];
-        foreach ($temp_datadokumentasi as $row){
-            $temp_type = strtolower($row->ext);
-            if (in_array(strtolower($row->ext), $this->data['categori_image'])) {
-                $temp_type = 'image';
-            }elseif (in_array(strtolower($row->ext), $this->data['categori_video'])) {
-                $temp_type = 'video';
-            }
-
-            $fileId = $row->id_file; // some unique key to identify the file
-            $data['preview'][] = base_url().$row->download_url;
-            if ($temp_type == 'video'){
-                if ($row->ext == 'mov'){
-                    $row->ext = 'mp4';
-                }
-                $preview_file = '<video controls width="120px"><source src="'.base_url().$row->download_url.'" type="video/mp4"></video>'; // Video preview with controls
-                $data['config'][] = [
-                    'type' => $temp_type,
-                    'key' => $fileId,
-                    'caption' => $row->file_name,
-                    'size' => $row->size,
-                    'filetype' => "video/".$row->ext,
-                    'downloadUrl' => base_url().$row->download_url, // the url to download the file
-                    'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
-                    'preview' => $preview_file
-                ];
-            }else{
-                $data['config'][] = [
-                    'type' => $temp_type,
-                    'key' => $fileId,
-                    'caption' => $row->file_name,
-                    'size' => $row->size,
-                    'downloadUrl' => base_url().$row->download_url, // the url to download the file
-                    'url' => base_url() . $this->data['controller'] . '/hapusfile', // server api to delete the file based on key
-                ];
-            }
-        }
-
-        $data['dokumentasi_file'] = [
-            'preview' => $data['preview'],
-            'config' => $data['config']
-        ];
-
-        $this->load->view('inc/mc-backdate/lihat_data', $data);
-    }
-
-    public function simpanrekammedik(){
+    public function simpancatatanmengaji(){
         $err = $this->CatatanMengaji->simpanRekamMedic();
 
         if ($err === FALSE) {

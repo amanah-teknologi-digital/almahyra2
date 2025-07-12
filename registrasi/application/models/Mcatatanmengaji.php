@@ -10,21 +10,17 @@ class Mcatatanmengaji extends CI_Model
         $this->login = $this->session->userdata['auth'];
     }
 
-    function getHasilCheckup($tanggal_sekarang = ''){
-        if (empty($tanggal_sekarang)) {
-            $tanggal_sekarang = date('Y-m-d');
-        }
-
+    function getHasilMengaji($tanggal_mc, $sesi){
         $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_checkup, h.id_checkup as rinci, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_medic, g.name as nama_role
+                e.id_catatan, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_medic, g.name as nama_role, h.nama as sesi
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
                 JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                LEFT JOIN medical_checkup e ON e.id_anak = a.id AND e.tanggal = '$tanggal_sekarang'
-                LEFT JOIN data_user f ON f.id = e.medic
+                LEFT JOIN mengaji_catatan e ON e.id_anak = a.id AND e.tanggal = '$tanggal_mc'
+                LEFT JOIN mengaji_sesi h ON h.id_sesi = e.id_sesi
+                LEFT JOIN data_user f ON f.id = e.id_ustadzah
                 LEFT JOIN m_role g ON g.id = f.id_role
-                LEFT JOIN (SELECT id_checkup FROM rincian_medicalcheckup GROUP BY id_checkup) h ON h.id_checkup = e.id_checkup
                 WHERE a.is_active = 1 ORDER BY a.nama ASC";
 
         $query = $this->db->query($sql);
@@ -32,10 +28,16 @@ class Mcatatanmengaji extends CI_Model
         return $query->result();
     }
 
-    function checkAktivitas($tanggal, $id_anak){
-        $user = $this->session->userdata['auth'];
+    function getListSesi(){
+        $sql = "SELECT * FROM mengaji_sesi";
 
-        $sql = "SELECT id_checkup FROM medical_checkup WHERE id_anak = $id_anak AND tanggal = '$tanggal'";
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
+    function checkAktivitas($tanggal, $id_anak, $sesi){
+        $sql = "SELECT id_catatan FROM mengaji_catatan WHERE id_anak = $id_anak AND tanggal = '$tanggal' AND id_sesi = '$sesi'";
 
         $query = $this->db->query($sql);
 
@@ -43,11 +45,11 @@ class Mcatatanmengaji extends CI_Model
             return $query->row()->id_checkup;
         }else{
             $a_input['id_anak'] = $id_anak;
-            $a_input['medic'] = $user->id;
+            $a_input['id_sesi'] = $sesi;
             $a_input['tanggal'] = $tanggal;
             $a_input['created_at'] = date('Y-m-d H:m:s');
 
-            $this->db->insert('medical_checkup', $a_input);
+            $this->db->insert('mengaji_catatan', $a_input);
 
             return $this->db->insert_id();
         }
@@ -81,6 +83,7 @@ class Mcatatanmengaji extends CI_Model
     }
 
     function simpanRekamMedic(){
+        $user = $this->session->userdata['auth'];
         date_default_timezone_set('Asia/Jakarta');
 
         $id_checkup = $this->input->post('id_checkup');
