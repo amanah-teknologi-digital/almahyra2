@@ -119,6 +119,7 @@ $route['laporan-absensieducator'] = 'claporanabsensieducator';
 $route['laporan-medicalcheckup'] = 'claporanmedicalcheckup';
 $route['laporan-medicalcheckup/lihat-data/(:num)'] = 'claporanmedicalcheckup/lihatdata/$1';
 $route['laporan-mengaji'] = 'claporanmengaji';
+$route['laporan-ustadzah'] = 'claporanabsenustadzah';
 
 // laporan 
 $route['laporan-tumbuh-kembang'] = 'claporan/tumbuhkembangf';

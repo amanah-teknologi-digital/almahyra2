@@ -62,7 +62,7 @@
                 JOIN mengaji_jilid i ON i.id_jilidmengaji = e.id_jilidmengaji
                 JOIN data_user f ON f.id = e.id_ustadzah
                 JOIN m_role g ON g.id = f.id_role
-                WHERE a.is_active = 1 ORDER BY a.nama, h.id_sesi ASC";
+                WHERE a.is_active = 1 ORDER BY e.tanggal, a.id, h.id_sesi ASC";
 
             $query = $this->db->query($sql);
 

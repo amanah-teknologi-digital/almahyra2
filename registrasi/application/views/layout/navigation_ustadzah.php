@@ -42,6 +42,12 @@
                         <span class="item-name">Laporan Mengaji</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'laporan-ustadzah'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Ustadzah</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
