@@ -187,7 +187,6 @@
         let url = "<?= base_url().$controller ?>";
         let initialPreview = <?= json_encode($dokumentasi_file['preview'])?>;
         let initialPreviewConfig = <?= json_encode($dokumentasi_file['config'])?>;
-        const list_form = <?= json_encode(['jilid', 'halaman']) ?>;
 
         $(document).ready(function() {
             $.validator.addMethod("decimal", function(value, element) {
@@ -226,44 +225,6 @@
 
             initPlugin();
 
-            let temp_rules, temp_message, rules = {}, message = {};
-            $.each(list_form, function(index, value){
-                temp_rules = {}; temp_message = {};
-                if (value['jenis_kolom'] === 'number'){
-                    temp_rules = {
-                        required: true,
-                        decimal: true
-                    };
-
-                    temp_message = {
-                        required: value['nama_kolom']+" harus diisi!",
-                        decimal: value['nama_kolom']+" harus berupa angka!"
-                    };
-
-                }else{
-                    temp_rules = {
-                        required: true
-                    };
-
-                    temp_message = {
-                        required: value['nama_kolom']+" harus diisi!",
-                    };
-                }
-
-                rules[value['kolom']] = temp_rules;
-                message[value['kolom']] = temp_message
-
-                if (value['action'] !== null){
-                    rules['action_'+value['kolom']] = {
-                        required: true
-                    };
-
-                    message['action_'+value['kolom']] = {
-                        required: "Action "+value['nama_kolom']+" harus dipilih!"
-                    };
-                }
-            });
-
             file_input.on("filepredelete", function(jqXHR) {
                 var abort = true;
                 if (confirm("Apakah yakin menghapus file?")) {
@@ -276,10 +237,7 @@
                 $("#frm_simpan").valid();
             });
 
-            $("#frm_simpan").validate({
-                rules: rules,
-                messages: message
-            });
+            $("#frm_simpan").validate();
         });
     </script>
 </html>

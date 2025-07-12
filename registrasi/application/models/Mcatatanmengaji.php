@@ -17,7 +17,7 @@ class Mcatatanmengaji extends CI_Model
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
                 JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                LEFT JOIN mengaji_catatan e ON e.id_anak = a.id AND e.tanggal = '$tanggal_mc'
+                LEFT JOIN mengaji_catatan e ON e.id_anak = a.id AND e.tanggal = '$tanggal_mc' AND e.id_sesi = $sesi
                 LEFT JOIN mengaji_sesi h ON h.id_sesi = e.id_sesi
                 LEFT JOIN data_user f ON f.id = e.id_ustadzah
                 LEFT JOIN m_role g ON g.id = f.id_role
@@ -36,13 +36,21 @@ class Mcatatanmengaji extends CI_Model
         return $query->result();
     }
 
+    function getListJilid(){
+        $sql = "SELECT * FROM mengaji_jilid";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+    }
+
     function checkAktivitas($tanggal, $id_anak, $sesi){
         $sql = "SELECT id_catatan FROM mengaji_catatan WHERE id_anak = $id_anak AND tanggal = '$tanggal' AND id_sesi = '$sesi'";
 
         $query = $this->db->query($sql);
 
         if ($query->num_rows() > 0) {
-            return $query->row()->id_checkup;
+            return $query->row()->id_catatan;
         }else{
             $a_input['id_anak'] = $id_anak;
             $a_input['id_sesi'] = $sesi;
@@ -55,69 +63,44 @@ class Mcatatanmengaji extends CI_Model
         }
     }
 
-    function getDataCheckup($id_checkup){
+    function getDataMengaji($id_mengaji){
         $sql = "SELECT a.id, a.nama as nama_anak, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_checkup, e.tanggal, e.keterangan, e.created_at, e.updated_at, f.name as nama_medic, g.name as nama_role
+                e.id_catatan, e.tanggal, e.id_jilidmengaji, e.id_sesi, e.halaman, e.keterangan, e.nilai, e.created_at, e.updated_at, f.name as nama_ustadzah, g.name as nama_role
                 FROM registrasi_data_anak a 
                 JOIN v_kategori_usia b ON b.id = a.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
                 JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                JOIN medical_checkup e ON e.id_anak = a.id
-                JOIN data_user f ON f.id = e.medic
-                JOIN m_role g ON g.id = f.id_role
-                WHERE e.id_checkup = $id_checkup";
+                JOIN mengaji_catatan e ON e.id_anak = a.id
+                LEFT JOIN data_user f ON f.id = e.id_ustadzah
+                LEFT JOIN m_role g ON g.id = f.id_role
+                WHERE e.id_catatan = $id_mengaji";
 
         $query = $this->db->query($sql);
 
         return $query->row();
     }
 
-    function getDataRincianCheckup($id_checkup){
-        $sql = "SELECT a.*, b.id_rinciancheckup, b.nilai, b.aksi_medic
-                FROM form_medical a 
-                LEFT JOIN rincian_medicalcheckup b ON b.id_formmedical = a.id_formmedical AND b.id_checkup = $id_checkup";
-
-        $query = $this->db->query($sql);
-
-        return $query->result();
-    }
-
-    function simpanRekamMedic(){
+    function simpanCatatanMengaji(){
         $user = $this->session->userdata['auth'];
         date_default_timezone_set('Asia/Jakarta');
 
-        $id_checkup = $this->input->post('id_checkup');
-        $list_form = $this->getDataRincianCheckup($id_checkup);
+        $id_catatan = $this->input->post('id_catatan');
+        $jilid = $this->input->post('jilid');
+        $halaman = $this->input->post('halaman');
+        $nilai = $this->input->post('nilai');
 
         $this->db->trans_start();
 
+        $update_checkup['id_ustadzah'] = $user->id;
+        $update_checkup['id_jilidmengaji'] = $jilid;
+        $update_checkup['halaman'] = $halaman;
+        $update_checkup['nilai'] = $nilai;
+        $update_checkup['is_catat'] = 1;
         $update_checkup['updated_at'] = date('Y-m-d H:m:s');
         $update_checkup['keterangan'] = $this->input->post('keterangan');
-        $this->db->where('id_checkup', $id_checkup);
-        $this->db->update('medical_checkup', $update_checkup);
-
-        foreach ($list_form as $form){
-            $id_rinciancheckup = $form->id_rinciancheckup;
-            if (!empty($id_rinciancheckup)){ //update
-                $a_input['nilai'] = $this->input->post($form->kolom);
-                if (!empty($form->action)) {
-                    $a_input['aksi_medic'] = $this->input->post('action_' . $form->kolom);
-                }
-
-                $this->db->where('id_rinciancheckup', $id_rinciancheckup);
-                $this->db->update('rincian_medicalcheckup', $a_input);
-            }else{ //insert
-                $a_input['id_rinciancheckup'] = $id_rinciancheckup;
-                $a_input['id_checkup'] = $id_checkup;
-                $a_input['id_formmedical'] = $form->id_formmedical;
-                $a_input['nilai'] = $this->input->post($form->kolom);
-                if (!empty($form->action)) {
-                    $a_input['aksi_medic'] = $this->input->post('action_' . $form->kolom);
-                }
-
-                $this->db->insert('rincian_medicalcheckup', $a_input);
-            }
-        }
+        $update_checkup['updater'] = $user->id;
+        $this->db->where('id_catatan', $id_catatan);
+        $this->db->update('mengaji_catatan', $update_checkup);
 
         if (isset($_FILES['file_dukung'])){
             $this->uploadfiles();
@@ -134,7 +117,7 @@ class Mcatatanmengaji extends CI_Model
             return [];
         }
         $total = count($_FILES[$input]['name']); // multiple files
-        $path = './uploads/medical_checkup/'; // your upload path
+        $path = './uploads/catatan_mengaji/'; // your upload path
 
         for ($i = 0; $i < $total; $i++) {
             $temp_filename = date('dmyhis').rand(1, 1000000);
@@ -151,7 +134,7 @@ class Mcatatanmengaji extends CI_Model
 
                 //Upload the file into the new path
                 if(move_uploaded_file($tmpFilePath, $newFilePath)) {
-                    $id_file = $this->insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $_POST['id_checkup']);
+                    $id_file = $this->insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $_POST['id_catatan']);
                     if (empty($id_file)) {
                         @unlink($newFilePath);
                         break;
@@ -168,7 +151,7 @@ class Mcatatanmengaji extends CI_Model
     }
 
     function hapusDokumentasiFile($id_file){
-        $sql = "SELECT download_url FROM file_medicalcheckup WHERE id_file = $id_file";
+        $sql = "SELECT download_url FROM file_mengaji WHERE id_file = $id_file";
         $query = $this->db->query($sql);
         $download_url = $query->row()->download_url;
         $path = './'.$download_url;
@@ -176,7 +159,7 @@ class Mcatatanmengaji extends CI_Model
         $this->db->trans_start();
 
         $this->db->where('id_file', $id_file);
-        $this->db->delete('file_medicalcheckup');
+        $this->db->delete('file_mengaji');
 
         $this->db->trans_complete();
 
@@ -187,25 +170,25 @@ class Mcatatanmengaji extends CI_Model
         return $this->db->trans_status();
     }
 
-    function insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $id_checkup){
+    function insertDokumentasiHarian($temp_filename, $ext, $fileName, $fileSize, $id_catatan){
         $user = $this->session->userdata['auth'];
 
-        $a_input['id_checkup'] = $id_checkup;
+        $a_input['id_catatan'] = $id_catatan;
         $a_input['file_name'] = $fileName;
         $a_input['size'] = $fileSize;
-        $a_input['download_url'] = 'uploads/medical_checkup/' . $temp_filename.'.'.$ext;
+        $a_input['download_url'] = 'uploads/catatan_mengaji/' . $temp_filename.'.'.$ext;
         $a_input['temp_file_name'] = $temp_filename;
         $a_input['ext'] = $ext;
         $a_input['created_at'] = date('Y-m-d H:m:s');
         $a_input['updater'] = $user->id;
 
-        $this->db->insert('file_medicalcheckup', $a_input);
+        $this->db->insert('file_mengaji', $a_input);
 
         return $this->db->insert_id();
     }
 
-    function getDokumentasiFile($id_checkup){
-        $sql = "SELECT * FROM file_medicalcheckup WHERE id_checkup = $id_checkup";
+    function getDokumentasiFile($id_mengaji){
+        $sql = "SELECT * FROM file_mengaji WHERE id_catatan = $id_mengaji";
         $query = $this->db->query($sql);
 
         return $query->result();

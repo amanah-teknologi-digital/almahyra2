@@ -87,7 +87,8 @@ class Ccatatanmengaji extends CI_Controller {
     public function lihatdata($id_mengaji){
         $data = $this->data;
 
-        $data['data_mengaji'] = $this->CatatanMengaji->getDataCheckup($id_mengaji);
+        $data['data_mengaji'] = $this->CatatanMengaji->getDataMengaji($id_mengaji);
+        $data['list_jilid'] = $this->CatatanMengaji->getListJilid();
         $data['role'] = $this->role;
         $temp_datadokumentasi = $this->CatatanMengaji->getDokumentasiFile($id_mengaji);
         $data['preview'] = $data['config'] = [];
@@ -133,11 +134,11 @@ class Ccatatanmengaji extends CI_Controller {
             'config' => $data['config']
         ];
 
-        $this->load->view('inc/medicalcheckup/lihat_data', $data);
+        $this->load->view('inc/catatanmengaji/lihat_data', $data);
     }
 
     public function simpancatatanmengaji(){
-        $err = $this->CatatanMengaji->simpanRekamMedic();
+        $err = $this->CatatanMengaji->simpanCatatanMengaji();
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
@@ -145,19 +146,7 @@ class Ccatatanmengaji extends CI_Controller {
             $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
         }
 
-        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_checkup']);
-    }
-
-    public function simpanrekammedikbackdate(){
-        $err = $this->CatatanMengaji->simpanRekamMedic();
-
-        if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
-        }else{
-            $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
-        }
-
-        redirect($this->data['redirect2'].'/lihat-data/'.$_POST['id_checkup']);
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_catatan']);
     }
 
     function hapusfile(){
