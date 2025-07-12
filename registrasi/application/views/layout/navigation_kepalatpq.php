@@ -2,10 +2,10 @@
 <div class="side-content-wrap">
     <div class="sidebar-left open rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
         <ul class="navigation-left">
-            <li class="nav-item <?= $parent=='checkup'?'active':'' ?>" data-item="checkup">
+            <li class="nav-item <?= $parent=='mengaji'?'active':'' ?>" data-item="mengaji">
                 <a class="nav-item-hold" href="#">
                     <i class="nav-icon i-Doctor"></i>
-                    <span class="nav-text">Medical Checkup</span>
+                    <span class="nav-text">Mengaji Qiro'ati</span>
                 </a>
                 <div class="triangle"></div>
             </li>
@@ -19,9 +19,9 @@
         </header>
         <!-- Submenu Dashboards -->
 
-        <div class="submenu-area" data-parent="checkup">
+        <div class="submenu-area" data-parent="mengaji">
             <header>
-                <h6>Medical Checkup</h6>
+                <h6>Qiro'ati</h6>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
@@ -31,15 +31,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'medical-checkup'; ?>">
+                    <a href="<?= base_url().'laporan-mengaji'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Hasil Checkup</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= base_url().'laporan-medicalcheckup'; ?>">
-                        <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Laporan Medical Checkup</span>
+                        <span class="item-name">Laporan Mengaji</span>
                     </a>
                 </li>
             </ul>

@@ -343,6 +343,12 @@
                         <span class="item-name">Laporan Indikator</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'laporan-mengaji'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Mengaji</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="submenu-area" data-parent="rencana">
