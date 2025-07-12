@@ -21,9 +21,17 @@
             return $query->result();
         }
 
+        function getListJilid(){
+            $sql = "SELECT * FROM mengaji_jilid";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getListAnak($role){
             $user = $this->session->userdata['auth'];
-            if ($role == 1 OR $role == 2 OR $role == 6) { // admin & superadmin & system absen
+            if ($role == 1 OR $role == 2 OR $role == 6 OR $role == 7 OR $role == 8) { // admin & superadmin & system absen
                 $where = "";
             }elseif ($role == 3) { // educator
                 $where = " AND a.educator = $user->id";
@@ -49,6 +57,26 @@
                 JOIN rincian_medicalcheckup b ON b.id_checkup = a.id_checkup
                 JOIN form_medical c ON c.id_formmedical = b.id_formmedical
                 WHERE a.id_anak = $id_anak AND b.id_formmedical IN(1,2,3,4) ORDER BY b.id_formmedical, a.tanggal ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDataCatatanMengaji($id_anak){
+            $sql = "SELECT
+                        tanggal,
+                        id_anak,
+                        id_jilidmengaji,
+                        MAX(halaman) AS halaman_tertinggi
+                    FROM
+                        mengaji_catatan
+                    WHERE
+                        is_catat = 1 AND id_anak = $id_anak
+                    GROUP BY
+                        tanggal, id_anak, id_jilidmengaji
+                    ORDER BY
+                        tanggal, id_anak, id_jilidmengaji";
 
             $query = $this->db->query($sql);
 

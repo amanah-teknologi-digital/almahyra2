@@ -118,6 +118,7 @@ class CDashboard extends CI_Controller {
             $data = $this->data;
             $data['parent'] = 'mengaji';
             $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            $data['list_jilid'] = $this->Dashboard->getListJilid();
             if (!empty($data['list_anak'])) {
                 $data['id_anak'] = $data['list_anak'][0]->id;
             }else{
@@ -129,6 +130,7 @@ class CDashboard extends CI_Controller {
             $data = $this->data;
             $data['parent'] = 'mengaji';
             $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            $data['list_jilid'] = $this->Dashboard->getListJilid();
             if (!empty($data['list_anak'])) {
                 $data['id_anak'] = $data['list_anak'][0]->id;
             }else{
@@ -321,6 +323,39 @@ class CDashboard extends CI_Controller {
         }
 
         $data = $data_form;
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+    }
+
+    public function getDataCatatanMengaji($id_anak){
+        $data_mengaji = $this->Dashboard->getDataCatatanMengaji($id_anak);
+        $list_jilid = $this->Dashboard->getListJilid();
+
+        foreach ($data_mengaji as $mengaji){
+            $data_graph[$mengaji->id_jilidmengaji][] = [
+                'tanggal' => $mengaji->tanggal,
+                'halaman' => $mengaji->halaman_tertinggi,
+            ];
+        }
+
+        foreach ($list_jilid as $jilid){
+            if (empty($data_graph[$jilid->id_jilidmengaji])){
+                $data_graph[$jilid->id_jilidmengaji] = [];
+            }
+
+            $data_final[] = [
+                'dom' => 'graph_'.$jilid->id_jilidmengaji,
+                'color' => $jilid->color,
+                'nama_form' => $jilid->nama,
+                'data' => $data_graph[$jilid->id_jilidmengaji]
+            ];
+        }
+
+        $data = $data_final;
 
         $this->output->set_content_type('application/json');
 

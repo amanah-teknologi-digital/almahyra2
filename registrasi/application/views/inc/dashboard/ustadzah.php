@@ -43,7 +43,7 @@
                         <div class="col-md-12">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Pertumbuhan Anak</b></span>
+                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Progres Mengaji Anak</b></span>
                                     <hr>
                                     <div class="form-group row">
                                         <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
@@ -55,30 +55,17 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <br>
+                                    <br>
                                     <div id="ctx_graph">
                                         <div class="row">
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_bb"></div>
+                                            <?php $temp=[]; foreach ($list_jilid as $jilid){ $temp[] = 'graph_'.$jilid->id_jilidmengaji; ?>
+                                                <div class="col-sm-4 mb-4">
+                                                    <div class="chart-container">
+                                                        <div id="graph_<?= $jilid->id_jilidmengaji ?>"></div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_tb"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_lila"></div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 mb-4">
-                                                <div class="chart-container">
-                                                    <div id="chart_lk"></div>
-                                                </div>
-                                            </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     <div class="row" id="loader" style="display: none">
@@ -107,7 +94,6 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         var url = "<?= base_url().$controller ?>";
-        const arr_domctx = ['chart_bb', 'chart_tb', 'chart_lila', 'chart_lk'];
         let id_anak = <?= json_decode($id_anak)?>;
         const charts = {};
 
@@ -126,7 +112,7 @@
             $('#ctx_graph').hide();
 
             $.ajax({
-                url: url + '/getDataMedicalCheckup/' + id_anak,
+                url: url + '/getDataCatatanMengaji/' + id_anak,
                 type:'GET',
                 dataType: 'json',
                 success: function(data){
@@ -158,7 +144,7 @@
             let data_value = [];
             $.each(data['data'], function(index, value){
                 data_label.push(value['tanggal']);
-                data_value.push(value['nilai']);
+                data_value.push(value['halaman']);
             });
 
             var options = {
@@ -199,7 +185,7 @@
                 yaxis: {
                     labels: {
                         formatter: function (value) {
-                            return value + ' cm'; // Ganti 'kg' dengan satuan yang diinginkan
+                            return value + ' halaman'; // Ganti 'kg' dengan satuan yang diinginkan
                         }
                     }
                 },
