@@ -213,7 +213,7 @@
 
             initPlugin();
 
-            $('.btn-update').click(function(){
+            $('#tbl').on('click', '.btn-update', function() {
                 id_catatan = $(this).data('id')
                 nama_anak = $(this).data('nama')
 
