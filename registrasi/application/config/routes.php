@@ -85,6 +85,7 @@ $route['register-anak'] = 'cranak';
 $route['register-orangtua'] = 'crorangtua';
 $route['register-rekam-medik'] = 'crrekammedik';
 $route['register-berkas'] = 'crberkas';
+$route['kelas-anak'] = 'ckelasanak';
 
 // observasi
 $route['observasi-anak'] = 'coanak';

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mabsensianak.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/registrasi/application/models/Mcapaianindikator.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mcatatanmengaji.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mdashboard.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mlaporanmengaji.php" dialect="GenericSQL" />
