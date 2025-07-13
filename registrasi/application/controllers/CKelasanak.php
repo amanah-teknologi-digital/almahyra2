@@ -32,70 +32,39 @@ class CKelasanak extends CI_Controller {
 		$data = $this->data;
 
 		$data['list'] = $this->KelasAnak->getAll();
+        $data['listkelasnonalmahyra'] = $this->KelasAnak->getKelasNonAlmahyra();
 		$data['column'] = $this->KelasAnak->getColumn();
         $data['list_educator'] = $this->KelasAnak->getListEducator();
 
-		$this->load->view('inc/registeranak/list', $data);
-	}
-
-	public function insert() {
-		
-		$err = $this->KelasAnak->insert();
-
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
-		}
-
-		redirect($this->data['redirect']);
-	}
-
-	public function edit($id) {
-		$data = $this->data;
-
-		$data['list_edit'] = $this->KelasAnak->getByID($id) ;
-
-	    $this->output->set_content_type('application/json');
-	    
-	    $this->output->set_output(json_encode($data));
-
-	    return $data;
-	}
-
-	public function update() {
-		$err = $this->KelasAnak->update($this->input->post('id'));
-
-		if ($err['code'] == '0') {
-			$this->session->set_flashdata('success', 'Berhasil Merubah Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Merubah Data');
-		}	
-
-		redirect($this->data['redirect']);
+		$this->load->view('inc/kelasanak/list', $data);
 	}
 
     public function updatestatus() {
-        $err = $this->KelasAnak->updatestatus($_POST['id_user']);
+        $id_anak = $_POST["id_anak"];
+        $id_usia = $_POST["id_usia"];
+
+        $err = $this->KelasAnak->updateKelasAnak($id_usia, $id_anak);
 
         if ($err['code'] == '0') {
-            $this->session->set_flashdata('success', 'Berhasil Merubah Status');
+            $this->session->set_flashdata('success', 'Berhasil Merubah Kelas Anak');
         } else {
-            $this->session->set_flashdata('failed', 'Gagal Merubah Status');
+            $this->session->set_flashdata('failed', 'Gagal Merubah Kelas Anak');
         }
 
         redirect($this->data['redirect']);
     }
 
-	public function delete($id) {
-		$err = $this->KelasAnak->delete($id);
+    public function updatekeAlmahyra() {
+        $id_anak = $_POST["id_anak"];
 
-		if ($err) {
-			$this->session->set_flashdata('success', 'Berhasil Menghapus Data');
-		} else {
-			$this->session->set_flashdata('failed', 'Gagal Menghapus Data, Data Digunakan');
-		}	
+        $err = $this->KelasAnak->updateKeAlmahyra($id_anak);
 
-		redirect($this->data['redirect']);
-	}
+        if ($err['code'] == '0') {
+            $this->session->set_flashdata('success', 'Berhasil Merubah Kelas Anak');
+        } else {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Kelas Anak');
+        }
+
+        redirect($this->data['redirect']);
+    }
 }

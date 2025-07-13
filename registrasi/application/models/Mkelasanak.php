@@ -21,20 +21,33 @@
 
 	    ## get all data in table
 	    function getAll() {
-            
-	    	//$this->db->where('is_active','1');
-
             if($this->login->id_role == 4) {
-
-                $this->db->where('id_orangtua', $this->login->id);                
+                $where = " AND a.id_orangtua = ".$this->login->id;
+            }else{
+                $where = "";
             }
-            $this->db->order_by('is_active', 'desc')->order_by('id', 'desc');
-            $this->db->join('data_user', 'data_user.id = registrasi_data_anak.educator', 'left');
-            $this->db->select('registrasi_data_anak.*, data_user.name as nama_educator');
-	        $query = $this->db->get($this->table_name);
+
+            $sql = "SELECT a.*, d.nama as nama_kelas
+                FROM registrasi_data_anak a 
+                JOIN v_kategori_usia b ON b.id = a.id 
+                JOIN map_kelasusia c ON c.id_usia = b.id_usia
+                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
+                WHERE a.is_active = 1 $where ORDER BY a.nama ASC";
+
+            $query = $this->db->query($sql);
 
 	        return $query->result();
 		}
+
+        public function getKelasNonAlmahyra(){
+            $sql = "SELECT *
+                FROM ref_usia
+                WHERE id_usia IN(13,14)";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
 
 		## get all data in table for list (select)
 	    function getList() {
@@ -70,59 +83,33 @@
 	        return $this->db->list_fields($this->table_name);
 	    }
 
-	    ## insert data into table
-	    function insert() {
-	        $a_input = array();
-	       
-	        foreach ($_POST as $key => $row) {
-	            $a_input[$key] = $row;
-	        }
+        function updateKelasAnak($id_usia, $id_anak) {
+            $user = $this->session->userdata['auth'];
 
-	        $a_input['date_created'] = date('Y-m-d H:m:s');
-	        $a_input['is_active']	 = '1';
-            $a_input['id_orangtua']  = $this->login->id;
-
-	        $this->db->insert($this->table_name, $a_input);
-
-	        return $this->db->error();	        
-	    }
-
-	    ## update data in table
-	    function update($id) {
-	    	$_data = $this->input->post() ;
-	    	
-	        foreach ($_data as $key => $row) {
-	            $a_input[$key] = $row;
-	        }
-
-	        $a_input['date_updated'] = date('Y-m-d H:m:s');	        
-
-	        $this->db->where('id', $id);
-	        
-	        $this->db->update($this->table_name, $a_input);
-
-	        return $this->db->error(1);	        
-	    }
-
-        function updatestatus($id) {
-            $a_input['is_active'] = $_POST['status'];
+            $a_input['id_usia'] = $id_usia;
+            $a_input['updater_kelas'] = $user->id;
 	        $a_input['date_updated'] = date('Y-m-d H:m:s');
 
-	        $this->db->where('id', $id);
+	        $this->db->where('id', $id_anak);
 
 	        $this->db->update($this->table_name, $a_input);
 
 	        return $this->db->error(1);
 	    }
 
-	    ## delete data in table
-		function delete($id) {
-            $this->db->where('id', $id);
+        function updateKeAlmahyra($id_anak) {
+            $user = $this->session->userdata['auth'];
 
-            $this->db->delete($this->table_name);
+            $a_input['id_usia'] = null;
+            $a_input['updater_kelas'] = $user->id;
+	        $a_input['date_updated'] = date('Y-m-d H:m:s');
 
-            return $this->db->affected_rows();
-		}
+	        $this->db->where('id', $id_anak);
+
+	        $this->db->update($this->table_name, $a_input);
+
+	        return $this->db->error(1);
+	    }
 
 		## get data by id in table
 	    function getByKode($id) {
