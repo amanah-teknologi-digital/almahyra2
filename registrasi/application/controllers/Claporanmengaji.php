@@ -148,4 +148,26 @@ class Claporanmengaji extends CI_Controller {
         return $data;
 
     }
+
+    function getfile($id_catatan){
+        $data_file = $this->LaporanMengaji->getLaporanMengajiFile($id_catatan);
+
+        $data['preview'] = $data['config'] = [];
+        foreach ($data_file as $row){
+            $fileId = $row->id_file; // some unique key to identify the file
+            $data['preview'][] = base_url().$row->download_url;
+            $data['config'][] = [
+                'key' => $fileId,
+                'caption' => $row->file_name,
+                'size' => $row->size,
+                'downloadUrl' => base_url().$row->download_url, // the url to download the file
+            ];
+        }
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+    }
 }

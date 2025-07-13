@@ -64,6 +64,16 @@
                 $kondisi .= " AND e.id_ustadzah = ".$user->id;
             }
 
+            if ($id_role == 4){
+                $user = $this->session->userdata['auth'];
+                $kondisi .= " AND a.id_orangtua = ".$user->id;
+            }
+
+            if ($id_role == 3){
+                $user = $this->session->userdata['auth'];
+                $kondisi .= " AND a.educator = ".$user->id;
+            }
+
             $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
                 e.id_catatan, e.halaman, e.nilai, e.tanggal, e.keterangan, e.created_at, e.updated_at, e.is_catat, f.name as nama_ustadzah, g.name as nama_role,
                 h.nama as nama_sesi, i.nama as nama_jilid
@@ -76,7 +86,7 @@
                 JOIN mengaji_jilid i ON i.id_jilidmengaji = e.id_jilidmengaji
                 JOIN data_user f ON f.id = e.id_ustadzah
                 JOIN m_role g ON g.id = f.id_role
-                WHERE a.is_active = 1 ORDER BY e.tanggal, a.id, h.id_sesi ASC";
+                WHERE a.is_active = 1 ORDER BY e.tanggal DESC, a.id, h.id_sesi ASC";
 
             $query = $this->db->query($sql);
 
@@ -157,6 +167,13 @@
             $query = $this->db->query($sql);
 
             return $query->row();
+        }
+
+        function getLaporanMengajiFile($id_catatanmengaji){
+            $sql = "SELECT * FROM file_mengaji WHERE id_catatan = $id_catatanmengaji";
+            $query = $this->db->query($sql);
+
+            return $query->result();
         }
 	}
 

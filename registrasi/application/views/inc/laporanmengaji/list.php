@@ -114,13 +114,14 @@
                                             <thead>
                                             <tr>
                                                 <th style="width: 15%">Tanggal</th>
-                                                <th style="width: 20%">Nama Anak</th>
+                                                <th style="width: 15%">Nama Anak</th>
                                                 <th style="width: 10%">Sesi</th>
                                                 <th style="width: 10%">Jilid/Kelas</th>
                                                 <th style="width: 5%">Halaman</th>
                                                 <th style="width: 5%">Nilai</th>
-                                                <th style="width: 20%">Ustadzah</th>
+                                                <th style="width: 15%">Ustadzah</th>
                                                 <th style="width: 15%">Keterangan</th>
+                                                <th style="width: 10%">Aksi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -134,6 +135,9 @@
                                                     <td nowrap align="center" class="font-weight-bold"><?= !empty($value->nilai) ? '<span class="text-success">L</span>':'<span class="text-danger">-L</span>' ?></td>
                                                     <td nowrap align="center"><?= $value->nama_ustadzah ?></td>
                                                     <td nowrap align="left" class="text-muted font-italic text-small"><?= $value->keterangan ?></td>
+                                                    <td nowrap align="center">
+                                                        <span class="btn btn-sm btn-success btn-update" data-id="<?= $value->id_catatan ?>" data-nama="<?= $value->nama_anak ?>"><span class="fas fa-file-alt"></span> Foto Kegiatan</span>
+                                                    </td>
                                                 </tr>
                                             <?php } ?>
                                             </tbody>
@@ -148,18 +152,91 @@
                     <!-- end of main-content -->
                 </div><!-- Footer Start -->
                 <!--  Modal -->
+                <div class="modal fade" id="updating-indikator" tabindex="-1" role="dialog" aria-labelledby="updating" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Foto Kegiatan a.n&nbsp;<span class="text-success font-weight-bold" id="label_nama_anak"></span></h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="file-loading">
+                                    <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <?php $this->load->view('layout/footer') ?>
             </div>
         </div>
     </body>
     <?php $this->load->view('layout/custom') ?>
+    <?php $this->load->view('layout/file_upload') ?>
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
 
+        let initialPreview = [];
+        let initialPreviewConfig = [];
+
         $(document).ready(function() {
             $('.select2').select2();
+            let file_input = $('#file_dukung'), initPlugin = function() {
+                file_input.fileinput({
+                    uploadUrl: url + '/uploadfile',
+                    minFileCount: 1,
+                    maxFileCount: 5,
+                    maxFileSize: 10000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
+                    required: true,
+                    showRemove: false,
+                    showUpload: false,
+                    showBrowse: false,
+                    showClose: false,
+                    showCaption: false,
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+                    previewFileType: 'image',
+                    overwriteInitial: false,
+                    initialPreview: initialPreview,
+                    initialPreviewConfig: initialPreviewConfig,
+                    initialPreviewAsData: true, // identify if you are sending preview data only and not the raw markup
+                    initialPreviewFileType: 'image', // image is the default and can be overridden in config below
+                    fileActionSettings: {
+                        showDrag: false,
+                        showRemove: false,
+                        removeClass: 'd-none',
+                    }
+                });
+            };
+
+            initPlugin();
+
+            $('.btn-update').click(function(){
+                id_catatan = $(this).data('id')
+                nama_anak = $(this).data('nama')
+
+                $("#label_nama_anak").html(nama_anak);
+
+                $.ajax({
+                    url: url + '/getfile/' + $(this).data('id'),
+                    type:'GET',
+                    dataType: 'json',
+                    success: function(data){
+                        initialPreview = data['preview'];
+                        initialPreviewConfig = data['config'];
+
+                        if (file_input.data('fileinput')) {
+                            file_input.fileinput('destroy');
+                        }
+
+                        initPlugin();
+
+                        $("#updating-indikator").modal('show');
+                    }
+                });
+            });
         });
 
         function resetInput(){
