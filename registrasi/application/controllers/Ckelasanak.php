@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CKelasanak extends CI_Controller {
+class Ckelasanak extends CI_Controller {
 
 	var $data = array();
 	function __construct() {
