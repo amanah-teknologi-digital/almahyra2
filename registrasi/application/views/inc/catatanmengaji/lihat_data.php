@@ -118,6 +118,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label><b>Pilih Jilid</b></label>
+                                                        <br><span class="text-muted font-italic text-small">Jilid Terakhir: <?= !empty($data_sebelum) ? '<b class="text-success">'.$data_sebelum->nama_jilid.'</b> ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
                                                         <select class="form-control" name="jilid" id="jilid" required>
                                                             <option value="">-- Pilih Jilid --</option>
                                                             <?php foreach ($list_jilid as $pil){ ?>
@@ -131,6 +132,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label><b>Input Halaman</b></label>
+                                                        <br><span class="text-muted font-italic text-small">Halaman Terakhir: <?= !empty($data_sebelum) ? '<b class="text-success">'.$data_sebelum->halaman.'</b> ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
                                                         <input type="number" class="form-control" name="halaman" id="halaman" value="<?= (!empty($data_mengaji->halaman))? $data_mengaji->halaman:'' ?>" required placeholder="(Masukan Halaman Terakhir)" autocomplete="off">
                                                     </div>
                                                 </div>
@@ -139,6 +141,16 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label><b>Nilai</b></label>
+                                                        <?php if (!empty($data_sebelum)){
+                                                            if (empty($data_sebelum->nilai)){
+                                                                $nilai_seb = '<b class="text-danger">L-'.'</b>';
+                                                            }else{
+                                                                $nilai_seb = '<b class="text-success">L'.'</b>';
+                                                            }
+                                                        }else{
+                                                            $nilai_seb = '';
+                                                        } ?>
+                                                        <br><span class="text-muted font-italic text-small">Nilai Terakhir: <?= !empty($data_sebelum) ? $nilai_seb. ' ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
                                                         <select class="form-control" name="nilai" id="nilai" required>
                                                             <option value="0" <?= $data_mengaji->nilai == 0 ? 'selected':''; ?>>L-</option>
                                                             <option value="1" <?= $data_mengaji->nilai == 1 ? 'selected':''; ?>>L</option>
@@ -150,6 +162,16 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label><b>Keterangan</b> <i>(Optional)</i></label>
+                                                        <?php if (!empty($data_sebelum)){
+                                                            if (empty($data_sebelum->keterangan)){
+                                                                $ket_seb = '<span class="text-muted text-info">-</span>';
+                                                            }else{
+                                                                $ket_seb = '<span class="text-muted text-info">'.$data_sebelum->keterangan.'</span>';
+                                                            }
+                                                        }else{
+                                                            $ket_seb = '';
+                                                        } ?>
+                                                        <br><span class="text-muted font-italic text-small">Ket Terakhir: <?= !empty($data_sebelum) ? $ket_seb.' ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
                                                         <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"><?= !empty($data_mengaji->keterangan)? $data_mengaji->keterangan:''; ?></textarea>
                                                     </div>
                                                 </div>

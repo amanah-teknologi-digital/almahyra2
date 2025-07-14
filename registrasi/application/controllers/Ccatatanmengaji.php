@@ -88,6 +88,10 @@ class Ccatatanmengaji extends CI_Controller {
         $data = $this->data;
 
         $data['data_mengaji'] = $this->CatatanMengaji->getDataMengaji($id_mengaji);
+        $temp_datamengaji = json_decode(json_encode($data['data_mengaji']), true);
+        $tanggal = $temp_datamengaji['tanggal'];
+        $id_anak = $temp_datamengaji['id'];
+        $data['data_sebelum'] = $this->CatatanMengaji->getDataSebelumnya($id_mengaji, $tanggal, $id_anak);
         $data['list_jilid'] = $this->CatatanMengaji->getListJilid();
         $data['role'] = $this->role;
         $temp_datadokumentasi = $this->CatatanMengaji->getDokumentasiFile($id_mengaji);

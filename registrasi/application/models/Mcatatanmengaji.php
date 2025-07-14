@@ -82,6 +82,18 @@ class Mcatatanmengaji extends CI_Model
         return $query->row();
     }
 
+    function getDataSebelumnya($id_mengaji, $tgl_mengaji, $id_anak){
+        $sql = "SELECT a.*, b.nama as nama_jilid, f.name as nama_ustadzah, g.nama as nama_sesi FROM mengaji_catatan a 
+                JOIN mengaji_jilid b ON b.id_jilidmengaji = a.id_jilidmengaji
+                JOIN data_user f ON f.id = a.id_ustadzah
+                JOIN mengaji_sesi g ON g.id_sesi = a.id_sesi
+                WHERE tanggal <= '$tgl_mengaji' AND id_anak = $id_anak AND id_catatan != $id_mengaji ORDER BY tanggal, id_sesi DESC";
+
+        $query = $this->db->query($sql);
+
+        return $query->row();
+    }
+
     function simpanCatatanMengaji(){
         $user = $this->session->userdata['auth'];
         date_default_timezone_set('Asia/Jakarta');
