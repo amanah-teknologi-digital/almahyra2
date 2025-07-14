@@ -239,36 +239,42 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Apakah Lembur ?</label>
-                                                <select class="form-control" id="is_lemburedit" disabled>
-                                                    <option value="0">Tidak</option>
-                                                    <option value="1">Iya</option>
-                                                </select>
+                                    <?php if ($role != 7){ ?>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Apakah Lembur ?</label>
+                                                    <select class="form-control" id="is_lemburedit" disabled>
+                                                        <option value="0">Tidak</option>
+                                                        <option value="1">Iya</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group lemburedit" style="display: none">
+                                                    <label>Jenis Lembur</label>
+                                                    <select class="form-control" id="jenis_lemburedit" disabled>
+                                                        <option value="">-- Pilih Jenis Lembur --</option>
+                                                        <?php foreach ($list_jenislembur as $key => $value) { ?>
+                                                            <option value="<?= $value->id_jenislembur ?>"><?= $value->nama ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group lemburedit" style="display: none">
-                                                <label>Jenis Lembur</label>
-                                                <select class="form-control" id="jenis_lemburedit" disabled>
-                                                    <option value="">-- Pilih Jenis Lembur --</option>
-                                                    <?php foreach ($list_jenislembur as $key => $value) { ?>
-                                                        <option value="<?= $value->id_jenislembur ?>"><?= $value->nama ?></option>
-                                                    <?php } ?>
-                                                </select>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group lemburedit" style="display: none">
+                                                    <label>Keterangan <i>(Optional)</i></label>
+                                                    <textarea id="keteranganedit" cols="30" rows="4" class="form-control" disabled></textarea>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group lemburedit" style="display: none">
-                                                <label>Keterangan <i>(Optional)</i></label>
-                                                <textarea id="keteranganedit" cols="30" rows="4" class="form-control" disabled></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <?php }else{ ?>
+                                        <input type="hidden" name="jenis_lembur" id="jenis_lembur" value="">
+                                        <input type="hidden" name="is_lembur" id="is_lembur" value="0">
+                                        <input type="hidden" name="keterangan" id="keterangan" value="">
+                                    <?php } ?>
                                 </fieldset>
                                 <?php echo form_open_multipart($controller.'/absenpulang', 'id="frm_absenpulang"'); ?>
                                     <div id="form_absen_pulang">
