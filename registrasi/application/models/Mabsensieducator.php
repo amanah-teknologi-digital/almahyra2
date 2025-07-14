@@ -80,8 +80,14 @@
             return $query->result();
         }
 
-        function getListJenisAbsensi(){
-            $sql = "SELECT * FROM ref_jenisabsen ORDER BY id_jenisabsen ASC";
+        function getListJenisAbsensi($id_role){
+            if($id_role == 7){ //ustadzah
+                $where = " WHERE id_jenisabsen IN (6,7)"; // hanya jenis absen
+            }else{
+                $where = ""; // semua jenis absen
+            }
+
+            $sql = "SELECT * FROM ref_jenisabsen $where ORDER BY id_jenisabsen ASC";
             $query = $this->db->query($sql);
 
             return $query->result();

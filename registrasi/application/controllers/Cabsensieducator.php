@@ -48,7 +48,7 @@ class Cabsensieducator extends CI_Controller {
         $data['list_educator'] = $this->Absensieducator->getListEducator($this->role);
         $data['absensi'] = $this->Absensieducator->getAbsensiEducator($this->role);
 
-        $data['list_jenisabsensi'] = $this->Absensieducator->getListJenisAbsensi();
+        $data['list_jenisabsensi'] = $this->Absensieducator->getListJenisAbsensi($this->role);
         $data['list_jenislembur'] = $this->Absensieducator->getListJenisLembur();
 
         $this->load->view('inc/absensieducator/list', $data);
