@@ -140,7 +140,7 @@
                                                     <div class="form-group">
                                                         <label><b>Nilai</b></label>
                                                         <select class="form-control" name="nilai" id="nilai" required>
-                                                            <option value="0" <?= $data_mengaji->nilai == 0 ? 'selected':''; ?>>-L</option>
+                                                            <option value="0" <?= $data_mengaji->nilai == 0 ? 'selected':''; ?>>L-</option>
                                                             <option value="1" <?= $data_mengaji->nilai == 1 ? 'selected':''; ?>>L</option>
                                                         </select>
                                                     </div>
@@ -155,12 +155,12 @@
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <br>
-                                        <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
-                                        <br>
-                                        <div class="file-loading">
-                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
-                                        </div>
+<!--                                        <br>-->
+<!--                                        <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>-->
+<!--                                        <br>-->
+<!--                                        <div class="file-loading">-->
+<!--                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>-->
+<!--                                        </div>-->
                                         <br>
                                         <center><button class="btn btn-success" id="btn_simpan" type="submit"><span class="fas fa-save"></span>&nbsp;Simpan Catatan</button></center>
                                         <input type="hidden" name="id_catatan" value="<?= $data_mengaji->id_catatan ?>">
@@ -180,62 +180,62 @@
         </div>
     </body>
     <?php $this->load->view('layout/custom') ?>
-    <?php $this->load->view('layout/file_upload') ?>
+<!--    --><?php //$this->load->view('layout/file_upload') ?>
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         let url = "<?= base_url().$controller ?>";
-        let initialPreview = <?= json_encode($dokumentasi_file['preview'])?>;
-        let initialPreviewConfig = <?= json_encode($dokumentasi_file['config'])?>;
+        //let initialPreview = <?php //= json_encode($dokumentasi_file['preview'])?>//;
+        //let initialPreviewConfig = <?php //= json_encode($dokumentasi_file['config'])?>//;
 
         $(document).ready(function() {
-            $.validator.addMethod("decimal", function(value, element) {
-                // Regular expression for decimal values (including optional negative sign)
-                return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
-            }, "Please enter a valid decimal number.");
+            // $.validator.addMethod("decimal", function(value, element) {
+            //     // Regular expression for decimal values (including optional negative sign)
+            //     return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
+            // }, "Please enter a valid decimal number.");
 
-            $.validator.addMethod("filesize", function(value, element, param) {
-                var files = element.files;
-                for (var i = 0; i < files.length; i++) {
-                    if (files[i].size > param) {
-                        return false; // If any file is too large, return false
-                    }
-                }
-                return true; // All files are within size limit
-            }, "File is too large.");
+            // $.validator.addMethod("filesize", function(value, element, param) {
+            //     var files = element.files;
+            //     for (var i = 0; i < files.length; i++) {
+            //         if (files[i].size > param) {
+            //             return false; // If any file is too large, return false
+            //         }
+            //     }
+            //     return true; // All files are within size limit
+            // }, "File is too large.");
 
-            let file_input = $('#file_dukung'), initPlugin = function () {
-                file_input.fileinput({
-                    maxFileSize: 20000,
-                    dropZoneTitle: 'File Pendukung Kosong!',
-                    previewThumbnail: true,
-                    showRemove: false,
-                    showUpload: false,
-                    required: true,
-                    validateInitialCount: true,
-                    previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
-                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
-                    allowedPreviewTypes: ['image'],
-                    initialPreview: initialPreview,
-                    initialPreviewConfig: initialPreviewConfig,
-                    initialPreviewAsData: true,
-                    overwriteInitial: false
-                });
-            };
-
-            initPlugin();
-
-            file_input.on("filepredelete", function(jqXHR) {
-                var abort = true;
-                if (confirm("Apakah yakin menghapus file?")) {
-                    abort = false;
-                }
-                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
-            });
-
-            file_input.on('change', function(event) {
-                $("#frm_simpan").valid();
-            });
+            // let file_input = $('#file_dukung'), initPlugin = function () {
+            //     file_input.fileinput({
+            //         maxFileSize: 20000,
+            //         dropZoneTitle: 'File Pendukung Kosong!',
+            //         previewThumbnail: true,
+            //         showRemove: false,
+            //         showUpload: false,
+            //         required: true,
+            //         validateInitialCount: true,
+            //         previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
+            //         allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
+            //         allowedPreviewTypes: ['image'],
+            //         initialPreview: initialPreview,
+            //         initialPreviewConfig: initialPreviewConfig,
+            //         initialPreviewAsData: true,
+            //         overwriteInitial: false
+            //     });
+            // };
+            //
+            // initPlugin();
+            //
+            // file_input.on("filepredelete", function(jqXHR) {
+            //     var abort = true;
+            //     if (confirm("Apakah yakin menghapus file?")) {
+            //         abort = false;
+            //     }
+            //     return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+            // });
+            //
+            // file_input.on('change', function(event) {
+            //     $("#frm_simpan").valid();
+            // });
 
             $("#frm_simpan").validate();
         });

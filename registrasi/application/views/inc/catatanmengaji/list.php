@@ -72,7 +72,7 @@
                                     </div>
                                     <br>
                                     <div class="table-responsive">
-                                        <table class="display table table-striped table-bordered table-sm" id="tbl-absensi" style="width:100%">
+                                        <table class="display table table-striped table-bordered table-sm" id="tbl-catat" style="width:100%">
                                             <colgroup>
                                                 <col style="width: 5%">
                                                 <col style="width: 20%">

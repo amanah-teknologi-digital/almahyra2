@@ -197,7 +197,7 @@ foreach ($hasil_mengaji as $key => $value){ ?>
         <td nowrap align="center"><b><?= $value->nama_sesi ?></b></td>
         <td nowrap align="center"><?= $value->nama_jilid ?></td>
         <td nowrap align="center"><?= $value->halaman ?></td>
-        <td nowrap align="center" style="font-weight: bold"><?= !empty($value->nilai) ? '<span style="color: green">L</span>':'<span style="color: red">-L</span>' ?></td>
+        <td nowrap align="center" style="font-weight: bold"><?= !empty($value->nilai) ? '<span style="color: green">L</span>':'<span style="color: red">L-</span>' ?></td>
         <td nowrap align="center"><?= $value->nama_ustadzah ?></td>
         <td nowrap align="left" style="font-size: 10px; color: grey; font-style: italic"><?= $value->keterangan ?></td>
     </tr>

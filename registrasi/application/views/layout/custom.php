@@ -56,7 +56,16 @@
             "ordering": false,
             "searching": true,
             "info": true,
-            "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "Tampilkan Semua"]]
+            "lengthMenu": [[15, 25, 50, 100, 200, -1], [15, 25, 50, 100, 200, "Tampilkan Semua"]]
+        });
+    }
+
+    if ('#tbl-catat') {
+        $('#tbl-catat').dataTable({
+            "ordering": false,
+            "searching": true,
+            "info": true,
+            "lengthMenu": [[-1], ["Tampilkan Semua"]]
         });
     }
 

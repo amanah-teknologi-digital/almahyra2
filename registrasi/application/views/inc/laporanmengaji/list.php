@@ -114,14 +114,14 @@
                                             <thead>
                                             <tr>
                                                 <th style="width: 15%">Tanggal</th>
-                                                <th style="width: 15%">Nama Anak</th>
+                                                <th style="width: 20%">Nama Anak</th>
                                                 <th style="width: 10%">Sesi</th>
                                                 <th style="width: 10%">Jilid/Kelas</th>
                                                 <th style="width: 5%">Halaman</th>
                                                 <th style="width: 5%">Nilai</th>
-                                                <th style="width: 15%">Ustadzah</th>
+                                                <th style="width: 20%">Ustadzah</th>
                                                 <th style="width: 15%">Keterangan</th>
-                                                <th style="width: 10%">Aksi</th>
+<!--                                                <th style="width: 10%">Aksi</th>-->
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -132,12 +132,12 @@
                                                     <td nowrap align="center"><b><?= $value->nama_sesi ?></b></td>
                                                     <td nowrap align="center"><?= $value->nama_jilid ?></td>
                                                     <td nowrap align="center"><?= $value->halaman ?></td>
-                                                    <td nowrap align="center" class="font-weight-bold"><?= !empty($value->nilai) ? '<span class="text-success">L</span>':'<span class="text-danger">-L</span>' ?></td>
+                                                    <td nowrap align="center" class="font-weight-bold"><?= !empty($value->nilai) ? '<span class="text-success">L</span>':'<span class="text-danger">L-</span>' ?></td>
                                                     <td nowrap align="center"><?= $value->nama_ustadzah ?></td>
                                                     <td nowrap align="left" class="text-muted font-italic text-small"><?= $value->keterangan ?></td>
-                                                    <td nowrap align="center">
-                                                        <span class="btn btn-sm btn-success btn-update" data-id="<?= $value->id_catatan ?>" data-nama="<?= $value->nama_anak ?>"><span class="fas fa-file-alt"></span> Foto Kegiatan</span>
-                                                    </td>
+<!--                                                    <td nowrap align="center">-->
+<!--                                                        <span class="btn btn-sm btn-success btn-update" data-id="--><?php //= $value->id_catatan ?><!--" data-nama="--><?php //= $value->nama_anak ?><!--"><span class="fas fa-file-alt"></span> Foto Kegiatan</span>-->
+<!--                                                    </td>-->
                                                 </tr>
                                             <?php } ?>
                                             </tbody>
