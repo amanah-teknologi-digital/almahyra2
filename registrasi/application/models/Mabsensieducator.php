@@ -84,7 +84,7 @@
             if($id_role == 7){ //ustadzah
                 $where = " WHERE id_jenisabsen IN (6,7)"; // hanya jenis absen
             }else{
-                $where = ""; // semua jenis absen
+                $where = " WHERE id_jenisabsen NOT IN (6,7)"; // semua jenis absen
             }
 
             $sql = "SELECT * FROM ref_jenisabsen $where ORDER BY id_jenisabsen ASC";
