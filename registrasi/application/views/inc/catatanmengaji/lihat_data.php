@@ -164,9 +164,9 @@
                                                         <label><b>Keterangan</b> <i>(Optional)</i></label>
                                                         <?php if (!empty($data_sebelum)){
                                                             if (empty($data_sebelum->keterangan)){
-                                                                $ket_seb = '<span class="text-muted text-info">-</span>';
+                                                                $ket_seb = '<b class="text-muted text-info">-</b>';
                                                             }else{
-                                                                $ket_seb = '<span class="text-muted text-info">'.$data_sebelum->keterangan.'</span>';
+                                                                $ket_seb = '<b class="text-muted text-info">'.$data_sebelum->keterangan.'</b>';
                                                             }
                                                         }else{
                                                             $ket_seb = '';
