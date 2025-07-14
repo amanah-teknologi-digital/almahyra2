@@ -51,7 +51,7 @@
                                             </colgroup>
                                             <thead>
                                                 <tr>
-                                                    <th>Nama Educator</th>
+                                                    <th>Nama <?= $label ?></th>
                                                     <th>Jenis Absensi</th>
                                                     <th>Waktu Masuk</th>
                                                     <th>Waktu Pulang</th>
@@ -102,7 +102,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Educator bisa absen <b>lebih dari 1</b>, jika tidak ada absen yang statusnya <b>belum absen pulang</b></span></p>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px"><?= $label ?> bisa absen <b>lebih dari 1</b>, jika tidak ada absen yang statusnya <b>belum absen pulang</b></span></p>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +126,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label>Nama Educator</label>
+                                                <label>Nama <?= $label ?></label>
                                                 <select class="form-control select2" id="educator" name="educator">
                                                     <?php if (count($list_educator) > 1){ ?>
                                                         <option value="" selected>-- Pilih Educator --</option>
