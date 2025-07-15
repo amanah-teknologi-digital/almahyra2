@@ -76,8 +76,7 @@
                                         </div>
                                     <?php } else { ?>
                                         <div class="alert alert-danger" role="alert">
-                                            <strong>Data Ekstrakulikuler belum ditentukan!</strong> tentukan pada link
-                                            <a href="<?= base_url().'data-ekstrakulikuler' ?>">berikut</a>.
+                                            <strong>Data Ekstrakulikuler belum ditentukan!</strong> mohon hubungi Administrator
                                         </div>
                                     <?php } ?>
                                 </div>

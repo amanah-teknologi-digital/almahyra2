@@ -14,7 +14,7 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Rencana Belajar</a></li>
+                            <li><a href="#">Ekstrakulikuler</a></li>
                             <li><?= $title ?></li>
                         </ul>
                     </div>
@@ -29,26 +29,33 @@
                                                 <tr>
                                                     <!-- <th>#</th> -->
                                                     <th style="width: 5%">No</th>
-                                                    <th style="width: 45%">Nama Template Jadwal</th>
-                                                    <th style="width: 35%">Timestamp</th>
-                                                    <th style="width: 15%">Action</th>
+                                                    <th style="width: 40%">Nama Ekstrakulikuler</th>
+                                                    <th style="width: 25%">Pengampu</th>
+                                                    <th style="width: 20%">Keterangan</th>
+                                                    <th style="width: 10%">Action</th>
                                                 </tr>
                                             </thead>
                                              <tbody>
                                                 <?php 
                                                 $i = 1 ;
-                                                foreach ($list as $key =>$row) { ?>
+                                                foreach ($list_ekstra as $key =>$row) { ?>
                                                     <tr>
                                                         <td align="center"><?= $key+1 ?></td>
                                                         <td><?= $row->nama ?></td>
                                                         <td>
-                                                            <p><span class="text-muted"><i>terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?> oleh <?= $row->nama_role.' ('.$row->nama_user.')' ?></i></span></p>
+                                                            <p><span class="text-muted"><i>terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?></i></span></p>
+                                                        </td>
+                                                        <td>
+                                                            <span class="text-success font-weight-bold"><?= $row->nama_pengampu ?></span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="font-italic text-muted text-small"><?= $row->keterangan ?></span>
                                                         </td>
                                                         <td align="center">
                                                             <div class="d-flex align-items-center justify-content-center">
-                                                                <a href="<?= base_url().$redirect.'/edit/'.$row->id_templatejadwal ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span> Lihat Data</a>
+                                                                <a href="<?= base_url().$redirect.'/edit/'.$row->id_ekstra ?>" class="btn btn-sm btn-success"><span class="fas fa-eye"></span> Lihat Data</a>
                                                                 &nbsp;
-                                                                <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->id_templatejadwal; ?>">
+                                                                <button class="btn btn-outline-danger btn-sm btn-icon delete" type="button" data-id="<?= $row->id_ekstra; ?>">
                                                                         <span class="ul-btn__icon">
                                                                             <i class="i-Close-Window"></i>
                                                                         </span>
@@ -62,14 +69,15 @@
                                                 <tr>
                                                     <!-- <th>#</th> -->
                                                     <th>No</th>
-                                                    <th>Nama Template Jadwal</th>
-                                                    <th>Timestamp</th>
+                                                    <th>Nama Ekstrakulikuler</th>
+                                                    <th>Pengampu</th>
+                                                    <th>Keterangan</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Template Jadwal bisa digunakan pada <b>semua kelas</b> dan <b>semua jadwal harian</b>.</span></p>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Ekstrakulikuler bisa digunakan pada <b>kelas KB/TK</b> dan <b>hanya guru ekstra saja</b> yang bisa mencatat sesuai pengampu ekstra.</span></p>
                                 </div>
                             </div>
                         </div>
@@ -84,14 +92,18 @@
                         <?php echo form_open_multipart($controller.'/insert','id="frm_tambahtemplate"'); ?>
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Penambahan Template Jadwal</h5>
+                                    <h5 class="modal-title">Penambahan Data Ekstrakulikuler</h5>
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                 </div>
                                 <div class="modal-body">                                   
                                     <fieldset>
                                         <div class="form-group">
-                                            <label>Nama Template</label>
-                                            <input type="text" class="form-control" required name="nama_template" id="nama_template" autocomplete="off">
+                                            <label>Nama Ekstrakulikuler</label>
+                                            <input type="text" class="form-control" required name="nama_ekstra" id="nama_ekstra" autocomplete="off">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Keterangan</label>
+                                            <textarea name="keterangan" id="keterangan" cols="30" rows="10" class="form-control"></textarea>
                                         </div>
                                     </fieldset>                                    
                                 </div>
@@ -117,13 +129,13 @@
         $(document).ready(function() {
             $("#frm_tambahtemplate").validate({
                 rules: {
-                    nama_template: {
+                    nama_ekstra: {
                         required: true
                     }
                 },
                 messages: {
-                    nama_template: {
-                        required: "Nama Template Jadwal harus diisi!"
+                    nama_ekstra: {
+                        required: "Nama Ekstrakulikuler harus diisi!"
                     }
                 },
                 submitHandler: function (form) {

@@ -9,6 +9,33 @@
 	        $this->table_name = 'template_jadwal' ;
 	    }
 
+        function getListEkstrakulikuler(){
+            $sql = "SELECT a.*, b.name as nama_pengampu FROM ekstrakulikuler a 
+                LEFT JOIN data_user b ON a.pengampu = b.id";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDataEkstra($id_ekstra){
+            $sql = "SELECT a.* FROM ekstrakulikuler a 
+                WHERE a.id_ekstra = $id_ekstra";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+        function getDataEkstraForm($id_ekstra){
+            $sql = "SELECT b.* FROM ekstrakulikuler a 
+                JOIN ekstrakulikuler_form b ON a.id_ekstra = b.id_ekstra
+            WHERE a.id_ekstra = $id_ekstra";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
 	    ## get all data in table
 	    function getAll() {
             $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role FROM template_jadwal a 
@@ -61,23 +88,23 @@
 	    }
 
 	    ## insert data into table
-	    function insertTemplate() {
-            $user = $this->session->userdata['auth'];
-            $nama_template = $_POST['nama_template'];
+        function insertTemplate() {
+            $nama_template = $_POST['nama_ekstra'];
+            $keterangan = $_POST['keterangan'];
 
             $this->db->trans_start();
 
             $a_input['nama'] = $nama_template;
+            $a_input['keterangan'] = $keterangan;
             $a_input['created_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
 
-            $this->db->insert('template_jadwal', $a_input);
-            $id_templatejadwal = $this->db->insert_id();
+            $this->db->insert('ekstrakulikuler', $a_input);
+            $id_ekstra = $this->db->insert_id();
 
             $this->db->trans_complete();
 
-            return ['err' => $this->db->trans_status(), 'id_templatejadwal' => $id_templatejadwal];
-	    }
+            return ['err' => $this->db->trans_status(), 'id_ekstra' => $id_ekstra];
+        }
 
 	    ## update data in table
 	    function update($id) {

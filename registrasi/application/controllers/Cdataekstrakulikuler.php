@@ -18,10 +18,10 @@ class Cdataekstrakulikuler extends CI_Controller {
         } 
 
 		$this->data = array(
-            'controller'=>'ctemplatejadwal',
-            'redirect'=>'template-jadwal',
-            'title'=>'Template Jadwal',
-            'parent'=>'rencana'
+            'controller'=>'cdataekstrakulikuler',
+            'redirect'=>'data-ekstrakulikuler',
+            'title'=>'Data Ekstrakulikuler',
+            'parent'=>'ekstra'
         );
 		## load model here 
 		$this->load->model('Mdataekstra', 'DataEkstrakulikuler');
@@ -30,34 +30,34 @@ class Cdataekstrakulikuler extends CI_Controller {
 	public function index()	{
 		$data = $this->data;
 
-        $data['ekstrakulikuler'] = $this->DataEkstrakulikuler->getDataEkstrakulikuler($this->session->userdata['auth']->id);
+        $data['list_ekstra'] = $this->DataEkstrakulikuler->getListEkstrakulikuler();
 
 		$this->load->view('inc/dataekstra/list', $data);
 	}
 
-	public function insert() {
-        $data = $this->TemplateJadwal->insertTemplate();
+    public function insert() {
+        $data = $this->DataEkstrakulikuler->insertTemplate();
 
         $err = $data['err'];
-        $id_template_jadwal = $data['id_templatejadwal'];
+        $id_ekstra = $data['id_ekstra'];
 
         if ($err === FALSE) {
-            $this->session->set_flashdata('failed', 'Gagal Merubah Data');
+            $this->session->set_flashdata('failed', 'Gagal Menambah Data');
             redirect($this->data['redirect']);
         }else{
-            $this->session->set_flashdata('success', 'Berhasil Merubah Data');
-            redirect($this->data['redirect'].'/edit/'.$id_template_jadwal);
+            $this->session->set_flashdata('success', 'Berhasil Menambah Data');
+            redirect($this->data['redirect'].'/edit/'.$id_ekstra);
         }
-	}
+    }
 
-    public function lihatdata($id_templatejadwal){
+    public function lihatdata($id_ekstra){
         $data = $this->data;
 
-        $data['data_template'] = $this->TemplateJadwal->getByID($id_templatejadwal);
-        $data['data_jadwal_template'] = $this->TemplateJadwal->getDataJadwalTempateById($id_templatejadwal);
-        $data['id_templatejadwal'] = $id_templatejadwal;
+        $data['data_ekstra'] = $this->DataEkstrakulikuler->getDataEkstra($id_ekstra);
+        $data['data_formekstra'] = $this->DataEkstrakulikuler->getDataEkstraForm($id_ekstra);
+        $data['id_ekstra'] = $id_ekstra;
 
-        $this->load->view('inc/templatejadwal/lihat_data', $data);
+        $this->load->view('inc/dataekstra/lihat_data', $data);
     }
 
 	public function edit($id) {

@@ -65,6 +65,13 @@
                 </a>
                 <div class="triangle"></div>
             </li>
+            <li class="nav-item <?= $parent=='ekstra'?'active':'' ?>" data-item="ekstra">
+                <a class="nav-item-hold" href="#">
+                    <i class="nav-icon i-Paw"></i>
+                    <span class="nav-text">Ekstrakulikuler</span>
+                </a>
+                <div class="triangle"></div>
+            </li>
         </ul>
     </div>
     <div class="sidebar-left-secondary rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
@@ -433,6 +440,25 @@
                     <a href="<?= base_url().'mc-backdate'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">MC Backdate</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="submenu-area" data-parent="ekstra">
+            <header>
+                <h6>Ekstrakulikuler</h6>
+            </header>
+            <ul class="childNav">
+                <li class="nav-item">
+                    <a href="<?= base_url().'data-ekstrakulikuler'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Data Ekstrakulikuler</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'laporan-ekstrakulikuler'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Ekstrakulikuler</span>
                     </a>
                 </li>
             </ul>
