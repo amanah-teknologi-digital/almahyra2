@@ -24,16 +24,15 @@ class Cdataekstrakulikuler extends CI_Controller {
             'parent'=>'rencana'
         );
 		## load model here 
-		$this->load->model('Mtemplatejadwal', 'TemplateJadwal');
+		$this->load->model('Mdataekstra', 'DataEkstrakulikuler');
 	}
 
 	public function index()	{
 		$data = $this->data;
 
-		$data['list'] = $this->TemplateJadwal->getAll();
-		$data['column'] = $this->TemplateJadwal->getColumn();
+        $data['ekstrakulikuler'] = $this->DataEkstrakulikuler->getDataEkstrakulikuler($this->session->userdata['auth']->id);
 
-		$this->load->view('inc/templatejadwal/list', $data);
+		$this->load->view('inc/dataekstra/list', $data);
 	}
 
 	public function insert() {
