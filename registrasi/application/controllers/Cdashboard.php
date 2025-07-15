@@ -138,6 +138,18 @@ class CDashboard extends CI_Controller {
             }
 
             $this->load->view('inc/dashboard/ustadzah', $data);
+        }elseif ($this->session->userdata['auth']->id_role == 9) { //kepala tpq
+            $data = $this->data;
+            $data['parent'] = 'ekstra';
+            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
+            $data['list_jilid'] = $this->Dashboard->getListJilid();
+            if (!empty($data['list_anak'])) {
+                $data['id_anak'] = $data['list_anak'][0]->id;
+            }else{
+                $data['id_anak'] = 0;
+            }
+
+            $this->load->view('inc/dashboard/ekstrakulikuler', $data);
         } else if ($this->session->userdata['auth']->id_role == 3) {
             // pengasuh
 

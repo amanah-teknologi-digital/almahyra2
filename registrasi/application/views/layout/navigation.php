@@ -13,6 +13,8 @@
         $this->load->view('layout/navigation_ustadzah');
     }else if ($this->session->userdata('auth')->id_role == '8'){ //Kepala TPQ
         $this->load->view('layout/navigation_kepalatpq');
+    }else if ($this->session->userdata('auth')->id_role == '9'){ //Ekstra Kurikuler
+        $this->load->view('layout/navigation_ekstra');
     } else {
         show_error('You are not allowed to access this page.', 403);
     }
