@@ -14,9 +14,9 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Rencana Belajar</a></li>
+                            <li><a href="#">Ekstrakulikuler</a></li>
                             <li><a href="#"><?= $title ?></a></li>
-                            <li>Data Template Harian</li>
+                            <li>Form Ekstrakulikuler</li>
                         </ul>
                     </div>
                     <div class="row">
@@ -25,11 +25,11 @@
                             <div class="card text-left">
                                 <div class="card-body">
                                     <div class="row mb-3 d-flex align-items-center justify-content-center">
-                                        <h5 class="card-title text-center">Data Template Jadwal Harian&nbsp;<span class="text-success font-weight-bold"><?= $data_template->nama ?></span></h5>
+                                        <h5 class="card-title text-center">Data Form Ekstrakulikuler&nbsp;<span class="text-success font-weight-bold"><?= $data_ekstra->nama ?></span></h5>
                                     </div>
                                     <div class="row mb-3 d-flex align-items-center justify-content-center">
                                         <div class="col-sm-12">
-                                            <button class="btn btn-sm btn-primary btn-tambahkegiatan float-right" ><span class="fas fa-plus"></span>&nbsp;Tambah Jadwal</button>
+                                            <button class="btn btn-sm btn-primary btn-tambahkegiatan float-right" ><span class="fas fa-plus"></span>&nbsp;Tambah Form</button>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -37,26 +37,26 @@
                                             <thead style="background-color: #bfdfff">
                                             <tr>
                                                 <th align="center">No</th>
-                                                <th align="center">Jam</th>
-                                                <th align="center">Kegiatan</th>
-                                                <th align="center">Keterangan</th>
+                                                <th align="center">Uraian Form</th>
+                                                <th align="center">Nama Kolom</th>
+                                                <th align="center">Jenis Input</th>
                                                 <th align="center">Pilihan Standar</th>
                                                 <th align="center" style="width: 20%">Aksi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <?php if (count($data_jadwal_template) > 0){
-                                                foreach ($data_jadwal_template as $key => $kegiatan){ ?>
+                                            <?php if (count($data_formekstra) > 0){
+                                                foreach ($data_formekstra as $key => $kegiatan){ ?>
                                                     <tr>
                                                         <td align="center"><?= $key+1; ?></td>
-                                                        <td nowrap align="center"><?= Date('H:i',strtotime($kegiatan->jam_mulai)).' - '.Date('H:i',strtotime($kegiatan->jam_selesai)) ?></td>
-                                                        <td nowrap><?= $kegiatan->uraian; ?></td>
-                                                        <td><span class="text-muted font-italic text-small"><?= $kegiatan->keterangan; ?></span></td>
+                                                        <td nowrap><?= $kegiatan->nama; ?></td>
+                                                        <td nowrap><?= $kegiatan->kolom; ?></td>
+                                                        <td nowrap><?= $kegiatan->jenis_kolom; ?></td>
                                                         <td nowrap>
                                                             <span class="text-muted font-italic text-small">
-                                                                <?php $standar_pilihan = json_decode($kegiatan->standar_pilihan, true);
-                                                                    $jml_pil = count($standar_pilihan);
-                                                                    foreach ($standar_pilihan as $key => $value){
+                                                                <?php $standar_pilihan = json_decode($kegiatan->pilihan_standar, true);
+                                                                    $jml_pil = count($pilihan_standar);
+                                                                    foreach ($pilihan_standar as $key => $value){
                                                                         if ($key == $jml_pil-1){
                                                                             echo $value;
                                                                         }else{
@@ -67,20 +67,20 @@
                                                             </span>
                                                         </td>
                                                         <td align="center" nowrap>
-                                                            <span class="btn btn-sm btn-warning edit_kegiatan" data-id="<?= $kegiatan->id_kegiatan ?>" data-nama="<?= $kegiatan->uraian  ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
-                                                            <span class="btn btn-sm btn-danger hapus_kegiatan" data-id="<?= $kegiatan->id_kegiatan ?>" data-nama="<?= $kegiatan->uraian  ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
+                                                            <span class="btn btn-sm btn-warning edit_kegiatan" data-id="<?= $kegiatan->id_formekstra ?>" data-nama="<?= $kegiatan->nama  ?>"><span class="fas fa-edit"></span>&nbsp;Update</span>
+                                                            <span class="btn btn-sm btn-danger hapus_kegiatan" data-id="<?= $kegiatan->id_formekstra ?>" data-nama="<?= $kegiatan->nama  ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
                                                         </td>
                                                     </tr>
                                                 <?php }
                                             }else{ ?>
                                                 <tr>
-                                                    <td colspan="6" align="center"><span class="font-weight-bold text-danger text-small"><i>Data Jadwal Kosong!</i></span></td>
+                                                    <td colspan="6" align="center"><span class="font-weight-bold text-danger text-small"><i>Data Form Kosong!</i></span></td>
                                                 </tr>
                                             <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Template bisa <b>diubah</b> sesuai kebutuhan yang nantinya bisa dipasangkan ke <b>jadwal harian</b> masing - masing kelas.</span></p>
+                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Form bisa <b>diubah</b> sesuai kebutuhan dari segi penilaian sisi guru ekstrakulikuler.</span></p>
                                 </div>
                             </div>
                         </div>
@@ -95,32 +95,33 @@
                         <?php echo form_open_multipart($controller.'/insertkegiatan', 'id="frm_tambahkegiatan"'); ?>
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Tambah Jadwal Kegiatan</h5>
+                                <h5 class="modal-title">Tambah Form Ekstra</h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
                                 <fieldset>
                                     <div class="form-group">
-                                        <label>Jam Mulai</label>
-                                        <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" autocomplete="off">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Jam Selesai</label>
-                                        <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" autocomplete="off">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Nama Kegiatan</label>
+                                        <label>Uraian Form</label>
                                         <input type="text" name="nama_kegiatan" id="nama_kegiatan" class="form-control" autocomplete="off">
                                     </div>
                                     <div class="form-group">
+                                        <label>Nama Kolom</label>
+                                        <input type="text" name="nama_kolom" id="nama_kolom" class="form-control" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Jenis Input</label>
+                                        <select name="jenis_kolom" id="jenis_kolom" class="form-control">
+                                            <option value="">-- Pilih Jenis Input</option>
+                                            <option value="text">Text</option>
+                                            <option value="number">Number</option>
+                                            <option value="select">Pilihan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="standarpilihan" style="display: none">
                                         <label>Standarisasi Pilihan</label>
                                         <select name="standarisasi[]" id="standarisasi" class="form-control tagselect" multiple="multiple" required>
 
                                         </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Keterangan <i>(Optional)</i></label>
-                                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" autocomplete="off"></textarea>
                                     </div>
                                 </fieldset>
                             </div>
@@ -129,7 +130,7 @@
                                 <button class="btn btn-primary ml-2" type="submit">Simpan</button>
                             </div>
                         </div>
-                        <input type="hidden" name="id_templatejadwal" value="<?= $id_templatejadwal ?>">
+                        <input type="hidden" name="id_ekstra" value="<?= $id_ekstra ?>">
                         </form>
                     </div>
                 </div>
@@ -138,32 +139,33 @@
                         <?php echo form_open_multipart($controller.'/updatekegiatan', 'id="frm_updatekegiatan"'); ?>
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Pembaharuan Jadwal Kegiatan</h5>
+                                <h5 class="modal-title">Pembaharuan Form Ekstra</h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
                                 <fieldset>
                                     <div class="form-group">
-                                        <label>Jam Mulai</label>
-                                        <input type="time" name="jam_mulai" id="jam_mulai_update" class="form-control" autocomplete="off">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Jam Selesai</label>
-                                        <input type="time" name="jam_selesai" id="jam_selesai_update" class="form-control" autocomplete="off">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Nama Kegiatan</label>
+                                        <label>Uraian Form</label>
                                         <input type="text" name="nama_kegiatan" id="nama_kegiatan_update" class="form-control" autocomplete="off">
                                     </div>
                                     <div class="form-group">
-                                        <label>Standarisasi Pilihan</label>
-                                        <select name="standarisasi_update[]" id="standarisasi_update" class="form-control tagselectupdate" multiple="multiple" required>
-
-                                        </select>
+                                        <label>Nama Kolom</label>
+                                        <input type="text" name="nama_kolom" id="nama_kolom_update" class="form-control" autocomplete="off">
                                     </div>
                                     <div class="form-group">
-                                        <label>Keterangan <i>(Optional)</i></label>
-                                        <textarea class="form-control" name="keterangan" id="keterangan_update" cols="30" rows="5" autocomplete="off"></textarea>
+                                        <label>Jenis Input</label>
+                                        <select name="jenis_kolom" id="jenis_kolom_update" class="form-control">
+                                            <option value="">-- Pilih Jenis Input</option>
+                                            <option value="text">Text</option>
+                                            <option value="number">Number</option>
+                                            <option value="select">Pilihan</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="standarpilihan" style="display: none">
+                                        <label>Standarisasi Pilihan</label>
+                                        <select name="standarisasi[]" id="standarisasi_update" class="form-control tagselect" multiple="multiple" required>
+
+                                        </select>
                                     </div>
                                 </fieldset>
                             </div>
@@ -172,8 +174,8 @@
                                 <button class="btn btn-primary ml-2" type="submit">Simpan</button>
                             </div>
                         </div>
-                        <input type="hidden" name="id_kegiatan" id="id_kegiatan">
-                        <input type="hidden" name="id_templatejadwal" value="<?= $id_templatejadwal ?>">
+                        <input type="hidden" name="id_formekstra" id="id_formekstra">
+                        <input type="hidden" name="id_ekstra" value="<?= $id_ekstra ?>">
                         </form>
                     </div>
                 </div>
@@ -182,19 +184,19 @@
                         <?php echo form_open_multipart($controller.'/hapuskegiatan', 'id="frm_hapuskegiatan"'); ?>
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Hapus Jadwal Kegiatan</h5>
+                                <h5 class="modal-title">Hapus Form Ekstra</h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
-                                <p>Apakah yakin menghapus kegiatan <span class="font-weight-bold" id="label_nama_kegiatan_hapus"></span>? </p>
+                                <p>Apakah yakin menghapus form <span class="font-weight-bold" id="label_nama_kegiatan_hapus"></span>? </p>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                                 <button class="btn btn-danger ml-2" type="submit">Hapus</button>
                             </div>
                         </div>
-                        <input type="hidden" name="id_kegiatan" id="id_kegiatan_hapus">
-                        <input type="hidden" name="id_templatejadwal" value="<?= $id_templatejadwal ?>">
+                        <input type="hidden" name="id_formekstra" id="id_formekstra_hapus">
+                        <input type="hidden" name="id_ekstra" value="<?= $id_ekstra ?>">
                         </form>
                     </div>
                 </div>

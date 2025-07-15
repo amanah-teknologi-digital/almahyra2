@@ -24,7 +24,7 @@
 
             $query = $this->db->query($sql);
 
-            return $query->result();
+            return $query->row();
         }
         function getDataEkstraForm($id_ekstra){
             $sql = "SELECT b.* FROM ekstrakulikuler a 

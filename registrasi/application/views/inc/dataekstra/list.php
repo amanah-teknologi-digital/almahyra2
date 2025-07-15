@@ -41,9 +41,8 @@
                                                 foreach ($list_ekstra as $key =>$row) { ?>
                                                     <tr>
                                                         <td align="center"><?= $key+1 ?></td>
-                                                        <td><?= $row->nama ?></td>
-                                                        <td>
-                                                            <p><span class="text-muted"><i>terakhir update <?= empty($row->updated_at)? timeAgo($row->created_at):timeAgo($row->updated_at); ?></i></span></p>
+                                                        <td style="vertical-align: middle">
+                                                            <b><?= $row->nama ?></b>
                                                         </td>
                                                         <td>
                                                             <span class="text-success font-weight-bold"><?= $row->nama_pengampu ?></span>
@@ -65,16 +64,6 @@
                                                     </tr>
                                                 <?php } ?>
                                             </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <!-- <th>#</th> -->
-                                                    <th>No</th>
-                                                    <th>Nama Ekstrakulikuler</th>
-                                                    <th>Pengampu</th>
-                                                    <th>Keterangan</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
                                         </table>
                                     </div>
                                     <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Ekstrakulikuler bisa digunakan pada <b>kelas KB/TK</b> dan <b>hanya guru ekstra saja</b> yang bisa mencatat sesuai pengampu ekstra.</span></p>
