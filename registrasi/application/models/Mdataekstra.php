@@ -29,7 +29,7 @@
         function getDataEkstraForm($id_ekstra){
             $sql = "SELECT b.* FROM ekstrakulikuler a 
                 JOIN ekstrakulikuler_form b ON a.id_ekstra = b.id_ekstra
-            WHERE a.id_ekstra = $id_ekstra";
+            WHERE a.id_ekstra = $id_ekstra ORDER BY b.id_formekstra";
 
             $query = $this->db->query($sql);
 
@@ -125,11 +125,11 @@
 		function delete($id) {
             $this->db->trans_start();
 
-            $this->db->where('id_templatejadwal', $id);
-            $this->db->delete('jadwal_kegiatan');
+            $this->db->where('id_ekstra', $id);
+            $this->db->delete('ekstrakulikuler_form');
 
-            $this->db->where('id_templatejadwal', $id);
-            $this->db->delete('template_jadwal');
+            $this->db->where('id_ekstra', $id);
+            $this->db->delete('ekstrakulikuler');
 
 
             $this->db->trans_complete();
@@ -147,35 +147,36 @@
 	    }
 
         function insertKegiatan() {
-            $user = $this->session->userdata['auth'];
-
-            $id_templatejadwal = $_POST['id_templatejadwal'];
-            $jam_mulai = $_POST['jam_mulai'];
-            $jam_selesai = $_POST['jam_selesai'];
+            $id_ekstra = $_POST['id_ekstra'];
             $nama_kegiatan = $_POST['nama_kegiatan'];
-            $keterangan = $_POST['keterangan'];
-            $standarisasi = $_POST['standarisasi'];
-            $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
+            $nama_kolom = $_POST['nama_kolom'];
+            $nama_kolom = strtolower($nama_kolom); // huruf kecil semua
+            $nama_kolom = preg_replace('/[^a-z0-9_ ]/', '', $nama_kolom); // hapus karakter aneh
+            $nama_kolom = str_replace(' ', '_', $nama_kolom); // spasi jadi underscore
+            $jenis_kolom = $_POST['jenis_kolom'];
+            if (isset($_POST['standarisasi']) && $_POST['jenis_kolom'] == 'select') {
+                $standarisasi = $_POST['standarisasi'];
+                $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
+            }else{
+                $standarisasi = null;
+            }
 
             $this->db->trans_start();
 
-            $a_input['id_templatejadwal'] = $id_templatejadwal;
-            $a_input['jam_mulai'] = $jam_mulai;
-            $a_input['jam_selesai'] = $jam_selesai;
-            $a_input['uraian'] = $nama_kegiatan;
-            $a_input['keterangan'] = $keterangan;
-            $a_input['created_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
-            $a_input['standar_pilihan'] = $standarisasi;
+            $a_input['id_ekstra'] = $id_ekstra;
+            $a_input['nama'] = $nama_kegiatan;
+            $a_input['kolom'] = $nama_kolom;
+            $a_input['jenis_kolom'] = $jenis_kolom;
+            $a_input['pilihan_standar'] = $standarisasi;
 
-            $this->db->insert('jadwal_kegiatan', $a_input);
+            $this->db->insert('ekstrakulikuler_form', $a_input);
             $this->db->trans_complete();
 
             return $this->db->trans_status();
         }
 
         function getJadwalKegiatanHarianById($id_kegiatan){
-            $sql = "SELECT * FROM jadwal_kegiatan a WHERE a.id_kegiatan = $id_kegiatan";
+            $sql = "SELECT * FROM ekstrakulikuler_form a WHERE a.id_formekstra = $id_kegiatan";
 
             $query = $this->db->query($sql);
 
@@ -183,28 +184,29 @@
         }
 
         function updateKegiatan() {
-            $user = $this->session->userdata['auth'];
-
-            $id_kegiatan = $_POST['id_kegiatan'];
-            $jam_mulai = $_POST['jam_mulai'];
-            $jam_selesai = $_POST['jam_selesai'];
+            $id_form = $_POST['id_formekstra'];
             $nama_kegiatan = $_POST['nama_kegiatan'];
-            $keterangan = $_POST['keterangan'];
-            $standarisasi = $_POST['standarisasi_update'];
-            $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
+            $nama_kolom = $_POST['nama_kolom'];
+            $nama_kolom = strtolower($nama_kolom); // huruf kecil semua
+            $nama_kolom = preg_replace('/[^a-z0-9_ ]/', '', $nama_kolom); // hapus karakter aneh
+            $nama_kolom = str_replace(' ', '_', $nama_kolom); // spasi jadi underscore
+            $jenis_kolom = $_POST['jenis_kolom'];
+            if (isset($_POST['standarisasi']) && $_POST['jenis_kolom'] == 'select') {
+                $standarisasi = $_POST['standarisasi'];
+                $standarisasi = json_encode($standarisasi, JSON_FORCE_OBJECT);
+            }else{
+                $standarisasi = null;
+            }
 
-            $a_input['jam_mulai'] = $jam_mulai;
-            $a_input['jam_selesai'] = $jam_selesai;
-            $a_input['uraian'] = $nama_kegiatan;
-            $a_input['keterangan'] = $keterangan;
-            $a_input['updated_at'] = date('Y-m-d H:m:s');
-            $a_input['updater'] = $user->id;
-            $a_input['standar_pilihan'] = $standarisasi;
+            $a_input['nama'] = $nama_kegiatan;
+            $a_input['kolom'] = $nama_kolom;
+            $a_input['jenis_kolom'] = $jenis_kolom;
+            $a_input['pilihan_standar'] = $standarisasi;
 
             $this->db->trans_start();
 
-            $this->db->where('id_kegiatan', $id_kegiatan);
-            $this->db->update('jadwal_kegiatan', $a_input);
+            $this->db->where('id_formekstra', $id_form);
+            $this->db->update('ekstrakulikuler_form', $a_input);
 
             $this->db->trans_complete();
 
@@ -214,8 +216,8 @@
         function hapusKegiatan($id_kegiatan) {
             $this->db->trans_start();
 
-            $this->db->where('id_kegiatan', $id_kegiatan);
-            $this->db->delete('jadwal_kegiatan');
+            $this->db->where('id_formekstra', $id_kegiatan);
+            $this->db->delete('ekstrakulikuler_form');
 
             $this->db->trans_complete();
 

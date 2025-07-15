@@ -85,7 +85,7 @@ class Cdataekstrakulikuler extends CI_Controller {
 	}
 
 	public function delete($id) {
-        $err = $this->TemplateJadwal->delete($id);
+        $err = $this->DataEkstrakulikuler->delete($id);
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
@@ -98,7 +98,7 @@ class Cdataekstrakulikuler extends CI_Controller {
 
     public function editkegiatan($id) {
         $data = $this->data;
-        $data['list_edit'] = $this->TemplateJadwal->getJadwalKegiatanHarianById($id) ;
+        $data['list_edit'] = $this->DataEkstrakulikuler->getJadwalKegiatanHarianById($id) ;
 
         $this->output->set_content_type('application/json');
 
@@ -108,7 +108,7 @@ class Cdataekstrakulikuler extends CI_Controller {
     }
 
     public function insertkegiatan() {
-        $err = $this->TemplateJadwal->insertKegiatan();
+        $err = $this->DataEkstrakulikuler->insertKegiatan();
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
@@ -116,11 +116,11 @@ class Cdataekstrakulikuler extends CI_Controller {
             $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
         }
 
-        redirect($this->data['redirect'].'/edit/'.$_POST['id_templatejadwal']);
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_ekstra']);
     }
 
     public function updatekegiatan() {
-        $err = $this->TemplateJadwal->updateKegiatan();
+        $err = $this->DataEkstrakulikuler->updateKegiatan();
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menambahkan Data');
@@ -128,11 +128,11 @@ class Cdataekstrakulikuler extends CI_Controller {
             $this->session->set_flashdata('success', 'Berhasil Menambahkan Data');
         }
 
-        redirect($this->data['redirect'].'/edit/'.$_POST['id_templatejadwal']);
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_ekstra']);
     }
 
     public function hapuskegiatan() {
-        $err = $this->TemplateJadwal->hapusKegiatan($_POST['id_kegiatan']);
+        $err = $this->DataEkstrakulikuler->hapusKegiatan($_POST['id_formekstra']);
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
@@ -140,6 +140,6 @@ class Cdataekstrakulikuler extends CI_Controller {
             $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
         }
 
-        redirect($this->data['redirect'].'/edit/'.$_POST['id_templatejadwal']);
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_ekstra']);
     }
 }

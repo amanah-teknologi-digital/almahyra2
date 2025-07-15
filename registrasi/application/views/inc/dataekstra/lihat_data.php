@@ -54,16 +54,18 @@
                                                         <td nowrap><?= $kegiatan->jenis_kolom; ?></td>
                                                         <td nowrap>
                                                             <span class="text-muted font-italic text-small">
-                                                                <?php $standar_pilihan = json_decode($kegiatan->pilihan_standar, true);
-                                                                    $jml_pil = count($pilihan_standar);
-                                                                    foreach ($pilihan_standar as $key => $value){
-                                                                        if ($key == $jml_pil-1){
-                                                                            echo $value;
-                                                                        }else{
-                                                                            echo $value.', ';
+                                                                <?php if ($kegiatan->jenis_kolom == 'select'){  ?>
+                                                                    <?php $pilihan_standar = json_decode($kegiatan->pilihan_standar, true);
+                                                                        $jml_pil = count($pilihan_standar);
+                                                                        foreach ($pilihan_standar as $key => $value){
+                                                                            if ($key == $jml_pil-1){
+                                                                                echo $value;
+                                                                            }else{
+                                                                                echo $value.', ';
+                                                                            }
                                                                         }
-                                                                    }
-                                                                ?>
+                                                                    ?>
+                                                                <?php } ?>
                                                             </span>
                                                         </td>
                                                         <td align="center" nowrap>
@@ -110,7 +112,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Jenis Input</label>
-                                        <select name="jenis_kolom" id="jenis_kolom" class="form-control">
+                                        <select name="jenis_kolom" id="jenis_kolom" class="form-control" onchange="refreshStandarPilihan(this, 'standarpilihan')">
                                             <option value="">-- Pilih Jenis Input</option>
                                             <option value="text">Text</option>
                                             <option value="number">Number</option>
@@ -154,16 +156,16 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Jenis Input</label>
-                                        <select name="jenis_kolom" id="jenis_kolom_update" class="form-control">
+                                        <select name="jenis_kolom" id="jenis_kolom_update" class="form-control" onchange="refreshStandarPilihan(this, 'standarpilihan_update')">
                                             <option value="">-- Pilih Jenis Input</option>
                                             <option value="text">Text</option>
                                             <option value="number">Number</option>
                                             <option value="select">Pilihan</option>
                                         </select>
                                     </div>
-                                    <div class="form-group" id="standarpilihan" style="display: none">
+                                    <div class="form-group" id="standarpilihan_update" style="display: none">
                                         <label>Standarisasi Pilihan</label>
-                                        <select name="standarisasi[]" id="standarisasi_update" class="form-control tagselect" multiple="multiple" required>
+                                        <select name="standarisasi[]" id="standarisasi_update" class="form-control tagselectupdate" multiple="multiple" required>
 
                                         </select>
                                     </div>
@@ -220,24 +222,16 @@
 
             $('.btn-tambahkegiatan').click(function(){
                 clearFormStatus("#frm_tambahkegiatan");
-
-                let nama_kelas = $(this).data('nama')
-                let nama_tema = $(this).data('namatema')
-                let id_kelas = $(this).data('idkelas')
-
-                $("#label_nama_subtema_tambah").html(nama_tema);
-                $("#label_namakelas_tambah").html(nama_kelas);
-                $("#id_kelas_tambah").val(id_kelas);
-
                 $("#tambah-kegitan").modal('show');
             });
 
             $('.edit_kegiatan').click(function(){
                 clearFormStatus('#frm_updatekegiatan')
+                $('#standarpilihan_update').hide()
 
-                let id_kegiatan = $(this).data('id')
+                let id_formekstra = $(this).data('id')
 
-                $("#id_kegiatan").val(id_kegiatan);
+                $("#id_formekstra").val(id_formekstra);
 
                 $.ajax({
                     url: url + '/editkegiatan/' + $(this).data('id'),
@@ -245,22 +239,29 @@
                     dataType: 'json',
                     success: function(data){
                         let data_kegiatan = data['list_edit'];
-                        let standar_pilihan = JSON.parse(data_kegiatan['standar_pilihan']);
-                        standar_pilihan = Object.values(standar_pilihan);
+                        let pilihan_standar = [];
 
-                        $("#jam_mulai_update").val(data_kegiatan['jam_mulai']);
-                        $("#jam_selesai_update").val(data_kegiatan['jam_selesai']);
-                        $("#nama_kegiatan_update").val(data_kegiatan['uraian']);
-                        $("#keterangan_update").val(data_kegiatan['keterangan']);
+                        if (data_kegiatan['pilihan_standar'] != null){
+                            pilihan_standar = JSON.parse(data_kegiatan['pilihan_standar']);
+                            pilihan_standar = Object.values(pilihan_standar);
+                            $('#standarpilihan_update').show()
+                        }
+
+                        console.log(pilihan_standar)
+
+                        $("#nama_kegiatan_update").val(data_kegiatan['nama']);
+                        $("#nama_kolom_update").val(data_kegiatan['kolom']);
+                        $("#jenis_kolom_update").val(data_kegiatan['jenis_kolom']);
+
 
                         $('.tagselectupdate').empty();
-                        $.each(standar_pilihan, function (i, item) {
+                        $.each(pilihan_standar, function (i, item) {
                             $('.tagselectupdate').append($('<option>', {
                                 value: item,
                                 text : item
                             }));
                         });
-                        $('.tagselectupdate').val(standar_pilihan).trigger('change');
+                        $('.tagselectupdate').val(pilihan_standar).trigger('change');
 
                         $("#update-kegitan").modal('show');
                     }
@@ -274,32 +275,26 @@
                 let id_kegiatan = $(this).data('id')
 
                 $("#label_nama_kegiatan_hapus").html(nama_kegiatan);
-                $("#id_kegiatan_hapus").val(id_kegiatan);
+                $("#id_formekstra_hapus").val(id_kegiatan);
 
                 $("#hapus-kegiatan").modal('show');
             });
 
             $("#frm_tambahkegiatan").validate({
                 rules: {
-                    jam_mulai: {
-                        required: true
-                    },
-                    jam_selesai: {
-                        required: true
-                    },
                     nama_kegiatan: {
+                        required: true
+                    },
+                    nama_kolom: {
                         required: true
                     }
                 },
                 messages: {
-                    jam_mulai: {
-                        required: "Jam mulai harus diisi!"
-                    },
-                    jam_selesai: {
-                        required: "Jam selesai harus diisi!"
-                    },
                     nama_kegiatan: {
                         required: "Nama Kegiatan harus diisi!"
+                    },
+                    nama_kolom: {
+                        required: "Nama Kolom harus diisi!"
                     }
                 },
                 submitHandler: function(form) {
@@ -309,25 +304,19 @@
 
             $("#frm_updatekegiatan").validate({
                 rules: {
-                    jam_mulai: {
-                        required: true
-                    },
-                    jam_selesai: {
-                        required: true
-                    },
                     nama_kegiatan: {
+                        required: true
+                    },
+                    nama_kolom: {
                         required: true
                     }
                 },
                 messages: {
-                    jam_mulai: {
-                        required: "Jam mulai harus diisi!"
-                    },
-                    jam_selesai: {
-                        required: "Jam selesai harus diisi!"
-                    },
                     nama_kegiatan: {
                         required: "Nama Kegiatan harus diisi!"
+                    },
+                    nama_kolom: {
+                        required: "Nama Kolom harus diisi!"
                     }
                 },
                 submitHandler: function(form) {
@@ -335,6 +324,16 @@
                 }
             });
         });
+
+        function refreshStandarPilihan(dom, dom_standr){
+            let jenis_kolom = $(dom).val();
+
+            if (jenis_kolom === 'select'){
+                $('#'+dom_standr).show();
+            }else{
+                $('#'+dom_standr).hide();
+            }
+        }
 
         function clearFormStatus(formId) {
             // Reset the form values
