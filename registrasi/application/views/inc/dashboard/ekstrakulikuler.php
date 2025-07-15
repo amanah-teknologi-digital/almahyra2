@@ -35,7 +35,7 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Dashboard Mengaji Qiro'ati</a></li>
+                            <li><a href="#">Dashboard Ekstrakulikuler</a></li>
                         </ul>
                     </div>
 
@@ -43,38 +43,43 @@
                         <div class="col-md-12">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Progres Mengaji Anak</b></span>
-                                    <hr>
-                                    <div class="form-group row">
-                                        <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
-                                        <div class="col-sm-10">
-                                            <select name="anak" id="anak" class="form-control" onchange="refreshGraph(this)">
-                                                <?php foreach ($list_anak as $anak){ ?>
-                                                    <option value="<?= $anak->id ?>" <?= $anak->id == $id_anak ? 'selected':'' ?>><?= $anak->nama_anak ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <br>
-                                    <div id="ctx_graph">
-                                        <div class="row">
-                                            <?php $temp=[]; foreach ($list_jilid as $jilid){ $temp[] = 'graph_'.$jilid->id_jilidmengaji; ?>
-                                                <div class="col-sm-4 mb-4">
-                                                    <div class="chart-container">
-                                                        <div id="graph_<?= $jilid->id_jilidmengaji ?>"></div>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                    <div class="row" id="loader" style="display: none">
-                                        <div class="col-sm-12">
-                                            <div class="d-flex justify-content-center">
-                                                <div class="loader"></div>
+                                    <?php if (!empty($ekstra)){ ?>
+                                        <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Perkembangan Ekstrakulikuler <?= $ekstra->nama ?></b></span>
+                                        <hr>
+                                        <div class="form-group row">
+                                            <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
+                                            <div class="col-sm-10">
+                                                <select name="anak" id="anak" class="form-control" onchange="refreshGraph(this)">
+                                                    <?php foreach ($list_anak as $anak){ ?>
+                                                        <option value="<?= $anak->id ?>" <?= $anak->id == $id_anak ? 'selected':'' ?>><?= $anak->nama_anak ?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>
+                                        <br>
+                                        <br>
+                                        <div id="ctx_graph">
+                                            <div class="row">
+                                                <div class="col-sm-4 mb-4">
+                                                    <div class="chart-container">
+                                                        <div id="graph"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="loader" style="display: none">
+                                            <div class="col-sm-12">
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="loader"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>Data Ekstrakulikuler belum ditentukan!</strong> tentukan pada link
+                                            <a href="<?= base_url().'data-ekstrakulikuler' ?>">berikut</a>.
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -98,8 +103,10 @@
         const charts = {};
 
         $(document).ready(function() {
-            $('#anak').select2();
-            getDataPerkembanganAnak(id_anak);
+            <?php if (!empty($ekstra)){ ?>
+                $('#anak').select2();
+                getDataPerkembanganAnak(id_anak);
+            <?php } ?>
         });
 
         function refreshGraph(dom){

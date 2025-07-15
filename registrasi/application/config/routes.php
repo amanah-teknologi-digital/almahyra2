@@ -152,6 +152,8 @@ $route['template-stimulus'] = 'ctemplatestimulus';
 $route['catatan-mengaji'] = 'ccatatanmengaji';
 $route['catatan-mengaji/lihat-data/(:any)'] = 'ccatatanmengaji/lihatdata/$1';
 
+$route['data-ekstrakulikuler'] = 'cdataekstrakulikuler';
+
 // $route['peminjaman-kendaraan'] = 'ctkendaraan';
 // $route['peminjaman-kendaraan/pengembalian'] = 'ctkendaraan/pengembalian';
 

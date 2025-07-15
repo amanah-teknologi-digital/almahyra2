@@ -138,11 +138,13 @@ class CDashboard extends CI_Controller {
             }
 
             $this->load->view('inc/dashboard/ustadzah', $data);
-        }elseif ($this->session->userdata['auth']->id_role == 9) { //kepala tpq
+        }elseif ($this->session->userdata['auth']->id_role == 9) { //ekstrakulikuler
             $data = $this->data;
+            $id_userekstra = $this->session->userdata['auth']->id;
             $data['parent'] = 'ekstra';
             $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
-            $data['list_jilid'] = $this->Dashboard->getListJilid();
+            $data['ekstra'] = $this->Dashboard->getDataEkstrakulikuler($id_userekstra);
+
             if (!empty($data['list_anak'])) {
                 $data['id_anak'] = $data['list_anak'][0]->id;
             }else{

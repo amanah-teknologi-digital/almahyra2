@@ -29,6 +29,14 @@
             return $query->result();
         }
 
+        function getDataEkstrakulikuler($id_user){
+            $sql = "SELECT * FROM ekstrakulikuler";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
         function getListAnak($role){
             $user = $this->session->userdata['auth'];
             if ($role == 1 OR $role == 2 OR $role == 6 OR $role == 7 OR $role == 8) { // admin & superadmin & system absen

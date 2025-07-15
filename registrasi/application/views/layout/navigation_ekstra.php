@@ -31,19 +31,19 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-mengaji'; ?>">
+                    <a href="<?= base_url().'catat-ekstrakulikuler'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Catat Ekstrakulikuler</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-mengaji'; ?>">
+                    <a href="<?= base_url().'data-ekstrakulikuler'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Data Ekstrakulikuler</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-absensieducator'; ?>">
+                    <a href="<?= base_url().'laporan-ekstrakulikuler'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Ekstrakulikuler</span>
                     </a>
