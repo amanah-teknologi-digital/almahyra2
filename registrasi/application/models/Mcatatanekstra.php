@@ -18,8 +18,7 @@ class Mcatatanekstra extends CI_Model
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
                 JOIN ref_kelas d ON d.id_kelas = c.id_kelas
                 LEFT JOIN ekstrakulikuler_catatan e ON e.id_anak = a.id AND e.tanggal = '$tanggal' AND e.id_ekstra = $id_ekstra
-            
-                WHERE a.is_active = 1 ORDER BY a.nama ASC";
+                WHERE a.is_active = 1 AND a.id IN (SELECT id_anak FROM ekstrakulikuler_siswa WHERE id_ekstra = $id_ekstra) ORDER BY a.nama ASC";
 
         $query = $this->db->query($sql);
 
@@ -36,35 +35,44 @@ class Mcatatanekstra extends CI_Model
     }
 
     function checkAktivitas($tanggal, $id_anak, $id_ekstra){
-        $sql = "SELECT id_ekstracatatan FROM ekstrakulikuler_catatan WHERE id_anak = $id_anak AND tanggal = '$tanggal' AND id_ekstra = '$id_ekstra'";
-
+        $sql = "SELECT id_ekstra FROM ekstrakulikuler_siswa WHERE id_ekstra = $id_ekstra AND id_anak = $id_anak";
         $query = $this->db->query($sql);
+        $data_anak = $query->row();
 
-        if ($query->num_rows() > 0) {
-            return $query->row()->id_ekstracatatan;
-        } else {
-            $sql = "SELECT * FROM ekstrakulikuler_form WHERE id_ekstra = $id_ekstra";
+        if (!empty($data_anak)) {
+            $sql = "SELECT id_ekstracatatan FROM ekstrakulikuler_catatan WHERE id_anak = $id_anak AND tanggal = '$tanggal' AND id_ekstra = '$id_ekstra'";
             $query = $this->db->query($sql);
-            $dataform = $query->result();
 
-            if (!empty($dataform)) {
-                $a_input['id_anak'] = $id_anak;
-                $a_input['id_ekstra'] = $id_ekstra;
-                $a_input['tanggal'] = $tanggal;
-                $a_input['created_at'] = date('Y-m-d H:m:s');
+            if ($query->num_rows() > 0) {
+                return $query->row()->id_ekstracatatan;
+            } else {
+                $sql = "SELECT * FROM ekstrakulikuler_form WHERE id_ekstra = $id_ekstra";
+                $query = $this->db->query($sql);
+                $dataform = $query->result();
 
-                $this->db->insert('ekstrakulikuler_catatan', $a_input);
-                $id_ekstracatatan = $this->db->insert_id();
+                if (!empty($dataform)) {
+                    $a_input['id_anak'] = $id_anak;
+                    $a_input['id_ekstra'] = $id_ekstra;
+                    $a_input['tanggal'] = $tanggal;
+                    $a_input['created_at'] = date('Y-m-d H:m:s');
 
-                $sql = "INSERT INTO ekstrakulikuler_catatandet (id_ekstracatatan, nama, kolom, jenis_kolom, pilihan_standar) SELECT $id_ekstracatatan, nama, kolom, jenis_kolom, pilihan_standar FROM ekstrakulikuler_form WHERE id_ekstra = $id_ekstra ORDER BY id_formekstra";
-                $this->db->query($sql);
+                    $this->db->insert('ekstrakulikuler_catatan', $a_input);
+                    $id_ekstracatatan = $this->db->insert_id();
 
-                return $id_ekstracatatan;
-            }else{
-                $this->session->set_flashdata('failed', 'Form Ekstrakulikuler belum ditentukan! Mohon Hubungi Admin untuk menentukan');
+                    $sql = "INSERT INTO ekstrakulikuler_catatandet (id_ekstracatatan, nama, kolom, jenis_kolom, pilihan_standar) SELECT $id_ekstracatatan, nama, kolom, jenis_kolom, pilihan_standar FROM ekstrakulikuler_form WHERE id_ekstra = $id_ekstra ORDER BY id_formekstra";
+                    $this->db->query($sql);
 
-                redirect('catat-ekstrakulikuler');
+                    return $id_ekstracatatan;
+                } else {
+                    $this->session->set_flashdata('failed', 'Form Ekstrakulikuler belum ditentukan! Mohon Hubungi Admin untuk menentukan');
+
+                    redirect('catat-ekstrakulikuler');
+                }
             }
+        }else{
+            $this->session->set_flashdata('failed', 'Anak ini belum dimasukan ke dalam ekstra ini! Mohon Hubungi Admin untuk menambahkan');
+
+            redirect('catat-ekstrakulikuler');
         }
     }
 
