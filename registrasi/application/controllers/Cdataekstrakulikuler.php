@@ -31,6 +31,7 @@ class Cdataekstrakulikuler extends CI_Controller {
 		$data = $this->data;
 
         $data['list_ekstra'] = $this->DataEkstrakulikuler->getListEkstrakulikuler();
+        $data['list_pengampu'] = $this->DataEkstrakulikuler->getListPengampu();
 
 		$this->load->view('inc/dataekstra/list', $data);
 	}
@@ -141,5 +142,20 @@ class Cdataekstrakulikuler extends CI_Controller {
         }
 
         redirect($this->data['redirect'].'/edit/'.$_POST['id_ekstra']);
+    }
+
+    public function updatepengampu(){
+        $id_ekstra = $_POST["id_ekstra"];
+        $id_pengampu = $_POST["id_pengampu"];
+
+        $err = $this->DataEkstrakulikuler->updatePengampuEkstra($id_ekstra, $id_pengampu);
+
+        if ($err['code'] == '0') {
+            $this->session->set_flashdata('success', 'Berhasil Merubah Pengampu Ekstra');
+        } else {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Pengampu Ekstra');
+        }
+
+        redirect($this->data['redirect']);
     }
 }

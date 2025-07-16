@@ -29,8 +29,8 @@
                                                 <tr>
                                                     <!-- <th>#</th> -->
                                                     <th style="width: 5%">No</th>
-                                                    <th style="width: 40%">Nama Ekstrakulikuler</th>
-                                                    <th style="width: 25%">Pengampu</th>
+                                                    <th style="width: 45%">Nama Ekstrakulikuler</th>
+                                                    <th style="width: 20%">Pengampu</th>
                                                     <th style="width: 20%">Keterangan</th>
                                                     <th style="width: 10%">Action</th>
                                                 </tr>
@@ -44,8 +44,13 @@
                                                         <td style="vertical-align: middle">
                                                             <b><?= $row->nama ?></b>
                                                         </td>
-                                                        <td>
-                                                            <span class="text-success font-weight-bold"><?= $row->nama_pengampu ?></span>
+                                                        <td align="center">
+                                                            <select class="form-control" onchange="ubahPengampu(this, '<?= $row->id_ekstra ?>')">
+                                                                <option value="0" <?= empty($row->pengampu)? 'selected':''; ?> >Tidak ada pengampu</option>
+                                                                <?php foreach ($list_pengampu as $kel){ ?>
+                                                                    <option value="<?= $kel->id ?>" <?= $row->pengampu == $kel->id? 'selected':''; ?>><?= $kel->name ?></option>
+                                                                <?php } ?>
+                                                            </select>
                                                         </td>
                                                         <td>
                                                             <span class="font-italic text-muted text-small"><?= $row->keterangan ?></span>
@@ -105,6 +110,10 @@
                     </div>
                 </div>
                 <!--  Modal -->
+                <?php echo form_open_multipart($controller.'/updatepengampu', 'id="frm_ubahstatus"'); ?>
+                    <input type="hidden" name="id_ekstra" id="id_ekstra" required>
+                    <input type="hidden" name="id_pengampu" id="id_pengampu" required>
+                </form>
                 <?php $this->load->view('layout/footer') ?>
             </div>
         </div>
@@ -146,5 +155,15 @@
                 })
             });
         });
+
+        function ubahPengampu(dom, id_ekstra){
+            if(confirm('Apakah anda yakin untuk mengubah pengampu ekstra ini?')){
+                let id_pengampu = $(dom).val();
+
+                $('#id_ekstra').val(id_ekstra);
+                $('#id_pengampu').val(id_pengampu);
+                $('#frm_ubahstatus').submit();
+            }
+        }
     </script>
 </html>

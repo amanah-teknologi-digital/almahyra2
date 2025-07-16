@@ -36,6 +36,14 @@
             return $query->result();
         }
 
+        function getListPengampu(){
+            $sql = "SELECT a.* FROM data_user a WHERE a.id_role = 9 ORDER BY a.id";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
 	    ## get all data in table
 	    function getAll() {
             $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role FROM template_jadwal a 
@@ -222,6 +230,21 @@
             $this->db->trans_complete();
 
             return $this->db->trans_status();
+        }
+
+        function updatePengampuEkstra($id_ekstra, $id_pengampu){
+            if (empty($id_pengampu)){
+                $id_pengampu = null;
+            }
+
+            $a_input['pengampu'] = $id_pengampu;
+            $a_input['updated_at'] = date('Y-m-d H:m:s');
+
+            $this->db->where('id_ekstra', $id_ekstra);
+
+            $this->db->update('ekstrakulikuler', $a_input);
+
+            return $this->db->error(1);
         }
     }
 
