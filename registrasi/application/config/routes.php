@@ -155,6 +155,9 @@ $route['catatan-mengaji/lihat-data/(:any)'] = 'ccatatanmengaji/lihatdata/$1';
 $route['data-ekstrakulikuler'] = 'cdataekstrakulikuler';
 $route['data-ekstrakulikuler/edit/(:num)'] = 'cdataekstrakulikuler/lihatdata/$1';
 
+$route['catat-ekstrakulikuler'] = 'ccatatanekstra';
+$route['catat-ekstrakulikuler/lihat-data/(:any)'] = 'ccatatanekstra/lihatdata/$1';
+
 // $route['peminjaman-kendaraan'] = 'ctkendaraan';
 // $route['peminjaman-kendaraan/pengembalian'] = 'ctkendaraan/pengembalian';
 
