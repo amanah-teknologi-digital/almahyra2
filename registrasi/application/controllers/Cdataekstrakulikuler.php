@@ -51,11 +51,28 @@ class Cdataekstrakulikuler extends CI_Controller {
         }
     }
 
+    public function insertsiswa() {
+        $data = $this->DataEkstrakulikuler->insertSiswa();
+
+        $err = $data['err'];
+        $id_ekstra = $data['id_ekstra'];
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menambah Siswa');
+            redirect($this->data['redirect']);
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menambah Siswa');
+            redirect($this->data['redirect'].'/edit/'.$id_ekstra);
+        }
+    }
+
     public function lihatdata($id_ekstra){
         $data = $this->data;
 
         $data['data_ekstra'] = $this->DataEkstrakulikuler->getDataEkstra($id_ekstra);
         $data['data_formekstra'] = $this->DataEkstrakulikuler->getDataEkstraForm($id_ekstra);
+        $data['data_siswa'] = $this->DataEkstrakulikuler->getDataSiswa($id_ekstra);
+        $data['list_siswa'] = $this->DataEkstrakulikuler->getListSiswa($id_ekstra);
         $data['id_ekstra'] = $id_ekstra;
 
         $this->load->view('inc/dataekstra/lihat_data', $data);
@@ -139,6 +156,18 @@ class Cdataekstrakulikuler extends CI_Controller {
             $this->session->set_flashdata('failed', 'Gagal Menghapus Data');
         }else{
             $this->session->set_flashdata('success', 'Berhasil Menghapus Data');
+        }
+
+        redirect($this->data['redirect'].'/edit/'.$_POST['id_ekstra']);
+    }
+
+    public function hapussiswa() {
+        $err = $this->DataEkstrakulikuler->hapusSiswa($_POST['id_anak'], $_POST['id_ekstra']);
+
+        if ($err === FALSE) {
+            $this->session->set_flashdata('failed', 'Gagal Menghapus Siswa');
+        }else{
+            $this->session->set_flashdata('success', 'Berhasil Menghapus Siswa');
         }
 
         redirect($this->data['redirect'].'/edit/'.$_POST['id_ekstra']);

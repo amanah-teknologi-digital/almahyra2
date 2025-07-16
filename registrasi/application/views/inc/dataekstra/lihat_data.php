@@ -82,6 +82,47 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <br>
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-6">
+                                            <h5 class="mb-0">Daftar Siswa Ekstra</h5>
+                                        </div>
+                                        <div class="col-6  text-right">
+                                            <button class="btn btn-sm btn-info btn-tambahsiswa">
+                                                <span class="fas fa-plus"></span>&nbsp;Tambah Siswa
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="display table table-sm table-striped table-bordered">
+                                            <thead style="background-color: #bfdfff">
+                                            <tr>
+                                                <th align="center" style="width: 5%">No</th>
+                                                <th align="center" style="width: 50%">Nama Siswa</th>
+                                                <th align="center" style="width: 30%">Kelas</th>
+                                                <th align="center" style="width: 15%">Aksi</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php if (count($data_siswa) > 0){
+                                                foreach ($data_siswa as $key => $siswa){ ?>
+                                                    <tr>
+                                                        <td align="center"><?= $key+1; ?></td>
+                                                        <td nowrap><?= $siswa->nama; ?></td>
+                                                        <td nowrap align="center"><?= $siswa->nama_kelas; ?></td>
+                                                        <td align="center" nowrap>
+                                                            <span class="btn btn-sm btn-danger hapus_siswa" data-id="<?= $siswa->id ?>" data-nama="<?= $siswa->nama  ?>"><span class="fas fa-times"></span>&nbsp;Hapus</span>
+                                                        </td>
+                                                    </tr>
+                                                <?php }
+                                            }else{ ?>
+                                                <tr>
+                                                    <td colspan="6" align="center"><span class="font-weight-bold text-danger text-small"><i>Data Siswa Kosong!</i></span></td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Form bisa <b>diubah</b> sesuai kebutuhan dari segi penilaian sisi guru ekstrakulikuler.</span></p>
                                 </div>
                             </div>
@@ -123,6 +164,35 @@
                                         <label>Standarisasi Pilihan</label>
                                         <select name="standarisasi[]" id="standarisasi" class="form-control tagselect" multiple="multiple" required>
 
+                                        </select>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_ekstra" value="<?= $id_ekstra ?>">
+                        </form>
+                    </div>
+                </div>
+                <div class="modal fade" id="tambah-siswa" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/insertsiswa', 'id="frm_tambahsiswa"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tambah Data Siswa Ekstrakulikuler</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="form-group" id="standarpilihan">
+                                        <label>Pilih Siswa (Bisa pilih multiple)</label>
+                                        <select name="siswa[]" id="siswa" class="form-control" multiple="multiple" required>
+                                            <?php foreach ($list_siswa as $siswas){ ?>
+                                                <option value="<?= $siswas->id ?>"><?=$siswas->nama.' ('.$siswas->nama_kelas.')'?></option>
+                                            <?php } ?>
                                         </select>
                                     </div>
                                 </fieldset>
@@ -202,6 +272,27 @@
                         </form>
                     </div>
                 </div>
+                <div class="modal fade" id="hapus_siswa" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/hapussiswa', 'id="frm_hapussiswa"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Hapus Siswa Ekstra</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Apakah yakin menghapus <span class="font-weight-bold" id="label_nama_siswa_hapus"></span> dari ekstrakulikuler ini? </p>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-danger ml-2" type="submit">Hapus</button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id_anak" id="id_anak_hapus">
+                        <input type="hidden" name="id_ekstra" value="<?= $id_ekstra ?>">
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
@@ -220,9 +311,16 @@
                 tags: true
             });
 
+            $("#siswa").select2();
+
             $('.btn-tambahkegiatan').click(function(){
                 clearFormStatus("#frm_tambahkegiatan");
                 $("#tambah-kegitan").modal('show');
+            });
+
+            $('.btn-tambahsiswa').click(function(){
+                clearFormStatus("#frm_tambahsiswa");
+                $("#tambah-siswa").modal('show');
             });
 
             $('.edit_kegiatan').click(function(){
@@ -278,6 +376,18 @@
                 $("#id_formekstra_hapus").val(id_kegiatan);
 
                 $("#hapus-kegiatan").modal('show');
+            });
+
+            $('.hapus_siswa').click(function(){
+                clearFormStatus("#frm_hapussiswa");
+
+                let nama_siswa = $(this).data('nama')
+                let id_siswa = $(this).data('id')
+
+                $("#label_nama_siswa_hapus").html(nama_siswa);
+                $("#id_anak_hapus").val(id_siswa);
+
+                $("#hapus_siswa").modal('show');
             });
 
             $("#frm_tambahkegiatan").validate({

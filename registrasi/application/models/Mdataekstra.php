@@ -36,6 +36,33 @@
             return $query->result();
         }
 
+        function getDataSiswa($id_ekstra){
+            $sql = "SELECT b.*, e.nama as nama_kelas FROM ekstrakulikuler_siswa a 
+                JOIN registrasi_data_anak b ON b.id = a.id_anak 
+                JOIN v_kategori_usia c ON c.id = b.id 
+                JOIN map_kelasusia d ON d.id_usia = c.id_usia
+                JOIN ref_kelas e ON e.id_kelas = d.id_kelas
+            WHERE a.id_ekstra = $id_ekstra ORDER BY b.nama";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getListSiswa($id_ekstra){
+            $sql = "SELECT b.*, e.nama as nama_kelas FROM registrasi_data_anak b 
+                JOIN v_kategori_usia c ON c.id = b.id 
+                JOIN map_kelasusia d ON d.id_usia = c.id_usia
+                JOIN ref_kelas e ON e.id_kelas = d.id_kelas
+            WHERE
+            b.is_active = 1 AND b.id NOT IN (SELECT id_anak FROM ekstrakulikuler_siswa WHERE id_ekstra = $id_ekstra) AND b.id_usia IS NOT NULL
+            ORDER BY b.nama";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getListPengampu(){
             $sql = "SELECT a.* FROM data_user a WHERE a.id_role = 9 ORDER BY a.id";
 
@@ -114,6 +141,23 @@
             return ['err' => $this->db->trans_status(), 'id_ekstra' => $id_ekstra];
         }
 
+        function insertSiswa() {
+            $siswa = $_POST['siswa'];
+            $id_ekstra = $_POST['id_ekstra'];
+
+            $this->db->trans_start();
+            foreach ($siswa as $key => $value) {
+                $a_input['id_ekstra'] = $id_ekstra;
+                $a_input['id_anak'] = $value;
+
+                $this->db->insert('ekstrakulikuler_siswa', $a_input);
+            }
+
+            $this->db->trans_complete();
+
+            return ['err' => $this->db->trans_status(), 'id_ekstra' => $id_ekstra];
+        }
+
 	    ## update data in table
 	    function update($id) {
             $user = $this->session->userdata['auth'];
@@ -132,6 +176,9 @@
 	    ## delete data in table
 		function delete($id) {
             $this->db->trans_start();
+
+            $this->db->where('id_ekstra', $id);
+            $this->db->delete('ekstrakulikuler_siswa');
 
             $this->db->where('id_ekstra', $id);
             $this->db->delete('ekstrakulikuler_form');
@@ -232,6 +279,18 @@
 
             $this->db->where('id_formekstra', $id_kegiatan);
             $this->db->delete('ekstrakulikuler_form');
+
+            $this->db->trans_complete();
+
+            return $this->db->trans_status();
+        }
+
+        function hapusSiswa($id_anak, $id_ekstra) {
+            $this->db->trans_start();
+
+            $this->db->where('id_ekstra', $id_ekstra);
+            $this->db->where('id_anak', $id_anak);
+            $this->db->delete('ekstrakulikuler_siswa');
 
             $this->db->trans_complete();
 
