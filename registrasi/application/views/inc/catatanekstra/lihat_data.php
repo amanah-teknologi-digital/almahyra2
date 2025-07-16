@@ -94,9 +94,9 @@
                 <div class="main-content">
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">Qiro'ati</a></li>
+                            <li><a href="#">Ekstrakulikuler</a></li>
                             <li><a href="#"><?= $title ?></a></li>
-                            <li>Detail Catatan Mengaji</li>
+                            <li>Detail Catatan Ekstrakulikuler</li>
                         </ul>
                     </div>
                     <div class="row">
@@ -106,88 +106,56 @@
                                 <div class="card-body">
                                     <div class="row text-center d-flex align-items-center justify-content-center">
                                         <div class="col-sm-12">
-                                            <h5 class="card-title mb-1">Catatan Mengaji <b>Sesi <?= $data_mengaji->namasesi ?></b> Hari&nbsp;<?= format_date_indonesia($data_mengaji->tanggal).', '.date('d-m-Y', strtotime($data_mengaji->tanggal)) ?></h5>
-                                            <h5 class="card-title mb-1">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_mengaji->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_mengaji->tanggal_lahir) ?> <span class="text-muted">(<?= $data_mengaji->nama_kelas ?>)</span></span></h5>
+                                            <h5 class="card-title mb-1">Catatan Ekstrakulikuler <b><?= $data_ekstra->nama_ekstra ?></b> Hari&nbsp;<?= format_date_indonesia($data_ekstra->tanggal).', '.date('d-m-Y', strtotime($data_ekstra->tanggal)) ?></h5>
+                                            <h5 class="card-title mb-1">a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_ekstra->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_ekstra->tanggal_lahir) ?> <span class="text-muted">(<?= $data_ekstra->nama_kelas ?>)</span></span></h5>
                                         </div>
                                     </div>
                                     <hr>
-                                    <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_mengaji->updated_at)? timeAgo($data_mengaji->created_at):timeAgo($data_mengaji->updated_at); ?> </i></span></p>
-                                    <?php echo form_open_multipart($controller.'/simpancatatanmengaji', 'id="frm_simpan" enctype="multipart/form-data"'); ?>
+                                    <p><span class="text-muted" style="font-size: smaller"><i>terakhir update <?= empty($data_ekstra->updated_at)? timeAgo($data_ekstra->created_at):timeAgo($data_ekstra->updated_at); ?> </i></span></p>
+                                    <?php echo form_open_multipart($controller.'/simpancatatanekstra', 'id="frm_simpan" enctype="multipart/form-data"'); ?>
                                         <fieldset>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label><b>Pilih Jilid</b></label>
-                                                        <br><span class="text-muted font-italic text-small">Jilid Terakhir: <?= !empty($data_sebelum) ? '<b class="text-success">'.$data_sebelum->nama_jilid.'</b> ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
-                                                        <select class="form-control" name="jilid" id="jilid" required>
-                                                            <option value="">-- Pilih Jilid --</option>
-                                                            <?php foreach ($list_jilid as $pil){ ?>
-                                                                <option value="<?= $pil->id_jilidmengaji ?>" <?= $pil->id_jilidmengaji == $data_mengaji->id_jilidmengaji? 'selected':''; ?>><?= $pil->nama ?></option>
+                                            <?php foreach ($data_ekstraform as $formekstra) { ?>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label><b><?= $formekstra->nama ?></b></label>
+                                                            <?php if ($formekstra->jenis_kolom == 'select'){
+                                                                $temp_pilihan = json_decode($formekstra->pilihan_standar, true);
+                                                                ?>
+                                                                <select class="form-control" name="<?= $formekstra->kolom ?>" id="<?= $formekstra->kolom ?>" required>
+                                                                    <option value="">-- Pilih salah satu --</option>
+                                                                    <?php foreach ($temp_pilihan as $pil){ ?>
+                                                                        <option value="<?= $pil ?>" <?= $pil == $formekstra->value? 'selected':''; ?>><?= $pil ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            <?php }else{ ?>
+                                                                <input type="<?= $formekstra->jenis_kolom ?>" class="form-control" name="<?= $formekstra->kolom ?>" id="<?= $formekstra->kolom ?>" value="<?= $formekstra->value ?>" required>
                                                             <?php } ?>
-                                                        </select>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            <?php } ?>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label><b>Input Halaman</b></label>
-                                                        <br><span class="text-muted font-italic text-small">Halaman Terakhir: <?= !empty($data_sebelum) ? '<b class="text-success">'.$data_sebelum->halaman.'</b> ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
-                                                        <input type="number" class="form-control" name="halaman" id="halaman" value="<?= (!empty($data_mengaji->halaman))? $data_mengaji->halaman:'' ?>" required placeholder="(Masukan Halaman Terakhir)" autocomplete="off">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label><b>Nilai</b></label>
-                                                        <?php if (!empty($data_sebelum)){
-                                                            if (empty($data_sebelum->nilai)){
-                                                                $nilai_seb = '<b class="text-danger">L-'.'</b>';
-                                                            }else{
-                                                                $nilai_seb = '<b class="text-success">L'.'</b>';
-                                                            }
-                                                        }else{
-                                                            $nilai_seb = '';
-                                                        } ?>
-                                                        <br><span class="text-muted font-italic text-small">Nilai Terakhir: <?= !empty($data_sebelum) ? $nilai_seb. ' ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
-                                                        <select class="form-control" name="nilai" id="nilai" required>
-                                                            <option value="0" <?= $data_mengaji->nilai == 0 ? 'selected':''; ?>>L-</option>
-                                                            <option value="1" <?= $data_mengaji->nilai == 1 ? 'selected':''; ?>>L</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label><b>Keterangan</b> <i>(Optional)</i></label>
-                                                        <?php if (!empty($data_sebelum)){
-                                                            if (empty($data_sebelum->keterangan)){
-                                                                $ket_seb = '<b class="text-muted text-info">-</b>';
-                                                            }else{
-                                                                $ket_seb = '<b class="text-muted text-info">'.$data_sebelum->keterangan.'</b>';
-                                                            }
-                                                        }else{
-                                                            $ket_seb = '';
-                                                        } ?>
-                                                        <br><span class="text-muted font-italic text-small">Ket Terakhir: <?= !empty($data_sebelum) ? $ket_seb.' ('.$data_sebelum->nama_ustadzah.' pada '.format_date_indonesia($data_sebelum->tanggal).', '.date('d-m-Y', strtotime($data_sebelum->tanggal)).' sesi '.$data_sebelum->nama_sesi.')':'<b class="text-danger">Kosong</b>' ?></span>
-                                                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"><?= !empty($data_mengaji->keterangan)? $data_mengaji->keterangan:''; ?></textarea>
+                                                        <label><b>Nilai</b> <i class="text-danger">*</i></label>
+                                                        <br><span class="text-muted font-italic text-small">Nilai minimal 0, maksimal 100</span>
+                                                        <input type="number" name="nilai" id="nilai" class="form-control" min="0" max="100" value="<?= $data_ekstra->nilai ?>" required>
                                                     </div>
                                                 </div>
                                             </div>
                                         </fieldset>
-<!--                                        <br>-->
-<!--                                        <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>-->
-<!--                                        <br>-->
-<!--                                        <div class="file-loading">-->
-<!--                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>-->
-<!--                                        </div>-->
+                                        <br>
+                                        <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
+                                        <br>
+                                        <div class="file-loading">
+                                            <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
+                                        </div>
                                         <br>
                                         <center><button class="btn btn-success" id="btn_simpan" type="submit"><span class="fas fa-save"></span>&nbsp;Simpan Catatan</button></center>
-                                        <input type="hidden" name="id_catatan" value="<?= $data_mengaji->id_catatan ?>">
+                                        <input type="hidden" name="id_ekstracatatan" value="<?= $id_ekstracatatan ?>">
                                     </form>
-                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data catatan mengaji sesuai uraian yang diberikan!.</span></p>
+                                    <p class="font-italic float-right mt-5"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Lengkapi data catatan ekstrakulikuler sesuai uraian yang diberikan!.</span></p>
                                 </div>
                             </div>
                         </div>
@@ -202,62 +170,62 @@
         </div>
     </body>
     <?php $this->load->view('layout/custom') ?>
-<!--    --><?php //$this->load->view('layout/file_upload') ?>
+    <?php $this->load->view('layout/file_upload') ?>
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         let url = "<?= base_url().$controller ?>";
-        //let initialPreview = <?php //= json_encode($dokumentasi_file['preview'])?>//;
-        //let initialPreviewConfig = <?php //= json_encode($dokumentasi_file['config'])?>//;
+        let initialPreview = <?= json_encode($dokumentasi_file['preview'])?>;
+        let initialPreviewConfig = <?= json_encode($dokumentasi_file['config'])?>;
 
         $(document).ready(function() {
-            // $.validator.addMethod("decimal", function(value, element) {
-            //     // Regular expression for decimal values (including optional negative sign)
-            //     return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
-            // }, "Please enter a valid decimal number.");
+            $.validator.addMethod("decimal", function(value, element) {
+                // Regular expression for decimal values (including optional negative sign)
+                return this.optional(element) || /^-?\d+(\.\d+)?$/.test(value);
+            }, "Please enter a valid decimal number.");
 
-            // $.validator.addMethod("filesize", function(value, element, param) {
-            //     var files = element.files;
-            //     for (var i = 0; i < files.length; i++) {
-            //         if (files[i].size > param) {
-            //             return false; // If any file is too large, return false
-            //         }
-            //     }
-            //     return true; // All files are within size limit
-            // }, "File is too large.");
+            $.validator.addMethod("filesize", function(value, element, param) {
+                var files = element.files;
+                for (var i = 0; i < files.length; i++) {
+                    if (files[i].size > param) {
+                        return false; // If any file is too large, return false
+                    }
+                }
+                return true; // All files are within size limit
+            }, "File is too large.");
 
-            // let file_input = $('#file_dukung'), initPlugin = function () {
-            //     file_input.fileinput({
-            //         maxFileSize: 20000,
-            //         dropZoneTitle: 'File Pendukung Kosong!',
-            //         previewThumbnail: true,
-            //         showRemove: false,
-            //         showUpload: false,
-            //         required: true,
-            //         validateInitialCount: true,
-            //         previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
-            //         allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
-            //         allowedPreviewTypes: ['image'],
-            //         initialPreview: initialPreview,
-            //         initialPreviewConfig: initialPreviewConfig,
-            //         initialPreviewAsData: true,
-            //         overwriteInitial: false
-            //     });
-            // };
-            //
-            // initPlugin();
-            //
-            // file_input.on("filepredelete", function(jqXHR) {
-            //     var abort = true;
-            //     if (confirm("Apakah yakin menghapus file?")) {
-            //         abort = false;
-            //     }
-            //     return abort; // you can also send any data/object that you can receive on `filecustomerror` event
-            // });
-            //
-            // file_input.on('change', function(event) {
-            //     $("#frm_simpan").valid();
-            // });
+            let file_input = $('#file_dukung'), initPlugin = function () {
+                file_input.fileinput({
+                    maxFileSize: 20000,
+                    dropZoneTitle: 'File Pendukung Kosong!',
+                    previewThumbnail: true,
+                    showRemove: false,
+                    showUpload: false,
+                    required: true,
+                    validateInitialCount: true,
+                    previewFileType: ['image'], // Preview type is automatically handled (both images and videos)
+                    allowedFileExtensions: ['jpg', 'jpeg', 'png', 'gif'], // Allowed image/video extensions
+                    allowedPreviewTypes: ['image'],
+                    initialPreview: initialPreview,
+                    initialPreviewConfig: initialPreviewConfig,
+                    initialPreviewAsData: true,
+                    overwriteInitial: false
+                });
+            };
+
+            initPlugin();
+
+            file_input.on("filepredelete", function(jqXHR) {
+                var abort = true;
+                if (confirm("Apakah yakin menghapus file?")) {
+                    abort = false;
+                }
+                return abort; // you can also send any data/object that you can receive on `filecustomerror` event
+            });
+
+            file_input.on('change', function(event) {
+                $("#frm_simpan").valid();
+            });
 
             $("#frm_simpan").validate();
         });

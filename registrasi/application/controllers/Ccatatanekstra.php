@@ -22,7 +22,7 @@ class Ccatatanekstra extends CI_Controller {
 
         $this->data = array(
             'controller'=>'ccatatanekstra',
-            'redirect'=>'catatan-ekstra',
+            'redirect'=>'catat-ekstrakulikuler',
             'title'=>'Catatan Ekstrakurikuler',
             'parent'=>'ekstra',
             'role' => $this->session->userdata['auth']->id_role,
@@ -97,12 +97,10 @@ class Ccatatanekstra extends CI_Controller {
     public function lihatdata($id_ekstracatatan){
         $data = $this->data;
 
-        $data['hasil_catatan'] = $this->CatatanEkstra->getDataEkstra($id_ekstracatatan);
-        $temp_datamengaji = json_decode(json_encode($data['data_mengaji']), true);
-        $tanggal = $temp_datamengaji['tanggal'];
-        $id_anak = $temp_datamengaji['id'];
-        $data['data_sebelum'] = $this->CatatanEkstra->getDataSebelumnya($id_ekstracatatan, $tanggal, $id_anak);
+        $data['data_ekstra'] = $this->CatatanEkstra->getDataEkstra($id_ekstracatatan);
+        $data['data_ekstraform'] = $this->CatatanEkstra->getDataEkstraForm($id_ekstracatatan);
         $data['role'] = $this->role;
+        $data['id_ekstracatatan'] = $id_ekstracatatan;
         $temp_datadokumentasi = $this->CatatanEkstra->getDokumentasiFile($id_ekstracatatan);
         $data['preview'] = $data['config'] = [];
         foreach ($temp_datadokumentasi as $row){
@@ -147,11 +145,11 @@ class Ccatatanekstra extends CI_Controller {
             'config' => $data['config']
         ];
 
-        $this->load->view('inc/catatanmengaji/lihat_data', $data);
+        $this->load->view('inc/catatanekstra/lihat_data', $data);
     }
 
-    public function simpancatatanmengaji(){
-        $err = $this->CatatanMengaji->simpanCatatanMengaji();
+    public function simpancatatanekstra(){
+        $err = $this->CatatanEkstra->simpanCatatanEkstra();
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
@@ -159,13 +157,13 @@ class Ccatatanekstra extends CI_Controller {
             $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
         }
 
-        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_catatan']);
+        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_ekstracatatan']);
     }
 
     function hapusfile(){
         header('Content-Type: application/json'); // set json response headers
 
-        $err = $this->CatatanMengaji->hapusDokumentasiFile($_POST['key']);
+        $err = $this->CatatanEkstra->hapusDokumentasiFile($_POST['key']);
 
         $out = ['initialPreview' => [], 'initialPreviewConfig' => [], 'initialPreviewAsData' => true];
         if ($err === FALSE) {

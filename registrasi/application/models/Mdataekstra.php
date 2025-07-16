@@ -161,6 +161,9 @@
             $nama_kolom = strtolower($nama_kolom); // huruf kecil semua
             $nama_kolom = preg_replace('/[^a-z0-9_ ]/', '', $nama_kolom); // hapus karakter aneh
             $nama_kolom = str_replace(' ', '_', $nama_kolom); // spasi jadi underscore
+            if ($nama_kolom == 'nilai'){
+                $nama_kolom = null;
+            }
             $jenis_kolom = $_POST['jenis_kolom'];
             if (isset($_POST['standarisasi']) && $_POST['jenis_kolom'] == 'select') {
                 $standarisasi = $_POST['standarisasi'];
@@ -198,6 +201,9 @@
             $nama_kolom = strtolower($nama_kolom); // huruf kecil semua
             $nama_kolom = preg_replace('/[^a-z0-9_ ]/', '', $nama_kolom); // hapus karakter aneh
             $nama_kolom = str_replace(' ', '_', $nama_kolom); // spasi jadi underscore
+            if ($nama_kolom == 'nilai'){
+                $nama_kolom = null;
+            }
             $jenis_kolom = $_POST['jenis_kolom'];
             if (isset($_POST['standarisasi']) && $_POST['jenis_kolom'] == 'select') {
                 $standarisasi = $_POST['standarisasi'];
