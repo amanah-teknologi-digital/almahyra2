@@ -110,6 +110,7 @@ class Mcatatanekstra extends CI_Model
 
         $update_ekstra['is_catat'] = 1;
         $update_ekstra['nilai'] = $this->input->post('nilai');
+        $update_ekstra['keterangan'] = $this->input->post('keterangan');
         $this->db->where('id_ekstracatatan', $_POST['id_ekstracatatan']);
         $this->db->update('ekstrakulikuler_catatan', $update_ekstra);
 

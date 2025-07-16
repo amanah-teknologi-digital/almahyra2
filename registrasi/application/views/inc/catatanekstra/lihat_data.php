@@ -144,6 +144,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label><b>Keterangan</b> <i>(Optional)</i></label>
+                                                        <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5"><?= !empty($data_ekstra->keterangan)? $data_ekstra->keterangan:''; ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </fieldset>
                                         <br>
                                         <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
