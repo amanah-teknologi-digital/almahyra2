@@ -38,47 +38,42 @@
                             <li><a href="#">Dashboard Ekstrakulikuler</a></li>
                         </ul>
                     </div>
+                    <?php if (empty($ekstra)) { ?>
+                        <div class="alert alert-danger" role="alert">
+                            <strong>Data Ekstrakulikuler belum ditentukan!</strong> mohon hubungi Administrator
+                        </div>
+                    <?php } ?>
 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card text-left">
                                 <div class="card-body">
-                                    <?php if (!empty($ekstra)){ ?>
-                                        <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Perkembangan Ekstrakulikuler <?= $ekstra->nama ?></b></span>
-                                        <hr>
-                                        <div class="form-group row">
-                                            <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
-                                            <div class="col-sm-10">
-                                                <select name="anak" id="anak" class="form-control" onchange="refreshGraph(this)">
-                                                    <?php foreach ($list_anak as $anak){ ?>
-                                                        <option value="<?= $anak->id ?>" <?= $anak->id == $id_anak ? 'selected':'' ?>><?= $anak->nama_anak ?></option>
-                                                    <?php } ?>
-                                                </select>
+                                    <span class="card-title mb-1"><span class="fas fa-chart-line"></span>&nbsp;<b>Perkembangan Ekstrakulikuler</b></span>
+                                    <hr>
+                                    <div class="form-group row">
+                                        <label for="anak" class="col-sm-2 col-form-label">Pilih Anak</label>
+                                        <div class="col-sm-10">
+                                            <select name="anak" id="anak" class="form-control" onchange="refreshGraph(this)">
+                                                <?php foreach ($list_anak as $anak){ ?>
+                                                    <option value="<?= $anak->id ?>" <?= $anak->id == $id_anak ? 'selected':'' ?>><?= $anak->nama_anak ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div id="ctx_graph">
+                                        <div class="row" id="konten_graph">
+
+                                        </div>
+                                    </div>
+                                    <div class="row" id="loader" style="display: none">
+                                        <div class="col-sm-12">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="loader"></div>
                                             </div>
                                         </div>
-                                        <br>
-                                        <br>
-                                        <div id="ctx_graph">
-                                            <div class="row">
-                                                <div class="col-sm-4 mb-4">
-                                                    <div class="chart-container">
-                                                        <div id="graph"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row" id="loader" style="display: none">
-                                            <div class="col-sm-12">
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="loader"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php } else { ?>
-                                        <div class="alert alert-danger" role="alert">
-                                            <strong>Data Ekstrakulikuler belum ditentukan!</strong> mohon hubungi Administrator
-                                        </div>
-                                    <?php } ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -102,10 +97,8 @@
         const charts = {};
 
         $(document).ready(function() {
-            <?php if (!empty($ekstra)){ ?>
-                $('#anak').select2();
-                getDataPerkembanganAnak(id_anak);
-            <?php } ?>
+            $('#anak').select2();
+            getDataPerkembanganAnak(id_anak);
         });
 
         function refreshGraph(dom){
@@ -114,18 +107,28 @@
         }
 
         function getDataPerkembanganAnak(id_anak){
+            $('#konten_graph').empty();
             $('#loader').show();
             $('#ctx_graph').hide();
 
             $.ajax({
-                url: url + '/getDataCatatanMengaji/' + id_anak,
+                url: url + '/getDataCatatanEkstra/' + id_anak,
                 type:'GET',
                 dataType: 'json',
                 success: function(data){
-                    if (data.length > 0){
-                        $.each(data, function(index, value){
-                            generateGraph(value['dom'], value, value['nama_form']);
+                    console.log(data)
+                    let list_ekstra = data['list_ekstra'];
+                    let data_perkembangan = data['data_perkembangan']
+                    if (list_ekstra.length > 0){
+                        $.each(list_ekstra, function(index, value){
+                            generateDom(value['id_ekstra']);
                         });
+
+                        if (data_perkembangan.length > 0){
+                            $.each(data_perkembangan, function(index, value){
+                                generateGraph(value['dom'], value, value['nama_form']);
+                            });
+                        }
                     }
 
                     $('#loader').hide();
@@ -136,6 +139,13 @@
                     $('#ctx_graph').show();
                 }
             });
+        }
+
+        function generateDom(id_ekstra){
+            let ctx = 'graph_' + id_ekstra;
+            if (!document.getElementById(ctx)) {
+                $('#konten_graph').append('<div class="col-sm-4 mb-4"><div class="chart-container"><div id="'+ctx+'"></div></div></div>');
+            }
         }
 
         function generateGraph(ctx, data, title){
@@ -191,7 +201,7 @@
                 yaxis: {
                     labels: {
                         formatter: function (value) {
-                            return value + ' halaman'; // Ganti 'kg' dengan satuan yang diinginkan
+                            return value + ' Nilai'; // Ganti 'kg' dengan satuan yang diinginkan
                         }
                     }
                 },

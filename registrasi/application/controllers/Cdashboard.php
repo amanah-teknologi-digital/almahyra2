@@ -140,10 +140,10 @@ class CDashboard extends CI_Controller {
             $this->load->view('inc/dashboard/ustadzah', $data);
         }elseif ($this->session->userdata['auth']->id_role == 9) { //ekstrakulikuler
             $data = $this->data;
-            $id_userekstra = $this->session->userdata['auth']->id;
+
             $data['parent'] = 'ekstra';
-            $data['list_anak'] = $this->Dashboard->getListAnak($this->role);
-            $data['ekstra'] = $this->Dashboard->getDataEkstrakulikuler($id_userekstra);
+            $data['ekstra'] = $this->Dashboard->getDataEsktraByGuru();
+            $data['list_anak'] = $this->Dashboard->getListAnakEkstra($this->role);
 
             if (!empty($data['list_anak'])) {
                 $data['id_anak'] = $data['list_anak'][0]->id;
@@ -370,6 +370,43 @@ class CDashboard extends CI_Controller {
         }
 
         $data = $data_final;
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+    }
+
+    public function getDataCatatanEkstra($id_anak){
+        $data['list_ekstra'] = $this->Dashboard->getListEkstra($id_anak);
+        $data_mengaji = $this->Dashboard->getDataCatatanMengaji($id_anak);
+        $list_ekstra = $data['list_ekstra'];
+
+        foreach ($data_mengaji as $mengaji){
+            $data_graph[$mengaji->id_jilidmengaji][] = [
+                'tanggal' => $mengaji->tanggal,
+                'halaman' => $mengaji->halaman_tertinggi,
+            ];
+        }
+
+        foreach ($list_ekstra as $ekstra){
+            if (empty($data_graph[$ekstra->id_ekstra])){
+                $data_graph[$ekstra->id_ekstra] = [];
+            }
+
+            $data_final[] = [
+                'dom' => 'graph_'.$ekstra->id_ekstra,
+                'color' => '',
+                'nama_form' => $ekstra->nama,
+                'data' => $data_graph[$ekstra->id_ekstra]
+            ];
+        }
+
+        $data = [
+            'list_ekstra' => $data['list_ekstra'],
+            'data_perkembangan' => $data_final
+        ];
 
         $this->output->set_content_type('application/json');
 

@@ -37,6 +37,16 @@
             return $query->row();
         }
 
+        function getDataEsktraByGuru(){
+            $id_user = $this->session->userdata['auth']->id;
+
+            $sql = "SELECT * FROM ekstrakulikuler WHERE pengampu = $id_user";
+
+            $query = $this->db->query($sql);
+
+            return $query->row();
+        }
+
         function getListAnak($role){
             $user = $this->session->userdata['auth'];
             if ($role == 1 OR $role == 2 OR $role == 6 OR $role == 7 OR $role == 8) { // admin & superadmin & system absen
@@ -59,6 +69,41 @@
             return $query->result();
         }
 
+        function getListAnakEkstra($role){
+            $user = $this->session->userdata['auth'];
+            if ($role == 1) { // admin & superadmin & system absen
+                $where = "";
+            }elseif ($role == 9) { // educator
+                $where = " AND a.pengampu_update = $user->id";
+            }elseif ($role == 3) { // educator
+                $where = " AND b.educator = $user->id";
+            }elseif ($role == 4) { // orangtua
+                $where = " AND b.id_orangtua = $user->id";
+            }else{
+                $where = " AND 1 = 0";
+            }
+
+            $sql = "SELECT DISTINCT b.id, b.nama as nama_anak
+                FROM ekstrakulikuler_catatan a
+                JOIN registrasi_data_anak b ON b.id = a.id_anak
+                WHERE b.is_active = 1 AND a.is_catat = 1 $where ORDER BY b.nama ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getListEkstra($id_anak){
+            $sql = "SELECT DISTINCT b.id_ekstra, b.nama as nama_ekstra
+                FROM ekstrakulikuler_catatan a
+                JOIN ekstrakulikuler b ON b.id_ekstra = a.id_ekstra
+                WHERE a.id_anak = $id_anak AND a.is_catat = 1 ORDER BY b.id_ekstra ASC";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
         function getDataMedicalCheckup($id_anak){
             $sql = "SELECT a.tanggal, b.*, c.satuan, c.nama_kolom
                 FROM medical_checkup a 
@@ -75,16 +120,16 @@
             $sql = "SELECT
                         tanggal,
                         id_anak,
-                        id_jilidmengaji,
-                        MAX(halaman) AS halaman_tertinggi
+                        id_ekstra,
+                        nilai
                     FROM
-                        mengaji_catatan
+                        ekstrakulikuler_catatan
                     WHERE
                         is_catat = 1 AND id_anak = $id_anak
                     GROUP BY
-                        tanggal, id_anak, id_jilidmengaji
+                        tanggal, id_anak, id_ekstra
                     ORDER BY
-                        tanggal, id_anak, id_jilidmengaji";
+                        id_ekstra, tanggal";
 
             $query = $this->db->query($sql);
 
