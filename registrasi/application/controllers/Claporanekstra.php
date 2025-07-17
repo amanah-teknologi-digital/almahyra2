@@ -118,21 +118,28 @@ class Claporanekstra extends CI_Controller {
         $this->load->view('inc/laporanmengaji/cetak_absensi', $data);
     }
 
-    public function getDataTanggal(){
-        $tahun = $_POST['tahun'];
+    public function getDataAnakDanTanggal(){
+        $id_ekstra = $_POST['ekstra'];
+        $id_role = $_POST['id_role'];
 
-        $data = $this->LaporanMengaji->getListTanggalByTahun($tahun);
-        if (!empty($data)) {
-            $data_list = [];
-            foreach ($data as $key => $value) {
-                $value->nama_hari = format_date_indonesia($value->tanggal);
-                $value->tanggal = date('d-m-Y', strtotime($value->tanggal));
-                $data_list[] = $value;
-            }
-            $data['tanggal'] = $data_list;
+        if (!empty($id_ekstra)){
+            $data['anak'] = $this->LaporanEkstra->getListAnak($id_ekstra, $id_role);
         }else{
+            $data['anak'] = [];
+        }
+
+        if (!empty($data['anak']) && !empty($id_ekstra)) {
+            $data['tanggal'] = $this->LaporanEkstra->getListTanggalByAnak($id_ekstra, -1);
+            $temp_tgl = [];
+            foreach ($data['tanggal'] as $key => $value) {
+                $temp_tgl[] = [
+                    'tanggal' => $value->tanggal,
+                    'nama_hari' => format_date_indonesia($value->tanggal)
+                ];
+            }
+            $data['tanggal'] = $temp_tgl;
+        } else {
             $data['tanggal'] = [];
-            $data['kelas'] = [];
         }
 
         $this->output->set_content_type('application/json');

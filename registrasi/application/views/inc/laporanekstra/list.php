@@ -37,7 +37,7 @@
                                                 </td>
                                                 <td>
                                                     <select class="form-control" id="ekstra" name="ekstra" onchange="getDataAnakDanTanggal(this)" required">
-                                                        <option value="" selected>-- Pilih Ekstrakulikuler --</option>
+                                                        <option value="" selected disabled>-- Pilih Ekstrakulikuler --</option>
                                                     <?php foreach ($list_ekstra as $key => $value) { ?>
                                                         <option value="<?= $value->id_ekstra ?>" <?= $ekstra == $value->id_ekstra ? 'selected' : '' ?>><?= $value->nama ?></option>
                                                     <?php } ?>
@@ -66,9 +66,9 @@
                                                 <td>
                                                     <select class="form-control" id="tanggal" name="tanggal" required">
                                                     <?php if (count($list_tanggal) > 0){ ?>
-                                                        <option value="" selected>-- Pilih Tanggal --</option>
+                                                        <option value="" selected disabled>-- Pilih Tanggal --</option>
                                                         <?php foreach ($list_tanggal as $key => $value) { ?>
-                                                            <option value="<?= $value->tanggal ?>" <?= $tanggal == $value->tanggal ? 'selected' : '' ?>><?= format_date_indonesia($value->tanggal) . ', ' . date('d-m-Y', strtotime($value->tanggal)); ?></option>
+                                                            <option value="<?= $value->tanggal ?>" <?= $tanggal == $value->tanggal ? 'selected' : '' ?>><?= format_date_indonesia($value->tanggal) . ', ' . $value->tanggal; ?></option>
                                                         <?php } ?>
                                                     <?php } ?>
                                                     </select>
@@ -242,17 +242,26 @@
             resetInput();
 
             $.ajax({
-                url: url+'/getDataTanggal',
+                url: url+'/getDataAnakDanTanggal',
                 type: 'POST',
-                data: {tahun: tahun},
+                data: {ekstra: ekstra, id_role: id_role},
                 success: function(data){
+                    let data_anak = data['anak'];
                     let data_tanggal = data['tanggal'];
 
+                    if (data_anak.length > 0){
+                        $('#anak').append('<option value="-1" selected>-- Semua Anak --</option>');
+                    }
+
+                    $.each(data_anak, function(key, value){
+                        $('#anak').append('<option value="'+value.id+'">'+ value.nama_anak + ' (' +value.nama_kelas + ')</option>');
+                    });
+
                     if (data_tanggal.length > 0){
-                        $('#tanggal').append('<option value="-1">-- Semua --</option>');
+                        $('#tanggal').append('<option value="" selected disabled>-- Pilih Tanggal --</option>');
                     }
                     $.each(data_tanggal, function(key, value){
-                        $('#tanggal').append('<option value="'+value.tanggal+'">'+ value.nama_hari + ' ' +value.tanggal + '</option>');
+                        $('#tanggal').append('<option value="'+value.tanggal+'">'+ value.nama_hari + ', ' +value.tanggal + '</option>');
                     });
                 }
             });
