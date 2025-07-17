@@ -201,7 +201,7 @@
                 yaxis: {
                     labels: {
                         formatter: function (value) {
-                            return value + ' Nilai'; // Ganti 'kg' dengan satuan yang diinginkan
+                            return value; // Ganti 'kg' dengan satuan yang diinginkan
                         }
                     }
                 },

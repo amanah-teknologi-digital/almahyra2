@@ -116,7 +116,7 @@
             return $query->result();
         }
 
-        function getDataCatatanMengaji($id_anak){
+        function getDataCatatanEkstra($id_anak){
             $sql = "SELECT
                         tanggal,
                         id_anak,
@@ -130,6 +130,26 @@
                         tanggal, id_anak, id_ekstra
                     ORDER BY
                         id_ekstra, tanggal";
+
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDataCatatanMengaji($id_anak){
+            $sql = "SELECT
+                        tanggal,
+                        id_anak,
+                        id_jilidmengaji,
+                        MAX(halaman) AS halaman_tertinggi
+                    FROM
+                        mengaji_catatan
+                    WHERE
+                        is_catat = 1 AND id_anak = $id_anak
+                    GROUP BY
+                        tanggal, id_anak, id_jilidmengaji
+                    ORDER BY
+                        tanggal, id_anak, id_jilidmengaji";
 
             $query = $this->db->query($sql);
 

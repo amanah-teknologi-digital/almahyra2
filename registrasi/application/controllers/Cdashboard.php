@@ -380,13 +380,13 @@ class CDashboard extends CI_Controller {
 
     public function getDataCatatanEkstra($id_anak){
         $data['list_ekstra'] = $this->Dashboard->getListEkstra($id_anak);
-        $data_mengaji = $this->Dashboard->getDataCatatanMengaji($id_anak);
+        $data_mengaji = $this->Dashboard->getDataCatatanEkstra($id_anak);
         $list_ekstra = $data['list_ekstra'];
 
         foreach ($data_mengaji as $mengaji){
-            $data_graph[$mengaji->id_jilidmengaji][] = [
+            $data_graph[$mengaji->id_ekstra][] = [
                 'tanggal' => $mengaji->tanggal,
-                'halaman' => $mengaji->halaman_tertinggi,
+                'halaman' => $mengaji->nilai,
             ];
         }
 
@@ -398,7 +398,7 @@ class CDashboard extends CI_Controller {
             $data_final[] = [
                 'dom' => 'graph_'.$ekstra->id_ekstra,
                 'color' => '',
-                'nama_form' => $ekstra->nama,
+                'nama_form' => $ekstra->nama_ekstra,
                 'data' => $data_graph[$ekstra->id_ekstra]
             ];
         }
@@ -439,6 +439,26 @@ class CDashboard extends CI_Controller {
         }
 
         $this->load->view('inc/dashboard/ustadzah', $data);
+    }
+
+    public function dashboardekstra(){
+        $data = $this->data;
+
+        if ($this->role == 9) {
+            $data['parent'] = 'ekstra';
+            $data['ekstra'] = $this->Dashboard->getDataEsktraByGuru();
+        }else{
+            $data['ekstra'] = 1;
+        }
+        $data['list_anak'] = $this->Dashboard->getListAnakEkstra($this->role);
+
+        if (!empty($data['list_anak'])) {
+            $data['id_anak'] = $data['list_anak'][0]->id;
+        }else{
+            $data['id_anak'] = 0;
+        }
+
+        $this->load->view('inc/dashboard/ekstrakulikuler', $data);
     }
 
 }

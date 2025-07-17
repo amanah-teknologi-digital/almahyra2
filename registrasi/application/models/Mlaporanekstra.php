@@ -18,9 +18,9 @@
             }elseif($id_role == 1){ //admin
                 $where = " 1 = 1"; // semua ekstra
             }elseif ($id_role == 3){ // educator
-                $where = " a.id_ekstra IN (SELECT id_ekstra FROM ekstrakulikuler_siswa WHERE id_anak IN(SELECT id FROM registrasi_data_anak WHERE educator = $user->id))";
+                $where = " a.id_ekstra IN (SELECT DISTINCT id_ekstra FROM ekstrakulikuler_catatan WHERE is_catat = 1 AND id_anak IN(SELECT id FROM registrasi_data_anak WHERE educator = $user->id))";
             }elseif($id_role == 4){ // orangtua
-                $where = " a.id_ekstra IN (SELECT id_ekstra FROM ekstrakulikuler_siswa WHERE id_anak IN(SELECT id FROM registrasi_data_anak WHERE id_orangtua = $user->id))";
+                $where = " a.id_ekstra IN (SELECT DISTINCT id_ekstra FROM ekstrakulikuler_catatan WHERE  is_catat = 1 AND id_anak IN(SELECT id FROM registrasi_data_anak WHERE id_orangtua = $user->id))";
             }else{
                 $where = " AND 1 = 0";
             }
@@ -48,7 +48,7 @@
             }
 
             $sql = "SELECT c.id, c.nama as nama_anak, f.nama as nama_kelas FROM ekstrakulikuler a 
-                JOIN ekstrakulikuler_siswa b ON b.id_ekstra = a.id_ekstra
+                JOIN (SELECT DISTINCT id_ekstra, id_anak FROM ekstrakulikuler_catatan WHERE is_catat = 1) b ON b.id_ekstra = a.id_ekstra
                 JOIN registrasi_data_anak c ON c.id = b.id_anak
                 JOIN v_kategori_usia d ON d.id = c.id 
                 JOIN map_kelasusia e ON e.id_usia = d.id_usia

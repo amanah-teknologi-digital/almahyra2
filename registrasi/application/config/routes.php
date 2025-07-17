@@ -57,6 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 $route['dashboard'] = 'cdashboard';
 $route['dashboard-perkembangan'] = 'cdashboard/perkembangan';
 $route['dashboard-mengaji'] = 'cdashboard/mengaji';
+$route['dashboard-ekstra'] = 'cdashboard/dashboardekstra';
 $route['capaian-indikator'] = 'ccapaianindikator';
 $route['capaian-indikator/detail/(:any)'] = 'ccapaianindikator/detailcapaian/$1';
 

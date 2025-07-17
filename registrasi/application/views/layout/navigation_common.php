@@ -111,6 +111,12 @@
                         <span class="item-name">Progres Mengaji</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'dashboard-ekstra'; ?>">
+                        <i class="nav-icon i-Bar-Chart-2"></i>
+                        <span class="item-name">Ekstrakulikuler</span>
+                    </a>
+                </li>
             </ul>
         </div>
 

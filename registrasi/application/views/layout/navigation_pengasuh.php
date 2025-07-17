@@ -97,6 +97,12 @@
                         <span class="item-name">Progres Mengaji</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'dashboard-ekstra'; ?>">
+                        <i class="nav-icon i-Bar-Chart-2"></i>
+                        <span class="item-name">Ekstrakulikuler</span>
+                    </a>
+                </li>
             </ul>
         </div>
 
@@ -191,6 +197,12 @@
                     <a href="<?= base_url().'laporan-mengaji'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Mengaji</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'laporan-ekstrakulikuler'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Ekstrakulikuler</span>
                     </a>
                 </li>
             </ul>
