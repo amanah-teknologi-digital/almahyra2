@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Laporan Mengaji</title>
+    <title>Laporan Ekstrakulikuler</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <link href="<?= base_url().'dist-assets/'?>css/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <style>
@@ -168,40 +168,34 @@
 </head>
 <body class="A4">
 <?php $i = 0; $iter = 0;
-foreach ($hasil_mengaji as $key => $value){ ?>
+foreach ($hasil_ekstra as $key => $value){ ?>
     <?php if ($iter == 0 OR $iter % 30 == 0){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
-            <h1><span>Data Laporan Mengaji Tahun <?= $tahun ?><span><?= $tanggal != -1 ? '&nbsp;Hari '. format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)):''; ?></span>&nbsp;<span style="color: green;font-weight: bold"><?= !empty($nama_sesi)? 'Sesi '.$nama_sesi:''; ?></span>&nbsp;<span style="font-weight: bold"><?= !empty($nama_ustadzah) ? 'Ustadzah: '.$nama_ustadzah:'' ?> </span></span></h1>
+            <h1><span>Data Laporan Ekstrakulikuler <?= $nama_ekstra ?><span><?= '<br> &nbsp;Hari '. format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)) ?></span></span></h1>
         <?php } ?>
         <br>
         <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
         <thead>
         <tr style="background-color: #bfdfff">
-            <th style="width: 15%">Tanggal</th>
-            <th style="width: 20%">Nama Anak</th>
-            <th style="width: 10%">Sesi</th>
-            <th style="width: 10%">Jilid/Kelas</th>
-            <th style="width: 5%">Halaman</th>
-            <th style="width: 5%">Nilai</th>
-            <th style="width: 20%">Ustadzah</th>
+            <th style="width: 30%">Nama Anak</th>
+            <th style="width: 15%">Kelas Anak</th>
+            <th style="width: 20%">Pengampu</th>
+            <th style="width: 10%">Nilai</th>
             <th style="width: 15%">Keterangan</th>
         </tr>
         </thead>
         <tbody>
     <?php } ?>
     <tr>
-        <td nowrap align="center" style="font-weight: bold ;font-style: italic; color: grey"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
         <td nowrap align="left"><?= $value->nama_anak ?></td>
-        <td nowrap align="center"><b><?= $value->nama_sesi ?></b></td>
-        <td nowrap align="center"><?= $value->nama_jilid ?></td>
-        <td nowrap align="center"><?= $value->halaman ?></td>
-        <td nowrap align="center" style="font-weight: bold"><?= !empty($value->nilai) ? '<span style="color: green">L</span>':'<span style="color: red">L-</span>' ?></td>
-        <td nowrap align="center"><?= $value->nama_ustadzah ?></td>
+        <td nowrap align="center"><b><?= $value->nama_kelas ?></b></td>
+        <td nowrap align="center"><?= $value->nama_pengampu ?></td>
+        <td nowrap align="center"><span style="color: green"><?= $value->nilai ?></span></td>
         <td nowrap align="left" style="font-size: 10px; color: grey; font-style: italic"><?= $value->keterangan ?></td>
     </tr>
-    <?php if ($iter == count($hasil_mengaji)-1 OR $iter % 30 == 29){ ?>
+    <?php if ($iter == count($hasil_ekstra)-1 OR $iter % 30 == 29){ ?>
         </tbody>
         </table>
         </div>

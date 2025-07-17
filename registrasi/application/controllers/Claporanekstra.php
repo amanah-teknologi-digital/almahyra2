@@ -99,23 +99,27 @@ class Claporanekstra extends CI_Controller {
         return null; // jika tidak ditemukan
     }
 
-    function cetaklaporanmengaji(){
+    function cetaklaporanekstra(){
         $data = $this->data;
 
-        $tahun = $_POST['tahun'];
+        $id_ekstra = $_POST['ekstra'];
+        $id_anak = $_POST['anak'];
         $tanggal = $_POST['tanggal'];
-        $sesi = $_POST['sesi'];
-        $id_ustadzah = $_POST['id_ustadzah'];
 
-        $data['tahun'] = $tahun;
-        $data['list_sesi'] = $this->LaporanMengaji->getListSesi();
-        $data['nama_sesi'] = $this->getNamaByIdSesi($data['list_sesi'], $sesi);
-        $data['list_ustadzah'] = $this->LaporanMengaji->getListUstadzah($this->role);
-        $data['nama_ustadzah'] = $this->getNamaByIdUstadzah($data['list_ustadzah'], $id_ustadzah);
-        $data['hasil_mengaji'] = $this->LaporanMengaji->getHasilMengaji($this->role, $tahun, $tanggal, $sesi, $id_ustadzah);
+        $data['list_ekstra'] = $this->LaporanEkstra->getListEsktra($this->role);
+
         $data['tanggal'] = $tanggal;
+        $data['anak'] = $id_anak;
+        $data['ekstra'] = $id_ekstra;
+        $data['id_role'] = $this->role;
+        $data['nama_ekstra'] = $this->getNamaByIdEkstra($data['list_ekstra'], $id_ekstra);
+        if (!empty($id_ekstra) && !empty($tanggal) && !empty($id_anak)) {
+            $data['hasil_ekstra'] = $this->LaporanEkstra->getHasilEkstra($this->role, $id_ekstra, $id_anak, $tanggal);
+        }else{
+            $data['hasil_ekstra'] = [];
+        }
 
-        $this->load->view('inc/laporanmengaji/cetak_absensi', $data);
+        $this->load->view('inc/laporanekstra/cetak_absensi', $data);
     }
 
     public function getDataAnakDanTanggal(){

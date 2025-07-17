@@ -83,7 +83,7 @@
                                     </form>
                                     <hr>
                                     <?php if (!empty($tanggal)){ ?>
-                                        <?php echo form_open_multipart($controller.'/cetaklaporanmengaji', 'target="blank"'); ?>
+                                        <?php echo form_open_multipart($controller.'/cetaklaporanekstra', 'target="blank"'); ?>
                                         <div class="row d-flex justify-content-center align-items-center">
                                             <div class="col-sm-10">
                                                 <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Laporan Ekstrakulikuler <?= $nama_ekstra ?><span>&nbsp;Hari <?= format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)) ?></span></span></h5>
