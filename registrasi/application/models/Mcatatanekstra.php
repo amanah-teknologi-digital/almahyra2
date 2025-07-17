@@ -35,6 +35,7 @@ class Mcatatanekstra extends CI_Model
     }
 
     function checkAktivitas($tanggal, $id_anak, $id_ekstra){
+        $user = $this->session->userdata['auth'];
         $sql = "SELECT id_ekstra FROM ekstrakulikuler_siswa WHERE id_ekstra = $id_ekstra AND id_anak = $id_anak";
         $query = $this->db->query($sql);
         $data_anak = $query->row();
@@ -54,6 +55,7 @@ class Mcatatanekstra extends CI_Model
                     $a_input['id_anak'] = $id_anak;
                     $a_input['id_ekstra'] = $id_ekstra;
                     $a_input['tanggal'] = $tanggal;
+                    $a_input['pengampu_update'] = $user->id;
                     $a_input['created_at'] = date('Y-m-d H:m:s');
 
                     $this->db->insert('ekstrakulikuler_catatan', $a_input);
@@ -99,6 +101,7 @@ class Mcatatanekstra extends CI_Model
     }
 
     function simpanCatatanEkstra(){
+        $user = $this->session->userdata['auth'];
         date_default_timezone_set('Asia/Jakarta');
 
         $sql = "SELECT id_ekstracatatandet, kolom FROM ekstrakulikuler_catatandet WHERE id_ekstracatatan = ".$_POST['id_ekstracatatan'];
@@ -119,6 +122,7 @@ class Mcatatanekstra extends CI_Model
         $update_ekstra['is_catat'] = 1;
         $update_ekstra['nilai'] = $this->input->post('nilai');
         $update_ekstra['keterangan'] = $this->input->post('keterangan');
+        $update_ekstra['pengampu_update'] = $user->id;
         $this->db->where('id_ekstracatatan', $_POST['id_ekstracatatan']);
         $this->db->update('ekstrakulikuler_catatan', $update_ekstra);
 

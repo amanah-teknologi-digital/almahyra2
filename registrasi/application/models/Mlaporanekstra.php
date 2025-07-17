@@ -14,7 +14,7 @@
             $user = $this->session->userdata['auth'];
 
             if ($id_role == 9){ //guru ekstra
-                $where = " a.pengampu = $user->id";
+                $where = " a.id_ekstra IN (SELECT DISTINCT id_ekstra FROM ekstrakulikuler_catatan WHERE pengampu_update = $user->id AND is_catat = 1)";
             }elseif($id_role == 1){ //admin
                 $where = " 1 = 1"; // semua ekstra
             }elseif ($id_role == 3){ // educator
@@ -68,7 +68,7 @@
             }
 
             $sql = "SELECT DISTINCT a.tanggal FROM ekstrakulikuler_catatan a 
-                WHERE $where_anak AND a.id_ekstra = $id_ekstra ORDER BY a.tanggal DESC";
+                WHERE $where_anak AND a.id_ekstra = $id_ekstra AND a.is_catat = 1 ORDER BY a.tanggal DESC";
 
             $query = $this->db->query($sql);
 
@@ -102,64 +102,12 @@
                 JOIN v_kategori_usia b ON b.id = an.id 
                 JOIN map_kelasusia c ON c.id_usia = b.id_usia
                 JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                JOIN data_user e ON e.id = ek.pengampu
+                JOIN data_user e ON e.id = a.pengampu_update
                 WHERE $kondisi ORDER BY an.nama ASC";
 
             $query = $this->db->query($sql);
 
             return $query->result();
-        }
-
-	    function getAll() {
-            $sql = "SELECT a.*, b.name as nama_user, c.name as nama_role, d.tahun as is_pakai FROM ref_tahun a 
-                JOIN data_user b ON b.id = a.updater 
-                JOIN m_role c ON c.id = b.id_role 
-                LEFT JOIN (SELECT tahun FROM tema_bulanan GROUP BY tahun) d ON d.tahun = a.tahun                           
-                ORDER BY a.tahun DESC";
-
-            $query = $this->db->query($sql);
-
-	        return $query->result();
-		}
-
-        function getListTanggalByTahun($tahun){
-            $sql = "SELECT DISTINCT tanggal FROM mengaji_catatan WHERE YEAR(tanggal) = $tahun ORDER BY tanggal DESC";
-
-            $query = $this->db->query($sql);
-
-            return $query->result();
-        }
-
-        function getDataAbsensi($id_anak, $tahun){
-            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas,
-                e.id_absensi, e.tanggal, e.tanggal_checkout, e.waktu_checkin, e.suhu, e.suhu_checkout, e.kondisi, e.kondisi_checkout, e.waktu_checkout, f.name as nama_user, g.name as nama_role, h.name as nama_user2, i.name as nama_role2
-                FROM registrasi_data_anak a 
-                JOIN v_kategori_usia b ON b.id = a.id 
-                JOIN map_kelasusia c ON c.id_usia = b.id_usia
-                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                JOIN absen_anak e ON e.id_anak = a.id AND YEAR(e.tanggal) = $tahun
-                JOIN data_user f ON f.id = e.updater
-                JOIN m_role g ON g.id = f.id_role
-                LEFT JOIN data_user h ON h.id = e.updater2
-                LEFT JOIN m_role i ON i.id = h.id_role
-                WHERE a.id = $id_anak ORDER BY e.tanggal DESC";
-
-            $query = $this->db->query($sql);
-
-            return $query->result();
-        }
-
-        function getDataAnak($id_anak){
-            $sql = "SELECT a.id, a.nama as nama_anak, a.nick, a.tempat_lahir, a.tanggal_lahir, a.jenis_kelamin, d.nama as nama_kelas
-                FROM registrasi_data_anak a 
-                JOIN v_kategori_usia b ON b.id = a.id 
-                JOIN map_kelasusia c ON c.id_usia = b.id_usia
-                JOIN ref_kelas d ON d.id_kelas = c.id_kelas
-                WHERE a.id = $id_anak";
-
-            $query = $this->db->query($sql);
-
-            return $query->row();
         }
 
         function getLaporanEsktraFile($id_catatanekstra){
