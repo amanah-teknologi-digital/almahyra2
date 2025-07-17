@@ -85,9 +85,9 @@
                 }elseif($id_role == 1){ //admin
                     $kondisi .= ""; // semua ekstra
                 }elseif ($id_role == 3){ // educator
-                    $kondisi .= " an.id_anak IN (SELECT id FROM registrasi_data_anak WHERE educator = $user->id)";
+                    $kondisi .= " AND a.id_anak IN (SELECT id FROM registrasi_data_anak WHERE educator = $user->id)";
                 }elseif($id_role == 4){ // orangtua
-                    $kondisi .= " an.id_anak IN (SELECT id FROM registrasi_data_anak WHERE id_orangtua = $user->id)";
+                    $kondisi .= " AND a.id_anak IN (SELECT id FROM registrasi_data_anak WHERE id_orangtua = $user->id)";
                 }else{
                     $kondisi .= " AND 1 = 0";
                 }

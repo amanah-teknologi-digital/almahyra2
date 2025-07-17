@@ -273,7 +273,7 @@
 
         function getDataTanggal(dom){
             let id_anak = $(dom).val();
-            let id_ekstra = $(dom).val();
+            let id_ekstra = $('#ekstra').val();
 
             $('#tanggal').html('');
 
