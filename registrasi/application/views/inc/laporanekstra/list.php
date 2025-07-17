@@ -36,7 +36,7 @@
                                                     <label>Ekstrakulikuler</label>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control" id="ekstra" name="ekstra" onchange="getDataTanggal(this)" required">
+                                                    <select class="form-control" id="ekstra" name="ekstra" onchange="getDataAnakDanTanggal(this)" required">
                                                         <option value="" selected>-- Pilih Ekstrakulikuler --</option>
                                                     <?php foreach ($list_ekstra as $key => $value) { ?>
                                                         <option value="<?= $value->id_ekstra ?>" <?= $ekstra == $value->id_ekstra ? 'selected' : '' ?>><?= $value->nama ?></option>
@@ -76,7 +76,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="2" >
-                                                    <button class="btn btn-sm btn-primary mt-4">Tampilkan</button>
+                                                    <button type="submit" class="btn btn-sm btn-primary mt-4">Tampilkan</button>
                                                 </td>
                                             </tr>
                                         </table>
@@ -169,6 +169,7 @@
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
     <script type="text/javascript">
         var url = "<?= base_url().$controller ?>";
+        let id_role = <?= json_encode($id_role) ?>;
 
         let initialPreview = [];
         let initialPreviewConfig = [];
@@ -232,11 +233,12 @@
         });
 
         function resetInput(){
+            $('#anak').html('');
             $('#tanggal').html('');
         }
 
-        function getDataTanggal(dom){
-            let tahun = $(dom).val();
+        function getDataAnakDanTanggal(dom){
+            let ekstra = $(dom).val();
             resetInput();
 
             $.ajax({

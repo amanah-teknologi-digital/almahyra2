@@ -70,6 +70,7 @@ class Claporanekstra extends CI_Controller {
         $data['tanggal'] = $tanggal;
         $data['anak'] = $id_anak;
         $data['ekstra'] = $id_ekstra;
+        $data['id_role'] = $this->role;
         $data['nama_ekstra'] = $this->getNamaByIdEkstra($data['list_ekstra'], $id_ekstra);
         if (!empty($id_ekstra) && !empty($tanggal) && !empty($id_anak)) {
             $data['hasil_ekstra'] = $this->LaporanEkstra->getHasilEkstra($this->role, $id_ekstra, $id_anak, $tanggal);
