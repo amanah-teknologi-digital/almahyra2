@@ -77,9 +77,9 @@
 
         function getHasilEkstra($id_role, $id_ekstra, $id_anak, $tanggal){
             $user = $this->session->userdata['auth'];
-            $kondisi = " ek.id_ekstra = $id_ekstra AND a.tanggal = $tanggal";
+            $kondisi = " ek.id_ekstra = $id_ekstra AND a.tanggal = '$tanggal' AND a.is_catat = 1";
 
-            if ($id_anak != -1){
+            if ($id_anak == -1){
                 if ($id_role == 9){ //guru ekstra
                     $kondisi .= "";
                 }elseif($id_role == 1){ //admin
@@ -162,8 +162,16 @@
             return $query->row();
         }
 
-        function getLaporanMengajiFile($id_catatanmengaji){
-            $sql = "SELECT * FROM file_mengaji WHERE id_catatan = $id_catatanmengaji";
+        function getLaporanEsktraFile($id_catatanekstra){
+            $sql = "SELECT * FROM file_ektrakulikuler WHERE id_ekstracatatan = $id_catatanekstra";
+            $query = $this->db->query($sql);
+
+            return $query->result();
+        }
+
+        function getDataEkstraForm($id_ekstracatatan){
+            $sql = "SELECT * FROM ekstrakulikuler_catatandet WHERE id_ekstracatatan = $id_ekstracatatan";
+
             $query = $this->db->query($sql);
 
             return $query->result();

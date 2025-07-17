@@ -38,9 +38,9 @@
                                                 <td>
                                                     <select class="form-control" id="ekstra" name="ekstra" onchange="getDataAnakDanTanggal(this)" required">
                                                         <option value="" selected disabled>-- Pilih Ekstrakulikuler --</option>
-                                                    <?php foreach ($list_ekstra as $key => $value) { ?>
-                                                        <option value="<?= $value->id_ekstra ?>" <?= $ekstra == $value->id_ekstra ? 'selected' : '' ?>><?= $value->nama ?></option>
-                                                    <?php } ?>
+                                                        <?php foreach ($list_ekstra as $key => $value) { ?>
+                                                            <option value="<?= $value->id_ekstra ?>" <?= $ekstra == $value->id_ekstra ? 'selected' : '' ?>><?= $value->nama ?></option>
+                                                        <?php } ?>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -49,7 +49,7 @@
                                                     <label>Anak</label>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control" id="anak" name="anak" required">
+                                                    <select class="form-control" id="anak" name="anak" required onchange="getDataTanggal(this)">
                                                     <?php if (count($list_anak) > 0){ ?>
                                                         <option value="-1" selected>-- Semua --</option>
                                                         <?php foreach ($list_anak as $key => $value) { ?>
@@ -86,47 +86,40 @@
                                         <?php echo form_open_multipart($controller.'/cetaklaporanmengaji', 'target="blank"'); ?>
                                         <div class="row d-flex justify-content-center align-items-center">
                                             <div class="col-sm-10">
-                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Laporan Mengaji Tahun <?= $tahun ?><span><?= $tanggal != -1 ? '&nbsp;Hari '. format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)):''; ?></span>&nbsp;<span class="text-success font-weight-bold"><?= !empty($sesi)? 'Sesi '.$nama_sesi:''; ?></span>&nbsp;<span class="font-weight-bold"><?= !empty($id_ustadzah) ? 'Ustadzah: '.$nama_ustadzah:'' ?> </span></span></h5>
+                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Laporan Ekstrakulikuler <?= $nama_ekstra ?><span>&nbsp;Hari <?= format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)) ?></span></span></h5>
                                             </div>
                                             <div class="col-sm-2">
                                                 <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Laporan</button>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="tahun" value="<?= $tahun ?>">
+                                        <input type="hidden" name="ekstra" value="<?= $ekstra ?>">
+                                        <input type="hidden" name="anak" value="<?= $anak ?>">
                                         <input type="hidden" name="tanggal" value="<?= $tanggal ?>">
-                                        <input type="hidden" name="sesi" value="<?= $sesi ?>">
-                                        <input type="hidden" name="id_ustadzah" value="<?= $id_ustadzah ?>">
                                         </form>
                                         <br>
                                         <div class="table-responsive">
                                             <table class="display table table-sm table-bordered" id="tbl" style="font-size: 12px;">
                                                 <thead>
                                                 <tr>
-                                                    <th style="width: 15%">Tanggal</th>
-                                                    <th style="width: 20%">Nama Anak</th>
-                                                    <th style="width: 10%">Sesi</th>
-                                                    <th style="width: 10%">Jilid/Kelas</th>
-                                                    <th style="width: 5%">Halaman</th>
-                                                    <th style="width: 5%">Nilai</th>
-                                                    <th style="width: 20%">Ustadzah</th>
+                                                    <th style="width: 30%">Nama Anak</th>
+                                                    <th style="width: 15%">Kelas Anak</th>
+                                                    <th style="width: 20%">Pengampu</th>
+                                                    <th style="width: 10%">Nilai</th>
                                                     <th style="width: 15%">Keterangan</th>
-                                                    <!--                                                <th style="width: 10%">Aksi</th>-->
+                                                    <th style="width: 10%">Aksi</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php $no = 1; foreach ($hasil_mengaji as $key => $value) { ?>
+                                                <?php $no = 1; foreach ($hasil_ekstra as $key => $value) { ?>
                                                     <tr>
-                                                        <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
                                                         <td nowrap align="left"><?= $value->nama_anak ?></td>
-                                                        <td nowrap align="center"><b><?= $value->nama_sesi ?></b></td>
-                                                        <td nowrap align="center"><?= $value->nama_jilid ?></td>
-                                                        <td nowrap align="center"><?= $value->halaman ?></td>
-                                                        <td nowrap align="center" class="font-weight-bold"><?= !empty($value->nilai) ? '<span class="text-success">L</span>':'<span class="text-danger">L-</span>' ?></td>
-                                                        <td nowrap align="center"><?= $value->nama_ustadzah ?></td>
+                                                        <td nowrap align="center"><b><?= $value->nama_kelas ?></b></td>
+                                                        <td nowrap align="center"><?= $value->nama_pengampu ?></td>
+                                                        <td nowrap align="center" class="font-weight-bold"><span class="text-success"><?= $value->nilai ?></span></td>
                                                         <td nowrap align="left" class="text-muted font-italic text-small"><?= $value->keterangan ?></td>
-                                                        <!--                                                    <td nowrap align="center">-->
-                                                        <!--                                                        <span class="btn btn-sm btn-success btn-update" data-id="--><?php //= $value->id_catatan ?><!--" data-nama="--><?php //= $value->nama_anak ?><!--"><span class="fas fa-file-alt"></span> Foto Kegiatan</span>-->
-                                                        <!--                                                    </td>-->
+                                                        <td nowrap align="center">
+                                                            <span class="btn btn-sm btn-success btn-update" data-id="<?= $value->id_ekstracatatan ?>" data-nama="<?= $value->nama_anak ?>" data-nama_ekstra="<?= $nama_ekstra ?>"><span class="fas fa-file-alt"></span> Data Kegiatan</span>
+                                                        </td>
                                                     </tr>
                                                 <?php } ?>
                                                 </tbody>
@@ -148,10 +141,15 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Foto Kegiatan a.n&nbsp;<span class="text-success font-weight-bold" id="label_nama_anak"></span></h5>
+                                <h5 class="card-title mb-1 d-flex align-items-center justify-content-center">Data Kegiatan Ekstrakulikuler&nbsp;<span id="label_nama_ekstra"></span>&nbsp;a.n&nbsp;<span class="text-success font-weight-bold" id="label_nama_anak"></span></h5>
                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
+                                <fieldset id="data_form_ekstra">
+                                </fieldset>
+                                <br>
+                                <h5><span class="fas fa-file"></span>&nbsp;Dokumentasi</h5>
+                                <br>
                                 <div class="file-loading">
                                     <input id="file_dukung" name="file_dukung[]" type="file" accept="image/*" multiple>
                                 </div>
@@ -209,8 +207,11 @@
             $('#tbl').on('click', '.btn-update', function() {
                 id_catatan = $(this).data('id')
                 nama_anak = $(this).data('nama')
+                nama_ekstra = $(this).data('nama_ekstra')
 
                 $("#label_nama_anak").html(nama_anak);
+                $("#label_nama_ekstra").html(nama_ekstra);
+                $("#data_form_ekstra").html("");
 
                 $.ajax({
                     url: url + '/getfile/' + $(this).data('id'),
@@ -219,6 +220,9 @@
                     success: function(data){
                         initialPreview = data['preview'];
                         initialPreviewConfig = data['config'];
+                        htmlform = data['htmlform'];
+
+                        $("#data_form_ekstra").html(htmlform);
 
                         if (file_input.data('fileinput')) {
                             file_input.fileinput('destroy');
@@ -256,6 +260,29 @@
                     $.each(data_anak, function(key, value){
                         $('#anak').append('<option value="'+value.id+'">'+ value.nama_anak + ' (' +value.nama_kelas + ')</option>');
                     });
+
+                    if (data_tanggal.length > 0){
+                        $('#tanggal').append('<option value="" selected disabled>-- Pilih Tanggal --</option>');
+                    }
+                    $.each(data_tanggal, function(key, value){
+                        $('#tanggal').append('<option value="'+value.tanggal+'">'+ value.nama_hari + ', ' +value.tanggal + '</option>');
+                    });
+                }
+            });
+        }
+
+        function getDataTanggal(dom){
+            let id_anak = $(dom).val();
+            let id_ekstra = $(dom).val();
+
+            $('#tanggal').html('');
+
+            $.ajax({
+                url: url+'/getDataTanggal',
+                type: 'POST',
+                data: {ekstra: id_ekstra, id_anak: id_anak},
+                success: function(data){
+                    let data_tanggal = data['tanggal'];
 
                     if (data_tanggal.length > 0){
                         $('#tanggal').append('<option value="" selected disabled>-- Pilih Tanggal --</option>');

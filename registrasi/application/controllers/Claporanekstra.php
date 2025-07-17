@@ -150,8 +150,34 @@ class Claporanekstra extends CI_Controller {
 
     }
 
+    public function getDataTanggal(){
+        $id_ekstra = $_POST['ekstra'];
+        $id_anak = $_POST['id_anak'];
+
+        if (!empty($id_anak) && !empty($id_ekstra)) {
+            $data['tanggal'] = $this->LaporanEkstra->getListTanggalByAnak($id_ekstra, $id_anak);
+            $temp_tgl = [];
+            foreach ($data['tanggal'] as $key => $value) {
+                $temp_tgl[] = [
+                    'tanggal' => $value->tanggal,
+                    'nama_hari' => format_date_indonesia($value->tanggal)
+                ];
+            }
+            $data['tanggal'] = $temp_tgl;
+        } else {
+            $data['tanggal'] = [];
+        }
+
+        $this->output->set_content_type('application/json');
+
+        $this->output->set_output(json_encode($data));
+
+        return $data;
+
+    }
+
     function getfile($id_catatan){
-        $data_file = $this->LaporanMengaji->getLaporanMengajiFile($id_catatan);
+        $data_file = $this->LaporanEkstra->getLaporanEsktraFile($id_catatan);
 
         $data['preview'] = $data['config'] = [];
         foreach ($data_file as $row){
@@ -164,6 +190,28 @@ class Claporanekstra extends CI_Controller {
                 'downloadUrl' => base_url().$row->download_url, // the url to download the file
             ];
         }
+
+        $dataForm = $this->LaporanEkstra->getDataEkstraForm($id_catatan);
+        $html = '';
+
+        foreach ($dataForm as $formekstra) {
+            $html .= '<div class="row"><div class="col-md-12"><div class="form-group"><label><b>' . $formekstra->nama . '</b></label>';
+            if ($formekstra->jenis_kolom == 'select') {
+                $temp_pilihan = json_decode($formekstra->pilihan_standar, true);
+                $html .= '<select class="form-control" name="' . $formekstra->kolom . '" id="' . $formekstra->kolom . '" required disabled>';
+                foreach ($temp_pilihan as $pil) {
+                    if ($pil == $formekstra->value){
+                        $html .= '<option>' . $pil . '</option>';
+                    }
+                }
+                $html .= '</select>';
+            } else {
+                $html .= '<input type="' . $formekstra->jenis_kolom . '" class="form-control" name="' . $formekstra->kolom . '" id="' . $formekstra->kolom . '" value="' . $formekstra->value . '" required disabled>';
+
+            }
+            $html .= '</div></div></div>';
+        }
+        $data['htmlform'] = $html;
 
         $this->output->set_content_type('application/json');
 
