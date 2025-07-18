@@ -87,7 +87,7 @@
                                                         <td><b><?= $row->nama_anak; ?></b>&nbsp;<span class="font-italic">(<?= $row->nama_kelas; ?>)</span></td>
                                                         <td align="center" class="text-muted font-italic"><?= hitung_usia($row->tanggal_lahir) ?></td>
                                                         <td align="center"><?= $row->nama_jeniskebutuhan ?></td>
-                                                        <td><b><?= $row->nama_educator; ?></b>&nbsp;<span class="font-italic">(<?= $row->created_at; ?>)</span></td>
+                                                        <td><b><?= $row->nama_educator; ?></b>&nbsp;pada&nbsp;<span class="font-italic text-small"><?= $row->created_at; ?></span></td>
                                                         <td class="text-muted font-italic text-small"><?= empty($row->keterangan) ? '<center>-</center>':$row->keterangan ?></td>
                                                         <td align="center" nowrap>
                                                             <div class="form-check form-check-inline">
