@@ -309,7 +309,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= base_url().'laporan-kebutuhananak'; ?>">
+                    <a href="<?= base_url().'laporan-kebutuhan'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Kebutuhan</span>
                     </a>

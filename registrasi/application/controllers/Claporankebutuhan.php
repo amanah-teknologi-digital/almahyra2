@@ -22,56 +22,48 @@ class Claporankebutuhan extends CI_Controller {
         $this->role = $this->session->userdata('auth')->id_role;
 
 		$this->data = array(
-            'controller'=>'claporanabsensianak',
-            'redirect'=>'laporan-absensianak',
-            'title'=>'Laporan Absensi Anak',
+            'controller'=>'claporankebutuhan',
+            'redirect'=>'laporan-kebutuhan',
+            'title'=>'Laporan Kebutuhan Anak',
             'parent'=>'laporan',
         );
 		## load model here 
-		$this->load->model('Mlaporanabsensianak', 'LaporanAbsensiAnak');
+		$this->load->model('Mlaporankebutuhan', 'LaporanKebutuhan');
 	}
 
 	public function index()	{
+        $data = $this->data;
         if (!empty($_POST)) {
-            $this->session->set_userdata('tahun_session_absensianak', $_POST['tahun']);
-            $this->session->set_userdata('id_anak_session_absensianak', $_POST['id_anak']);
+            $this->session->set_userdata('id_anak_session_lkebutuhan', $_POST['id_anak']);
         }
 
-        $tahun = $this->session->userdata('tahun_session_absensianak');
-        $id_anak = $this->session->userdata('id_anak_session_absensianak');
+        $id_anak = $this->session->userdata('id_anak_session_lkebutuhan');
+        $data['list_anak'] = $this->LaporanKebutuhan->getListAnak($this->role);
+        $temp_listanak = json_decode(json_encode($data['list_anak']), true);
+
         if (empty($id_anak)){
-            $id_anak = 0;
+            if (!empty($temp_listanak)) {
+                $id_anak = $temp_listanak[0]['id'];
+            } else {
+                $id_anak = 0;
+            }
         }
-
-		$data = $this->data;
 
         if (!empty($_POST)) {
             redirect(base_url().$this->data['redirect']);
         }
 
-        $data['tahun'] = $this->LaporanAbsensiAnak->getListTahun();
-        if (empty($tahun)) {
-            $tahun = $data['tahun'][0]->tahun;
-        }
-
-        if (empty($tahun)){
-            $tahun = 0;
-        }
-
-        $data['list_anak'] = $this->LaporanAbsensiAnak->getListAnak($this->role);
-
         if (!empty($id_anak)) {
-            $data['data_anak'] = $this->LaporanAbsensiAnak->getDataAnak($id_anak);
-            $data['data_absensi'] = $this->LaporanAbsensiAnak->getDataAbsensi($id_anak, $tahun);
+            $data['data_anak'] = $this->LaporanKebutuhan->getDataAnak($id_anak);
+            $data['data_kebutuhan'] = $this->LaporanKebutuhan->getDataKebutuhan($id_anak);
         }else{
             $data['data_anak'] = [];
-            $data['data_absensi'] = [];
+            $data['data_kebutuhan'] = [];
         }
 
-        $data['tahun_selected'] = $tahun;
         $data['id_anak'] = $id_anak;
 
-		$this->load->view('inc/laporanabsensianak/list', $data);
+		$this->load->view('inc/laporankebutuhan/list', $data);
 	}
 
     function cetakabsensianak(){

@@ -33,26 +33,13 @@
                                             </colgroup>
                                             <tr>
                                                 <td>
-                                                    <label>Tahun</label>
+                                                    <label>Anak</label>
                                                 </td>
                                                 <td>
-                                                    <select class="form-control" id="tahun" name="tahun" required">
-                                                        <?php foreach ($tahun as $key => $value) { ?>
-                                                            <option value="<?= $value->tahun ?>" <?= $tahun_selected == $value->tahun ? 'selected' : '' ?>><?= $value->tahun ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <label>Nama Anak</label>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control select2" id="id_anak" name="id_anak" required>
-                                                        <option value="">-- Pilih Anak --</option>
-                                                        <?php foreach ($list_anak as $key => $value) { ?>
-                                                            <option value="<?= $value->id ?>" <?= $id_anak == $value->id ? 'selected' : '' ?>><?= $value->nama_anak.' ('.hitung_usia($value->tanggal_lahir).')' ?>&nbsp;<?= $value->is_active ? 'aktif':'tidak aktif' ?></option>
-                                                        <?php } ?>
+                                                    <select class="form-control" id="id_anak" name="id_anak" required">
+                                                    <?php foreach ($list_anak as $key => $value) { ?>
+                                                        <option value="<?= $value->id ?>" <?= $id_anak == $value->id ? 'selected' : '' ?>><?= $value->nama_anak ?></option>
+                                                    <?php } ?>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -64,72 +51,51 @@
                                         </table>
                                     </form>
                                     <hr>
-                                    <?php if (!empty($data_anak)){ ?>
-                                        <?php echo form_open_multipart($controller.'/cetakabsensianak', 'target="blank"'); ?>
-                                            <div class="row d-flex justify-content-center align-items-center">
-                                                <div class="col-sm-10">
-                                                    <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Absensi Anak&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Usia:&nbsp;<span class="text-info"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span class="text-muted">(<?= $data_anak->nama_kelas ?>)</span></span></span></h5>
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Absensi</button>
-                                                </div>
+                                    <?php echo form_open_multipart($controller.'/cetakkebutuhananak', 'target="blank"'); ?>
+                                        <div class="row d-flex justify-content-center align-items-center">
+                                            <div class="col-sm-10">
+                                                <h5 class="card-title mb-1 d-flex align-content-center justify-content-between"><span class="float-left">Data Kebutuhan Anak&nbsp;<?= !empty($id_anak)? 'a.n&nbsp;<span class="text-success font-weight-bold">'. $data_anak->nama_anak.'</span>':''?></span></h5>
                                             </div>
-                                            <input type="hidden" name="id_anak" value="<?= $id_anak ?>">
-                                            <input type="hidden" name="tahun" value="<?= $tahun_selected ?>">
-                                        </form>
-                                        <br>
-                                        <div class="table-responsive">
-                                            <table class="display table table-sm table-bordered" id="tbl" style="font-size: 12px;">
-                                                <thead>
-                                                <tr>
-                                                    <th style="width: 15%">Tanggal</th>
-                                                    <th style="width: 20%">Waktu Masuk</th>
-                                                    <th style="width: 20%">Waktu Pulang</th>
-                                                    <th style="width: 20%">Status</th>
-                                                    <th style="width: 25%">Keterangan</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <?php $no = 1; foreach ($data_absensi as $key => $value) { ?>
-                                                    <tr>
-                                                        <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
-                                                        <td nowrap align="center"><?= $value->waktu_checkin ?></td>
-                                                        <td nowrap align="center"><?= format_date_indonesia(date($value->tanggal_checkout)).', '.date('d-m-Y', strtotime($value->tanggal_checkout)).' jam '.$value->waktu_checkout ?></td>
-                                                        <td align="center" nowrap style="font-size: 11px">
-                                                            <?php if (empty($value->id_absensi)) { ?>
-                                                                <span class="badge badge-danger">Belum Absen</span>
-                                                            <?php } else { ?>
-                                                                <?php if (!empty($value->waktu_checkout)){ ?>
-                                                                    <span class="text-info font-italic font-weight-bold">Durasi : <?= hitung_durasi_waktu(date('Y-m-d', strtotime($value->tanggal)).' '.$value->waktu_checkin, date('Y-m-d', strtotime($value->tanggal_checkout)).' '.$value->waktu_checkout); ?></span>
-                                                                <?php }else{ ?>
-                                                                    <span class="badge badge-warning">Belum Absen Pulang</span>
-                                                                <?php } ?>
-                                                            <?php } ?>
-                                                        </td>
-                                                        <td nowrap>
-                                                            <?php if (!empty($value->id_absensi)) { ?>
-                                                                &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 11px">
-                                                                    Suhu Tubuh Masuk: <b><?= $value->suhu ?> °C</b>, Kondisi Masuk: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b>
-                                                                </span>
-                                                                <?php if (!empty($value->waktu_checkout)){ ?>
-                                                                    <br>
-                                                                    &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 11px">
-                                                                    Suhu Tubuh Pulang: <b><?= $value->suhu_checkout ?> °C</b>, Kondisi Pulang: <b><?= $value->kondisi_checkout == 1 ? 'Sehat':'Kurang Sehat' ?></b>
-                                                                </span>
-                                                                <?php } ?>
-                                                            <?php } else { ?>
-                                                                <center>-</center>
-                                                            <?php } ?>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-                                                </tbody>
-                                            </table>
+                                            <div class="col-sm-2">
+                                                <button class="btn btn-sm btn-primary float-right"><span class="fas fa-print"></span>&nbsp;Cetak Data</button>
+                                            </div>
                                         </div>
-                                    <?php }else{ ?>
-                                        <h5 class="card-title mb-1 d-flex align-content-center justify-content-center"><span class="text-danger font-weight-bold">Pilih Anak terlebih dahulu, kemudian klik tombol <span class="text-success">Tampilkan</span> untuk menampilkan data!</span></h5>
-                                    <?php } ?>
-                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Laporan absensi harian anak.</span></p>
+                                        <input type="hidden" name="id_anak" value="<?= $id_anak ?>">
+                                    </form>
+                                    <br>
+                                    <div class="table-responsive">
+                                        <table class="display table table-sm table-bordered" id="tbl" style="font-size: 12px;">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 15%">Tanggal</th>
+                                                <th style="width: 20%">Jenis Kebutuhan</th>
+                                                <th style="width: 20%">Penginput</th>
+                                                <th style="width: 20%">Status</th>
+                                                <th style="width: 25%">Keterangan</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php $no = 1; foreach ($data_kebutuhan as $key => $value) { ?>
+                                                <tr>
+                                                    <td nowrap align="center" class="text-muted font-italic font-weight-bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
+                                                    <td nowrap align="center"><?= $value->nama_jeniskebutuhan ?></td>
+                                                    <td nowrap><b><?= $value->nama_educator; ?></b>&nbsp;pada&nbsp;<span class="font-italic text-small"><?= $value->created_at; ?></span></td>
+                                                    <td align="center" nowrap>
+                                                        <?php if (empty($value->is_valid)) { ?>
+                                                            <span class="badge badge-danger">Tidak Valid</span>
+                                                        <?php } else { ?>
+                                                            <span class="badge badge-success">Valid</span>
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td nowrap>
+                                                        <span class="text-muted font-italic" style="font-size: 11px"><?= $value->keterangan ?></span>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p class="font-italic float-right"><span class="fas fa-info-circle"></span>&nbsp;<span class="text-muted" style="font-size: 11px">Laporan kebutuhan anak.</span></p>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +115,7 @@
         var url = "<?= base_url().$controller ?>";
 
         $(document).ready(function() {
-            $('.select2').select2();
+            $('#id_anak').select2();
         });
     </script>
 </html>
