@@ -53,7 +53,7 @@
                                             <h5 class="mb-0">Tambahan Makanan Hari&nbsp;<span><?= format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)); ?></span></h5>
                                         </div>
                                         <div class="col-6  text-right">
-                                            <button class="btn btn-info m-1 mb-4 add-button" type="button" data-toggle="modal" data-target="#adding-modal">Catat Makanan</button>
+                                            <button class="btn btn-info m-1 mb-4 add-button" type="button" data-toggle="modal" data-target="#adding-modal"><span class="fa fa-add"></span>&nbsp;Catat Makanan</button>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -110,6 +110,49 @@
                 </div><!-- Footer Start -->
                 <!--  Modal -->
                 <?php $this->load->view('layout/footer') ?>
+
+                <div class="modal fade" id="adding-modal" tabindex="-1" role="dialog" aria-labelledby="adding" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <?php echo form_open_multipart($controller.'/insert','id="frm_tambahtemplate"'); ?>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Penambahan Data Pencatatan Makanan</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label>Pilih Anak</label>
+                                        <select name="anak" id="anak" class="form-control" required>
+                                            <option value="" selected disabled>-- Pilih Anak --</option>
+                                            <?php foreach ($list_anak as $anak){ ?>
+                                                <option value="<?= $anak->id ?>"><?= $anak->nama ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Pilih Jenis Makanan</label>
+                                        <select name="jenis_kebutuhan" id="jenis_kebutuhan" class="form-control" required>
+                                            <option value="" selected disabled>-- Pilih Jenis Makanan --</option>
+                                            <?php foreach ($list_jeniskebutuhan as $anak){ ?>
+                                                <option value="<?= $anak->id_jeniskebutuhan ?>"><?= $anak->nama ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Keterangan</label>
+                                        <textarea name="keterangan" id="keterangan" cols="30" rows="10" class="form-control" required></textarea>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
+                                <button class="btn btn-primary ml-2" type="submit">Simpan</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
@@ -120,7 +163,7 @@
         var url = "<?= base_url().$controller ?>";
 
         $(document).ready(function() {
-
+            $('#anak').select2();
         });
     </script>
 </html>

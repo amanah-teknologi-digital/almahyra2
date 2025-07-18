@@ -26,16 +26,16 @@ class Mtambahanmakanan extends CI_Model
         return $query->result();
     }
 
-    function getListSesi(){
-        $sql = "SELECT * FROM mengaji_sesi";
+    function getListJenisKebutuhan(){
+        $sql = "SELECT * FROM jenis_kebutuhan";
 
         $query = $this->db->query($sql);
 
         return $query->result();
     }
 
-    function getListJilid(){
-        $sql = "SELECT * FROM mengaji_jilid";
+    function getListAnak(){
+        $sql = "SELECT * FROM registrasi_data_anak WHERE is_active = 1 ORDER BY nama";
 
         $query = $this->db->query($sql);
 
