@@ -199,6 +199,17 @@ class Mtambahanmakanan extends CI_Model
 
         return $query->result();
     }
+
+    function updatestatus($id) {
+        $a_input['is_valid'] = $_POST['status'];
+        $a_input['updated_at'] = date('Y-m-d H:m:s');
+
+        $this->db->where('id_kebutuhan', $id);
+
+        $this->db->update('kebutuhan_anak', $a_input);
+
+        return $this->db->error(1);
+    }
 }
 
 ?>

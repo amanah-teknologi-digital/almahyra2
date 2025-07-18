@@ -146,6 +146,18 @@ class Ctambahanmakanan extends CI_Controller {
         redirect($this->data['redirect']);
     }
 
+    public function updatestatus() {
+        $err = $this->TambahanMakanan->updatestatus($_POST['id_kebutuhan']);
+
+        if ($err['code'] == '0') {
+            $this->session->set_flashdata('success', 'Berhasil Merubah Status');
+        } else {
+            $this->session->set_flashdata('failed', 'Gagal Merubah Status');
+        }
+
+        redirect($this->data['redirect']);
+    }
+
     function hapusfile(){
         header('Content-Type: application/json'); // set json response headers
 

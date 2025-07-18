@@ -167,6 +167,12 @@
             </div>
         </div>
     </body>
+
+    <?php echo form_open_multipart($controller.'/updatestatus', 'id="frm_ubahstatus"'); ?>
+    <input type="hidden" name="id_kebutuhan" id="id_kebutuhan" required>
+    <input type="hidden" name="status" id="status" required>
+    </form>
+
     <?php $this->load->view('layout/custom') ?>
     <script src="<?= base_url().'dist-assets/'?>js/plugins/datatables.min.js"></script>
     <script src="<?= base_url().'dist-assets/'?>js/scripts/datatables.script.min.js"></script>
@@ -176,6 +182,12 @@
         $(document).ready(function() {
             $('#anak').select2();
         });
+
+        function ubahStatus(id, status){
+            $('#id_kebutuhan').val(id);
+            $('#status').val(status);
+            $('#frm_ubahstatus').submit();
+        }
     </script>
 </html>
 
