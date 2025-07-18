@@ -9,6 +9,7 @@
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mdataekstra.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mkelasanak.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mlaporanekstra.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/registrasi/application/models/Mlaporankebutuhan.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mlaporanmengaji.php" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/registrasi/application/models/Mtambahanmakanan.php" dialect="GenericSQL" />
   </component>
