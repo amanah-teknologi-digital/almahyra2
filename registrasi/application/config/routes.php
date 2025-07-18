@@ -160,6 +160,8 @@ $route['data-ekstrakulikuler/edit/(:num)'] = 'cdataekstrakulikuler/lihatdata/$1'
 $route['catat-ekstrakulikuler'] = 'ccatatanekstra';
 $route['catat-ekstrakulikuler/lihat-data/(:any)'] = 'ccatatanekstra/lihatdata/$1';
 
+$route['tambahan-makanan'] = 'ctambahanmakanan';
+
 // $route['peminjaman-kendaraan'] = 'ctkendaraan';
 // $route['peminjaman-kendaraan/pengembalian'] = 'ctkendaraan/pengembalian';
 

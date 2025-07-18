@@ -65,6 +65,13 @@
                 </a>
                 <div class="triangle"></div>
             </li>
+            <li class="nav-item <?= $parent=='kebutuhan'?'active':'' ?>" data-item="kebutuhan">
+                <a class="nav-item-hold" href="#">
+                    <i class="nav-icon i-Livejournal"></i>
+                    <span class="nav-text">Kebutuhan Anak</span>
+                </a>
+                <div class="triangle"></div>
+            </li>
         </ul>
     </div>
     <div class="sidebar-left-secondary rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
@@ -203,6 +210,25 @@
                     <a href="<?= base_url().'laporan-ekstrakulikuler'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
                         <span class="item-name">Laporan Ekstrakulikuler</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="submenu-area" data-parent="kebutuhan">
+            <header>
+                <h6>Kebutuhan Anak</h6>
+            </header>
+            <ul class="childNav">
+                <li class="nav-item">
+                    <a href="<?= base_url().'tambahan-makanan'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Tambahan Makan</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'antar-jemput'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Antar Jemput</span>
                     </a>
                 </li>
             </ul>
