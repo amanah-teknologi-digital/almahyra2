@@ -220,9 +220,9 @@
             </header>
             <ul class="childNav">
                 <li class="nav-item">
-                    <a href="<?= base_url().'tambahan-makanan'; ?>">
+                    <a href="<?= base_url().'catat-kebutuhan'; ?>">
                         <i class="nav-icon i-Duplicate-Window"></i>
-                        <span class="item-name">Tambahan Makan</span>
+                        <span class="item-name">Catat Kebutuhan</span>
                     </a>
                 </li>
                 <li class="nav-item">

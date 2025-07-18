@@ -22,8 +22,8 @@ class Ctambahanmakanan extends CI_Controller {
 
         $this->data = array(
             'controller'=>'ctambahanmakanan',
-            'redirect'=>'tambahan-makanan',
-            'title'=>'Tambahan Makanan',
+            'redirect'=>'catat-kebutuhan',
+            'title'=>'Catat Kebutuhan',
             'parent'=>'kebutuhan',
             'role' => $this->session->userdata['auth']->id_role,
             'categori_image' => ['jpg', 'jpeg', 'png', 'gif'],
@@ -134,8 +134,8 @@ class Ctambahanmakanan extends CI_Controller {
         $this->load->view('inc/catatanmengaji/lihat_data', $data);
     }
 
-    public function simpancatatanmengaji(){
-        $err = $this->TambahanMakanan->simpanCatatanMengaji();
+    public function simpancatatan(){
+        $err = $this->TambahanMakanan->simpanCatatanKebutuhan();
 
         if ($err === FALSE) {
             $this->session->set_flashdata('failed', 'Gagal Menyimpan Data');
@@ -143,7 +143,7 @@ class Ctambahanmakanan extends CI_Controller {
             $this->session->set_flashdata('success', 'Berhasil Menyimpan Data');
         }
 
-        redirect($this->data['redirect'].'/lihat-data/'.$_POST['id_catatan']);
+        redirect($this->data['redirect']);
     }
 
     function hapusfile(){

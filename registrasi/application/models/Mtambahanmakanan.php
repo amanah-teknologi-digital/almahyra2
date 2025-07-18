@@ -11,7 +11,7 @@ class Mtambahanmakanan extends CI_Model
     }
 
     function getTambahanMakanan($tanggal){
-        $sql = "SELECT a.*, g.nama as nama_anak, d.nama as nama_kelas, e.nama as nama_jeniskebutuhan, f.name as nama_educator
+        $sql = "SELECT a.*, g.nama as nama_anak, g.tanggal_lahir, g.jenis_kelamin, d.nama as nama_kelas, e.nama as nama_jeniskebutuhan, f.name as nama_educator
                 FROM kebutuhan_anak a 
                 JOIN registrasi_data_anak g ON g.id = a.id_anak
                 JOIN v_kategori_usia b ON b.id = g.id 
@@ -92,31 +92,25 @@ class Mtambahanmakanan extends CI_Model
         return $query->row();
     }
 
-    function simpanCatatanMengaji(){
+    function simpanCatatanKebutuhan(){
         $user = $this->session->userdata['auth'];
         date_default_timezone_set('Asia/Jakarta');
 
-        $id_catatan = $this->input->post('id_catatan');
-        $jilid = $this->input->post('jilid');
-        $halaman = $this->input->post('halaman');
-        $nilai = $this->input->post('nilai');
+        $id_jeniskebutuhan = $this->input->post('jenis_kebutuhan');
+        $id_anak = $this->input->post('anak');
+        $keterangan = $this->input->post('keterangan');
+        $tanggal= $this->input->post('tanggal');
 
         $this->db->trans_start();
 
-        $update_checkup['id_ustadzah'] = $user->id;
-        $update_checkup['id_jilidmengaji'] = $jilid;
-        $update_checkup['halaman'] = $halaman;
-        $update_checkup['nilai'] = $nilai;
-        $update_checkup['is_catat'] = 1;
-        $update_checkup['updated_at'] = date('Y-m-d H:m:s');
-        $update_checkup['keterangan'] = $this->input->post('keterangan');
-        $update_checkup['updater'] = $user->id;
-        $this->db->where('id_catatan', $id_catatan);
-        $this->db->update('mengaji_catatan', $update_checkup);
+        $a_input['id_jeniskebutuhan'] = $id_jeniskebutuhan;
+        $a_input['id_anak'] = $id_anak;
+        $a_input['tanggal'] = $tanggal;
+        $a_input['keterangan'] = $keterangan;
+        $a_input['educator'] = $user->id;
+        $a_input['created_at'] = date('Y-m-d H:m:s');
 
-        if (isset($_FILES['file_dukung'])){
-            $this->uploadfiles();
-        }
+        $this->db->insert('kebutuhan_anak', $a_input);
 
         $this->db->trans_complete();
 
