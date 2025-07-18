@@ -42,25 +42,22 @@
                                                 <label>Tanggal</label>
                                             </td>
                                             <td>
-                                                <input type="date" class="form-control" name="tanggal" value="<?= $tanggal ?>" required>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2" >
-                                                <button class="btn btn-sm btn-primary mt-4">Tampilkan</button>
+                                                <input type="date" class="form-control" name="tanggal" value="<?= $tanggal ?>" onchange="this.form.submit()" required>
                                             </td>
                                         </tr>
                                     </table>
                                     </form>
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h5 class="card-title text-center">Tambahan Makanan Hari&nbsp;<span><?= format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)); ?></span></h5>
+                                    <br><br>
+                                    <div class="row mb-3 align-items-center">
+                                        <div class="col-6">
+                                            <h5 class="mb-0">Tambahan Makanan Hari&nbsp;<span><?= format_date_indonesia($tanggal).', '.date('d-m-Y', strtotime($tanggal)); ?></span></h5>
+                                        </div>
+                                        <div class="col-6  text-right">
+                                            <button class="btn btn-info m-1 mb-4 add-button" type="button" data-toggle="modal" data-target="#adding-modal">Catat Makanan</button>
                                         </div>
                                     </div>
-                                    <br>
                                     <div class="table-responsive">
-                                        <table class="display table table-striped table-bordered table-sm" id="tbl-catat" style="width:100%">
+                                        <table class="display table table-sm table-striped table-bordered">
                                             <colgroup>
                                                 <col style="width: 5%">
                                                 <col style="width: 15%">
@@ -71,7 +68,7 @@
                                                 <col style="width: 15%">
                                                 <col style="width: 10%">
                                             </colgroup>
-                                            <thead>
+                                            <thead style="background-color: #bfdfff">
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nama Anak</th>
