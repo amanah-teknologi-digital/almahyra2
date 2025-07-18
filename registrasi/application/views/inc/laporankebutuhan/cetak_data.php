@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Laporan Absensi Anak</title>
+    <title>Laporan Kebutuhan Anak</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <link href="<?= base_url().'dist-assets/'?>css/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <style>
@@ -168,20 +168,20 @@
 </head>
 <body class="A4">
 <?php $i = 0; $iter = 0;
-foreach ($data_absensi as $key => $value){ ?>
+foreach ($data_kebutuhan as $key => $value){ ?>
     <?php if ($iter == 0 OR $iter % 10 == 0){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
-            <h1>Laporan Absensi Anak&nbsp;a.n&nbsp;<span class="text-success font-weight-bold"><?= $data_anak->nama_anak ?></span>&nbsp;Tahun <?= $tahun_selected?><br>Usia:&nbsp;<span style="color: green"><?= hitung_usia($data_anak->tanggal_lahir) ?> <span style="color: grey"><i>(<?= $data_anak->nama_kelas ?>)</i></span></span></h1>
+            <h1><span>Data Kebutuhan Anak&nbsp;a.n&nbsp;<span style="font-weight: bold; color: green"><?= $data_anak->nama_anak ?></span></span></h1>
         <?php } ?>
         <br>
         <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
         <thead>
         <tr style="background-color: #bfdfff">
             <th style="width: 15%">Tanggal</th>
-            <th style="width: 20%">Waktu Masuk</th>
-            <th style="width: 20%">Waktu Pulang</th>
+            <th style="width: 20%">Jenis Kebutuhan</th>
+            <th style="width: 20%">Penginput</th>
             <th style="width: 20%">Status</th>
             <th style="width: 25%">Keterangan</th>
         </tr>
@@ -189,33 +189,21 @@ foreach ($data_absensi as $key => $value){ ?>
         <tbody>
     <?php } ?>
     <tr>
-        <td nowrap align="center" style="font-weight: bold ;font-style: italic; color: grey"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
-        <td nowrap align="center"><?= $value->waktu_checkin ?></td>
-        <td align="center"><?= format_date_indonesia(date($value->tanggal_checkout)).', '.date('d-m-Y', strtotime($value->tanggal_checkout)).' jam '.$value->waktu_checkout ?></td>
-        <td align="center" nowrap style="font-size: 10px">
-            <?php if (empty($value->id_absensi)) { ?>
-                <span style="color: red">Belum Absen</span>
+        <td nowrap align="center" style=" font-weight: bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
+        <td nowrap align="center"><?= $value->nama_jeniskebutuhan ?></td>
+        <td nowrap><b><?= $value->nama_educator; ?></b>&nbsp;pada&nbsp;<span><?= $value->created_at; ?></span></td>
+        <td align="center" nowrap>
+            <?php if (empty($value->is_valid)) { ?>
+                <span style="color: red">Tidak Valid</span>
             <?php } else { ?>
-                <?php if (!empty($value->waktu_checkout)){ ?>
-                    <span style="font-style: italic; font-weight: bold">Durasi : <?= hitung_durasi_waktu(date('Y-m-d', strtotime($value->tanggal)).' '.$value->waktu_checkin, date('Y-m-d', strtotime($value->tanggal_checkout)).' '.$value->waktu_checkout); ?></span>
-                <?php }else{ ?>
-                    <span style="color: orangered">Belum Absen Pulang</span>
-                <?php } ?>
+                <span style="color: green">Valid</span>
             <?php } ?>
         </td>
-        <td>
-            <?php if (!empty($value->id_absensi)) { ?>
-                &bullet;&nbsp;<span class="text-muted font-italic" style="font-size: 10px; color: grey; font-style: italic">Suhu Tubuh Masuk: <b><?= $value->suhu ?> °C</b>, Kondisi Masuk: <b><?= $value->kondisi == 1 ? 'Sehat':'Kurang Sehat' ?></b></span>
-                <?php if (!empty($value->waktu_checkout)){ ?>
-                    <br>
-                    &bullet;&nbsp;<span style="font-size: 10px; color: grey; font-style: italic">Suhu Tubuh Pulang: <b><?= $value->suhu_checkout ?> °C</b>, Kondisi Pulang: <b><?= $value->kondisi_checkout == 1 ? 'Sehat':'Kurang Sehat' ?></b></span>
-                <?php } ?>
-            <?php } else { ?>
-                <center>-</center>
-            <?php } ?>
+        <td nowrap>
+            <span style="font-size: 11px"><?= $value->keterangan ?></span>
         </td>
     </tr>
-    <?php if ($iter == count($data_absensi)-1 OR $iter % 10 == 9){ ?>
+    <?php if ($iter == count($data_kebutuhan)-1 OR $iter % 10 == 9){ ?>
         </tbody>
         </table>
         </div>

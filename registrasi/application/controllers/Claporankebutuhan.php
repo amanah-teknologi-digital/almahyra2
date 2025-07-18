@@ -66,22 +66,18 @@ class Claporankebutuhan extends CI_Controller {
 		$this->load->view('inc/laporankebutuhan/list', $data);
 	}
 
-    function cetakabsensianak(){
+    function cetakkebutuhananak(){
         $data = $this->data;
-
         $id_anak = $_POST['id_anak'];
-        $tahun = $_POST['tahun'];
 
         if (!empty($id_anak)) {
-            $data['data_anak'] = $this->LaporanAbsensiAnak->getDataAnak($id_anak);
-            $data['data_absensi'] = $this->LaporanAbsensiAnak->getDataAbsensi($id_anak, $tahun);
+            $data['data_anak'] = $this->LaporanKebutuhan->getDataAnak($id_anak);
+            $data['data_kebutuhan'] = $this->LaporanKebutuhan->getDataKebutuhan($id_anak);
         }else{
             $data['data_anak'] = [];
-            $data['data_absensi'] = [];
+            $data['data_kebutuhan'] = [];
         }
 
-        $data['tahun_selected'] = $tahun;
-
-        $this->load->view('inc/laporanabsensianak/cetak_absensi', $data);
+        $this->load->view('inc/laporankebutuhan/cetak_data', $data);
     }
 }
