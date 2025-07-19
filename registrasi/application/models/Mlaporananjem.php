@@ -42,9 +42,9 @@
             $user = $this->session->userdata['auth'];
 
             if ($id_role == 1){ // admin & superadmin & system absen
-                $where_anak = "";
+                $where_anak = " AND a.id IN(SELECT DISTINCT id_anak FROM antar_jemput WHERE is_valid = 1)";
             }elseif ($id_role == 3){ // educator
-                $where_anak = " AND a.educator = $user->id";
+                $where_anak = " AND a.id IN(SELECT DISTINCT id_anak FROM antar_jemput WHERE is_valid = 1 AND educator = ".$user->id.")";
             }elseif($id_role == 4){ // orangtua
                 $where_anak = " AND a.id_orangtua = $user->id";
             }else{
