@@ -93,14 +93,22 @@
                                                         <td><b><?= $row->nama_educator; ?></b>&nbsp;<br style="font-size: 11px">pada&nbsp;<span class="font-italic text-small"><?= $row->created_at; ?></span></td>
                                                         <td class="text-muted font-italic text-small"><?= empty($row->keterangan) ? '<center>-</center>':$row->keterangan ?></td>
                                                         <td align="center" nowrap>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status<?= $row->id_antarjemput ?>" onchange="ubahStatus('<?= $row->id_antarjemput ?>', 1)" id="inlineRadio1<?= $row->id_antarjemput ?>" value="1" <?= $row->is_valid == 1 && !is_null($row->is_valid)? 'checked':''; ?> >
-                                                                <label class="form-check-label" for="inlineRadio1">Valid</label>
-                                                            </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status<?= $row->id_antarjemput ?>" onchange="ubahStatus('<?= $row->id_antarjemput ?>', 0)" id="inlineRadio2<?= $row->id_antarjemput ?>" value="0" <?= $row->is_valid != 1 && !is_null($row->is_valid)? 'checked':''; ?>>
-                                                                <label class="form-check-label" for="inlineRadio2">Tidak Valid</label>
-                                                            </div>
+                                                            <?php if ($role == 3 && $row->educator == $id_educator || $role == 1){ ?>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status<?= $row->id_antarjemput ?>" onchange="ubahStatus('<?= $row->id_antarjemput ?>', 1)" id="inlineRadio1<?= $row->id_antarjemput ?>" value="1" <?= $row->is_valid == 1 && !is_null($row->is_valid)? 'checked':''; ?> >
+                                                                    <label class="form-check-label" for="inlineRadio1">Valid</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input" type="radio" name="status<?= $row->id_antarjemput ?>" onchange="ubahStatus('<?= $row->id_antarjemput ?>', 0)" id="inlineRadio2<?= $row->id_antarjemput ?>" value="0" <?= $row->is_valid != 1 && !is_null($row->is_valid)? 'checked':''; ?>>
+                                                                    <label class="form-check-label" for="inlineRadio2">Tidak Valid</label>
+                                                                </div>
+                                                            <?php }else{ ?>
+                                                                <?php if (empty($row->is_valid)) { ?>
+                                                                    <span class="badge badge-danger">Tidak Valid</span>
+                                                                <?php } else { ?>
+                                                                    <span class="badge badge-success">Valid</span>
+                                                                <?php } ?>
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
 

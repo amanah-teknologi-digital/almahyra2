@@ -55,6 +55,7 @@ class Cantarjemput extends CI_Controller {
         $data['list_jenisanjem'] = $this->AntarJemput->getListJenisAnjem();
         $data['antar_jemput'] = $this->AntarJemput->getDataAnjem($tanggal);
         $data['role'] = $this->role;
+        $data['id_educator'] = $this->session->userdata['auth']->id;
 
         $this->load->view('inc/antarjemput/list', $data);
     }

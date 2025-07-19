@@ -54,6 +54,7 @@ class Ctambahanmakanan extends CI_Controller {
         $data['list_jeniskebutuhan'] = $this->TambahanMakanan->getListJenisKebutuhan();
         $data['tambahan_makanan'] = $this->TambahanMakanan->getTambahanMakanan($tanggal);
         $data['role'] = $this->role;
+        $data['id_educator'] = $this->session->userdata['auth']->id;
 
         $this->load->view('inc/tambahanmakanan/list', $data);
     }
