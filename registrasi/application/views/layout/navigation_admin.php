@@ -399,6 +399,12 @@
                         <span class="item-name">Laporan Kebutuhan</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= base_url().'laporan-anjem'; ?>">
+                        <i class="nav-icon i-Duplicate-Window"></i>
+                        <span class="item-name">Laporan Antar Jemput</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="submenu-area" data-parent="rencana">

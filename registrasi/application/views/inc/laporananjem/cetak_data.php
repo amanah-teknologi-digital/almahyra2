@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Laporan Kebutuhan Anak</title>
+    <title>Laporan Antar Jemput Anak</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/paper-css/0.4.1/paper.css">
     <link href="<?= base_url().'dist-assets/'?>css/plugins/fontawesome/css/all.min.css" rel="stylesheet" />
     <style>
@@ -173,17 +173,19 @@ foreach ($data_kebutuhan as $key => $value){ ?>
         <section class="sheet padding-10mm"><div class="container">
         <?php if ($iter == 0){ ?>
             <br>
-            <h1><span>Data Kebutuhan Anak&nbsp;a.n&nbsp;<span style="font-weight: bold; color: green"><?= $data_anak->nama_anak ?></span></span></h1>
+            <h1><span>Data Antar Jemput Anak&nbsp;a.n&nbsp;<span style="font-weight: bold; color: green"><?= $data_anak->nama_anak ?></span></span></h1>
         <?php } ?>
         <br>
         <table class="table anak"  cellspacing="0" cellpadding="0" style="font-family: 'Open Sans', sans-serif; border-collapse: collapse; border: 1px solid #dee2e6;font-size: 12px" border="">
         <thead>
         <tr style="background-color: #bfdfff">
             <th style="width: 15%">Tanggal</th>
-            <th style="width: 20%">Jenis Kebutuhan</th>
-            <th style="width: 20%">Penginput</th>
-            <th style="width: 20%">Status</th>
-            <th style="width: 25%">Keterangan</th>
+            <th style="width: 10%">Jenis Anjem</th>
+            <th style="width: 15%">Lokasi Antar</th>
+            <th style="width: 15%">Lokasi Tujuan</th>
+            <th style="width: 20%">Educator</th>
+            <th style="width: 10%">Status</th>
+            <th style="width: 15%">Keterangan</th>
         </tr>
         </thead>
         <tbody>
@@ -191,6 +193,8 @@ foreach ($data_kebutuhan as $key => $value){ ?>
     <tr>
         <td nowrap align="center" style=" font-weight: bold"><?= format_date_indonesia($value->tanggal).', '.date('d-m-Y', strtotime($value->tanggal)) ?></td>
         <td nowrap align="center"><?= $value->nama_jeniskebutuhan ?></td>
+        <td><?= $value->lokasi_start ?></td>
+        <td><?= $value->lokasi_tujuan ?></td>
         <td><b><?= $value->nama_educator; ?></b>&nbsp;pada&nbsp;<span><?= $value->created_at; ?></span></td>
         <td align="center" nowrap>
             <?php if (empty($value->is_valid)) { ?>

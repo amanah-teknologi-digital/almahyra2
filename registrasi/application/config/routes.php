@@ -125,6 +125,7 @@ $route['laporan-medicalcheckup/lihat-data/(:num)'] = 'claporanmedicalcheckup/lih
 $route['laporan-mengaji'] = 'claporanmengaji';
 $route['laporan-ekstrakulikuler'] = 'claporanekstra';
 $route['laporan-kebutuhan'] = 'claporankebutuhan';
+$route['laporan-anjem'] = 'claporananjem';
 
 // laporan 
 $route['laporan-tumbuh-kembang'] = 'claporan/tumbuhkembangf';
